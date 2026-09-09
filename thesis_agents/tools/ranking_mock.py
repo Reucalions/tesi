@@ -1,0 +1,42 @@
+from thesis_agents.schemas import ArgumentationGraph, CandidateStrategies, RankingResult
+from thesis_agents.schemas.argumentation import Argument, RankedStrategy, Relation
+
+
+def build_graph(candidates: CandidateStrategies, graph_id: str) -> ArgumentationGraph:
+    """Explicit graph projection of candidate estimates; no LLM ranking."""
+    arguments, relations = [], []
+    for s in candidates.strategies:
+        root = f"strategy:{s.id}"
+        arguments.append(Argument(id=root, kind="strategy", strategy_id=s.id, weight=0.5))
+        for kind, weight, relation in [
+            ("benefit", s.security_benefit, "support"),
+            ("impact", s.operational_impact, "attack"),
+        ]:
+            node_id = f"{kind}:{s.id}"
+            arguments.append(Argument(id=node_id, kind=kind, strategy_id=s.id, weight=weight))
+            relations.append(Relation(source=node_id, target=root, kind=relation, weight=0.5))
+    return ArgumentationGraph(id=graph_id, arguments=arguments, relations=relations)
+
+
+class MockRankingTool:
+    """One-hop signed weighted sum, NOT the BWAF smart-contract algorithm."""
+
+    def rank_graph(self, graph: ArgumentationGraph) -> RankingResult:
+        arguments = {a.id: a for a in graph.arguments}
+        ranked = []
+        for node in graph.arguments:
+            if node.kind != "strategy":
+                continue
+            score = node.weight
+            for edge in graph.relations:
+                if edge.target == node.id:
+                    sign = 1 if edge.kind == "support" else -1
+                    score += sign * edge.weight * arguments[edge.source].weight
+            ranked.append(
+                RankedStrategy(strategy_id=node.strategy_id, score=round(max(0, min(1, score)), 8))
+            )
+        return RankingResult(
+            graph_id=graph.id,
+            backend="signed-one-hop-mock-v1",
+            ranking=sorted(ranked, key=lambda r: (-r.score, r.strategy_id)),
+        )
