@@ -5,10 +5,13 @@ Il progetto realizza il mock concordato nella [chat di partenza](https://chatgpt
 ```mermaid
 flowchart LR
     I[Input statico] --> T[TelemetryAgent]
-    T --> V[VulnerabilityAgent]
+    T -->|RuntimeEvidence per lookup| V[VulnerabilityAgent]
     V <--> K[Mock Knowledge Graph]
-    V --> C[CountermeasureAgent]
-    C --> S[StrategicAgent]
+    T -->|RuntimeEvidence| C[CountermeasureAgent]
+    V -->|VulnerabilityReport| C
+    T -->|RuntimeEvidence| S[StrategicAgent]
+    V -->|VulnerabilityReport| S
+    C -->|CandidateStrategies| S
     S <--> R[Mock ranking]
     S <--> M[Mock validazione]
     S --> D[Decisione JSON]
@@ -66,7 +69,7 @@ score = clamp(0.5 + 0.5 × security_benefit − 0.5 × operational_impact, 0, 1)
 
 I pareggi vengono risolti per ID. La formula serve a esercitare il contratto del ranking. Le stime candidate sono generate dal modello nella modalità CAMEL: ranking deterministico non significa che l'intera esecuzione LLM sia riproducibile o che tali stime siano oggettive.
 
-La Workforce predefinita usa la modalità CAMEL `PIPELINE`: quattro task con dipendenze esplicite, assegnati ed eseguiti da CAMEL. Per sperimentare anche la decomposizione tramite il task agent:
+La Workforce predefinita usa la modalità CAMEL `PIPELINE`: quattro task assegnati ed eseguiti da CAMEL con un DAG esplicito. `vulnerability` dipende da `telemetry` per il lookup; `countermeasure` dipende da entrambi; `strategic` dipende direttamente da tutti e tre. L'ordine di esecuzione resta vincolato da questi prerequisiti, ma ogni artefatto mantiene la propria identità e disponibilità. Lo StrategicAgent legge separatamente `RuntimeEvidence`, `VulnerabilityReport` e `CandidateStrategies` tramite `get_context`, che espone anche `artifact_producers`. Per sperimentare anche la decomposizione tramite il task agent:
 
 ```bash
 python main.py --workflow auto

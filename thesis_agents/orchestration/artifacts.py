@@ -43,6 +43,12 @@ ARTIFACT_SCHEMAS = {
     "provenance": ProvenanceRecord,
 }
 
+ARTIFACT_PRODUCERS = {
+    "runtime_evidence": "TelemetryAgent",
+    "vulnerability_report": "VulnerabilityAgent",
+    "candidate_strategies": "CountermeasureAgent",
+}
+
 
 class ArtifactSession:
     """Per-run state. Agents publish JSON through validated, stage-specific tools.
@@ -104,17 +110,33 @@ class ArtifactSession:
         """Read authoritative input, validated artifacts, and required JSON schemas.
 
         Returns:
-            dict: Current run context. Use this instead of guessing prior results.
+            dict: Separate artifacts and their producers. StrategicAgent must read
+                runtime_evidence, vulnerability_report and candidate_strategies individually.
         """
         return {
             "run_id": self.run_id,
             "mode": self.mode,
             "artifacts": {k: v.model_dump(mode="json") for k, v in self._artifacts.items()},
+            "artifact_producers": {
+                name: producer if self.mode == "camel" else f"fixture:{producer}"
+                for name, producer in ARTIFACT_PRODUCERS.items()
+                if name in self._artifacts
+            },
             "schemas": {
                 k: ARTIFACT_SCHEMAS[k].model_json_schema()
                 for k in ("runtime_evidence", "vulnerability_report", "candidate_strategies")
             },
         }
+
+    def _require_strategic_inputs(
+        self,
+    ) -> tuple[RuntimeEvidence, VulnerabilityReport, CandidateStrategies]:
+        """Validate each producer's artifact independently, never a chain summary."""
+        return (
+            self.require("runtime_evidence", RuntimeEvidence),
+            self.require("vulnerability_report", VulnerabilityReport),
+            self.require("candidate_strategies", CandidateStrategies),
+        )
 
     def publish_runtime_evidence(self, payload: str) -> dict:
         """Validate and publish the TelemetryAgent's RuntimeEvidence JSON.
@@ -163,6 +185,7 @@ class ArtifactSession:
         Returns:
             dict: Validated VulnerabilityReport.
         """
+        self.require("runtime_evidence", RuntimeEvidence)
         report = VulnerabilityReport.model_validate_json(payload)
         if self._lookup is None or report != self._lookup:
             raise ValueError("Call lookup_vulnerabilities and preserve its exact report")
@@ -177,6 +200,7 @@ class ArtifactSession:
         Returns:
             dict: Validated CandidateStrategies with unique IDs and known CVEs.
         """
+        self.require("runtime_evidence", RuntimeEvidence)
         report = self.require("vulnerability_report", VulnerabilityReport)
         candidates = CandidateStrategies.model_validate_json(payload)
         known = {v.cve_id for v in report.vulnerabilities}
@@ -195,7 +219,7 @@ class ArtifactSession:
         Returns:
             dict: ArgumentationGraph built from the candidates' estimates.
         """
-        candidates = self.require("candidate_strategies", CandidateStrategies)
+        _, _, candidates = self._require_strategic_inputs()
         graph = build_graph(candidates, f"graph:{self.run_id}")
         return self._commit("argumentation_graph", graph).model_dump(mode="json")
 
@@ -266,8 +290,9 @@ class ArtifactSession:
             dict: FinalDecision. Scores and validation are copied from backend artifacts.
         """
         ranking = self.require("ranking", RankingResult)
-        evidence = self.require("runtime_evidence", RuntimeEvidence)
-        report = self.require("vulnerability_report", VulnerabilityReport)
+        evidence, report, candidates = self._require_strategic_inputs()
+        if {r.strategy_id for r in ranking.ranking} != {s.id for s in candidates.strategies}:
+            raise ValueError("Final decision ranking must match the published candidate strategies")
         accepted = next((v for v in self._validation.validations if v.valid), None)
         expected_id = accepted.strategy_id if accepted else None
         if selected_strategy_id != expected_id:

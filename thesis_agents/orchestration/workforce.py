@@ -17,12 +17,39 @@ ROLES = (
 
 TASKS = (
     ("telemetry", "TelemetryAgent: normalize static input and publish runtime_evidence."),
-    ("vulnerability", "VulnerabilityAgent: query the backend and publish vulnerability_report."),
-    ("countermeasure", "CountermeasureAgent: generate and publish candidate_strategies."),
+    (
+        "vulnerability",
+        "VulnerabilityAgent: read runtime_evidence for the software/version lookup and publish "
+        "a separate vulnerability_report.",
+    ),
+    (
+        "countermeasure",
+        "CountermeasureAgent: read runtime_evidence and vulnerability_report separately via "
+        "get_context, then generate and publish candidate_strategies.",
+    ),
     (
         "strategic",
-        "StrategicAgent: build graph, rank, validate in order, publish decision and provenance.",
+        "StrategicAgent: read runtime_evidence, vulnerability_report and candidate_strategies "
+        "separately via get_context, preserving their producers; build graph, rank, validate "
+        "in order, publish decision and provenance.",
     ),
+)
+
+TASK_DEPENDENCIES = {
+    "telemetry": (),
+    "vulnerability": ("telemetry",),
+    "countermeasure": ("telemetry", "vulnerability"),
+    "strategic": ("telemetry", "vulnerability", "countermeasure"),
+}
+
+DAG_INSTRUCTIONS = (
+    "Preserve this data dependency DAG: "
+    + "; ".join(
+        f"{task_id} depends on [{', '.join(dependencies)}]"
+        for task_id, dependencies in TASK_DEPENDENCIES.items()
+    )
+    + ". Each producer publishes its own artifact; downstream outputs never replace upstream "
+    "evidence. StrategicAgent must read all three producer artifacts separately via get_context. "
 )
 
 COMMON = """All domain outputs MUST be published with the provided tools as schema-valid
@@ -44,8 +71,8 @@ def build_workforce(session: ArtifactSession, backend_factory, *, workflow: str 
         system_message=(
             "Coordinate exactly four domain roles: TelemetryAgent, VulnerabilityAgent, "
             "CountermeasureAgent, StrategicAgent. Assign each stage to its matching role. "
-            "Preserve dependencies: telemetry -> vulnerability -> countermeasure -> strategic. "
-            "Do not create extra workers, perform domain work or change tool results."
+            + DAG_INSTRUCTIONS
+            + "Do not create extra workers, perform domain work or change tool results."
         ),
         model=backend_factory(),
         max_iteration=12,
@@ -81,7 +108,12 @@ def build_workforce(session: ArtifactSession, backend_factory, *, workflow: str 
         )
     if workflow == "pipeline":
         for task_id, content in TASKS:
-            workforce.pipeline_add(content, task_id=task_id)
+            workforce.pipeline_add(
+                content,
+                task_id=task_id,
+                dependencies=list(TASK_DEPENDENCIES[task_id]),
+                auto_depend=False,
+            )
         workforce.pipeline_build()
     return workforce
 
@@ -91,8 +123,8 @@ def run_camel(session: ArtifactSession, backend_factory, *, workflow: str = "pip
     task = Task(
         id=session.run_id,
         content=(
-            "Analyze the static case using exactly these four sequential subtasks with "
-            "dependencies on the preceding stage: "
+            "Analyze the static case using exactly these four subtasks. "
+            + DAG_INSTRUCTIONS
             + " ".join(content for _, content in TASKS)
             + " Use get_context for input. Each domain result must be published by tools. "
             "Success requires all eight output artifacts, including provenance."

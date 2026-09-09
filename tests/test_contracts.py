@@ -11,8 +11,10 @@ from thesis_agents.schemas import (
     FinalDecision,
     ProvenanceRecord,
     RankingResult,
+    RuntimeEvidence,
     SemanticValidationReport,
     StaticTelemetry,
+    VulnerabilityReport,
 )
 from thesis_agents.schemas.argumentation import RankedStrategy
 from thesis_agents.tools.ranking_mock import MockRankingTool, build_graph
@@ -218,3 +220,101 @@ def test_decision_cannot_claim_selection_without_validation():
             evidence_ids=["E1"],
             explanation="Unsupported claim",
         )
+
+
+def test_runtime_evidence_survives_as_a_separate_artifact_until_decision(session):
+    evidence = fixture_evidence(session)
+    session.publish_runtime_evidence(evidence.model_dump_json())
+    original_bytes = (session.output_dir / "runtime_evidence.json").read_bytes()
+    report = session.lookup_vulnerabilities()
+    session.publish_vulnerability_report(json_payload(report))
+    assert session.require("runtime_evidence", RuntimeEvidence) == evidence
+    assert session.require("vulnerability_report", VulnerabilityReport).model_dump() == report
+
+    run_fixtures(session)
+    context = session.get_context()
+    assert context["artifacts"]["runtime_evidence"] == evidence.model_dump()
+    assert context["artifacts"]["vulnerability_report"] == report
+    assert (session.output_dir / "runtime_evidence.json").read_bytes() == original_bytes
+    assert context["artifact_producers"] == {
+        "runtime_evidence": "fixture:TelemetryAgent",
+        "vulnerability_report": "fixture:VulnerabilityAgent",
+        "candidate_strategies": "fixture:CountermeasureAgent",
+    }
+    # A consumer cannot mutate the session through the returned context dictionary.
+    context["artifacts"]["runtime_evidence"]["software"][0]["version"] = "changed"
+    assert session.require("runtime_evidence", RuntimeEvidence) == evidence
+    provenance = session.require("provenance", ProvenanceRecord)
+    decision_activity = next(a for a in provenance.activities if a.id == "decision")
+    assert set(decision_activity.used) == {
+        "runtime_evidence",
+        "vulnerability_report",
+        "candidate_strategies",
+        "ranking",
+        "semantic_validation",
+    }
+    for artifact, producer in context["artifact_producers"].items():
+        activity = next(a for a in provenance.activities if artifact in a.generated)
+        assert activity.agent == producer
+
+
+def test_report_cannot_embed_or_replace_runtime_evidence(session):
+    evidence = fixture_evidence(session)
+    session.publish_runtime_evidence(evidence.model_dump_json())
+    report = session.lookup_vulnerabilities()
+    with pytest.raises(ValidationError, match="Extra inputs"):
+        session.publish_vulnerability_report(
+            json_payload(report | {"runtime_evidence": evidence.model_dump()})
+        )
+    with pytest.raises(ValidationError):
+        session.publish_vulnerability_report(evidence.model_dump_json())
+    assert session.require("runtime_evidence", RuntimeEvidence) == evidence
+    assert "vulnerability_report" not in session.get_context()["artifacts"]
+
+
+@pytest.mark.parametrize(
+    "missing",
+    [
+        "runtime_evidence",
+        "vulnerability_report",
+        "candidate_strategies",
+    ],
+)
+@pytest.mark.parametrize("stage", ["graph", "decision"])
+def test_strategic_stages_require_each_distinct_input(session, missing, stage):
+    prepare(session)
+    session.validate_countermeasure("S_UPGRADE")
+    # Simulate missing shared state even though downstream artifacts already exist.
+    session._artifacts.pop(missing)
+    with pytest.raises(ValueError, match=f"Missing prerequisite artifact: {missing}"):
+        if stage == "graph":
+            session.build_argumentation_graph()
+        else:
+            session.publish_final_decision("S_UPGRADE", "Cannot decide from partial inputs")
+    assert not (session.output_dir / "final_decision.json").exists()
+
+
+@pytest.mark.parametrize("stage", ["lookup", "report", "candidates"])
+def test_runtime_evidence_is_required_even_when_a_report_is_cached(session, stage):
+    prepare(session)
+    session._artifacts.pop("runtime_evidence")
+    with pytest.raises(ValueError, match="Missing prerequisite artifact: runtime_evidence"):
+        if stage == "lookup":
+            session.lookup_vulnerabilities()
+        elif stage == "report":
+            session.publish_vulnerability_report(session._lookup.model_dump_json())
+        else:
+            session.publish_candidate_strategies(
+                fixture_candidates(["CVE-2021-44228"]).model_dump_json()
+            )
+
+
+def test_final_decision_rechecks_the_candidate_artifact(session):
+    prepare(session)
+    session.validate_countermeasure("S_UPGRADE")
+    # Simulate inconsistent downstream state; an accepted validation is not sufficient.
+    candidates = session.require("candidate_strategies", CandidateStrategies)
+    candidates.strategies = candidates.strategies[1:]
+    session._artifacts["candidate_strategies"] = candidates
+    with pytest.raises(ValueError, match="must match the published candidate strategies"):
+        session.publish_final_decision("S_UPGRADE", "Cannot select a missing candidate")

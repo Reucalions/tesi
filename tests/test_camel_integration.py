@@ -3,16 +3,19 @@
 This verifies SDK integration without a network call. It is not an LLM evaluation.
 """
 
+import ast
 import json
 import re
 from collections import defaultdict
 
 from camel.models.stub_model import StubModel
+from camel.societies.workforce.workforce import WorkforceMode
 from camel.types import ChatCompletion, ModelType
 
 from thesis_agents.fixtures import fixture_candidates, fixture_evidence
 from thesis_agents.orchestration.artifacts import ArtifactSession
-from thesis_agents.orchestration.workforce import run_camel
+from thesis_agents.orchestration.workforce import build_workforce, run_camel
+from thesis_agents.schemas import CandidateStrategies, RuntimeEvidence, VulnerabilityReport
 
 
 class ScriptedToolModel(StubModel):
@@ -21,6 +24,13 @@ class ScriptedToolModel(StubModel):
         self.session = session
         self.steps = defaultdict(int)
         self.tool_calls = []
+        self.received_contexts = {}
+
+    @property
+    def token_limit(self):
+        # The SDK stub defaults to a tiny window that drops get_context's schemas.
+        # Keep tool responses in memory so this test observes the actual handoff.
+        return 128_000
 
     def _run(self, messages, response_format=None, tools=None):
         tool_names = {t["function"]["name"] for t in tools or []}
@@ -83,6 +93,17 @@ class ScriptedToolModel(StubModel):
                 ("record_provenance", {}),
             ]
         step = self.steps[role]
+        if step == 1:
+            # Inspect what CAMEL actually delivered to the model after get_context,
+            # rather than reading ArtifactSession directly in this assertion.
+            context_messages = [message for message in messages if message.get("role") == "tool"]
+            assert context_messages, "CAMEL must deliver the get_context tool response"
+            context_message = context_messages[-1]
+            content = context_message["content"]
+            try:
+                self.received_contexts[role] = json.loads(content)
+            except json.JSONDecodeError:
+                self.received_contexts[role] = ast.literal_eval(content)
         self.steps[role] += 1
         if step >= len(script):
             return self._completion(content=json.dumps({"content": "{}", "failed": False}))
@@ -133,3 +154,35 @@ def test_real_workforce_dispatches_four_agents_and_publishes_artifacts(case, tmp
     assert backend.tool_calls.count("lookup_vulnerabilities") == 1
     assert backend.tool_calls.count("rank_graph") == 1
     assert backend.tool_calls.count("record_provenance") == 1
+    context = backend.received_contexts["strategic"]
+    expected = {
+        "runtime_evidence": (RuntimeEvidence, "TelemetryAgent"),
+        "vulnerability_report": (VulnerabilityReport, "VulnerabilityAgent"),
+        "candidate_strategies": (CandidateStrategies, "CountermeasureAgent"),
+    }
+    for name, (schema, producer) in expected.items():
+        assert schema.model_validate(context["artifacts"][name]) == session.require(name, schema)
+        assert context["artifact_producers"][name] == producer
+    runtime = context["artifacts"]["runtime_evidence"]
+    assert runtime == backend.received_contexts["vulnerability"]["artifacts"]["runtime_evidence"]
+    assert runtime == backend.received_contexts["countermeasure"]["artifacts"]["runtime_evidence"]
+    assert (
+        context["artifacts"]["vulnerability_report"]
+        == (backend.received_contexts["countermeasure"]["artifacts"]["vulnerability_report"])
+    )
+    assert result.evidence_ids == [s["evidence_id"] for s in runtime["software"]]
+
+
+def test_default_pipeline_has_explicit_producer_dependencies(case, tmp_path):
+    session = ArtifactSession(case, tmp_path, mode="camel", model="scripted-test-only")
+    workforce = build_workforce(session, lambda: ScriptedToolModel(session))
+    assert workforce.mode == WorkforceMode.PIPELINE
+    expected = {
+        "telemetry": [],
+        "vulnerability": ["telemetry"],
+        "countermeasure": ["telemetry", "vulnerability"],
+        "strategic": ["telemetry", "vulnerability", "countermeasure"],
+    }
+    # Check both the task objects and CAMEL's actual scheduling dependency map.
+    assert {t.id: [d.id for d in t.dependencies] for t in workforce._pending_tasks} == expected
+    assert workforce._task_dependencies == expected

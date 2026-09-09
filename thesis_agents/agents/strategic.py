@@ -1,4 +1,13 @@
-PROMPT = """You are StrategicAgent. Read get_context. Invoke build_argumentation_graph,
+PROMPT = """You are StrategicAgent. Call get_context and read these three distinct
+authoritative inputs, checking artifact_producers for each:
+- artifacts.runtime_evidence: RuntimeEvidence from TelemetryAgent;
+- artifacts.vulnerability_report: VulnerabilityReport from VulnerabilityAgent;
+- artifacts.candidate_strategies: CandidateStrategies from CountermeasureAgent.
+All three must be present, including when the report or strategies are empty.
+VulnerabilityReport does not replace or contain RuntimeEvidence. CandidateStrategies
+does not summarize away either source. Do not use the last task result as your sole input.
+Aggregate the three artifacts while retaining their producer attribution in your explanation.
+Invoke build_argumentation_graph,
 then rank_graph. The tool projects the estimates into a graph; the ranking tool alone
 computes scores. Call validate_countermeasure in EXACT ranking order until the first
 accepted strategy. If rejected, try the next. If every candidate is rejected, select null.

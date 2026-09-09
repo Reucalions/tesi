@@ -6,6 +6,23 @@ CAMEL gestisce assegnazione, esecuzione e collaborazione. Il CountermeasureAgent
 
 Il risultato di dominio è il JSON pubblicato tramite tool, validato da Pydantic. Il normale envelope CAMEL `TaskResult` trasporta un riepilogo; non può sostituire un artefatto mancante. Prima di dichiarare completo il run, si controllano tutti gli otto artefatti e la loro corrispondenza con lo stato validato.
 
+## DAG e convergenza degli artefatti
+
+La pipeline CAMEL mantiene quattro task, con dipendenze dichiarate esplicitamente:
+
+| Task | Prerequisiti diretti |
+|---|---|
+| `telemetry` | nessuno |
+| `vulnerability` | `telemetry` |
+| `countermeasure` | `telemetry`, `vulnerability` |
+| `strategic` | `telemetry`, `vulnerability`, `countermeasure` |
+
+Il collegamento telemetry → vulnerability serve a identificare software/versione per il lookup. Il rapporto pubblicato dal VulnerabilityAgent non incorpora né sostituisce `RuntimeEvidence`. Il CountermeasureAgent usa esplicitamente sia evidence sia report; lo StrategicAgent legge tre chiavi distinte da `get_context`: `artifacts.runtime_evidence`, `artifacts.vulnerability_report` e `artifacts.candidate_strategies`. `artifact_producers` ne espone rispettivamente i produttori TelemetryAgent, VulnerabilityAgent e CountermeasureAgent (con prefisso `fixture:` nella dimostrazione senza LLM).
+
+`ArtifactSession` richiede i tre modelli Pydantic separatamente prima della costruzione del grafo e della decisione finale, e verifica che il ranking della decisione corrisponda alle candidate pubblicate. I controlli già esistenti impediscono riscritture degli artefatti e campi aggiuntivi nel rapporto. La provenienza locale della decisione conserva già i riferimenti ai tre artefatti, al ranking e alla validazione.
+
+Non cambia la semantica di esecuzione della Workforce: `pipeline` resta il default, con scheduling CAMEL e gli stessi agenti/tool. L'ordine resta di fatto sequenziale per i prerequisiti del caso, ma le dipendenze dirette rappresentano il flusso dati completo, anziché affidarsi al solo task precedente. Anche i prompt gestionali della modalità `auto` descrivono questo DAG.
+
 ## Messaggi principali
 
 | Contratto | Produttore | Consumatore | Vincoli essenziali |
