@@ -1,6 +1,6 @@
 # Thesis Agents — primo prototipo CAMEL
 
-Il progetto realizza il mock concordato nella [chat di partenza](https://chatgpt.com/share/6aa14e54-2ca8-83ed-85c6-12f1eb9b0c4d): quattro ruoli CAMEL, messaggi JSON validati con Pydantic e dipendenze esterne sostituite da tool Python locali.
+Il progetto realizza: quattro ruoli CAMEL, messaggi JSON validati con Pydantic e dipendenze esterne sostituite da tool Python locali.
 
 ```mermaid
 flowchart LR
@@ -45,6 +45,48 @@ python main.py
 ```
 
 Il modello scelto deve supportare tool calling e risposte JSON. `LLM_BASE_URL` consente di usare un endpoint compatibile, anche locale; per un server locale senza autenticazione imposta una chiave fittizia esplicita. Non è previsto un modello implicito e le credenziali non vengono salvate negli artefatti.
+
+### LLM locale con Ollama, senza costi API
+
+Con Ollama avviato e `qwen3:4b-instruct` installato, crea il profilo locale con contesto
+a 16K token (riusa i pesi esistenti):
+
+```bash
+ollama create tesi-qwen3:4b -f Modelfile
+```
+
+Se il modello non è presente, scaricalo prima con `ollama pull qwen3:4b-instruct`.
+Configura `.env`:
+
+```dotenv
+LLM_MODEL=tesi-qwen3:4b
+LLM_API_KEY=local
+LLM_BASE_URL=http://localhost:11434/v1
+LLM_TIMEOUT_SECONDS=300
+LLM_TEMPERATURE=0
+```
+
+Avvia `python main.py --mode camel --workflow pipeline`. Il valore `local` è
+una credenziale fittizia per il client compatibile OpenAI: l'inferenza avviene
+su Ollama, senza utilizzare la chiave OpenAI. È un'esecuzione LLM reale dei
+quattro agenti CAMEL; i tool di dominio restano mock. Velocità e affidabilità
+dipendono dal modello e dalle risorse locali. Le variabili già esportate nella
+shell prevalgono su `.env`: rimuovi eventuali impostazioni di un provider cloud
+prima di usare questa configurazione.
+
+La temperatura viene inviata esplicitamente all'endpoint: non si presume che
+il default dell'API compatibile coincida con quello del Modelfile. Lascia
+`LLM_TEMPERATURE` vuota per provider che non supportano questo parametro.
+
+La prima esecuzione completa verificata con `tesi-qwen3:4b` è descritta nel
+[resoconto della prova Ollama](docs/ollama-first-run.md). Lo Strategic ha richiesto
+un tentativo aggiuntivo per pubblicare decisione e provenienza. Il successo va
+verificato sugli otto artefatti validati, non sui soli messaggi dei worker; un run
+riuscito non dimostra l'affidabilità del modello su altri casi.
+
+Per diagnosticare le chiamate puoi impostare `CAMEL_MODEL_LOG_ENABLED=true` e
+`CAMEL_LOG_DIR=output/llm-logs` prima dell'avvio. I log SDK contengono prompt,
+risposte e messaggi dei tool; sono distinti dall'artefatto di provenienza di dominio.
 
 Ogni esecuzione crea una cartella distinta `output/<timestamp>-<id>/`. Puoi specificare `--input percorso/caso.json` e `--output percorso/cartella-vuota`. Una cartella non vuota viene rifiutata per preservare le esecuzioni precedenti.
 
@@ -95,6 +137,8 @@ Il caso fixture seleziona `S_UPGRADE`, con score `0.875`. Rimuovendo `maintenanc
 Nessuna contromisura viene eseguita. `selected` indica una proposta che supera i controlli del mock, non una remediation effettuata o una prova semantica completa. Il campo `constraints` contiene caveat testuali; il validatore locale controlla soltanto `prerequisites`, requisiti propri delle categorie di azione e `prohibited_actions`.
 
 ## Contratti e struttura
+
+Per studiare il codice, parti dalla [guida alla lettura dei file commentati](docs/reading-guide.md). I sorgenti contengono spiegazioni in italiano; il [caso JSON è documentato campo per campo](thesis_agents/data/README.md) senza alterarne il formato.
 
 ```text
 main.py                         # Entry point dalla cartella del progetto

@@ -1,3 +1,6 @@
+# Dimostrazione ripetibile degli stessi contratti usati dagli agenti CAMEL.
+# Qui le proposte sono dati prefissati: il flusso procedurale riguarda soltanto
+# la prova senza LLM e non sostituisce l'orchestrazione multi-agente del prototipo.
 """Contract demonstration only. This module does NOT simulate a real CAMEL run."""
 
 from thesis_agents.orchestration.artifacts import ArtifactSession, json_payload
@@ -6,6 +9,8 @@ from thesis_agents.schemas.countermeasure import CountermeasureCandidate
 
 
 def fixture_evidence(session: ArtifactSession) -> RuntimeEvidence:
+    # Copia i fatti del caso in un oggetto tipizzato, assegnando E1 all'osservazione
+    # software. Non aggiunge misurazioni né deduce che un exploit sia stato eseguito.
     case = session.case
     return RuntimeEvidence(
         service_name=case.service_name,
@@ -21,9 +26,13 @@ def fixture_evidence(session: ArtifactSession) -> RuntimeEvidence:
 
 
 def fixture_candidates(cves: list[str]) -> CandidateStrategies:
+    # Senza CVE note manca il fondamento per proporre strategie: il set è vuoto.
+    # Il normale flusso CAMEL genera invece le candidate tramite CountermeasureAgent.
     if not cves:
         return CandidateStrategies(strategies=[])
     specs = [
+        # Ogni tupla contiene ID, categoria, beneficio stimato, impatto operativo,
+        # prerequisiti e descrizione. I numeri servono ai test, non sono misure reali.
         (
             "S_UPGRADE",
             "upgrade",
@@ -58,6 +67,8 @@ def fixture_candidates(cves: list[str]) -> CandidateStrategies:
         ),
     ]
     return CandidateStrategies(
+        # Anche i dati statici attraversano Pydantic: una fixture incoerente deve
+        # fallire come una proposta malformata prodotta da un agente.
         strategies=[
             CountermeasureCandidate(
                 id=id_,
@@ -76,15 +87,21 @@ def fixture_candidates(cves: list[str]) -> CandidateStrategies:
 
 
 def run_fixtures(session: ArtifactSession):
+    # Il controllo di modalità impedisce di registrare questa dimostrazione come
+    # una vera esecuzione CAMEL nella provenienza del run.
     if session.mode != "fixtures":
         raise ValueError("Fixture runs must explicitly use mode=fixtures")
     session.publish_runtime_evidence(json_payload(fixture_evidence(session)))
+    # Il report nasce sempre dal tool di lookup: non si costruisce una scorciatoia
+    # che aggiri la dipendenza software/versione dall'evidenza pubblicata.
     report = session.lookup_vulnerabilities()
     session.publish_vulnerability_report(json_payload(report))
     candidates = fixture_candidates([v["cve_id"] for v in report["vulnerabilities"]])
     session.publish_candidate_strategies(json_payload(candidates))
     session.build_argumentation_graph()
     ranking = session.rank_graph()
+    # La classifica proviene dal backend. Si prova il primo elemento, poi si passa
+    # al successivo solo se rifiutato: None rimane valido se nessuno è accettabile.
     selected = None
     for item in ranking["ranking"]:
         validation = session.validate_countermeasure(item["strategy_id"])
@@ -97,4 +114,6 @@ def run_fixtures(session: ArtifactSession):
         "All external backends are mocks; no CAMEL/LLM inference or remediation was executed.",
     )
     session.record_provenance()
+    # Non basta produrre una decisione: devono esistere tutti gli artefatti previsti
+    # e i loro file devono corrispondere agli oggetti validati nella sessione.
     return session.assert_complete()

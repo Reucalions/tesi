@@ -1,0 +1,6 @@
+# Riusa i pesi Qwen già presenti in Ollama; nessuna credenziale cloud.
+FROM qwen3:4b-instruct
+# Gli schemi Pydantic e gli artefatti richiedono spazio nel contesto del modello.
+PARAMETER num_ctx 16384
+# Riduce la variabilità; non garantisce esecuzioni identiche.
+PARAMETER temperature 0

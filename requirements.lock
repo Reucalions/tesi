@@ -1,5 +1,11 @@
 # Versions verified on Python 3.12 / macOS arm64. Includes development tools.
 # Install this file, then: python -m pip install --no-deps -e .
+# Elenco delle versioni esatte dell'ambiente verificato, incluse dipendenze transitive
+# e strumenti di sviluppo. pyproject.toml dichiara invece i requisiti diretti del progetto.
+# Per riprodurre: python -m pip install -r requirements.lock; poi installa il progetto.
+# L'ordine alfabetico facilita il confronto fra revisioni; non è l'ordine di esecuzione.
+# La presenza di una libreria transitiva non significa che il prototipo usi il relativo
+# servizio (per esempio strumenti web). Il file non contiene chiavi o endpoint.
 annotated-types==0.8.0
 anyio==4.15.1
 astor==0.8.1

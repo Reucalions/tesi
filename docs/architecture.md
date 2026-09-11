@@ -1,5 +1,7 @@
 # Contratti del primo MVP
 
+Questo documento descrive le responsabilità architetturali. La [guida alla lettura](reading-guide.md) collega ogni componente al relativo file commentato e distingue i controlli dello schema da quelli della sessione.
+
 ## Separazione delle responsabilità
 
 CAMEL gestisce assegnazione, esecuzione e collaborazione. Il CountermeasureAgent genera le strategie. Ranking e validazione sono funzioni dei backend, invocate dallo StrategicAgent. La proiezione delle stime in un grafo è un tool locale esplicito: non interpella il modello e non ordina le strategie.
@@ -41,6 +43,21 @@ Non cambia la semantica di esecuzione della Workforce: `pipeline` resta il defau
 Gli attributi `observations`, `rationale`, `description` ed `explanation` restano testo dentro uno schema: il controllo strutturale non ne dimostra la veridicità semantica. I fatti critici, le CVE, i punteggi del ranking e la selezione vengono invece verificati anche fra gli artefatti.
 
 ## Tool pubblici per ruolo
+
+Ogni worker usa `ArtifactTaskHandler`, un adattamento del gestore di output
+strutturato di CAMEL: chiarisce che la risposta finale JSON segue le chiamate ai
+tool e verifica tramite `ArtifactSession.require` gli output del ruolo prima di
+accettare `failed=false`. Non pubblica risultati al posto dell'agente. Un errore
+o un output mancante produce un task fallito anche se il modello dichiara successo.
+In modalità pipeline CAMEL può effettuare un solo tentativo aggiuntivo (due
+tentativi totali). Il prompt viene aggiornato con i nomi degli artefatti già
+validati e di quelli mancanti; il worker rilegge `get_context` e completa le
+pubblicazioni senza sostituire i risultati precedenti. Il retry è coperto da un
+test che interrompe lo Strategic dopo la validazione e verifica la conservazione
+degli artefatti fino alla pubblicazione di decisione e provenienza.
+Scheduling, assegnazione, DAG e ciclo di tool calling restano gestiti da CAMEL.
+L'aggancio all'handler del worker usa l'API interna della versione fissata 0.2.90
+ed è coperto dai test di integrazione; va ricontrollato in caso di aggiornamento SDK.
 
 | Ruolo | Tool |
 |---|---|

@@ -1,13 +1,19 @@
+# Ambiente e artefatti Python rigenerabili: non sono sorgenti del progetto.
 .venv/
 __pycache__/
 *.py[cod]
 *.egg-info/
+# Cache di test e analisi statica, ricreate automaticamente dagli strumenti.
 .pytest_cache/
 .ruff_cache/
+# Configurazione locale con possibili credenziali; .env.example resta versionato.
 .env
+# Output e log di singole esecuzioni possono essere numerosi e dipendono dal run.
+# Non sono necessari per reinstallare il prototipo o rieseguire i test.
 output/
 camel_logs/
 workforce_logs/
+# Risultati del packaging e metadati locali del file manager macOS.
 build/
 dist/
 .DS_Store
