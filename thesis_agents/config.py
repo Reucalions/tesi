@@ -16,6 +16,7 @@ class ModelSettings:
     base_url: str | None = None
     timeout: float = 120
     temperature: float | None = None
+    max_tokens: int | None = None
 
     @classmethod
     def from_env(cls) -> "ModelSettings":
@@ -39,13 +40,27 @@ class ModelSettings:
             not math.isfinite(temperature) or not 0 <= temperature <= 2
         ):
             raise ValueError("LLM_TEMPERATURE deve essere compresa tra 0 e 2")
-        return cls(model, key, os.getenv("LLM_BASE_URL") or None, timeout, temperature)
+        raw_max_tokens = os.getenv("LLM_MAX_TOKENS", "").strip()
+        try:
+            max_tokens = int(raw_max_tokens) if raw_max_tokens else None
+        except ValueError as exc:
+            raise ValueError("LLM_MAX_TOKENS deve essere un intero positivo") from exc
+        if max_tokens is not None and max_tokens <= 0:
+            raise ValueError("LLM_MAX_TOKENS deve essere un intero positivo")
+        return cls(model, key, os.getenv("LLM_BASE_URL") or None, timeout, temperature, max_tokens)
 
     def create_backend(self):
         # L'import locale mantiene la lettura della configurazione indipendente
         # dall'importazione dell'SDK fino alla costruzione effettiva del backend.
         from camel.models import ModelFactory
 
+        model_config = {}
+        if self.temperature is not None:
+            model_config["temperature"] = self.temperature
+        # Limita ogni risposta, incluse le richieste di tool. Un output troncato
+        # deve comunque superare i contratti: il limite non completa né ripara JSON.
+        if self.max_tokens is not None:
+            model_config["max_tokens"] = self.max_tokens
         return ModelFactory.create(
             # Un URL esplicito seleziona il backend compatibile, utile anche per un
             # server locale. Altrimenti viene scelto il backend OpenAI di CAMEL.
@@ -56,9 +71,7 @@ class ModelSettings:
             # Omette la temperatura salvo richiesta esplicita: alcuni provider o
             # modelli non la supportano. Per Ollama la passiamo nel payload HTTP,
             # senza dipendere dal default dell'endpoint compatibile OpenAI.
-            model_config_dict=(
-                {"temperature": self.temperature} if self.temperature is not None else {}
-            ),
+            model_config_dict=model_config,
             timeout=self.timeout,
             max_retries=1,
         )

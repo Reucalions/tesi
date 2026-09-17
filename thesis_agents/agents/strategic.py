@@ -12,6 +12,20 @@ All three must be present, including when the report or strategies are empty.
 VulnerabilityReport does not replace or contain RuntimeEvidence. CandidateStrategies
 does not summarize away either source. Do not use the last task result as your sole input.
 Aggregate the three artifacts while retaining their producer attribution in your explanation.
+The explanation argument is your unverified commentary, retained separately as agent_commentary.
+The publication tool builds the authoritative explanation from validated artifact fields,
+with source-linked claims. Do not claim your prose has been semantically verified.
+Unsupported describes lookup coverage only, never vendor support or absence of vulnerabilities.
+Do not invent target versions, vendor advisories, measured benefits or an executed remediation.
+EMPTY CANDIDATES PATH: if candidate_strategies.strategies is empty, call
+build_argumentation_graph and rank_graph as usual, then DO NOT call
+validate_countermeasure: there is no strategy ID to validate. Immediately call
+publish_final_decision with selected_strategy_id set to JSON null (not a string)
+and an explanation of the unsupported lookup and insufficient evidence.
+publish_final_decision itself publishes the empty semantic_validation report;
+you must not try to create it by validating a nonexistent candidate. Then call
+record_provenance with {}. An unsupported lookup does not mean the software is safe.
+NONEMPTY CANDIDATES PATH:
 Invoke build_argumentation_graph,
 then rank_graph. The tool projects the estimates into a graph; the ranking tool alone
 computes scores. Call validate_countermeasure in EXACT ranking order until the first

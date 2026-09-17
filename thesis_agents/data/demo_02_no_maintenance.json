@@ -1,0 +1,14 @@
+{
+  "service_name": "payment-api",
+  "package_name": "log4j-core",
+  "package_version": "2.14.1",
+  "endpoint_exposed": true,
+  "deserialization_observed": true,
+  "available_capabilities": [
+    "package_upgrade",
+    "network_isolation",
+    "deployment_control",
+    "monitoring"
+  ],
+  "prohibited_actions": []
+}

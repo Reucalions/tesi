@@ -294,6 +294,7 @@ def test_runtime_evidence_survives_as_a_separate_artifact_until_decision(session
     provenance = session.require("provenance", ProvenanceRecord)
     decision_activity = next(a for a in provenance.activities if a.id == "decision")
     assert set(decision_activity.used) == {
+        "input",
         "runtime_evidence",
         "vulnerability_report",
         "candidate_strategies",

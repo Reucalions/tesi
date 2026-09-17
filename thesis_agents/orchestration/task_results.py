@@ -8,9 +8,12 @@ from thesis_agents.orchestration.artifacts import ARTIFACT_SCHEMAS, ArtifactSess
 class ArtifactTaskHandler(StructuredOutputHandler):
     """Il testo del worker non basta a dimostrare che abbia pubblicato il risultato."""
 
-    def __init__(self, session: ArtifactSession, outputs: tuple[str, ...]):
+    def __init__(
+        self, session: ArtifactSession, outputs: tuple[str, ...], inputs: tuple[str, ...] = ()
+    ):
         self.session = session
         self.outputs = outputs
+        self.inputs = inputs
 
     def _missing_outputs(self):
         missing = []
@@ -24,6 +27,10 @@ class ArtifactTaskHandler(StructuredOutputHandler):
     def generate_structured_prompt(
         self, base_prompt, schema, examples=None, additional_instructions=None
     ):
+        # Il worker chiama questo metodo prima di astep: nessuna inferenza del
+        # ruolo può partire senza artefatti validi, anche in modalità auto.
+        for name in self.inputs:
+            self.session.require(name, ARTIFACT_SCHEMAS[name])
         # CAMEL 0.2.90 antepone al task esempi di risposte senza tool. Conserviamo
         # task, parent e dipendenze, rimuovendo solo quel preambolo di formattazione.
         # Il marker fa parte di PROCESS_TASK_PROMPT nell'SDK fissato nel progetto.
@@ -46,7 +53,8 @@ class ArtifactTaskHandler(StructuredOutputHandler):
             + (", ".join(missing) or "none")
             + ". Read get_context to reuse the validated results already available; "
             "do not regenerate or replace them. Complete the remaining tool calls. "
-            "A tool call is necessary for every publication. "
+            "Publications require real tool calls; a single tool can publish multiple artifacts. "
+            "Follow your role's empty-candidate instructions when there are no strategies. "
             "After successful publication, end with a JSON object containing "
             "content (a short summary) and failed (false). "
             "If a tool fails, correct the call or report failed=true."

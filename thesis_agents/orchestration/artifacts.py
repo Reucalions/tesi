@@ -12,6 +12,7 @@ from uuid import uuid4
 
 from pydantic import BaseModel
 
+from thesis_agents.orchestration.explanations import build_explanation
 from thesis_agents.schemas import (
     ArgumentationGraph,
     CandidateStrategies,
@@ -24,6 +25,7 @@ from thesis_agents.schemas import (
     StaticTelemetry,
     VulnerabilityReport,
 )
+from thesis_agents.schemas.decision import AgentCommentary
 from thesis_agents.schemas.provenance import ProvenanceActivity, ProvenanceEntity
 from thesis_agents.tools.interfaces import (
     ProvenanceTool,
@@ -194,6 +196,9 @@ class ArtifactSession:
     def lookup_vulnerabilities(self) -> dict:
         """Query the vulnerability backend for the published software observation.
 
+        Call with the empty arguments object {}. This tool accepts no arguments;
+        software and version are read from the published RuntimeEvidence.
+
         Returns:
             dict: Authoritative VulnerabilityReport, ready to publish unchanged.
         """
@@ -289,6 +294,13 @@ class ArtifactSession:
             dict: SemanticValidationResult. Rejected candidates require trying the next.
         """
         ranking = self.require("ranking", RankingResult)
+        if not ranking.ranking:
+            raise ValueError(
+                "Ranking is empty: do not call validate_countermeasure. "
+                "Call publish_final_decision with selected_strategy_id=null and an "
+                "explanation; it also publishes the empty semantic_validation report. "
+                "Then call record_provenance."
+            )
         for previous in self._validation.validations:
             # Un retry restituisce la validazione già ottenuta senza aggiungere
             # un secondo tentativo né richiamare il backend per la stessa strategia.
@@ -331,9 +343,14 @@ class ArtifactSession:
     def publish_final_decision(self, selected_strategy_id: str | None, explanation: str) -> dict:
         """Publish a decision consistent with the ranking and all validation attempts.
 
+        With an empty ranking, call this directly with selected_strategy_id=null,
+        without calling validate_countermeasure. This also publishes the empty
+        semantic_validation report. Call record_provenance after success.
+
         Args:
             selected_strategy_id (str | None): First accepted strategy, or null if none.
-            explanation (str): Explanation grounded in evidence and actual tool results.
+            explanation (str): Agent commentary, preserved as unverified. The tool builds
+                the authoritative explanation and source references from validated artifacts.
 
         Returns:
             dict: FinalDecision. Scores and validation are copied from backend artifacts.
@@ -360,15 +377,40 @@ class ArtifactSession:
         if report.lookup_status == "unsupported":
             # «Nessuna strategia valida» e «dati insufficienti» sono esiti diversi.
             status = "insufficient_evidence"
+        claims = self._decision_claims(expected_id)
         decision = FinalDecision(
             status=status,
             selected_strategy_id=expected_id,
             ranking=ranking.ranking,
             semantic_validation=accepted,
             evidence_ids=[s.evidence_id for s in evidence.software],
-            explanation=explanation,
+            explanation="\n\n".join(c.text for c in claims),
+            explanation_method="artifact-derived-v1",
+            explanation_claims=claims,
+            agent_commentary=AgentCommentary(text=explanation),
         )
         return self._commit("final_decision", decision).model_dump(mode="json")
+
+    def _decision_claims(self, selected_strategy_id: str | None):
+        evidence, report, candidates = self._require_strategic_inputs()
+        producers = {
+            **ARTIFACT_PRODUCERS,
+            "ranking": "StrategicAgent",
+            "semantic_validation": "StrategicAgent",
+        }
+        if self.mode == "fixtures":
+            producers = {name: f"fixture:{producer}" for name, producer in producers.items()}
+        producers["input"] = "StaticTelemetry"
+        return build_explanation(
+            self.case,
+            evidence,
+            report,
+            candidates,
+            self.require("ranking", RankingResult),
+            self.require("semantic_validation", SemanticValidationReport),
+            selected_strategy_id,
+            producers,
+        )
 
     def record_provenance(self) -> dict:
         """Record input/output hashes and the agents responsible for each activity.
@@ -408,6 +450,7 @@ class ArtifactSession:
                 "decision",
                 "StrategicAgent",
                 [
+                    "input",
                     "runtime_evidence",
                     "vulnerability_report",
                     "candidate_strategies",
@@ -469,7 +512,14 @@ class ArtifactSession:
             stored = schema.model_validate_json((self.output_dir / f"{name}.json").read_text())
             if value != stored:
                 raise ValueError(f"Stored artifact differs from validated state: {name}")
-        return self.require("final_decision", FinalDecision)
+        decision = self.require("final_decision", FinalDecision)
+        # Ricostruisce la spiegazione dalle fonti: non basta che riferimenti e
+        # testo abbiano la forma corretta o che file e memoria coincidano.
+        if decision.explanation_method != "artifact-derived-v1" or (
+            decision.explanation_claims != self._decision_claims(decision.selected_strategy_id)
+        ):
+            raise ValueError("Final explanation must be derived from the current artifacts")
+        return decision
 
 
 def json_payload(value: BaseModel | dict) -> str:

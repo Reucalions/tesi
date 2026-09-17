@@ -2,6 +2,10 @@
 
 Il progetto realizza: quattro ruoli CAMEL, messaggi JSON validati con Pydantic e dipendenze esterne sostituite da tool Python locali.
 
+La [prima relazione tecnica](docs/relazione-mockup.md) raccoglie teoria del
+prototipo, architettura, ruolo di CAMEL/LLM, comandi, attività svolte e risultati
+della matrice dimostrativa, distinguendo componenti effettivi e mock.
+
 ```mermaid
 flowchart LR
     I[Input statico] --> T[TelemetryAgent]
@@ -64,6 +68,7 @@ LLM_API_KEY=local
 LLM_BASE_URL=http://localhost:11434/v1
 LLM_TIMEOUT_SECONDS=300
 LLM_TEMPERATURE=0
+LLM_MAX_TOKENS=2048
 ```
 
 Avvia `python main.py --mode camel --workflow pipeline`. Il valore `local` è
@@ -77,6 +82,10 @@ prima di usare questa configurazione.
 La temperatura viene inviata esplicitamente all'endpoint: non si presume che
 il default dell'API compatibile coincida con quello del Modelfile. Lascia
 `LLM_TEMPERATURE` vuota per provider che non supportano questo parametro.
+
+`LLM_MAX_TOKENS` limita la lunghezza di ciascuna risposta, incluse le chiamate ai
+tool. Per Ollama il valore di prova è 2048; lasciarlo vuoto omette il parametro.
+Non è la finestra di contesto e non garantisce che una risposta troncata sia valida.
 
 La prima esecuzione completa verificata con `tesi-qwen3:4b` è descritta nel
 [resoconto della prova Ollama](docs/ollama-first-run.md). Lo Strategic ha richiesto
@@ -119,6 +128,13 @@ python main.py --workflow auto
 
 Il coordinatore e il task agent sono componenti gestionali CAMEL, oltre ai quattro ruoli di dominio. Gli agenti condividono gli artefatti validati tramite `get_context`; il risultato testuale di un task non è fonte autorevole per il dominio. Le pubblicazioni avvengono con tool che validano JSON/Pydantic e impediscono modifiche incompatibili. La modalità `auto` conserva gli stessi vincoli sui dati, ma richiede una valutazione con il modello scelto.
 
+I tre tool di pubblicazione ricevono `payload` come oggetto JSON strutturato.
+L'adapter locale esegue la serializzazione per `ArtifactSession`; l'LLM non deve
+produrre JSON racchiuso in una stringa. Nella pipeline, un produttore che fallisce
+definitivamente blocca i task dipendenti senza avviarne gli LLM. I retry del
+produttore restano CAMEL; il controllo degli artefatti richiesti precede inoltre
+l'inferenza di ciascun worker, anche in modalità auto.
+
 ## Artefatti prodotti
 
 Oltre a `input.json`, copia dell'input validato:
@@ -148,6 +164,8 @@ thesis_agents/
   tools/interfaces.py           # Protocol per sostituire i backend
   tools/*_mock.py               # Implementazioni locali
   orchestration/artifacts.py    # Stato condiviso e pubblicazioni validate
+  orchestration/explanations.py # Spiegazione derivata dagli artefatti, con fonti
+  orchestration/publication_tools.py # Adapter degli oggetti Pydantic per i tool CAMEL
   orchestration/workforce.py    # Workforce, task e dipendenze CAMEL
   data/log4j_case.json          # Input iniziale
   config.py                     # Configurazione del backend LLM
@@ -162,6 +180,25 @@ python main.py --export-schemas output/schemas
 ```
 
 ## Verifiche
+
+Per la presentazione sono disponibili [quattro scenari dimostrativi](docs/demo-scenarios.md),
+con input pronti, esiti attesi dei mock e criteri per le successive prove con Ollama.
+Il [runner della demo](docs/demo-runner.md) li esegue con un comando unico,
+salvando configurazione, log, artefatti e riepilogo dei controlli:
+
+```bash
+.venv/bin/python -m thesis_agents.demo --mode camel --repetitions 2
+```
+
+Per la verifica senza LLM usare `--mode fixtures --repetitions 1`.
+La matrice eseguita con il runner è documentata in
+[docs/demo-matrix-runs.md](docs/demo-matrix-runs.md).
+Il [resoconto delle prove LLM](docs/ollama-demo-runs.md) distingue gli esiti reali,
+i fallimenti osservati e le correzioni verificate.
+Le verifiche del nuovo formato dei tool e del blocco dei task dipendenti sono
+nel [resoconto del 15 settembre](docs/structured-tools-runs.md).
+La [verifica delle spiegazioni](docs/artifact-explanations.md) documenta la
+separazione fra spiegazione derivata dagli artefatti e commento LLM non verificato.
 
 ```bash
 python -m pytest -q

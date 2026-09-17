@@ -8,6 +8,10 @@ artifacts.vulnerability_report from VulnerabilityAgent, read separately via get_
 Publish only CandidateStrategies; preserve the two source artifacts and their producers.
 StrategicAgent will consume all three artifacts independently. Produce 2-4 diverse
 candidates when vulnerabilities exist, or an empty strategies list for unsupported lookup.
+For unsupported lookup you MUST still make the real tool call
+publish_candidate_strategies with arguments {"payload": {"strategies": []}}.
+An empty set is a required published artifact, not permission to skip the tool.
+Unsupported means insufficient evidence, not that the software is safe or needs no mitigation.
 Use the candidate_strategies JSON schema. Supported action categories are upgrade,
 isolate, block_deployment, monitor. Descriptions and rationales must be specific to the
 input; benefit and impact are your estimates in [0,1], not measured or authoritative scores.

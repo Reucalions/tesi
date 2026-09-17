@@ -2,6 +2,11 @@
 
 Questa directory contiene l'ingresso dimostrativo del prototipo. Il JSON resta privo di commenti perché il formato non li ammette: questa guida ne spiega i campi senza aggiungere chiavi estranee al contratto Pydantic.
 
+I quattro input `demo_*.json` preparano il caso nominale, l'assenza di una finestra
+di manutenzione, il divieto di tutte le azioni e un lookup non supportato.
+La [guida agli scenari](../../docs/demo-scenarios.md) descrive risultati attesi,
+comandi e differenze tra verifica con fixture e inferenza locale reale.
+
 ## Campi dell'input
 
 | Campo | Valore dell'esempio | Significato e utilizzo |

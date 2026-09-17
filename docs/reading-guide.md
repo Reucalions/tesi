@@ -19,6 +19,8 @@ I file Python contengono commenti in italiano su responsabilità, input/output, 
 | [thesis_agents/main.py](../thesis_agents/main.py) | Parsing degli argomenti, export degli schemi, `.env`, risorsa JSON, directory del run, scelta CAMEL/fixtures ed errori gestiti. |
 | [config.py](../thesis_agents/config.py) | Configurazione immutabile del modello, precedenza delle chiavi, URL opzionale e costruzione differita del backend. |
 | [fixtures.py](../thesis_agents/fixtures.py) | Proposte statiche, pubblicazioni attraverso gli stessi contratti, ranking e fallback senza inferenza. |
+| [demo.py](../thesis_agents/demo.py) | Runner della matrice: processi CLI isolati, configurazione locale, input, timeout e riepiloghi. |
+| [demo_audit.py](../thesis_agents/demo_audit.py) | Audit in sola lettura degli artefatti e dei messaggi consegnati allo Strategic. |
 | [log4j_case.json](../thesis_agents/data/log4j_case.json) | Input dimostrativo: la [guida dei dati](../thesis_agents/data/README.md) descrive ogni campo e variazioni del caso. |
 
 `mode` e `workflow` hanno scopi diversi. `mode=camel` usa inferenza tramite CAMEL; `mode=fixtures` esercita i contratti con dati prefissati. Solo nella prima modalità `workflow` decide se usare task dichiarati nella pipeline o decomposizione gestita dal modello.
@@ -28,10 +30,17 @@ I file Python contengono commenti in italiano su responsabilità, input/output, 
 | File | Cosa osservare nei commenti |
 |---|---|
 | [artifacts.py](../thesis_agents/orchestration/artifacts.py) | Copie profonde, scritture idempotenti, cache del lookup, contesto separato per produttore, validazioni in ordine e controlli della decisione. |
+| [explanations.py](../thesis_agents/orchestration/explanations.py) | Spiegazione della decisione derivata da campi strutturati, riferimenti alle fonti e distinzione fra dati riportati, stime e limiti. |
+| [publication_tools.py](../thesis_agents/orchestration/publication_tools.py) | Payload Pydantic strutturati esposti a CAMEL e serializzazione nell'adapter verso la sessione, senza cambiare i contratti degli artefatti. |
 | [workforce.py](../thesis_agents/orchestration/workforce.py) | Ruoli, task, DAG esplicito, componenti gestionali CAMEL, tool concessi ai worker e verifica finale del run. |
 | [task_results.py](../thesis_agents/orchestration/task_results.py) | Distingue le chiamate ai tool dal riepilogo finale e rifiuta il successo del worker quando mancano gli artefatti richiesti. |
 
 Tre strutture non vanno confuse: la memoria conversazionale di ChatAgent contiene i messaggi del modello; `TaskResult` è il risultato gestionale del task; `ArtifactSession` contiene gli output di dominio autorevoli, validati da Pydantic. Il successo della Workforce viene accettato solo se esistono anche tutti gli artefatti previsti.
+
+`ArtifactWorkforce` adatta la gestione dei fallimenti della pipeline: i task
+dipendenti da produttori definitivamente falliti vengono bloccati. Il gestore
+`ArtifactTaskHandler` verifica inoltre gli input prima dell'inferenza del worker;
+non costruisce o pubblica gli artefatti mancanti.
 
 `_commit` e `require` sono funzioni interne per scrivere e leggere modelli. I metodi pubblici di pubblicazione applicano vincoli aggiuntivi specifici: per esempio, una `RuntimeEvidence` può essere valida per Pydantic ma comunque rifiutata perché altera la versione dell'input.
 
@@ -78,6 +87,8 @@ La dependency injection avviene nel costruttore di `ArtifactSession`: riceve imp
 |---|---|
 | [conftest.py](../tests/conftest.py) | Preparazione di un caso e di una directory temporanea indipendenti per ogni test. |
 | [test_contracts.py](../tests/test_contracts.py) | Regole di dominio, casi negativi, idempotenza, fallback, provenienza e presenza dei tre input strategici. Ogni test spiega lo scenario che sta simulando. |
+| [test_explanations.py](../tests/test_explanations.py) | Separazione del commento non verificato, rifiuto di claim alterati e compatibilità esplicita dei JSON storici. |
+| [test_demo_runner.py](../tests/test_demo_runner.py) | Matrice fixture, timeout, fallimenti parziali, conservazione degli output e regressioni dell'audit. |
 | [test_cli.py](../tests/test_cli.py) | Codici di uscita, protezione degli output, export degli schemi e mancanza di configurazione. |
 | [test_camel_integration.py](../tests/test_camel_integration.py) | Workforce e tool calling reali con inferenza programmata; controllo dei dati effettivamente consegnati allo StrategicAgent. |
 
@@ -100,5 +111,6 @@ Alcuni test alterano deliberatamente `_artifacts`: è una simulazione di stato i
 | [architecture.md](architecture.md) | Contratti architetturali, DAG, limiti del mock e futuri punti di integrazione. |
 | [data/README.md](../thesis_agents/data/README.md) | Spiegazione campo per campo del JSON, che non può contenere commenti inline. |
 | [reading-guide.md](reading-guide.md) | Questa mappa, che collega la documentazione ai commenti nei sorgenti. |
+| [relazione-mockup.md](relazione-mockup.md) | Prima relazione complessiva: motivazioni, architettura, agenti/LLM, comandi, attività, risultati e integrazioni future. |
 
 Le cartelle `.venv`, `.git`, le cache e gli output generati non sono sorgenti da annotare: gli output si interpretano attraverso i modelli e la documentazione del progetto.

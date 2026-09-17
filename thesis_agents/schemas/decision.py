@@ -3,7 +3,7 @@
 # Questi controlli interni si sommano ai confronti fra artefatti in ArtifactSession.
 from typing import Literal
 
-from pydantic import StrictBool, model_validator
+from pydantic import Field, StrictBool, model_validator
 
 from .argumentation import RankedStrategy
 from .base import Identifier, Message, Text
@@ -37,6 +37,32 @@ class SemanticValidationReport(Message):
     validations: list[SemanticValidationResult]
 
 
+class ExplanationSource(Message):
+    # JSON Pointer verso un campo dell'artefatto, non verso un riepilogo LLM.
+    artifact: Literal[
+        "input",
+        "runtime_evidence",
+        "vulnerability_report",
+        "candidate_strategies",
+        "ranking",
+        "semantic_validation",
+    ]
+    pointer: str = Field(pattern=r"^(/[^/~]*(~[01][^/~]*)*)*$")
+    producer: Text
+
+
+class ExplanationClaim(Message):
+    category: Literal["reported_fact", "estimate", "decision", "limitation"]
+    text: Text
+    sources: list[ExplanationSource] = Field(min_length=1)
+
+
+class AgentCommentary(Message):
+    # Conserva il testo originale senza attribuirgli una verifica semantica.
+    text: Text
+    verification: Literal["unverified"] = "unverified"
+
+
 class FinalDecision(Message):
     # selected: proposta accettata; no_valid_strategy: tutte le alternative rifiutate;
     # insufficient_evidence: lookup non coperto. «Selected» non esegue la contromisura.
@@ -49,6 +75,10 @@ class FinalDecision(Message):
     evidence_ids: list[Identifier]
     # Questi ID provengono dall'evidenza originale, non da un riepilogo del report KG.
     explanation: Text
+    # I JSON storici restano leggibili, ma il testo legacy non diventa verificato.
+    explanation_method: Literal["legacy-unverified", "artifact-derived-v1"] = "legacy-unverified"
+    explanation_claims: list[ExplanationClaim] = Field(default_factory=list)
+    agent_commentary: AgentCommentary | None = None
 
     @model_validator(mode="after")
     def check_selection(self):
@@ -64,4 +94,13 @@ class FinalDecision(Message):
                 raise ValueError("Selected strategy is absent from ranking")
         elif self.selected_strategy_id is not None or self.semantic_validation is not None:
             raise ValueError("Unselected decisions must not include a selected strategy")
+        if self.explanation_method == "artifact-derived-v1":
+            if not self.explanation_claims or self.agent_commentary is None:
+                raise ValueError(
+                    "Derived explanations require claims and separate agent commentary"
+                )
+            if self.explanation != "\n\n".join(c.text for c in self.explanation_claims):
+                raise ValueError("Explanation text must match its source-linked claims")
+        elif self.explanation_claims or self.agent_commentary is not None:
+            raise ValueError("Legacy explanations cannot claim verified attribution")
         return self

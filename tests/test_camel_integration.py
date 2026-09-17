@@ -13,7 +13,9 @@ import json
 import re
 from collections import defaultdict
 
+import pytest
 from camel.models.stub_model import StubModel
+from camel.societies.workforce import Workforce
 from camel.societies.workforce.workforce import WorkforceMode
 from camel.tasks import Task
 from camel.tasks.task import TaskState
@@ -22,7 +24,12 @@ from camel.types import ChatCompletion, ModelType
 from thesis_agents.fixtures import fixture_candidates, fixture_evidence
 from thesis_agents.orchestration.artifacts import ArtifactSession
 from thesis_agents.orchestration.workforce import build_workforce, run_camel
-from thesis_agents.schemas import CandidateStrategies, RuntimeEvidence, VulnerabilityReport
+from thesis_agents.schemas import (
+    CandidateStrategies,
+    RuntimeEvidence,
+    SemanticValidationReport,
+    VulnerabilityReport,
+)
 
 
 class ScriptedToolModel(StubModel):
@@ -71,7 +78,7 @@ class ScriptedToolModel(StubModel):
                 ("get_context", {}),
                 (
                     "publish_runtime_evidence",
-                    {"payload": fixture_evidence(self.session).model_dump_json()},
+                    {"payload": fixture_evidence(self.session).model_dump(mode="json")},
                 ),
             ]
         elif "publish_vulnerability_report" in tool_names:
@@ -83,29 +90,44 @@ class ScriptedToolModel(StubModel):
                 script.append(
                     (
                         "publish_vulnerability_report",
-                        {"payload": self.session._lookup.model_dump_json()},
+                        {"payload": self.session._lookup.model_dump(mode="json")},
                     )
                 )
         elif "publish_candidate_strategies" in tool_names:
             role = "countermeasure"
+            report = self.session.require("vulnerability_report", VulnerabilityReport)
             script = [
                 ("get_context", {}),
                 (
                     "publish_candidate_strategies",
-                    {"payload": fixture_candidates(["CVE-2021-44228"]).model_dump_json()},
+                    {
+                        "payload": fixture_candidates(
+                            [v.cve_id for v in report.vulnerabilities]
+                        ).model_dump(mode="json")
+                    },
                 ),
             ]
         else:
             role = "strategic"
+            unsupported = (
+                self.session.require("vulnerability_report", VulnerabilityReport).lookup_status
+                == "unsupported"
+            )
             script = [
                 ("get_context", {}),
                 ("build_argumentation_graph", {}),
                 ("rank_graph", {}),
-                ("validate_countermeasure", {"strategy_id": "S_UPGRADE"}),
+                # Senza candidate il modello deve pubblicare direttamente null;
+                # il tool finale crea anche il report semantico vuoto.
+                *(
+                    []
+                    if unsupported
+                    else [("validate_countermeasure", {"strategy_id": "S_UPGRADE"})]
+                ),
                 (
                     "publish_final_decision",
                     {
-                        "selected_strategy_id": "S_UPGRADE",
+                        "selected_strategy_id": None if unsupported else "S_UPGRADE",
                         "explanation": "Scripted inference test; real CAMEL tool dispatch.",
                     },
                 ),
@@ -182,6 +204,17 @@ def test_real_workforce_dispatches_four_agents_and_publishes_artifacts(case, tmp
     backend = ScriptedToolModel(session)
     result = run_camel(session, lambda: backend)
     assert result.selected_strategy_id == "S_UPGRADE"
+    assert result.explanation_method == "artifact-derived-v1"
+    assert result.agent_commentary.text == "Scripted inference test; real CAMEL tool dispatch."
+    assert result.agent_commentary.text not in result.explanation
+    producers = {s.producer for c in result.explanation_claims for s in c.sources}
+    assert producers == {
+        "StaticTelemetry",
+        "TelemetryAgent",
+        "VulnerabilityAgent",
+        "CountermeasureAgent",
+        "StrategicAgent",
+    }
     assert set(backend.steps) == {"telemetry", "vulnerability", "countermeasure", "strategic"}
     assert backend.tool_calls.count("lookup_vulnerabilities") == 1
     assert backend.tool_calls.count("rank_graph") == 1
@@ -205,6 +238,27 @@ def test_real_workforce_dispatches_four_agents_and_publishes_artifacts(case, tmp
     assert result.evidence_ids == [s["evidence_id"] for s in runtime["software"]]
 
 
+def test_real_workforce_completes_unsupported_lookup_without_validation(case, tmp_path):
+    # Regressione del percorso vuoto osservato con Ollama: esegue davvero i tool
+    # CAMEL, ma lo script non dimostra che un LLM seguirà il prompt corretto.
+    case.package_name = "demo-unsupported-package"
+    session = ArtifactSession(case, tmp_path, mode="camel", model="scripted-test-only")
+    backend = ScriptedToolModel(session)
+    result = run_camel(session, lambda: backend)
+    assert result.status == "insufficient_evidence"
+    assert result.selected_strategy_id is None
+    assert result.ranking == []
+    assert "validate_countermeasure" not in backend.tool_calls
+    assert backend.tool_calls.count("publish_final_decision") == 1
+    assert backend.tool_calls.count("record_provenance") == 1
+    assert session.require("semantic_validation", SemanticValidationReport).validations == []
+    context = backend.received_contexts["strategic"]
+    assert context["artifacts"]["vulnerability_report"]["lookup_status"] == "unsupported"
+    assert context["artifacts"]["candidate_strategies"]["strategies"] == []
+    assert context["artifacts"]["runtime_evidence"]["software"][0]["package"] == case.package_name
+    assert session.assert_complete() == result
+
+
 def test_default_pipeline_has_explicit_producer_dependencies(case, tmp_path):
     # Ispeziona task e mappa interna dello scheduler: verificare soltanto la costante
     # TASK_DEPENDENCIES non proverebbe che gli archi siano stati passati a CAMEL.
@@ -220,6 +274,86 @@ def test_default_pipeline_has_explicit_producer_dependencies(case, tmp_path):
     # Check both the task objects and CAMEL's actual scheduling dependency map.
     assert {t.id: [d.id for d in t.dependencies] for t in workforce._pending_tasks} == expected
     assert workforce._task_dependencies == expected
+
+
+@pytest.mark.parametrize(
+    "failed_role,blocked",
+    [
+        ("telemetry", {"vulnerability", "countermeasure", "strategic"}),
+        ("vulnerability", {"countermeasure", "strategic"}),
+        ("countermeasure", {"strategic"}),
+    ],
+)
+def test_pipeline_blocks_descendants_after_producer_exhausts_retries(
+    case, tmp_path, failed_role, blocked
+):
+    class FailingProducer(ScriptedToolModel):
+        failures = 0
+        invoked_roles = set()
+
+        def _run(self, messages, response_format=None, tools=None):
+            names = {t["function"]["name"] for t in tools or []}
+            for role, publication in (
+                ("telemetry", "publish_runtime_evidence"),
+                ("vulnerability", "publish_vulnerability_report"),
+                ("countermeasure", "publish_candidate_strategies"),
+                ("strategic", "publish_final_decision"),
+            ):
+                if publication in names:
+                    self.invoked_roles.add(role)
+                    if role == failed_role:
+                        self.failures += 1
+                        return self._completion(
+                            content='{"content":"Cannot publish","failed":true}'
+                        )
+            return super()._run(messages, response_format, tools)
+
+    session = ArtifactSession(case, tmp_path, mode="camel", model="scripted-test-only")
+    backend = FailingProducer(session)
+    workforce = build_workforce(session, lambda: backend)
+    result = workforce.process_task(Task(id="main", content="Execute the configured pipeline"))
+    assert result.state == TaskState.FAILED
+    assert backend.failures == 2
+    assert backend.invoked_roles.isdisjoint(blocked)
+    assert set(workforce.blocked_tasks) == blocked
+    assert failed_role in workforce.failure_description()
+    assert "Task bloccati" in workforce.failure_description()
+    assert not (tmp_path / "final_decision.json").exists()
+    assert not workforce._pending_tasks
+
+
+@pytest.mark.parametrize("workflow", ["pipeline", "auto"])
+def test_worker_checks_missing_artifacts_before_llm(case, tmp_path, workflow):
+    class MustNotInfer(ScriptedToolModel):
+        def _run(self, messages, response_format=None, tools=None):
+            pytest.fail("A worker without prerequisites must not invoke the LLM")
+
+    session = ArtifactSession(case, tmp_path, mode="camel", model="scripted-test-only")
+    workforce = build_workforce(session, lambda: MustNotInfer(session), workflow=workflow)
+    worker = workforce._children[1]
+    task = Task(id="vulnerability", content="Look up vulnerabilities")
+    assert asyncio.run(worker._process_task(task, [])) == TaskState.FAILED
+    assert "Missing prerequisite artifact: runtime_evidence" in task.result
+
+
+def test_blocking_preserves_independent_tasks(case, tmp_path, monkeypatch):
+    session = ArtifactSession(case, tmp_path, mode="camel", model="scripted-test-only")
+    workforce = build_workforce(session, lambda: ScriptedToolModel(session))
+    telemetry_task = workforce._pending_tasks.popleft()
+    telemetry_task.state = TaskState.FAILED
+    workforce._completed_tasks.append(telemetry_task)
+    independent = Task(id="independent", content="Independent task", state=TaskState.OPEN)
+    workforce._pending_tasks.append(independent)
+    workforce._task_dependencies[independent.id] = []
+
+    async def inspect_ready_tasks(self):
+        # Il filtro deve consegnare allo scheduler SDK il ramo indipendente.
+        assert list(self._pending_tasks) == [independent]
+
+    monkeypatch.setattr(Workforce, "_post_ready_tasks", inspect_ready_tasks)
+    asyncio.run(workforce._post_ready_tasks())
+    assert set(workforce.blocked_tasks) == {"vulnerability", "countermeasure", "strategic"}
+    assert independent.state != TaskState.FAILED
 
 
 def test_camel_worker_rejects_success_without_artifact(case, tmp_path):
