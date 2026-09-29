@@ -1,0 +1,48 @@
+{
+  "validations": [
+    {
+      "strategy_id": "S_UPGRADE",
+      "valid": false,
+      "status": "rejected",
+      "missing_requirements": [],
+      "conflicts": [
+        "Action prohibited by scenario: upgrade"
+      ],
+      "explanation": "Local fixture requirements or policy not satisfied.",
+      "backend": "capability-policy-mock-v1"
+    },
+    {
+      "strategy_id": "S_MONITOR",
+      "valid": false,
+      "status": "rejected",
+      "missing_requirements": [],
+      "conflicts": [
+        "Action prohibited by scenario: monitor"
+      ],
+      "explanation": "Local fixture requirements or policy not satisfied.",
+      "backend": "capability-policy-mock-v1"
+    },
+    {
+      "strategy_id": "S_ISOLATE",
+      "valid": false,
+      "status": "rejected",
+      "missing_requirements": [],
+      "conflicts": [
+        "Action prohibited by scenario: isolate"
+      ],
+      "explanation": "Local fixture requirements or policy not satisfied.",
+      "backend": "capability-policy-mock-v1"
+    },
+    {
+      "strategy_id": "S_BLOCK",
+      "valid": false,
+      "status": "rejected",
+      "missing_requirements": [],
+      "conflicts": [
+        "Action prohibited by scenario: block_deployment"
+      ],
+      "explanation": "Local fixture requirements or policy not satisfied.",
+      "backend": "capability-policy-mock-v1"
+    }
+  ]
+}

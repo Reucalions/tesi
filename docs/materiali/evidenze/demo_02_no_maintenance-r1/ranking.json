@@ -1,0 +1,22 @@
+{
+  "graph_id": "graph:run-f4c8b191d18e415291e89ba16122fee5",
+  "backend": "signed-one-hop-mock-v1",
+  "ranking": [
+    {
+      "strategy_id": "S_UPGRADE",
+      "score": 0.825
+    },
+    {
+      "strategy_id": "S_MONITOR",
+      "score": 0.65
+    },
+    {
+      "strategy_id": "S_ISOLATE",
+      "score": 0.625
+    },
+    {
+      "strategy_id": "S_BLOCK",
+      "score": 0.5
+    }
+  ]
+}

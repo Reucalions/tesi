@@ -1,0 +1,77 @@
+{
+  "strategies": [
+    {
+      "id": "S_UPGRADE",
+      "action": "upgrade",
+      "description": "Upgrade log4j-core to a vendor-supported version that has remediated CVE-2021-44228.",
+      "addressed_vulnerabilities": [
+        "CVE-2021-44228"
+      ],
+      "security_benefit": 0.95,
+      "operational_impact": 0.3,
+      "prerequisites": [
+        "maintenance_window",
+        "package_upgrade"
+      ],
+      "constraints": [
+        "Upgrade must be validated against application compatibility.",
+        "Vendor-supported remediated version must be confirmed before deployment."
+      ],
+      "rationale": "CVE-2021-44228 is a critical vulnerability with CVSS 10.0, and upgrading resolves the root cause by eliminating the vulnerable version."
+    },
+    {
+      "id": "S_ISOLATE",
+      "action": "isolate",
+      "description": "Isolate the payment-api service from external network access to prevent exploitation.",
+      "addressed_vulnerabilities": [
+        "CVE-2021-44228"
+      ],
+      "security_benefit": 0.85,
+      "operational_impact": 0.6,
+      "prerequisites": [
+        "network_isolation"
+      ],
+      "constraints": [
+        "Isolation must be applied to the payment-api service immediately.",
+        "Network isolation may impact service availability."
+      ],
+      "rationale": "Immediate isolation reduces the attack surface and prevents lateral movement or exploitation of the exposed endpoint."
+    },
+    {
+      "id": "S_BLOCK",
+      "action": "block_deployment",
+      "description": "Block all future deployments of the payment-api service until a secure version is validated and rolled out.",
+      "addressed_vulnerabilities": [
+        "CVE-2021-44228"
+      ],
+      "security_benefit": 0.9,
+      "operational_impact": 0.9,
+      "prerequisites": [
+        "deployment_control"
+      ],
+      "constraints": [
+        "Deployment of the payment-api service must be halted until a verified fix is implemented.",
+        "This action may affect business operations requiring payment processing."
+      ],
+      "rationale": "Blocking deployment prevents any new instances from being exposed to the vulnerable version, reducing the potential attack surface."
+    },
+    {
+      "id": "S_MONITOR",
+      "action": "monitor",
+      "description": "Enhance monitoring to detect and alert on suspicious activity related to the vulnerable endpoint.",
+      "addressed_vulnerabilities": [
+        "CVE-2021-44228"
+      ],
+      "security_benefit": 0.4,
+      "operational_impact": 0.1,
+      "prerequisites": [
+        "monitoring"
+      ],
+      "constraints": [
+        "Monitoring must be configured to detect unusual activity on the payment-api endpoint.",
+        "Alerts must be routed to security operations personnel."
+      ],
+      "rationale": "While monitoring does not eliminate the vulnerability, it enables early detection of exploitation attempts."
+    }
+  ]
+}

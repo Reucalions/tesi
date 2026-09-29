@@ -1,0 +1,13 @@
+{
+  "validations": [
+    {
+      "strategy_id": "S_UPGRADE",
+      "valid": true,
+      "status": "accepted",
+      "missing_requirements": [],
+      "conflicts": [],
+      "explanation": "Local fixture requirements satisfied; this is not a Tiny-ME proof.",
+      "backend": "capability-policy-mock-v1"
+    }
+  ]
+}

@@ -1,0 +1,285 @@
+[
+  {
+    "title": "Dalle evidenze a una proposta verificabile",
+    "subtitle": "Prototipo multi-agente per Agentic CTI",
+    "kind": "hero",
+    "seconds": 45,
+    "cards": [
+      [
+        "4 agenti CAMEL",
+        "Inferenza reale con Ollama locale"
+      ],
+      [
+        "3 input distinti",
+        "Evidenza runtime, report e strategie"
+      ],
+      [
+        "8/8 run verificati",
+        "Quattro scenari, due ripetizioni"
+      ]
+    ],
+    "footer": "Prototipo di tesi · repository tesi · settembre 2026",
+    "notes": "L'obiettivo è mostrare un prototipo eseguibile che passa da dati su un servizio a una proposta di contromisura verificabile. Gli agenti CAMEL e il modello locale sono effettivamente utilizzati; i servizi esterni sono ancora simulati. La domanda di questa fase è se gli agenti riescano a collaborare rispettando contratti e provenienza delle evidenze. Le otto prove riguardano quattro scenari dimostrativi: non sono una misura generale di affidabilità. Nessuna contromisura viene eseguita sull'infrastruttura."
+  },
+  {
+    "title": "Una vulnerabilità non basta per scegliere un'azione",
+    "subtitle": "Caso dimostrativo: payment-api · log4j-core 2.14.1",
+    "kind": "cards",
+    "seconds": 55,
+    "cards": [
+      [
+        "Evidenza",
+        "Software/versione e condizioni runtime osservate"
+      ],
+      [
+        "Conoscenza",
+        "Lookup mock: fixture CVE-2021-44228"
+      ],
+      [
+        "Vincoli",
+        "Capacità disponibili e azioni vietate nello scenario"
+      ]
+    ],
+    "callout": "Se manca la finestra di manutenzione, l'upgrade deve essere rifiutato.",
+    "footer": "Input statico e lookup illustrativo: non attestano un exploit avvenuto.",
+    "notes": "Il caso parte da un input statico, non da OpenTelemetry già collegato. Il servizio e il pacchetto sono associati a una vulnerabilità dal lookup mock. Questa informazione non basta a scegliere una risposta: occorre sapere quali azioni siano possibili e consentite. Per esempio, una proposta di upgrade non è ammissibile se manca la finestra di manutenzione. Separare evidenza, correlazione e vincoli permette di spiegare un eventuale rifiuto e la scelta successiva."
+  },
+  {
+    "title": "Tre artefatti convergono nello StrategicAgent",
+    "subtitle": "Il DAG conserva sia le dipendenze dati sia l'identità dei produttori",
+    "kind": "dag",
+    "seconds": 80,
+    "footer": "Stato condiviso: ArtifactSession · lettura esplicita: get_context",
+    "notes": "Telemetry pubblica RuntimeEvidence. Vulnerability ne usa software e versione per il lookup e pubblica un report separato. Countermeasure usa entrambi per generare strategie. Lo Strategic legge tutte e tre le chiavi del contesto, senza affidarsi soltanto al riepilogo dell'ultimo task. Nella pipeline i prerequisiti producono un ordine sequenziale, ma un artefatto non sostituisce il precedente. I produttori restano indicati nel contesto e nella provenienza. Il diagramma rappresenta dipendenze logiche, non messaggi inviati su una rete esterna."
+  },
+  {
+    "title": "CAMEL esegue gli agenti, Ollama genera le chiamate",
+    "subtitle": "I quattro ChatAgent sono costruiti in build_workforce",
+    "kind": "cards",
+    "seconds": 70,
+    "cards": [
+      [
+        "CAMEL",
+        "Assegna i task, esegue i worker e gestisce i recuperi"
+      ],
+      [
+        "LLM locale",
+        "Propone argomenti dei tool, strategie e motivazioni"
+      ],
+      [
+        "Tool Python",
+        "Validano, calcolano e pubblicano i risultati di dominio"
+      ]
+    ],
+    "callout": "L'LLM propone; ranking, vincoli e pubblicazione sono controllati dal codice.",
+    "footer": "thesis_agents/orchestration/workforce.py · agents/ · config.py",
+    "notes": "I file in agents definiscono prompt e tool, mentre gli oggetti ChatAgent sono creati in workforce.py. Ogni worker riceve soltanto i tool del proprio ruolo. Il modello locale, tesi-qwen3:4b, interpreta le istruzioni ed effettua tool calling reale. Il CountermeasureAgent è il principale punto di generazione delle alternative. I tool deterministici calcolano ranking e ammissibilità. Sono presenti anche modelli gestionali CAMEL: le richieste LLM non corrispondono quindi a una sola chiamata per ciascuno dei quattro ruoli."
+  },
+  {
+    "title": "Un messaggio di successo non crea un artefatto",
+    "subtitle": "La pubblicazione attraversa schema e controlli fra gli artefatti",
+    "kind": "cards",
+    "seconds": 65,
+    "cards": [
+      [
+        "Pydantic",
+        "Forma, tipi, campi consentiti e coerenza interna"
+      ],
+      [
+        "ArtifactSession",
+        "Fatti uguali all'input, report uguale al lookup, selezione coerente"
+      ],
+      [
+        "Task handler",
+        "Rifiuta il completamento se mancano gli output richiesti"
+      ]
+    ],
+    "callout": "Lo Strategic deve invocare davvero publish_final_decision e record_provenance.",
+    "footer": "Il testo libero può essere formalmente valido e semanticamente impreciso.",
+    "notes": "Gli artefatti autorevoli sono modelli Pydantic pubblicati mediante tool e salvati come JSON. Pydantic controlla la struttura; ArtifactSession applica anche confronti fra input e output. L'handler del task impedisce che un semplice messaggio DONE mascheri una pubblicazione mancante. Questo caso è stato osservato realmente nel secondo run nominale: mancavano decisione e provenienza, il primo tentativo è stato respinto e CAMEL ha recuperato. La validazione strutturale non dimostra la verità di qualsiasi frase generata."
+  },
+  {
+    "title": "Classificare una proposta e accettarla sono due passi",
+    "subtitle": "Il ranking usa stime; la validazione controlla capacità e policy",
+    "kind": "cards",
+    "seconds": 65,
+    "cards": [
+      [
+        "1 · Ordinamento",
+        "Score dal beneficio e dall'impatto stimati delle candidate"
+      ],
+      [
+        "2 · Validazione",
+        "Controlli in ordine di ranking, con motivi espliciti dei rifiuti"
+      ],
+      [
+        "3 · Decisione",
+        "Prima candidata accettata oppure esito senza selezione"
+      ]
+    ],
+    "callout": "score = clamp(0.5 + 0.5 × beneficio − 0.5 × impatto, 0, 1)",
+    "footer": "Euristica del mock: pesi dimostrativi, non formula BWAF validata.",
+    "notes": "Il grafo rappresenta beneficio come supporto e impatto operativo come attacco. Il ranking mock applica la formula mostrata e risolve i pareggi per ID. Le stime di ingresso vengono dall'LLM, quindi un calcolo deterministico non rende oggettivi i punteggi. Lo Strategic prova poi le candidate in quell'ordine. La validazione controlla capacità e divieti; al primo successo ci si ferma. L'accettazione non dimostra l'efficacia in produzione. Per esempio, il monitoraggio può essere consentito pur non eliminando la vulnerabilità. Origine: (1 + beneficio - impatto) / 2 normalizza una differenza da [-1,1] a [0,1]. I pesi non sono calibrati su dati o derivati da un paper. Riferimenti teorici, distinti dalla formula: [BWAF-MN] e [BWAF-P], in docs/riferimenti/README.md. Il backend privato [BASE-LEDGER] richiama una libreria C++ distinta."
+  },
+  {
+    "title": "Che cosa è già reale e che cosa è simulato",
+    "subtitle": "Il confine del mockup è esplicito",
+    "kind": "table",
+    "seconds": 50,
+    "headers": [
+      "Effettivo nel prototipo",
+      "Backend attuale",
+      "Integrazione successiva"
+    ],
+    "rows": [
+      [
+        "Agenti CAMEL + Ollama",
+        "Tool Python locali",
+        "Trasporto MCP, se previsto"
+      ],
+      [
+        "Artefatti e DAG",
+        "Input statico / lookup esatto",
+        "OpenTelemetry, SBOM/OSV, KG"
+      ],
+      [
+        "Ranking e controlli invocati",
+        "Formula e capacità/policy",
+        "BWAF / Tiny-ME e contratti"
+      ],
+      [
+        "Tracciabilità dei file",
+        "JSON e hash locali",
+        "Provenienza e Fabric"
+      ]
+    ],
+    "footer": "Le API dei repository esterni devono ancora essere analizzate e collegate.",
+    "notes": "CAMEL non è rimandato alla fase finale: è già in esecuzione. Ciò che manca sono gli adapter verso i servizi esterni. La presenza della dipendenza MCP nell'ambiente non significa che i tool siano già esposti via MCP. Analogamente il grafo didattico non equivale al BWAF finale, e il file di provenienza non è una transazione Fabric. Questa distinzione delimita il contributo del mockup: verificare collaborazione e contratti prima di aumentare la complessità delle integrazioni."
+  },
+  {
+    "title": "Demo · seguire una decisione fino alle sue fonti",
+    "subtitle": "Quattro minuti: esecuzione locale e confronto con i run registrati",
+    "kind": "demo",
+    "seconds": 240,
+    "cards": [
+      [
+        "Avviare",
+        "Un solo scenario nominale con CAMEL/Ollama"
+      ],
+      [
+        "Osservare",
+        "Tre artefatti distinti, ranking e tentativi di validazione"
+      ],
+      [
+        "Confrontare",
+        "Fallback, azioni vietate e lookup non supportato"
+      ]
+    ],
+    "command": ".venv/bin/python -m thesis_agents.demo --mode camel --repetitions 1 \\\n  --scenarios demo_01_nominal --timeout 180",
+    "footer": "I risultati registrati sono etichettati come tali. Non si esegue tutta la matrice live.",
+    "notes": "Seguire il copione in demo-guida.md. Avviare il comando nel terminale dalla radice del repository. Durante l'attesa aprire le evidenze registrate, dichiarando che provengono dalla matrice del 16 settembre. Mostrare il nominale e il fallback senza manutenzione. Poi tornare al terminale: se il run termina, aprire il nuovo riepilogo; se è ancora attivo al limite del tempo assegnato, passare al materiale registrato e dichiararlo. La matrice completa ha richiesto oltre sedici minuti e non va eseguita dentro questa presentazione. Nessun risultato nuovo deve essere annunciato prima dei controlli del runner."
+  },
+  {
+    "title": "Otto prove complete, con recuperi osservati",
+    "subtitle": "Stessa configurazione · quattro scenari × due ripetizioni",
+    "kind": "table",
+    "seconds": 100,
+    "headers": [
+      "Scenario",
+      "Esito in entrambe le prove",
+      "Tempo per run"
+    ],
+    "rows": [
+      [
+        "Nominale",
+        "S_UPGRADE",
+        "125–135 s"
+      ],
+      [
+        "Senza manutenzione",
+        "Upgrade rifiutato, poi S_MONITOR",
+        "117–119 s"
+      ],
+      [
+        "Azioni vietate",
+        "no_valid_strategy",
+        "113–114 s"
+      ],
+      [
+        "Lookup non supportato",
+        "insufficient_evidence",
+        "111–151 s"
+      ]
+    ],
+    "callout": "95 test superati · 212 richieste LLM · 985,35 s complessivi",
+    "footer": "Un recupero per output mancanti; cinque retry del quality check sui due casi vuoti.",
+    "notes": "Tutti gli otto run hanno completato gli artefatti e superato l'audit. Nel nominale della seconda ripetizione lo Strategic ha recuperato dopo aver omesso decisione e provenienza. Nei due casi non supportati il quality check CAMEL ha chiesto tre e due retry, giudicando insufficienti output vuoti che erano corretti per lo scenario. Nel primo è stata respinta una chiamata di validazione su ranking vuoto. Quindi otto su otto non significa assenza di errori intermedi. La misura è riferita a questi casi e non rappresenta una percentuale di affidabilità generale. I 95 test verificano soprattutto contratti e integrazione SDK, non la qualità scientifica delle proposte."
+  },
+  {
+    "title": "Il prossimo passo è validare le integrazioni",
+    "subtitle": "Il mockup rende osservabile il confine tra proposta e controllo",
+    "kind": "cards",
+    "seconds": 70,
+    "cards": [
+      [
+        "Contributo",
+        "DAG esplicito, artefatti persistenti, vincoli e prove riproducibili"
+      ],
+      [
+        "Limiti",
+        "Un caso di lookup, stime LLM e validazione semantica ancora mock"
+      ],
+      [
+        "Prossimo passo",
+        "Concordare contratti e integrare un backend alla volta"
+      ]
+    ],
+    "callout": "Da discutere: primo backend da collegare e criteri di valutazione della tesi.",
+    "footer": "Tempo previsto: 14 minuti di esposizione e demo + 1 minuto per domande.",
+    "notes": "Il risultato di questa fase è un prototipo osservabile, nel quale posso seguire produttori, chiamate e motivi di una decisione. Restano aperte la qualità delle candidate, una valutazione su più casi e la gestione dei quality check sugli esiti vuoti. Proporrei di concordare con il docente quale backend collegare per primo e quali esperimenti debbano sostenere la tesi. L'integrazione richiederà la verifica delle API e delle ontologie nei repository reali. Chiudere lasciando circa un minuto alle domande; usare le due slide di appendice solo se utili."
+  },
+  {
+    "title": "Appendice · tre significati di “nessuna selezione”",
+    "subtitle": "Una decisione di dominio è distinta da un problema di esecuzione",
+    "kind": "cards",
+    "seconds": 0,
+    "cards": [
+      [
+        "no_valid_strategy",
+        "Le candidate pubblicate sono state tutte rifiutate"
+      ],
+      [
+        "insufficient_evidence",
+        "Il lookup non copre software/versione: non implica sicurezza"
+      ],
+      [
+        "Run fallito / timeout",
+        "Il flusso non è completo: si conservano gli output parziali"
+      ]
+    ],
+    "footer": "Fonti: schemi della decisione, ArtifactSession e audit della demo.",
+    "notes": "Da usare se viene chiesto che cosa accade quando manca una soluzione. La mancanza di copertura del lookup non dimostra assenza di vulnerabilità né mancato supporto del vendor. Tutte le candidate rifiutate significa tutte quelle generate in quel run, non ogni contromisura possibile nel mondo reale. Un timeout non viene convertito in un esito di dominio positivo."
+  },
+  {
+    "title": "Appendice · spiegazione controllata e commento LLM",
+    "subtitle": "Pydantic non certifica la verità di una frase",
+    "kind": "cards",
+    "seconds": 0,
+    "cards": [
+      [
+        "explanation",
+        "Composta dai campi validati degli artefatti"
+      ],
+      [
+        "explanation_claims",
+        "Dati riportati, stime e limiti con riferimenti alle fonti"
+      ],
+      [
+        "agent_commentary",
+        "Testo originale del modello, marcato unverified"
+      ]
+    ],
+    "footer": "La coerenza con gli artefatti mock non equivale a una verifica esterna dei fatti.",
+    "notes": "Questa separazione è stata introdotta dopo aver osservato versioni consigliate o deduzioni prive di fonte nelle risposte LLM. Il commento resta conservato, ma non viene promosso a spiegazione verificata. I riferimenti non bastano da soli: la sessione ricostruisce i claim e li confronta. Le descrizioni e i rationale delle candidate restano testo da esaminare criticamente."
+  }
+]

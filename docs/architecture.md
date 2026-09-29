@@ -156,7 +156,7 @@ Gli adapter reali non sono ancora implementati. In una fase successiva:
 3. `validate_countermeasure` mapperà candidate e contesto ai concetti Tiny-ME, conservando l'esito strutturato.
 4. `record_provenance` mapperà entità, attività, agenti e dipendenze a PROV-O e persistenza Fabric.
 
-Prima del collegamento reale bisognerà concordare la semantica dei pesi, l'ontologia delle capacità/azioni, il formato BWAF e i riferimenti alle transazioni. Il mock non presume di conoscere tali dettagli dalle repository precedenti, non presenti in questa workspace.
+Prima del collegamento reale bisognerà concordare la semantica dei pesi, l'ontologia delle capacità/azioni, il formato BWAF e i riferimenti alle transazioni. Le copie delle baseline sulla Scrivania sono state esaminate in sola lettura durante la revisione bibliografica del 17 settembre; non sono integrate nel mock. Il ranking locale resta un'euristica distinta dal backend. Fonti, commit e limiti della verifica sono in [fonti e scelte](fonti-e-scelte.md).
 
 La provenienza locale è una proiezione delle dipendenze dei sette stadi di dominio, registrata solo dopo la decisione. Include gli hash dei file e conserva tutti i tentativi semantici nel relativo artefatto. Non è un log completo dei prompt/token o degli errori della Workforce, non è firmata e non dichiara conformità PROV-O.
 

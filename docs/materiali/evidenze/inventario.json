@@ -1,0 +1,195 @@
+{
+  "description": "Copie byte per byte dei nove JSON per ciascun run r1; la matrice riporta anche r2. Nessuna nuova inferenza.",
+  "files": [
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_01_nominal-r1/artifacts/argumentation_graph.json",
+      "file": "evidenze/demo_01_nominal-r1/argumentation_graph.json",
+      "sha256": "2c702de990aceb538c267925ef4877f2bcfd6115ceacf2b526a93e4301234dc2"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_01_nominal-r1/artifacts/candidate_strategies.json",
+      "file": "evidenze/demo_01_nominal-r1/candidate_strategies.json",
+      "sha256": "d0ee35123957c602b901f3278f6da376d1d1c34a2a63aad371cd2c629993a077"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_01_nominal-r1/artifacts/final_decision.json",
+      "file": "evidenze/demo_01_nominal-r1/final_decision.json",
+      "sha256": "6bf722ab8a10499763a277b9c365114ebdb6040261f73d8f6894218f24e96b80"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_01_nominal-r1/artifacts/input.json",
+      "file": "evidenze/demo_01_nominal-r1/input.json",
+      "sha256": "05121566d57bd980d896c63ef388c07785607fc36b2e759f6742ee2319fd0700"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_01_nominal-r1/artifacts/provenance.json",
+      "file": "evidenze/demo_01_nominal-r1/provenance.json",
+      "sha256": "e8eaf9d290dfd0fec3eb35e3b1e8ea2afa865ec2174f49e0d3c9ff5dc2816904"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_01_nominal-r1/artifacts/ranking.json",
+      "file": "evidenze/demo_01_nominal-r1/ranking.json",
+      "sha256": "83e6d7c786c4f547a2a70ccf179df7b306efe351ef97a7713076c6d5ec2bd77c"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_01_nominal-r1/artifacts/runtime_evidence.json",
+      "file": "evidenze/demo_01_nominal-r1/runtime_evidence.json",
+      "sha256": "9d1a0a9c16c9d1bfb8270443abb89e390a51e8cd112a6c766ac1f6f6f5c57cb5"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_01_nominal-r1/artifacts/semantic_validation.json",
+      "file": "evidenze/demo_01_nominal-r1/semantic_validation.json",
+      "sha256": "254e1eed44df9d889fcf137c0bdd004f84e7d6b37b6fe18976d6587874a14fb1"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_01_nominal-r1/artifacts/vulnerability_report.json",
+      "file": "evidenze/demo_01_nominal-r1/vulnerability_report.json",
+      "sha256": "b17d4994afcdb16ee841c72c23954380a20d744c9762e5aaa9db437f4625951d"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_02_no_maintenance-r1/artifacts/argumentation_graph.json",
+      "file": "evidenze/demo_02_no_maintenance-r1/argumentation_graph.json",
+      "sha256": "1dd1558e23031e3eb132db10bfaee369ad60ac21e7ec28faeb4236742a2e7126"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_02_no_maintenance-r1/artifacts/candidate_strategies.json",
+      "file": "evidenze/demo_02_no_maintenance-r1/candidate_strategies.json",
+      "sha256": "c0560cce24d849125e786f3670ce22d12feb2eac2c4e1d9fface97f3f293dbeb"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_02_no_maintenance-r1/artifacts/final_decision.json",
+      "file": "evidenze/demo_02_no_maintenance-r1/final_decision.json",
+      "sha256": "3ceb41227151f76dd989cf787aa638e818a4a11fc33ef937178a6eb1f56b210d"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_02_no_maintenance-r1/artifacts/input.json",
+      "file": "evidenze/demo_02_no_maintenance-r1/input.json",
+      "sha256": "b75c63ca0f9517c1d635e83ad44b6cd9f62b5186e020050c860865f4cf4c00c4"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_02_no_maintenance-r1/artifacts/provenance.json",
+      "file": "evidenze/demo_02_no_maintenance-r1/provenance.json",
+      "sha256": "ce4c822767503eed0c2586a2e736bb7ce920b5a48fe7ab6e934025c3cf3c4a83"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_02_no_maintenance-r1/artifacts/ranking.json",
+      "file": "evidenze/demo_02_no_maintenance-r1/ranking.json",
+      "sha256": "b626b7acf16cfee7fff0f24fb53556db7bf565f76c4be0cabbbaa230bc9d96dc"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_02_no_maintenance-r1/artifacts/runtime_evidence.json",
+      "file": "evidenze/demo_02_no_maintenance-r1/runtime_evidence.json",
+      "sha256": "9d1a0a9c16c9d1bfb8270443abb89e390a51e8cd112a6c766ac1f6f6f5c57cb5"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_02_no_maintenance-r1/artifacts/semantic_validation.json",
+      "file": "evidenze/demo_02_no_maintenance-r1/semantic_validation.json",
+      "sha256": "08599feec701d4a98b5fa3fa85ed00fd549a38e8c3aeb796dbe56f3c4da8a1bd"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_02_no_maintenance-r1/artifacts/vulnerability_report.json",
+      "file": "evidenze/demo_02_no_maintenance-r1/vulnerability_report.json",
+      "sha256": "b17d4994afcdb16ee841c72c23954380a20d744c9762e5aaa9db437f4625951d"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_03_all_actions_prohibited-r1/artifacts/argumentation_graph.json",
+      "file": "evidenze/demo_03_all_actions_prohibited-r1/argumentation_graph.json",
+      "sha256": "cabe7952e4caca073e66802314e7078b61e1c26785eb8225b081e912b556c559"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_03_all_actions_prohibited-r1/artifacts/candidate_strategies.json",
+      "file": "evidenze/demo_03_all_actions_prohibited-r1/candidate_strategies.json",
+      "sha256": "51389b35974dc917794c3ce25b96b0237680ed8aa0f44791ae64751ac840bff3"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_03_all_actions_prohibited-r1/artifacts/final_decision.json",
+      "file": "evidenze/demo_03_all_actions_prohibited-r1/final_decision.json",
+      "sha256": "b63050150a2fdf465513b30dabda814b9769853424ad745408322746ee866997"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_03_all_actions_prohibited-r1/artifacts/input.json",
+      "file": "evidenze/demo_03_all_actions_prohibited-r1/input.json",
+      "sha256": "8d3e4356653ae632ff676e83080e94710593c44dbc54e9d086d5547cde7a7d9f"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_03_all_actions_prohibited-r1/artifacts/provenance.json",
+      "file": "evidenze/demo_03_all_actions_prohibited-r1/provenance.json",
+      "sha256": "9c850c5a6fcbb1d5800017cad515284dbc986d13e6e28ea74743e8836ab48db0"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_03_all_actions_prohibited-r1/artifacts/ranking.json",
+      "file": "evidenze/demo_03_all_actions_prohibited-r1/ranking.json",
+      "sha256": "b8d1ad7392304b061c12dbcf2dbdef49914108e0c51a8aeb8d80e613aaa590e1"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_03_all_actions_prohibited-r1/artifacts/runtime_evidence.json",
+      "file": "evidenze/demo_03_all_actions_prohibited-r1/runtime_evidence.json",
+      "sha256": "9d1a0a9c16c9d1bfb8270443abb89e390a51e8cd112a6c766ac1f6f6f5c57cb5"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_03_all_actions_prohibited-r1/artifacts/semantic_validation.json",
+      "file": "evidenze/demo_03_all_actions_prohibited-r1/semantic_validation.json",
+      "sha256": "a7864fb5cccd05439c200c7fb06b89a1f95574c1b2dd84500aeae5f2f651d241"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_03_all_actions_prohibited-r1/artifacts/vulnerability_report.json",
+      "file": "evidenze/demo_03_all_actions_prohibited-r1/vulnerability_report.json",
+      "sha256": "b17d4994afcdb16ee841c72c23954380a20d744c9762e5aaa9db437f4625951d"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_04_unsupported_lookup-r1/artifacts/argumentation_graph.json",
+      "file": "evidenze/demo_04_unsupported_lookup-r1/argumentation_graph.json",
+      "sha256": "3f3dc1ee2d9403c11d548fae8c32a78310e1ada8ce6e5cb125664b3d7693667f"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_04_unsupported_lookup-r1/artifacts/candidate_strategies.json",
+      "file": "evidenze/demo_04_unsupported_lookup-r1/candidate_strategies.json",
+      "sha256": "06c95a6daec015f95cebfb386cae2e2a67b6ac45ad09658f7d2b10770c4e86d3"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_04_unsupported_lookup-r1/artifacts/final_decision.json",
+      "file": "evidenze/demo_04_unsupported_lookup-r1/final_decision.json",
+      "sha256": "4c1fe4c73b8485eff5e9f2ab468ebe0d31595f3f7dd10f92631fcec100a9804e"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_04_unsupported_lookup-r1/artifacts/input.json",
+      "file": "evidenze/demo_04_unsupported_lookup-r1/input.json",
+      "sha256": "0d5c3a6e6ba8c0d7595ca82a784aa4ed7074f2e900ded479523f4bfd7a52de46"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_04_unsupported_lookup-r1/artifacts/provenance.json",
+      "file": "evidenze/demo_04_unsupported_lookup-r1/provenance.json",
+      "sha256": "cf05d93e13a786c72a1c5c81f46391658fa65427eaa1e866ef58086ea56e88bb"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_04_unsupported_lookup-r1/artifacts/ranking.json",
+      "file": "evidenze/demo_04_unsupported_lookup-r1/ranking.json",
+      "sha256": "2a986c544c7851d16e7948331e3a2d21e0554a6d536c475daead18a83de2b155"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_04_unsupported_lookup-r1/artifacts/runtime_evidence.json",
+      "file": "evidenze/demo_04_unsupported_lookup-r1/runtime_evidence.json",
+      "sha256": "cec6a73fa257b3ee92d71fc2aed352e7d80ecce9bd6d711e7071bb744aa3d091"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_04_unsupported_lookup-r1/artifacts/semantic_validation.json",
+      "file": "evidenze/demo_04_unsupported_lookup-r1/semantic_validation.json",
+      "sha256": "4be0e9d7e3da59722cbf4bb19d057121dc49ee0f67fdb56696dfff253835e5fc"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/demo_04_unsupported_lookup-r1/artifacts/vulnerability_report.json",
+      "file": "evidenze/demo_04_unsupported_lookup-r1/vulnerability_report.json",
+      "sha256": "607c30952127896e7edd472abdfade9292b192fb0e88b4ce34d27cfe48d9acdf"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/summary.json",
+      "file": "evidenze/matrice_summary.json",
+      "sha256": "055ff0d10c05cf29699ab6d5532db0fdcda468ad094cf8bc9ad472359f00cd48"
+    },
+    {
+      "source": "output/demo-matrix-20260916T074247Z-80665fa1/manifest.json",
+      "file": "evidenze/matrice_manifest.json",
+      "sha256": "32bab9da398c66fcd253b89f6e43e39f001e36a2296e87481600796e99db4a6e"
+    }
+  ]
+}

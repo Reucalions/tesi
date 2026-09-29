@@ -1,0 +1,163 @@
+@misc{TESI,
+  author = {Alessandro Costa},
+  title = {{Toward Explainable Agentic Cyber Threat Intelligence: Semantic Smart Contracts, Argumentation Ranking and Runtime Observability}},
+  note = {Documento progettuale fornito dall’autore; sezioni 2, 4–9, 11–12, 15–17. Definisce architettura e baseline previste, non la formula numerica del mock. Consultato il 2026-09-17.},
+  year = {2026},
+  howpublished = {Documento progettuale non pubblicato: proposta-agentic-cti.pdf}
+}
+
+@misc{CAMEL,
+  author = {Guohao Li and Hasan Abed Al Kader Hammoud and Hani Itani and Dmitrii Khizbullin and Bernard Ghanem},
+  title = {{CAMEL: Communicative Agents for "Mind" Exploration of Large Language Model Society}},
+  note = {Consultati abstract e metadati per il riferimento al framework di agenti comunicanti. Non giustifica il DAG specifico né gli hook Workforce 0.2.90. Consultato il 2026-09-17.},
+  year = {2023},
+  url = {https://arxiv.org/abs/2303.17760}
+}
+
+@misc{CAMEL-SDK,
+  author = {{CAMEL-AI}},
+  title = {{CAMEL repository, versione v0.2.90}},
+  note = {Repository/versione e documentazione Workforce; API e comportamento della configurazione sono verificabili nel codice locale installato e nei test del progetto. Non attribuire al paper 2023 le API attuali. Consultato il 2026-09-17.},
+  url = {https://github.com/camel-ai/camel/tree/v0.2.90}
+}
+
+@misc{PYDANTIC,
+  author = {{Pydantic contributors}},
+  title = {{Models — Pydantic documentation}},
+  note = {Metodi di validazione e serializzazione, copie e tipi. Le pagine latest sono consultate in questa revisione; versione del progetto 2.12.0. I vincoli tra artefatti sono codice originale del progetto. Consultato il 2026-09-17.},
+  url = {https://docs.pydantic.dev/latest/concepts/models/}
+}
+
+@misc{OLLAMA-API,
+  author = {{Ollama}},
+  title = {{OpenAI compatibility}},
+  note = {Sezione Local server usage: endpoint locale compatibile e uso del client. Non implica una chiamata al cloud OpenAI. Consultato il 2026-09-17.},
+  url = {https://docs.ollama.com/api/openai-compatibility}
+}
+
+@misc{OLLAMA-MODELFILE,
+  author = {{Ollama}},
+  title = {{Modelfile Reference}},
+  note = {Significato di FROM, num_ctx e temperature. La scelta 16384/0 è una configurazione del progetto, non un risultato consigliato dal paper CAMEL. Consultato il 2026-09-17.},
+  url = {https://docs.ollama.com/modelfile}
+}
+
+@misc{QWEN,
+  author = {{Ollama}},
+  title = {{qwen3:4b-instruct — model library entry}},
+  note = {Tag distribuito da Ollama, parametri e quantizzazione. Per i pesi effettivamente provati fa fede il digest nel manifest locale; il tag remoto può cambiare. Consultato il 2026-09-17.},
+  url = {https://ollama.com/library/qwen3:4b-instruct}
+}
+
+@misc{LOG4J,
+  author = {{Apache Software Foundation}},
+  title = {{Apache Logging Services — Security, CVE-2021-44228}},
+  note = {Riferimento esterno per la vulnerabilità Log4j. L’evidenza runtime payment-api, i vincoli e il lookup esatto restano dati dimostrativi; non sono rilevamenti reali. Consultato il 2026-09-17.},
+  url = {https://logging.apache.org/security.html}
+}
+
+@misc{BWAF-MN,
+  author = {Till Mossakowski and Fabian Neuhaus},
+  title = {{Modular Semantics and Characteristics for Bipolar Weighted Argumentation Graphs}},
+  note = {Consultati abstract/metadati: distinzione aggregazione/influenza e pluralità delle semantiche. Riferimento teorico aggiunto ora, non fonte dei coefficienti 0.5. Consultato il 2026-09-17.},
+  year = {2018},
+  url = {https://arxiv.org/abs/1807.06685}
+}
+
+@misc{BWAF-P,
+  author = {{Nico Potyka}},
+  title = {{Extending Modular Semantics for Bipolar Weighted Argumentation}},
+  note = {AAMAS 2019, pp. 1722–1730; consultati introduzione e definizioni dei grafi e delle semantiche modulari. Non viene implementata né riprodotta una sua semantica nel mock. Consultato il 2026-09-17.},
+  year = {2019},
+  url = {https://www.ifaamas.org/Proceedings/aamas2019/pdfs/p1722.pdf}
+}
+
+@misc{TINYME,
+  author = {Michele Ruta and Floriano Scioscia and Ivano Bilenchi and Filippo Gramegna and Giuseppe Loseto and Saverio Ieva and Agnese Pinto},
+  title = {{A multiplatform reasoning engine for the Semantic Web of Everything}},
+  note = {Journal of Web Semantics 73, 100709. Consultati abstract e introduzione della versione autore: motore di matchmaking e ragionamento OWL. Non documenta il chaincode privato della tesi. Consultato il 2026-09-17.},
+  year = {2022},
+  url = {https://sisinflab.poliba.it/publications/2022/RSBGLIP22/Ruta_et_al_JWS2022_Tiny-ME_CR.pdf}
+}
+
+@misc{PROVO,
+  author = {{W3C}},
+  title = {{PROV-O: The PROV Ontology}},
+  note = {Entità, attività e agenti come riferimento concettuale. JSON e hash del mock non dimostrano conformità PROV-O. Consultato il 2026-09-17.},
+  year = {2013},
+  url = {https://www.w3.org/TR/prov-o/}
+}
+
+@misc{OTEL,
+  author = {{OpenTelemetry}},
+  title = {{What is OpenTelemetry?}},
+  note = {Definizione e segnali di telemetria per l’integrazione futura; non è attualmente un produttore di input nel prototipo. Consultato il 2026-09-17.},
+  url = {https://opentelemetry.io/docs/what-is-opentelemetry/}
+}
+
+@misc{MCP,
+  author = {{Model Context Protocol contributors}},
+  title = {{Architecture — specification 2025-06-18}},
+  note = {Architettura del protocollo, riferimento per il futuro trasporto dei tool. Non prova che il mock usi MCP. Consultato il 2026-09-17.},
+  year = {2025},
+  url = {https://modelcontextprotocol.io/specification/2025-06-18/architecture}
+}
+
+@misc{OSV,
+  author = {{OpenSSF}},
+  title = {{Open Source Vulnerability format}},
+  note = {Schema delle vulnerabilità e versioni interessate; futuro adapter, non fonte live del lookup attuale. Consultato il 2026-09-17.},
+  url = {https://ossf.github.io/osv-schema/}
+}
+
+@misc{OWL,
+  author = {{W3C}},
+  title = {{OWL 2 Web Ontology Language Document Overview, Second Edition}},
+  note = {Standard del linguaggio ontologico; non identifica la specifica ontologia OWL CTI dei repository privati. Consultato il 2026-09-17.},
+  year = {2012},
+  url = {https://www.w3.org/TR/owl2-overview/}
+}
+
+@misc{FABRIC,
+  author = {{Hyperledger Fabric contributors}},
+  title = {{Smart Contracts and Chaincode}},
+  note = {Ruolo di smart contract e chaincode; riferimento generale dell’integrazione prevista, non verifica della rete privata. Consultato il 2026-09-17.},
+  url = {https://hyperledger-fabric.readthedocs.io/en/latest/smartcontract/smartcontract.html}
+}
+
+@misc{SBOM,
+  author = {{CISA}},
+  title = {{Framing Software Component Transparency: Establishing a Common Software Bill of Materials, Third Edition}},
+  note = {Sezione 2 consultata per la definizione di SBOM; non è un dataset già ingerito dal mock. Consultato il 2026-09-17.},
+  year = {2024},
+  url = {https://www.cisa.gov/sites/default/files/2024-10/SBOM\%20Framing\%20Software\%20Component\%20Transparency\%202024.pdf}
+}
+
+@misc{POLIBA,
+  author = {{Politecnico di Bari}},
+  title = {{Piano della comunicazione 2022}},
+  note = {Sezione Il Marchio completo, p. 46: PT Sans come base del logotipo e ottanio #008195. Estratto indicizzato consultato; il download tramite browser non è riuscito. Non è un template obbligatorio di tesi. Consultato il 2026-09-17.},
+  year = {2022},
+  url = {https://www.poliba.it/sites/default/files/piano_comunicazione_2022_3_aprile_2022.pdf}
+}
+
+@misc{PT-SANS,
+  author = {ParaType and Google Fonts},
+  title = {{PT Sans — Google Fonts distribution}},
+  note = {File dei font e SIL OFL scaricati; licenza e hash sono in docs/materiali/fonts/. Il logo è un asset separato da https://www.poliba.it/sites/default/files/logo_poliba_orizzontale_ufficiale.png. Consultato il 2026-09-17.},
+  url = {https://github.com/google/fonts/tree/main/ofl/ptsans}
+}
+
+@misc{BASE-PIPELINE,
+  author = {{sisinflab-swot (organizzazione del repository; autori individuali da confermare)}},
+  title = {{agent-based-cti-argumentation-pipeline}},
+  note = {Repository privato; copia locale letta nella revisione bibliografica. Commit c2ea54278bc5f44730693cdf7f86fc3584e54f70. Non eseguito né integrato nel mockup. File e hash in baseline-locali.json. Consultato il 2026-09-17.},
+  url = {https://github.com/sisinflab-swot/agent-based-cti-argumentation-pipeline/tree/c2ea54278bc5f44730693cdf7f86fc3584e54f70}
+}
+
+@misc{BASE-LEDGER,
+  author = {{sisinflab-swot (organizzazione del repository; autori individuali da confermare)}},
+  title = {{semantic-cti-ledger-argumentation}},
+  note = {Repository privato; copia locale letta nella revisione bibliografica. Commit a3dab4a5def79dda356dd753aa34306e03ea346a. Non eseguito né integrato nel mockup. File e hash in baseline-locali.json. Consultato il 2026-09-17.},
+  url = {https://github.com/sisinflab-swot/semantic-cti-ledger-argumentation/tree/a3dab4a5def79dda356dd753aa34306e03ea346a}
+}

@@ -1,0 +1,19 @@
+{
+  "service_name": "payment-api",
+  "software": [
+    {
+      "package": "demo-unsupported-package",
+      "version": "0.0.0",
+      "evidence_id": "E1"
+    }
+  ],
+  "endpoint_exposed": true,
+  "deserialization_observed": true,
+  "observations": [
+    "package_upgrade",
+    "maintenance_window",
+    "network_isolation",
+    "deployment_control",
+    "monitoring"
+  ]
+}

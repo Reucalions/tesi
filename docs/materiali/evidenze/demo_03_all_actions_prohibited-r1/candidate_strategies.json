@@ -1,0 +1,73 @@
+{
+  "strategies": [
+    {
+      "id": "S_UPGRADE",
+      "action": "upgrade",
+      "description": "Upgrade log4j-core from version 2.14.1 to a vendor-supported version that includes the fix for CVE-2021-44228.",
+      "addressed_vulnerabilities": [
+        "CVE-2021-44228"
+      ],
+      "security_benefit": 0.95,
+      "operational_impact": 0.3,
+      "prerequisites": [
+        "maintenance_window",
+        "package_upgrade"
+      ],
+      "constraints": [
+        "Upgrade must be performed to a vendor-supported version with remediation for CVE-2021-44228"
+      ],
+      "rationale": "CVE-2021-44228 is a critical vulnerability in log4j-core that allows remote code execution via deserialization. Upgrading to a patched version resolves the vulnerability."
+    },
+    {
+      "id": "S_ISOLATE",
+      "action": "isolate",
+      "description": "Isolate the payment-api service from external network access to mitigate the risk of exploitation.",
+      "addressed_vulnerabilities": [
+        "CVE-2021-44228"
+      ],
+      "security_benefit": 0.75,
+      "operational_impact": 0.6,
+      "prerequisites": [
+        "network_isolation"
+      ],
+      "constraints": [
+        "Network isolation must be applied to the payment-api service to prevent external access"
+      ],
+      "rationale": "By isolating the payment-api service, external access is restricted, reducing the attack surface for CVE-2021-44228."
+    },
+    {
+      "id": "S_BLOCK",
+      "action": "block_deployment",
+      "description": "Block the deployment of log4j-core version 2.14.1 in all environments to prevent exposure.",
+      "addressed_vulnerabilities": [
+        "CVE-2021-44228"
+      ],
+      "security_benefit": 0.9,
+      "operational_impact": 0.8,
+      "prerequisites": [
+        "deployment_control"
+      ],
+      "constraints": [
+        "Deployment of log4j-core version 2.14.1 must be blocked in all environments"
+      ],
+      "rationale": "Blocking deployment of the vulnerable version prevents any new instances from being exposed to the vulnerability."
+    },
+    {
+      "id": "S_MONITOR",
+      "action": "monitor",
+      "description": "Implement continuous monitoring to detect deserialization events and anomalies related to log4j-core.",
+      "addressed_vulnerabilities": [
+        "CVE-2021-44228"
+      ],
+      "security_benefit": 0.4,
+      "operational_impact": 0.2,
+      "prerequisites": [
+        "monitoring"
+      ],
+      "constraints": [
+        "Monitoring must be configured to detect deserialization events and log4j-related anomalies"
+      ],
+      "rationale": "Monitoring provides early detection of potential exploitation attempts, enabling timely response."
+    }
+  ]
+}

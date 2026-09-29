@@ -1,14 +1,35 @@
 # Prototipo multi-agente per Agentic CTI
 
-**Prima relazione tecnica — 17 settembre 2026**  
-Repository: `tesi`; package Python: `thesis_agents`.
+## Sintesi
 
-Questo documento descrive il prototipo realizzato, le motivazioni delle scelte,
-il funzionamento del codice e le prove conservate nel repository e nella
-workspace. È una prima base per la presentazione al docente e per la successiva
-stesura della tesi. La descrizione teorica riguarda il modello adottato nel
-prototipo; non costituisce una rassegna bibliografica né una specifica già
-verificata dei repository esterni da integrare.
+Il progetto verifica se quattro agenti basati su LLM possano
+collaborare mantenendo separati evidenze osservate, correlazioni di vulnerabilità,
+proposte e decisioni. Il contributo implementativo consiste nel DAG esplicito,
+nei contratti Pydantic, nello stato condiviso validato e nei controlli che
+impediscono di sostituire le pubblicazioni con dichiarazioni di successo.
+Il prototipo esegue CAMEL con Ollama locale e usa mock per i servizi esterni.
+La valutazione comprende test automatici e quattro scenari ripetuti due volte.
+I risultati sostengono la fattibilità del flusso sui casi provati; non dimostrano
+la qualità operativa delle contromisure né l'affidabilità su inventari reali.
+Il lavoro successivo riguarda l'integrazione progressiva dei servizi esterni
+e l'estensione dei criteri di valutazione.
+
+La relazione descrive il repository `tesi` e il package Python
+`thesis_agents`. Presenta l'architettura realizzata,
+le scelte implementative, le attività svolte e i comandi per riprodurre le prove.
+Le evidenze sperimentali sono conservate nel repository e nell'ambiente locale
+di lavoro. La parte teorica esplicita il modello adottato nel prototipo;
+le interfacce dei componenti esterni dovranno essere verificate nei rispettivi
+repository prima della loro integrazione.
+
+L'impostazione dei ruoli e del flusso deriva dalla proposta di tesi [TESI].
+I riferimenti teorici e tecnici sono raccolti nella bibliografia.
+
+Nel documento, **CTI** indica la Cyber Threat Intelligence, **LLM** un modello
+linguistico di grandi dimensioni, **DAG** un grafo diretto aciclico e **KG** un
+grafo di conoscenza. Un **mock** è un'implementazione simulata e limitata di un
+servizio; una **fixture** è un insieme di dati o risultati prefissati usato nelle
+prove. Una **policy** esprime i vincoli sulle azioni consentite nello scenario.
 
 ## 1. Obiettivo e stato del lavoro
 
@@ -23,10 +44,9 @@ un LLM locale e invocano tool Python. Le integrazioni esterne sono rappresentate
 da backend mock, con interfacce esplicite e risultati validati. Nessuna
 contromisura viene applicata all'infrastruttura.
 
-Al termine della matrice del 16 settembre, ricontrollata il 17 settembre,
-sono disponibili **otto esecuzioni complete e verificate su otto**, due per
-ciascuno dei quattro scenari. La suite automatica eseguita prima della matrice
-ha superato **95 test**. Questo risultato riguarda i casi e la configurazione
+La valutazione comprende **otto esecuzioni complete e verificate su otto**, due per
+ciascuno dei quattro scenari, e una suite automatica di **95 test superati**.
+Questo risultato riguarda i casi e la configurazione
 provati; non misura l'affidabilità generale del sistema.
 
 ## 2. Principi del modello
@@ -69,7 +89,7 @@ conversazionale o dal riepilogo con cui un worker conclude un task CAMEL.
 
 Le dipendenze sono descritte da un grafo diretto aciclico, o DAG. Un arco indica
 che un task richiede i dati di un produttore precedente; non indica che il nuovo
-risultato cancelli o riassuma autoritativamente quello precedente. Nel caso
+risultato cancelli o sostituisca la fonte autorevole precedente. Nel caso
 attuale i prerequisiti portano a un ordine sequenziale, ma i tre artefatti
 strategici conservano identità, contenuto e produttore distinti.
 
@@ -103,6 +123,11 @@ La dipendenza Telemetry → Vulnerability è necessaria: il lookup deve conoscer
 il pacchetto e la versione effettivamente osservati. Il report delle vulnerabilità
 non incorpora né sostituisce l'evidenza runtime. Il CountermeasureAgent usa
 entrambi; lo Strategic legge separatamente i tre output mediante `get_context`.
+
+Il diagramma sintetizza le dipendenze fra i quattro
+agenti. Il successivo percorso di grafo, ranking, validazione, decisione e
+registrazione della provenienza è svolto attraverso i tool dello StrategicAgent
+ed è descritto nella sezione 6.
 
 La modalità predefinita è `pipeline`. Il codice fornisce a CAMEL task e dipendenze
 con `pipeline_add(..., auto_depend=False)` e `pipeline_build()`. L'opzione
@@ -148,6 +173,10 @@ Le memorie conversazionali dei worker non sono condivise (`share_memory=False`).
 Lo stato di dominio comune è la stessa `ArtifactSession`, accessibile attraverso
 i metodi associati ai tool.
 
+Il riferimento scientifico generale a CAMEL è [CAMEL]; per le API utilizzate
+fa fede il repository alla versione 0.2.90 [CAMEL-SDK]. Il DAG e i controlli
+aggiunti nel progetto non sono risultati attribuiti al paper.
+
 ### 4.2 Ruolo del modello per ciascun agente
 
 | Agente | Uso dell'LLM | Vincolo imposto dal codice |
@@ -157,7 +186,7 @@ i metodi associati ai tool.
 | Countermeasure | Genera alternative, motivazioni, prerequisiti e stime | Schema valido e riferimenti a CVE presenti nel report |
 | Strategic | Legge i tre input, invoca i tool in sequenza e propone la selezione | Ranking, tentativi semantici e selezione devono essere coerenti |
 
-Il contributo generativo principale riguarda le candidate strategies. Le
+Il contributo generativo principale riguarda le strategie candidate. Le
 trasformazioni di Telemetry e Vulnerability sono più vincolate, ma nel percorso
 CAMEL sono comunque eseguite da agenti che effettuano chiamate reali al modello.
 La formula di ranking e il controllo delle capacità non sono calcolati dall'LLM.
@@ -168,11 +197,14 @@ La formula di ranking e il controllo delle capacità non sono calcolati dall'LLM
 `ModelFactory.create`. L'endpoint Ollama espone un'API compatibile con il client
 usato dall'SDK; l'impiego dell'SDK OpenAI come client non significa che le
 richieste vadano al servizio cloud OpenAI.
+Questa modalità è documentata da Ollama [OLLAMA-API].
 
 La configurazione valutata usa `tesi-qwen3:4b`, derivato da `qwen3:4b-instruct`,
 con profilo in [Modelfile](../Modelfile), contesto configurato a 16.384 token e
 temperatura 0. Il limite di 2048 token riguarda invece ciascuna risposta.
 Le due grandezze non coincidono. Temperatura 0 non garantisce esecuzioni identiche.
+I parametri sono descritti in [OLLAMA-MODELFILE]; il tag del modello è
+documentato in [QWEN]. La configurazione sperimentale è una scelta del progetto.
 
 ## 5. Stato condiviso, artefatti e validazione
 
@@ -188,9 +220,9 @@ registrare anche i tentativi rifiutati.
 delle tre pubblicazioni principali e `artifact_producers`. Lo Strategic legge:
 
 ```text
-artifacts.runtime_evidence       → TelemetryAgent
-artifacts.vulnerability_report   → VulnerabilityAgent
-artifacts.candidate_strategies   → CountermeasureAgent
+artifacts.runtime_evidence       : TelemetryAgent
+artifacts.vulnerability_report   : VulnerabilityAgent
+artifacts.candidate_strategies   : CountermeasureAgent
 ```
 
 I produttori sono metadati dichiarati dal prototipo, non identità certificate
@@ -234,6 +266,8 @@ I vincoli interni a un modello e quelli fra modelli sono distinti. Un CVE può
 avere sintassi corretta ma non provenire dal lookup: serve il confronto della
 sessione. Analogamente, Pydantic può validare una frase non vuota senza provarne
 la veridicità.
+Le operazioni di validazione, copia e serializzazione sono documentate da
+Pydantic [PYDANTIC]; gli invarianti tra artefatti sono implementati dal progetto.
 
 ### 5.4 Payload strutturati e risultato dei task
 
@@ -264,6 +298,8 @@ di aggiornamento del framework.
 una corrispondenza esatta: `log4j-core` versione `2.14.1` produce la fixture
 `CVE-2021-44228`. La fonte dichiara esplicitamente che non è una query a un KG live.
 Non vengono interrogati OWL CTI, OSV o feed aggiornati.
+Il riferimento esterno per CVE-2021-44228 è il bollettino Apache [LOG4J];
+il servizio e le osservazioni runtime dello scenario sono dati dimostrativi.
 
 Per coppie non coperte il risultato è `unsupported`. Questo significa
 informazione non disponibile nel lookup, senza attestare assenza di
@@ -279,17 +315,33 @@ proposta, non un'implementazione delle semantiche del BWAF finale.
 [build_graph e MockRankingTool](../thesis_agents/tools/ranking_mock.py) applicano:
 
 ```text
-score(s) = clamp(0.5 + 0.5 × beneficio(s) − 0.5 × impatto(s), 0, 1)
+score(s) = clamp(0.5 + 0.5 * beneficio(s) - 0.5 * impatto(s), 0, 1)
 ```
 
 Il calcolo usa i pesi originali con un solo passo, arrotonda a otto decimali
 e ordina per score decrescente; a parità di score usa l'ID. Non implementa
 propagazione iterativa, risoluzione generale di cicli o smart contract.
-Per la candidata upgrade delle fixture: `0.5 + 0.5×0.95 − 0.5×0.20 = 0.875`.
+`clamp` limita il valore all'intervallo indicato. Per la candidata upgrade delle
+fixture: `0.5 + 0.5*0.95 - 0.5*0.20 = 0.875`.
 
 La funzione è deterministica rispetto alle candidate ricevute. Le stime delle
 candidate CAMEL sono però generate dall'LLM: ordinamenti diversi fra run
 possono essere coerenti con lo stesso algoritmo.
+
+**Origine e fondamento della formula.** Si tratta di un'euristica del mockup,
+non di una formula tratta da un paper o dal contratto BWAF delle baseline.
+Ponendo `B = beneficio` e `I = impatto`, la formula prima dell'arrotondamento è
+`(1 + B - I) / 2`: una trasformazione affine di `B - I` da `[-1,1]` a `[0,1]`.
+I coefficienti uguali attribuiscono lo stesso peso ai due contributi; `0.5`
+è il valore per contributi uguali. In questo grafo il clamp è ridondante,
+perché le stime sono già limitate. Ordinare per score equivale a ordinare per
+`B - I`, salvo i pareggi introdotti dall'arrotondamento.
+
+Queste proprietà matematiche non giustificano scientificamente la scelta dei
+pesi, non calibrati su dati, né rendono lo score una probabilità di successo.
+La regola serve a verificare ordinamento e fallback. I riferimenti
+[BWAF-MN] e [BWAF-P] inquadrano le semantiche argomentative e la distinzione
+fra aggregazione e influenza; non sono la fonte di questa formula.
 
 ### 6.3 Validazione e fallback
 
@@ -321,11 +373,13 @@ prova che l'azione sia sufficiente o sicura in produzione.
 Un crash o un timeout è invece un fallimento dell'esecuzione: non è uno di
 questi esiti. Con ranking vuoto non si valida un ID inesistente; la pubblicazione
 della decisione senza selezione crea anche il report semantico vuoto.
+Il motore Tiny-ME è descritto in [TINYME]; i controlli del mock non ne
+implementano i servizi di ragionamento.
 
 ### 6.4 Spiegazioni e provenienza
 
-Le prime prove avevano mostrato spiegazioni libere con versioni consigliate o
-deduzioni non sostenute dalle fonti. Il contratto attuale conserva il testo
+Le spiegazioni libere possono contenere versioni consigliate o deduzioni non
+sostenute dalle fonti. Per questo il contratto conserva il testo
 dell'agente in `agent_commentary`, marcato `unverified`. Il tool compone invece
 `FinalDecision.explanation` da campi strutturati, con metodo `artifact-derived-v1`.
 
@@ -333,8 +387,8 @@ dell'agente in `agent_commentary`, marcato `unverified`. Il tool compone invece
 claim cita artefatto, JSON Pointer e produttore. La sessione ricostruisce i claim
 dai dati correnti per verificarli. La coerenza con un mock non trasforma i dati
 del mock in fatti verificati nel mondo reale; le descrizioni delle strategie
-rimangono da valutare criticamente. I JSON storici restano leggibili come
-`legacy-unverified`, senza essere corretti retroattivamente.
+rimangono da valutare criticamente. Le decisioni prive dei metadati di derivazione
+sono trattate come `legacy-unverified`.
 
 La provenienza locale registra otto hash: input e sette output di dominio,
 escludendo il record di provenienza stesso. Le attività collegano dati usati e
@@ -342,6 +396,8 @@ generati ai ruoli. È una registrazione locale dichiarativa, senza firma,
 conformità PROV-O attestata o transazione Hyperledger Fabric. I log SDK
 conservano separatamente conversazioni e chiamate; gli hash non sostituiscono
 un registro completo dell'esecuzione.
+Il riferimento concettuale per entità, attività e agenti è PROV-O [PROVO],
+previsto anche nella proposta [TESI, § 8].
 
 ## 7. Struttura del repository
 
@@ -380,30 +436,29 @@ responsabilità. `.env`, ambiente virtuale, cache e output non sono versionati.
 Il manifest di una matrice identifica i sorgenti con hash; per distribuire una
 versione riproducibile occorre conservare anche il codice corrispondente.
 
-## 8. Attività svolte e problemi affrontati
+## 8. Scelte implementative e gestione degli errori
 
-| Fase | Attività e risultato | Evidenza |
+| Ambito | Soluzione implementata | Evidenza |
 |---|---|---|
 | Strutturazione | Quattro ruoli, modelli Pydantic, sessione comune, DAG con convergenza dei tre artefatti | [Architettura](architecture.md), sorgenti e test |
-| 11 settembre | Prima pipeline locale completa con Ollama; recupero dello Strategic per output mancanti | [Primo run](ollama-first-run.md) |
-| 14 settembre | Quattro scenari, prove con policy/capacità diverse, diagnosi dei fallimenti sul percorso vuoto e della generazione troppo lunga | [Prove Ollama](ollama-demo-runs.md) |
-| 14 settembre | Pulizia selettiva degli output: 17 directory, 155 file, circa 1,65 MiB; conservazione del primo run completo | [Scenari](demo-scenarios.md) |
-| 15–16 settembre | Payload a oggetto, chiarimento del lookup senza argomenti, pubblicazione esplicita delle candidate vuote e blocco dei task dipendenti | [Tool strutturati](structured-tools-runs.md) |
-| 16 settembre | Spiegazione derivata dagli artefatti e commento LLM separato | [Spiegazioni](artifact-explanations.md) |
-| 16–17 settembre | Runner nel repository, matrice completa e ricontrollo degli esiti | [Runner](demo-runner.md), [matrice](demo-matrix-runs.md) |
+| Esecuzione LLM | Pipeline locale con Ollama e recupero dei task per output mancanti | [Integrazione locale](ollama-first-run.md) |
+| Scenari limite | Prove con policy e capacità diverse, gestione degli insiemi vuoti e limiti alla generazione | [Scenari](demo-scenarios.md), [prove](ollama-demo-runs.md) |
+| Pubblicazioni | Payload a oggetto, pubblicazione esplicita delle candidate vuote e blocco dei task dipendenti | [Tool strutturati](structured-tools-runs.md) |
+| Spiegabilità | Spiegazione derivata dagli artefatti e commento LLM separato | [Spiegazioni](artifact-explanations.md) |
+| Riproducibilità | Runner, matrice sperimentale e audit degli esiti | [Runner](demo-runner.md), [matrice](demo-matrix-runs.md) |
 
 I problemi sono stati affrontati al confine fra generazione e stato autorevole:
 payload malformati, dichiarazioni di successo senza pubblicazione, chiamate
 su ranking vuoto e inferenze a valle di produttori falliti. I test negativi
-verificano che questi casi non generino decisioni incoerenti. I fallimenti
-storici sono documentati separatamente dai successi ottenuti dopo le correzioni.
+verificano che questi casi non generino decisioni incoerenti. I log distinguono
+i tentativi falliti dagli esiti finali delle esecuzioni.
 
 ## 9. Comandi di preparazione e riproduzione
 
-I comandi di questa sezione costituiscono una procedura per un ambiente nuovo;
-non tutti sono stati rieseguiti durante l'ultima matrice. La workspace usata
-disponeva già di `.venv`, Ollama e dei pesi del modello. I comandi delle prove
-effettivamente avviate sono riportati nella sezione successiva e nei manifest.
+I comandi di questa sezione vanno eseguiti dalla radice del repository e
+descrivono la preparazione dell'ambiente e l'avvio delle prove. I manifest
+sperimentali identificano la configurazione e gli argomenti delle esecuzioni
+valutate.
 
 ### 9.1 Ambiente Python
 
@@ -463,7 +518,7 @@ LLM_TIMEOUT_SECONDS=300 LLM_MAX_TOKENS=2048 \
 ```
 
 `fixtures` esercita gli stessi contratti usando proposte prefissate, senza
-agent inference. `camel` esegue davvero i worker LLM. Ogni run usa una directory
+inferenza LLM. `camel` esegue i worker con il modello configurato. Ogni run usa una directory
 distinta; la CLI rifiuta destinazioni non vuote.
 
 ### 9.4 Test, schemi e matrice
@@ -494,14 +549,14 @@ Per una prova mirata si può aggiungere, ad esempio,
 | Integrazione SDK nei test | Workforce e tool CAMEL reali con risposte del modello programmate | Scheduling, pubblicazioni, passaggio del contesto e recuperi |
 | Matrice Ollama | Agenti CAMEL con inferenza locale effettiva | Comportamento osservato del modello sui quattro casi |
 
-I 95 test sono passati prima della matrice, insieme ai controlli Ruff. I dodici
-casi aggiunti per il runner coprono timeout reale di un subprocess, interruzione,
+La suite di 95 test e i controlli Ruff hanno esito positivo nella configurazione
+valutata. I dodici casi dedicati al runner coprono timeout reale di un subprocess, interruzione,
 prosecuzione dopo un errore, protezione degli output e rilevamento di alterazioni.
 I test automatici non sostituiscono la valutazione dei testi generati dall'LLM.
 
 ### 10.2 Scenari
 
-| Scenario | Variazione | Esito delle fixture | Esito LLM nelle due ripetizioni finali |
+| Scenario | Variazione | Esito delle fixture | Esito LLM nelle due ripetizioni |
 |---|---|---|---|
 | Nominale | Tutte le capacità presenti | `S_UPGRADE` | `S_UPGRADE` entrambe |
 | Senza manutenzione | Assente `maintenance_window` | Upgrade rifiutato, poi `S_ISOLATE` | Upgrade rifiutato, poi `S_MONITOR` entrambe |
@@ -512,7 +567,7 @@ La diversa scelta del caso senza manutenzione è coerente con le stime e
 l'ordine generati nei run LLM. Il monitoraggio selezionato supera i controlli
 di capacità e policy; ciò non significa che rimuova la vulnerabilità.
 
-### 10.3 Matrice del 16 settembre, ricontrollata il 17
+### 10.3 Risultati della matrice sperimentale
 
 Comando effettivamente eseguito:
 
@@ -520,9 +575,9 @@ Comando effettivamente eseguito:
 .venv/bin/python -u -m thesis_agents.demo --mode camel --repetitions 2
 ```
 
-Batch: `output/demo-matrix-20260916T074247Z-80665fa1/`.
+Il batch sperimentale è identificato nel [resoconto della matrice](demo-matrix-runs.md).
 Configurazione e hash sono in `manifest.json`; i risultati in `summary.json`
-e `summary.md`. Non sono stati riutilizzati run storici per completare la matrice.
+e `summary.md`. La matrice comprende due esecuzioni indipendenti per scenario.
 
 | Scenario | Ripetizione 1: secondi / richieste | Ripetizione 2: secondi / richieste |
 |---|---:|---:|
@@ -573,10 +628,26 @@ injection di `ArtifactSession`: `vulnerability_tool`, `ranking_tool`,
 di ingresso; non basta cambiare il nome del file statico in OpenTelemetry.
 
 Le firme effettive dei servizi esterni, i formati BWAF, le ontologie e le ricevute
-di transazione andranno verificati nei rispettivi repository prima di implementare
+di transazione richiedono verifiche di compatibilità prima di implementare
 gli adapter. Le integrazioni elencate sono una mappa di lavoro, non chiamate
 già collaudate. Un ampliamento a inventari multi-componente potrà richiedere
 anche l'evoluzione del contratto, oggi limitato a una singola osservazione software.
+
+I riferimenti generali sono [OTEL], [MCP], [OWL], [OSV], [SBOM] e [FABRIC].
+Essi definiscono tecnologie e formati; non attestano implementazioni nel mockup.
+
+Le baseline private [BASE-PIPELINE] e [BASE-LEDGER], ai commit rispettivamente
+`c2ea542` e `a3dab4a`, forniscono i componenti esterni previsti dall'architettura.
+Il backend delega il ranking da `RankGraph` a
+`ComputeRank`, quindi a `Graph::newCalculateRank_new()` mediante un wrapper
+C++. La copia consultata contiene l'header e la libreria `libgraph.so`, ma
+non è stato trovato il corpo della funzione nei due alberi locali.
+Non è quindi possibile attribuire al backend una formula completa o uno dei
+paper citati sulla sola base di queste interfacce. Il dettaglio dell'esame,
+i file e gli hash sono in `docs/fonti-e-scelte.md` e
+`docs/riferimenti/baseline-locali.json`. I repository sono stati letti, non eseguiti
+né integrati. La proposta [TESI, § 9] li identifica come lavori preesistenti,
+distinti dal contributo implementativo del mockup.
 
 ## 12. Percorso della dimostrazione e lavoro successivo
 
@@ -600,14 +671,114 @@ contratto come confine fra agenti e servizi.
 
 ## Riferimenti interni e tracciabilità
 
-- [README del progetto](../README.md): installazione e comandi principali.
-- [Architettura](architecture.md) e [guida alla lettura](reading-guide.md): responsabilità e file.
-- [Dati di ingresso](../thesis_agents/data/README.md) e [scenari](demo-scenarios.md).
-- [Primo run Ollama](ollama-first-run.md), [prove del 14 settembre](ollama-demo-runs.md),
-  [tool strutturati](structured-tools-runs.md): evoluzione documentata.
-- [Spiegazioni derivate](artifact-explanations.md): contratto del testo finale.
-- [Runner](demo-runner.md) e [matrice completa](demo-matrix-runs.md): protocollo e risultati.
-
-I resoconti storici conservano i risultati della rispettiva fase. Le cartelle
-`output/` contengono le evidenze locali e non vengono distribuite automaticamente
+Le cartelle `output/` contengono le evidenze locali e non vengono distribuite automaticamente
 con Git; per consegnarle occorre includere esplicitamente il batch pertinente.
+
+La documentazione di supporto è organizzata nei seguenti percorsi,
+relativi alla radice del repository:
+
+| Documento | Percorso nel repository |
+|---|---|
+| Installazione e avvio | `README.md` |
+| Architettura e guida al codice | `docs/architecture.md`, `docs/reading-guide.md` |
+| Dati e scenari dimostrativi | `thesis_agents/data/README.md`, `docs/demo-scenarios.md` |
+| Integrazione locale | `docs/ollama-first-run.md` |
+| Prove e correzioni dei tool | `docs/ollama-demo-runs.md`, `docs/structured-tools-runs.md` |
+| Spiegazioni e fonti | `docs/artifact-explanations.md` |
+| Runner e risultati della matrice | `docs/demo-runner.md`, `docs/demo-matrix-runs.md` |
+
+## Bibliografia e fonti consultate
+
+Riferimenti verificati nella revisione del 17 settembre 2026. Le fonti teoriche
+aggiunte in questa fase non sono attribuite retroattivamente allo sviluppo.
+Ambito e parti consultate sono registrati in `docs/riferimenti/fonti.json`.
+Le fonti grafiche sono [POLIBA] e [PT-SANS]; il logo proviene dal sito
+dell'Ateneo, con URL e hash in `docs/materiali/assets/sources.json`.
+
+**[TESI]** Alessandro Costa. *Toward Explainable Agentic Cyber Threat Intelligence: Semantic Smart Contracts, Argumentation Ranking and Runtime Observability*. 2026.
+
+Fonte: [riferimenti/proposta-agentic-cti.pdf](riferimenti/proposta-agentic-cti.pdf).
+
+**[CAMEL]** Guohao Li and Hasan Abed Al Kader Hammoud and Hani Itani and Dmitrii Khizbullin and Bernard Ghanem. *CAMEL: Communicative Agents for "Mind" Exploration of Large Language Model Society*. 2023.
+
+Fonte: [https://arxiv.org/abs/2303.17760](https://arxiv.org/abs/2303.17760).
+
+**[CAMEL-SDK]** CAMEL-AI. *CAMEL repository, versione v0.2.90*. s.d..
+
+Fonte: [https://github.com/camel-ai/camel/tree/v0.2.90](https://github.com/camel-ai/camel/tree/v0.2.90).
+
+**[PYDANTIC]** Pydantic contributors. *Models — Pydantic documentation*. s.d..
+
+Fonte: [https://docs.pydantic.dev/latest/concepts/models/](https://docs.pydantic.dev/latest/concepts/models/).
+
+**[OLLAMA-API]** Ollama. *OpenAI compatibility*. s.d..
+
+Fonte: [https://docs.ollama.com/api/openai-compatibility](https://docs.ollama.com/api/openai-compatibility).
+
+**[OLLAMA-MODELFILE]** Ollama. *Modelfile Reference*. s.d..
+
+Fonte: [https://docs.ollama.com/modelfile](https://docs.ollama.com/modelfile).
+
+**[QWEN]** Ollama. *qwen3:4b-instruct — model library entry*. s.d..
+
+Fonte: [https://ollama.com/library/qwen3:4b-instruct](https://ollama.com/library/qwen3:4b-instruct).
+
+**[LOG4J]** Apache Software Foundation. *Apache Logging Services — Security, CVE-2021-44228*. s.d..
+
+Fonte: [https://logging.apache.org/security.html](https://logging.apache.org/security.html).
+
+**[BWAF-MN]** Till Mossakowski and Fabian Neuhaus. *Modular Semantics and Characteristics for Bipolar Weighted Argumentation Graphs*. 2018.
+
+Fonte: [https://arxiv.org/abs/1807.06685](https://arxiv.org/abs/1807.06685).
+
+**[BWAF-P]** Nico Potyka. *Extending Modular Semantics for Bipolar Weighted Argumentation*. 2019.
+
+Fonte: [https://www.ifaamas.org/Proceedings/aamas2019/pdfs/p1722.pdf](https://www.ifaamas.org/Proceedings/aamas2019/pdfs/p1722.pdf).
+
+**[TINYME]** Michele Ruta and Floriano Scioscia and Ivano Bilenchi and Filippo Gramegna and Giuseppe Loseto and Saverio Ieva and Agnese Pinto. *A multiplatform reasoning engine for the Semantic Web of Everything*. 2022.
+
+Fonte: [https://sisinflab.poliba.it/publications/2022/RSBGLIP22/Ruta_et_al_JWS2022_Tiny-ME_CR.pdf](https://sisinflab.poliba.it/publications/2022/RSBGLIP22/Ruta_et_al_JWS2022_Tiny-ME_CR.pdf).
+
+**[PROVO]** W3C. *PROV-O: The PROV Ontology*. 2013.
+
+Fonte: [https://www.w3.org/TR/prov-o/](https://www.w3.org/TR/prov-o/).
+
+**[OTEL]** OpenTelemetry. *What is OpenTelemetry?*. s.d..
+
+Fonte: [https://opentelemetry.io/docs/what-is-opentelemetry/](https://opentelemetry.io/docs/what-is-opentelemetry/).
+
+**[MCP]** Model Context Protocol contributors. *Architecture — specification 2025-06-18*. 2025.
+
+Fonte: [https://modelcontextprotocol.io/specification/2025-06-18/architecture](https://modelcontextprotocol.io/specification/2025-06-18/architecture).
+
+**[OSV]** OpenSSF. *Open Source Vulnerability format*. s.d..
+
+Fonte: [https://ossf.github.io/osv-schema/](https://ossf.github.io/osv-schema/).
+
+**[OWL]** W3C. *OWL 2 Web Ontology Language Document Overview, Second Edition*. 2012.
+
+Fonte: [https://www.w3.org/TR/owl2-overview/](https://www.w3.org/TR/owl2-overview/).
+
+**[FABRIC]** Hyperledger Fabric contributors. *Smart Contracts and Chaincode*. s.d..
+
+Fonte: [https://hyperledger-fabric.readthedocs.io/en/latest/smartcontract/smartcontract.html](https://hyperledger-fabric.readthedocs.io/en/latest/smartcontract/smartcontract.html).
+
+**[SBOM]** CISA. *Framing Software Component Transparency: Establishing a Common Software Bill of Materials, Third Edition*. 2024.
+
+Fonte: [https://www.cisa.gov/sites/default/files/2024-10/SBOM%20Framing%20Software%20Component%20Transparency%202024.pdf](https://www.cisa.gov/sites/default/files/2024-10/SBOM%20Framing%20Software%20Component%20Transparency%202024.pdf).
+
+**[POLIBA]** Politecnico di Bari. *Piano della comunicazione 2022*. 2022.
+
+Fonte: [https://www.poliba.it/sites/default/files/piano_comunicazione_2022_3_aprile_2022.pdf](https://www.poliba.it/sites/default/files/piano_comunicazione_2022_3_aprile_2022.pdf).
+
+**[PT-SANS]** ParaType and Google Fonts. *PT Sans — Google Fonts distribution*. s.d..
+
+Fonte: [https://github.com/google/fonts/tree/main/ofl/ptsans](https://github.com/google/fonts/tree/main/ofl/ptsans).
+
+**[BASE-PIPELINE]** sisinflab-swot (organizzazione del repository; autori individuali da confermare). *agent-based-cti-argumentation-pipeline*. s.d..
+
+Fonte: [https://github.com/sisinflab-swot/agent-based-cti-argumentation-pipeline/tree/c2ea54278bc5f44730693cdf7f86fc3584e54f70](https://github.com/sisinflab-swot/agent-based-cti-argumentation-pipeline/tree/c2ea54278bc5f44730693cdf7f86fc3584e54f70).
+
+**[BASE-LEDGER]** sisinflab-swot (organizzazione del repository; autori individuali da confermare). *semantic-cti-ledger-argumentation*. s.d..
+
+Fonte: [https://github.com/sisinflab-swot/semantic-cti-ledger-argumentation/tree/a3dab4a5def79dda356dd753aa34306e03ea346a](https://github.com/sisinflab-swot/semantic-cti-ledger-argumentation/tree/a3dab4a5def79dda356dd753aa34306e03ea346a).

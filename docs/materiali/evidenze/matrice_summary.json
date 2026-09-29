@@ -1,0 +1,787 @@
+{
+  "state": "passed",
+  "planned_runs": 8,
+  "finished_runs": 8,
+  "verified_runs": 8,
+  "errors": [],
+  "runs": [
+    {
+      "name": "demo_01_nominal-r1",
+      "scenario": "demo_01_nominal",
+      "repetition": 1,
+      "exit_code": 0,
+      "execution_status": "completed",
+      "elapsed_seconds": 125.43,
+      "audit": {
+        "artifacts": {
+          "input": "valid",
+          "runtime_evidence": "valid",
+          "vulnerability_report": "valid",
+          "candidate_strategies": "valid",
+          "argumentation_graph": "valid",
+          "ranking": "valid",
+          "semantic_validation": "valid",
+          "final_decision": "valid",
+          "provenance": "valid"
+        },
+        "checks": {
+          "input_matches": true,
+          "runtime_matches_input": true,
+          "lookup_matches_backend": true,
+          "candidates_grounded": true,
+          "graph_matches_candidates": true,
+          "ranking_matches_backend": true,
+          "semantic_sequence_matches_backend": true,
+          "decision_matches_tools": true,
+          "explanation_derived": true,
+          "provenance_mode": true,
+          "provenance_hashes": true,
+          "provenance_producers": true,
+          "provenance_dependencies": true,
+          "four_agent_inference": true,
+          "strategic_inputs_delivered": true,
+          "decision_delivered": true
+        },
+        "errors": [],
+        "llm_requests": 22,
+        "decision_status": "selected",
+        "selected_strategy_id": "S_UPGRADE",
+        "selected_action": "upgrade",
+        "candidate_actions": [
+          "upgrade",
+          "isolate",
+          "block_deployment",
+          "monitor"
+        ],
+        "validation_attempts": [
+          {
+            "strategy_id": "S_UPGRADE",
+            "valid": true,
+            "status": "accepted",
+            "missing_requirements": [],
+            "conflicts": [],
+            "explanation": "Local fixture requirements satisfied; this is not a Tiny-ME proof.",
+            "backend": "capability-policy-mock-v1"
+          }
+        ],
+        "fallback_observed": false,
+        "sources_resolved": 37,
+        "failed_task_attempts": [],
+        "requests_by_role": {
+          "VulnerabilityAgent": 4,
+          "management": 5,
+          "TelemetryAgent": 3,
+          "StrategicAgent": 7,
+          "CountermeasureAgent": 3
+        },
+        "tool_calls": {
+          "get_context": 4,
+          "lookup_vulnerabilities": 1,
+          "publish_vulnerability_report": 1,
+          "publish_runtime_evidence": 1,
+          "build_argumentation_graph": 1,
+          "rank_graph": 1,
+          "validate_countermeasure": 1,
+          "publish_final_decision": 1,
+          "record_provenance": 1,
+          "publish_candidate_strategies": 1
+        },
+        "strategic_context_messages_verified": 6,
+        "decision_tool_messages_verified": 2,
+        "passed": true
+      },
+      "scenario_matches": true,
+      "sources_unchanged": true,
+      "verified": true
+    },
+    {
+      "name": "demo_02_no_maintenance-r1",
+      "scenario": "demo_02_no_maintenance",
+      "repetition": 1,
+      "exit_code": 0,
+      "execution_status": "completed",
+      "elapsed_seconds": 118.5,
+      "audit": {
+        "artifacts": {
+          "input": "valid",
+          "runtime_evidence": "valid",
+          "vulnerability_report": "valid",
+          "candidate_strategies": "valid",
+          "argumentation_graph": "valid",
+          "ranking": "valid",
+          "semantic_validation": "valid",
+          "final_decision": "valid",
+          "provenance": "valid"
+        },
+        "checks": {
+          "input_matches": true,
+          "runtime_matches_input": true,
+          "lookup_matches_backend": true,
+          "candidates_grounded": true,
+          "graph_matches_candidates": true,
+          "ranking_matches_backend": true,
+          "semantic_sequence_matches_backend": true,
+          "decision_matches_tools": true,
+          "explanation_derived": true,
+          "provenance_mode": true,
+          "provenance_hashes": true,
+          "provenance_producers": true,
+          "provenance_dependencies": true,
+          "four_agent_inference": true,
+          "strategic_inputs_delivered": true,
+          "decision_delivered": true
+        },
+        "errors": [],
+        "llm_requests": 23,
+        "decision_status": "selected",
+        "selected_strategy_id": "S_MONITOR",
+        "selected_action": "monitor",
+        "candidate_actions": [
+          "upgrade",
+          "isolate",
+          "block_deployment",
+          "monitor"
+        ],
+        "validation_attempts": [
+          {
+            "strategy_id": "S_UPGRADE",
+            "valid": false,
+            "status": "rejected",
+            "missing_requirements": [
+              "maintenance_window"
+            ],
+            "conflicts": [],
+            "explanation": "Local fixture requirements or policy not satisfied.",
+            "backend": "capability-policy-mock-v1"
+          },
+          {
+            "strategy_id": "S_MONITOR",
+            "valid": true,
+            "status": "accepted",
+            "missing_requirements": [],
+            "conflicts": [],
+            "explanation": "Local fixture requirements satisfied; this is not a Tiny-ME proof.",
+            "backend": "capability-policy-mock-v1"
+          }
+        ],
+        "fallback_observed": true,
+        "sources_resolved": 42,
+        "failed_task_attempts": [],
+        "requests_by_role": {
+          "management": 5,
+          "CountermeasureAgent": 3,
+          "VulnerabilityAgent": 4,
+          "StrategicAgent": 8,
+          "TelemetryAgent": 3
+        },
+        "tool_calls": {
+          "get_context": 4,
+          "publish_candidate_strategies": 1,
+          "lookup_vulnerabilities": 1,
+          "publish_vulnerability_report": 1,
+          "build_argumentation_graph": 1,
+          "rank_graph": 1,
+          "validate_countermeasure": 2,
+          "publish_final_decision": 1,
+          "record_provenance": 1,
+          "publish_runtime_evidence": 1
+        },
+        "strategic_context_messages_verified": 7,
+        "decision_tool_messages_verified": 2,
+        "passed": true
+      },
+      "scenario_matches": true,
+      "sources_unchanged": true,
+      "verified": true
+    },
+    {
+      "name": "demo_03_all_actions_prohibited-r1",
+      "scenario": "demo_03_all_actions_prohibited",
+      "repetition": 1,
+      "exit_code": 0,
+      "execution_status": "completed",
+      "elapsed_seconds": 114.49,
+      "audit": {
+        "artifacts": {
+          "input": "valid",
+          "runtime_evidence": "valid",
+          "vulnerability_report": "valid",
+          "candidate_strategies": "valid",
+          "argumentation_graph": "valid",
+          "ranking": "valid",
+          "semantic_validation": "valid",
+          "final_decision": "valid",
+          "provenance": "valid"
+        },
+        "checks": {
+          "input_matches": true,
+          "runtime_matches_input": true,
+          "lookup_matches_backend": true,
+          "candidates_grounded": true,
+          "graph_matches_candidates": true,
+          "ranking_matches_backend": true,
+          "semantic_sequence_matches_backend": true,
+          "decision_matches_tools": true,
+          "explanation_derived": true,
+          "provenance_mode": true,
+          "provenance_hashes": true,
+          "provenance_producers": true,
+          "provenance_dependencies": true,
+          "four_agent_inference": true,
+          "strategic_inputs_delivered": true,
+          "decision_delivered": true
+        },
+        "errors": [],
+        "llm_requests": 25,
+        "decision_status": "no_valid_strategy",
+        "selected_strategy_id": null,
+        "selected_action": null,
+        "candidate_actions": [
+          "upgrade",
+          "isolate",
+          "block_deployment",
+          "monitor"
+        ],
+        "validation_attempts": [
+          {
+            "strategy_id": "S_UPGRADE",
+            "valid": false,
+            "status": "rejected",
+            "missing_requirements": [],
+            "conflicts": [
+              "Action prohibited by scenario: upgrade"
+            ],
+            "explanation": "Local fixture requirements or policy not satisfied.",
+            "backend": "capability-policy-mock-v1"
+          },
+          {
+            "strategy_id": "S_MONITOR",
+            "valid": false,
+            "status": "rejected",
+            "missing_requirements": [],
+            "conflicts": [
+              "Action prohibited by scenario: monitor"
+            ],
+            "explanation": "Local fixture requirements or policy not satisfied.",
+            "backend": "capability-policy-mock-v1"
+          },
+          {
+            "strategy_id": "S_ISOLATE",
+            "valid": false,
+            "status": "rejected",
+            "missing_requirements": [],
+            "conflicts": [
+              "Action prohibited by scenario: isolate"
+            ],
+            "explanation": "Local fixture requirements or policy not satisfied.",
+            "backend": "capability-policy-mock-v1"
+          },
+          {
+            "strategy_id": "S_BLOCK",
+            "valid": false,
+            "status": "rejected",
+            "missing_requirements": [],
+            "conflicts": [
+              "Action prohibited by scenario: block_deployment"
+            ],
+            "explanation": "Local fixture requirements or policy not satisfied.",
+            "backend": "capability-policy-mock-v1"
+          }
+        ],
+        "fallback_observed": false,
+        "sources_resolved": 52,
+        "failed_task_attempts": [],
+        "requests_by_role": {
+          "management": 5,
+          "CountermeasureAgent": 3,
+          "StrategicAgent": 10,
+          "VulnerabilityAgent": 4,
+          "TelemetryAgent": 3
+        },
+        "tool_calls": {
+          "get_context": 4,
+          "publish_candidate_strategies": 1,
+          "build_argumentation_graph": 1,
+          "rank_graph": 1,
+          "validate_countermeasure": 4,
+          "publish_final_decision": 1,
+          "record_provenance": 1,
+          "lookup_vulnerabilities": 1,
+          "publish_vulnerability_report": 1,
+          "publish_runtime_evidence": 1
+        },
+        "strategic_context_messages_verified": 9,
+        "decision_tool_messages_verified": 2,
+        "passed": true
+      },
+      "scenario_matches": true,
+      "sources_unchanged": true,
+      "verified": true
+    },
+    {
+      "name": "demo_04_unsupported_lookup-r1",
+      "scenario": "demo_04_unsupported_lookup",
+      "repetition": 1,
+      "exit_code": 0,
+      "execution_status": "completed",
+      "elapsed_seconds": 150.78,
+      "audit": {
+        "artifacts": {
+          "input": "valid",
+          "runtime_evidence": "valid",
+          "vulnerability_report": "valid",
+          "candidate_strategies": "valid",
+          "argumentation_graph": "valid",
+          "ranking": "valid",
+          "semantic_validation": "valid",
+          "final_decision": "valid",
+          "provenance": "valid"
+        },
+        "checks": {
+          "input_matches": true,
+          "runtime_matches_input": true,
+          "lookup_matches_backend": true,
+          "candidates_grounded": true,
+          "graph_matches_candidates": true,
+          "ranking_matches_backend": true,
+          "semantic_sequence_matches_backend": true,
+          "decision_matches_tools": true,
+          "explanation_derived": true,
+          "provenance_mode": true,
+          "provenance_hashes": true,
+          "provenance_producers": true,
+          "provenance_dependencies": true,
+          "four_agent_inference": true,
+          "strategic_inputs_delivered": true,
+          "decision_delivered": true
+        },
+        "errors": [],
+        "llm_requests": 37,
+        "decision_status": "insufficient_evidence",
+        "selected_strategy_id": null,
+        "selected_action": null,
+        "candidate_actions": [],
+        "validation_attempts": [],
+        "fallback_observed": false,
+        "sources_resolved": 15,
+        "failed_task_attempts": [],
+        "requests_by_role": {
+          "StrategicAgent": 13,
+          "management": 8,
+          "TelemetryAgent": 3,
+          "VulnerabilityAgent": 8,
+          "CountermeasureAgent": 5
+        },
+        "tool_calls": {
+          "get_context": 7,
+          "build_argumentation_graph": 2,
+          "rank_graph": 2,
+          "publish_final_decision": 2,
+          "record_provenance": 2,
+          "validate_countermeasure": 1,
+          "publish_runtime_evidence": 1,
+          "lookup_vulnerabilities": 2,
+          "publish_vulnerability_report": 2,
+          "publish_candidate_strategies": 1
+        },
+        "strategic_context_messages_verified": 11,
+        "decision_tool_messages_verified": 4,
+        "passed": true
+      },
+      "scenario_matches": true,
+      "sources_unchanged": true,
+      "verified": true
+    },
+    {
+      "name": "demo_01_nominal-r2",
+      "scenario": "demo_01_nominal",
+      "repetition": 2,
+      "exit_code": 0,
+      "execution_status": "completed",
+      "elapsed_seconds": 135.1,
+      "audit": {
+        "artifacts": {
+          "input": "valid",
+          "runtime_evidence": "valid",
+          "vulnerability_report": "valid",
+          "candidate_strategies": "valid",
+          "argumentation_graph": "valid",
+          "ranking": "valid",
+          "semantic_validation": "valid",
+          "final_decision": "valid",
+          "provenance": "valid"
+        },
+        "checks": {
+          "input_matches": true,
+          "runtime_matches_input": true,
+          "lookup_matches_backend": true,
+          "candidates_grounded": true,
+          "graph_matches_candidates": true,
+          "ranking_matches_backend": true,
+          "semantic_sequence_matches_backend": true,
+          "decision_matches_tools": true,
+          "explanation_derived": true,
+          "provenance_mode": true,
+          "provenance_hashes": true,
+          "provenance_producers": true,
+          "provenance_dependencies": true,
+          "four_agent_inference": true,
+          "strategic_inputs_delivered": true,
+          "decision_delivered": true
+        },
+        "errors": [],
+        "llm_requests": 27,
+        "decision_status": "selected",
+        "selected_strategy_id": "S_UPGRADE",
+        "selected_action": "upgrade",
+        "candidate_actions": [
+          "upgrade",
+          "isolate",
+          "block_deployment",
+          "monitor"
+        ],
+        "validation_attempts": [
+          {
+            "strategy_id": "S_UPGRADE",
+            "valid": true,
+            "status": "accepted",
+            "missing_requirements": [],
+            "conflicts": [],
+            "explanation": "Local fixture requirements satisfied; this is not a Tiny-ME proof.",
+            "backend": "capability-policy-mock-v1"
+          }
+        ],
+        "fallback_observed": false,
+        "sources_resolved": 37,
+        "failed_task_attempts": [
+          [
+            "strategic",
+            "1/2"
+          ]
+        ],
+        "requests_by_role": {
+          "StrategicAgent": 12,
+          "CountermeasureAgent": 3,
+          "management": 5,
+          "TelemetryAgent": 3,
+          "VulnerabilityAgent": 4
+        },
+        "tool_calls": {
+          "get_context": 5,
+          "build_argumentation_graph": 2,
+          "rank_graph": 2,
+          "validate_countermeasure": 2,
+          "publish_final_decision": 1,
+          "record_provenance": 1,
+          "publish_candidate_strategies": 1,
+          "publish_runtime_evidence": 1,
+          "lookup_vulnerabilities": 1,
+          "publish_vulnerability_report": 1
+        },
+        "strategic_context_messages_verified": 10,
+        "decision_tool_messages_verified": 2,
+        "passed": true
+      },
+      "scenario_matches": true,
+      "sources_unchanged": true,
+      "verified": true
+    },
+    {
+      "name": "demo_02_no_maintenance-r2",
+      "scenario": "demo_02_no_maintenance",
+      "repetition": 2,
+      "exit_code": 0,
+      "execution_status": "completed",
+      "elapsed_seconds": 116.81,
+      "audit": {
+        "artifacts": {
+          "input": "valid",
+          "runtime_evidence": "valid",
+          "vulnerability_report": "valid",
+          "candidate_strategies": "valid",
+          "argumentation_graph": "valid",
+          "ranking": "valid",
+          "semantic_validation": "valid",
+          "final_decision": "valid",
+          "provenance": "valid"
+        },
+        "checks": {
+          "input_matches": true,
+          "runtime_matches_input": true,
+          "lookup_matches_backend": true,
+          "candidates_grounded": true,
+          "graph_matches_candidates": true,
+          "ranking_matches_backend": true,
+          "semantic_sequence_matches_backend": true,
+          "decision_matches_tools": true,
+          "explanation_derived": true,
+          "provenance_mode": true,
+          "provenance_hashes": true,
+          "provenance_producers": true,
+          "provenance_dependencies": true,
+          "four_agent_inference": true,
+          "strategic_inputs_delivered": true,
+          "decision_delivered": true
+        },
+        "errors": [],
+        "llm_requests": 23,
+        "decision_status": "selected",
+        "selected_strategy_id": "S_MONITOR",
+        "selected_action": "monitor",
+        "candidate_actions": [
+          "upgrade",
+          "isolate",
+          "block_deployment",
+          "monitor"
+        ],
+        "validation_attempts": [
+          {
+            "strategy_id": "S_UPGRADE",
+            "valid": false,
+            "status": "rejected",
+            "missing_requirements": [
+              "maintenance_window"
+            ],
+            "conflicts": [],
+            "explanation": "Local fixture requirements or policy not satisfied.",
+            "backend": "capability-policy-mock-v1"
+          },
+          {
+            "strategy_id": "S_MONITOR",
+            "valid": true,
+            "status": "accepted",
+            "missing_requirements": [],
+            "conflicts": [],
+            "explanation": "Local fixture requirements satisfied; this is not a Tiny-ME proof.",
+            "backend": "capability-policy-mock-v1"
+          }
+        ],
+        "fallback_observed": true,
+        "sources_resolved": 42,
+        "failed_task_attempts": [],
+        "requests_by_role": {
+          "management": 5,
+          "CountermeasureAgent": 3,
+          "StrategicAgent": 8,
+          "TelemetryAgent": 3,
+          "VulnerabilityAgent": 4
+        },
+        "tool_calls": {
+          "get_context": 4,
+          "publish_candidate_strategies": 1,
+          "build_argumentation_graph": 1,
+          "rank_graph": 1,
+          "validate_countermeasure": 2,
+          "publish_final_decision": 1,
+          "record_provenance": 1,
+          "publish_runtime_evidence": 1,
+          "lookup_vulnerabilities": 1,
+          "publish_vulnerability_report": 1
+        },
+        "strategic_context_messages_verified": 7,
+        "decision_tool_messages_verified": 2,
+        "passed": true
+      },
+      "scenario_matches": true,
+      "sources_unchanged": true,
+      "verified": true
+    },
+    {
+      "name": "demo_03_all_actions_prohibited-r2",
+      "scenario": "demo_03_all_actions_prohibited",
+      "repetition": 2,
+      "exit_code": 0,
+      "execution_status": "completed",
+      "elapsed_seconds": 113.1,
+      "audit": {
+        "artifacts": {
+          "input": "valid",
+          "runtime_evidence": "valid",
+          "vulnerability_report": "valid",
+          "candidate_strategies": "valid",
+          "argumentation_graph": "valid",
+          "ranking": "valid",
+          "semantic_validation": "valid",
+          "final_decision": "valid",
+          "provenance": "valid"
+        },
+        "checks": {
+          "input_matches": true,
+          "runtime_matches_input": true,
+          "lookup_matches_backend": true,
+          "candidates_grounded": true,
+          "graph_matches_candidates": true,
+          "ranking_matches_backend": true,
+          "semantic_sequence_matches_backend": true,
+          "decision_matches_tools": true,
+          "explanation_derived": true,
+          "provenance_mode": true,
+          "provenance_hashes": true,
+          "provenance_producers": true,
+          "provenance_dependencies": true,
+          "four_agent_inference": true,
+          "strategic_inputs_delivered": true,
+          "decision_delivered": true
+        },
+        "errors": [],
+        "llm_requests": 25,
+        "decision_status": "no_valid_strategy",
+        "selected_strategy_id": null,
+        "selected_action": null,
+        "candidate_actions": [
+          "upgrade",
+          "isolate",
+          "block_deployment",
+          "monitor"
+        ],
+        "validation_attempts": [
+          {
+            "strategy_id": "S_BLOCK",
+            "valid": false,
+            "status": "rejected",
+            "missing_requirements": [],
+            "conflicts": [
+              "Action prohibited by scenario: block_deployment"
+            ],
+            "explanation": "Local fixture requirements or policy not satisfied.",
+            "backend": "capability-policy-mock-v1"
+          },
+          {
+            "strategy_id": "S_UPGRADE",
+            "valid": false,
+            "status": "rejected",
+            "missing_requirements": [],
+            "conflicts": [
+              "Action prohibited by scenario: upgrade"
+            ],
+            "explanation": "Local fixture requirements or policy not satisfied.",
+            "backend": "capability-policy-mock-v1"
+          },
+          {
+            "strategy_id": "S_MONITOR",
+            "valid": false,
+            "status": "rejected",
+            "missing_requirements": [],
+            "conflicts": [
+              "Action prohibited by scenario: monitor"
+            ],
+            "explanation": "Local fixture requirements or policy not satisfied.",
+            "backend": "capability-policy-mock-v1"
+          },
+          {
+            "strategy_id": "S_ISOLATE",
+            "valid": false,
+            "status": "rejected",
+            "missing_requirements": [],
+            "conflicts": [
+              "Action prohibited by scenario: isolate"
+            ],
+            "explanation": "Local fixture requirements or policy not satisfied.",
+            "backend": "capability-policy-mock-v1"
+          }
+        ],
+        "fallback_observed": false,
+        "sources_resolved": 52,
+        "failed_task_attempts": [],
+        "requests_by_role": {
+          "TelemetryAgent": 3,
+          "CountermeasureAgent": 3,
+          "management": 5,
+          "VulnerabilityAgent": 4,
+          "StrategicAgent": 10
+        },
+        "tool_calls": {
+          "get_context": 4,
+          "publish_runtime_evidence": 1,
+          "publish_candidate_strategies": 1,
+          "lookup_vulnerabilities": 1,
+          "publish_vulnerability_report": 1,
+          "build_argumentation_graph": 1,
+          "rank_graph": 1,
+          "validate_countermeasure": 4,
+          "publish_final_decision": 1,
+          "record_provenance": 1
+        },
+        "strategic_context_messages_verified": 9,
+        "decision_tool_messages_verified": 2,
+        "passed": true
+      },
+      "scenario_matches": true,
+      "sources_unchanged": true,
+      "verified": true
+    },
+    {
+      "name": "demo_04_unsupported_lookup-r2",
+      "scenario": "demo_04_unsupported_lookup",
+      "repetition": 2,
+      "exit_code": 0,
+      "execution_status": "completed",
+      "elapsed_seconds": 111.14,
+      "audit": {
+        "artifacts": {
+          "input": "valid",
+          "runtime_evidence": "valid",
+          "vulnerability_report": "valid",
+          "candidate_strategies": "valid",
+          "argumentation_graph": "valid",
+          "ranking": "valid",
+          "semantic_validation": "valid",
+          "final_decision": "valid",
+          "provenance": "valid"
+        },
+        "checks": {
+          "input_matches": true,
+          "runtime_matches_input": true,
+          "lookup_matches_backend": true,
+          "candidates_grounded": true,
+          "graph_matches_candidates": true,
+          "ranking_matches_backend": true,
+          "semantic_sequence_matches_backend": true,
+          "decision_matches_tools": true,
+          "explanation_derived": true,
+          "provenance_mode": true,
+          "provenance_hashes": true,
+          "provenance_producers": true,
+          "provenance_dependencies": true,
+          "four_agent_inference": true,
+          "strategic_inputs_delivered": true,
+          "decision_delivered": true
+        },
+        "errors": [],
+        "llm_requests": 30,
+        "decision_status": "insufficient_evidence",
+        "selected_strategy_id": null,
+        "selected_action": null,
+        "candidate_actions": [],
+        "validation_attempts": [],
+        "fallback_observed": false,
+        "sources_resolved": 15,
+        "failed_task_attempts": [],
+        "requests_by_role": {
+          "StrategicAgent": 6,
+          "management": 7,
+          "VulnerabilityAgent": 8,
+          "CountermeasureAgent": 6,
+          "TelemetryAgent": 3
+        },
+        "tool_calls": {
+          "get_context": 6,
+          "build_argumentation_graph": 1,
+          "rank_graph": 1,
+          "publish_final_decision": 1,
+          "record_provenance": 1,
+          "lookup_vulnerabilities": 2,
+          "publish_vulnerability_report": 2,
+          "publish_candidate_strategies": 2,
+          "publish_runtime_evidence": 1
+        },
+        "strategic_context_messages_verified": 5,
+        "decision_tool_messages_verified": 2,
+        "passed": true
+      },
+      "scenario_matches": true,
+      "sources_unchanged": true,
+      "verified": true
+    }
+  ]
+}

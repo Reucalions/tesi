@@ -1,0 +1,127 @@
+{
+  "id": "graph:run-8bbc2c2a3bca4484a6b7ffe14fc03ff9",
+  "arguments": [
+    {
+      "id": "strategy:S_UPGRADE",
+      "kind": "strategy",
+      "strategy_id": "S_UPGRADE",
+      "weight": 0.5
+    },
+    {
+      "id": "benefit:S_UPGRADE",
+      "kind": "benefit",
+      "strategy_id": "S_UPGRADE",
+      "weight": 0.95
+    },
+    {
+      "id": "impact:S_UPGRADE",
+      "kind": "impact",
+      "strategy_id": "S_UPGRADE",
+      "weight": 0.3
+    },
+    {
+      "id": "strategy:S_ISOLATE",
+      "kind": "strategy",
+      "strategy_id": "S_ISOLATE",
+      "weight": 0.5
+    },
+    {
+      "id": "benefit:S_ISOLATE",
+      "kind": "benefit",
+      "strategy_id": "S_ISOLATE",
+      "weight": 0.7
+    },
+    {
+      "id": "impact:S_ISOLATE",
+      "kind": "impact",
+      "strategy_id": "S_ISOLATE",
+      "weight": 0.6
+    },
+    {
+      "id": "strategy:S_BLOCK",
+      "kind": "strategy",
+      "strategy_id": "S_BLOCK",
+      "weight": 0.5
+    },
+    {
+      "id": "benefit:S_BLOCK",
+      "kind": "benefit",
+      "strategy_id": "S_BLOCK",
+      "weight": 0.9
+    },
+    {
+      "id": "impact:S_BLOCK",
+      "kind": "impact",
+      "strategy_id": "S_BLOCK",
+      "weight": 0.8
+    },
+    {
+      "id": "strategy:S_MONITOR",
+      "kind": "strategy",
+      "strategy_id": "S_MONITOR",
+      "weight": 0.5
+    },
+    {
+      "id": "benefit:S_MONITOR",
+      "kind": "benefit",
+      "strategy_id": "S_MONITOR",
+      "weight": 0.4
+    },
+    {
+      "id": "impact:S_MONITOR",
+      "kind": "impact",
+      "strategy_id": "S_MONITOR",
+      "weight": 0.1
+    }
+  ],
+  "relations": [
+    {
+      "source": "benefit:S_UPGRADE",
+      "target": "strategy:S_UPGRADE",
+      "kind": "support",
+      "weight": 0.5
+    },
+    {
+      "source": "impact:S_UPGRADE",
+      "target": "strategy:S_UPGRADE",
+      "kind": "attack",
+      "weight": 0.5
+    },
+    {
+      "source": "benefit:S_ISOLATE",
+      "target": "strategy:S_ISOLATE",
+      "kind": "support",
+      "weight": 0.5
+    },
+    {
+      "source": "impact:S_ISOLATE",
+      "target": "strategy:S_ISOLATE",
+      "kind": "attack",
+      "weight": 0.5
+    },
+    {
+      "source": "benefit:S_BLOCK",
+      "target": "strategy:S_BLOCK",
+      "kind": "support",
+      "weight": 0.5
+    },
+    {
+      "source": "impact:S_BLOCK",
+      "target": "strategy:S_BLOCK",
+      "kind": "attack",
+      "weight": 0.5
+    },
+    {
+      "source": "benefit:S_MONITOR",
+      "target": "strategy:S_MONITOR",
+      "kind": "support",
+      "weight": 0.5
+    },
+    {
+      "source": "impact:S_MONITOR",
+      "target": "strategy:S_MONITOR",
+      "kind": "attack",
+      "weight": 0.5
+    }
+  ]
+}

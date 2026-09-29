@@ -1,0 +1,137 @@
+{
+  "run_id": "run-f4c8b191d18e415291e89ba16122fee5",
+  "mode": "camel",
+  "backend": "local-provenance-mock-v1",
+  "model": "tesi-qwen3:4b",
+  "created_at": "2026-09-16T07:44:53.065455+00:00",
+  "entities": [
+    {
+      "id": "input",
+      "filename": "input.json",
+      "sha256": "b75c63ca0f9517c1d635e83ad44b6cd9f62b5186e020050c860865f4cf4c00c4"
+    },
+    {
+      "id": "runtime_evidence",
+      "filename": "runtime_evidence.json",
+      "sha256": "9d1a0a9c16c9d1bfb8270443abb89e390a51e8cd112a6c766ac1f6f6f5c57cb5"
+    },
+    {
+      "id": "vulnerability_report",
+      "filename": "vulnerability_report.json",
+      "sha256": "b17d4994afcdb16ee841c72c23954380a20d744c9762e5aaa9db437f4625951d"
+    },
+    {
+      "id": "candidate_strategies",
+      "filename": "candidate_strategies.json",
+      "sha256": "c0560cce24d849125e786f3670ce22d12feb2eac2c4e1d9fface97f3f293dbeb"
+    },
+    {
+      "id": "argumentation_graph",
+      "filename": "argumentation_graph.json",
+      "sha256": "1dd1558e23031e3eb132db10bfaee369ad60ac21e7ec28faeb4236742a2e7126"
+    },
+    {
+      "id": "ranking",
+      "filename": "ranking.json",
+      "sha256": "b626b7acf16cfee7fff0f24fb53556db7bf565f76c4be0cabbbaa230bc9d96dc"
+    },
+    {
+      "id": "semantic_validation",
+      "filename": "semantic_validation.json",
+      "sha256": "08599feec701d4a98b5fa3fa85ed00fd549a38e8c3aeb796dbe56f3c4da8a1bd"
+    },
+    {
+      "id": "final_decision",
+      "filename": "final_decision.json",
+      "sha256": "3ceb41227151f76dd989cf787aa638e818a4a11fc33ef937178a6eb1f56b210d"
+    }
+  ],
+  "activities": [
+    {
+      "id": "telemetry",
+      "agent": "TelemetryAgent",
+      "used": [
+        "input"
+      ],
+      "generated": [
+        "runtime_evidence"
+      ]
+    },
+    {
+      "id": "lookup",
+      "agent": "VulnerabilityAgent",
+      "used": [
+        "runtime_evidence"
+      ],
+      "generated": [
+        "vulnerability_report"
+      ]
+    },
+    {
+      "id": "candidates",
+      "agent": "CountermeasureAgent",
+      "used": [
+        "runtime_evidence",
+        "vulnerability_report"
+      ],
+      "generated": [
+        "candidate_strategies"
+      ]
+    },
+    {
+      "id": "graph",
+      "agent": "StrategicAgent",
+      "used": [
+        "candidate_strategies"
+      ],
+      "generated": [
+        "argumentation_graph"
+      ]
+    },
+    {
+      "id": "ranking",
+      "agent": "StrategicAgent",
+      "used": [
+        "argumentation_graph"
+      ],
+      "generated": [
+        "ranking"
+      ]
+    },
+    {
+      "id": "validation",
+      "agent": "StrategicAgent",
+      "used": [
+        "input",
+        "runtime_evidence",
+        "vulnerability_report",
+        "candidate_strategies",
+        "ranking"
+      ],
+      "generated": [
+        "semantic_validation"
+      ]
+    },
+    {
+      "id": "decision",
+      "agent": "StrategicAgent",
+      "used": [
+        "input",
+        "runtime_evidence",
+        "vulnerability_report",
+        "candidate_strategies",
+        "ranking",
+        "semantic_validation"
+      ],
+      "generated": [
+        "final_decision"
+      ]
+    }
+  ],
+  "agents": [
+    "CountermeasureAgent",
+    "StrategicAgent",
+    "TelemetryAgent",
+    "VulnerabilityAgent"
+  ]
+}

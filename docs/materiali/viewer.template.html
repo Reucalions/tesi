@@ -1,0 +1,27 @@
+<!doctype html><html lang="it"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Demo · evidenze registrate</title>
+<style>body{font:18px Arial,sans-serif;margin:0;background:#f3f7f8;color:#12263a}
+header,main{max-width:1120px;margin:auto;padding:24px}header{background:#12263a;color:white}
+h1{font-size:32px;margin:12px 0}h2{font-size:22px}small{color:#b7d8d5}select,button{font:inherit;padding:10px;border:1px solid #007d79;border-radius:6px;background:white;color:#12263a}
+button[aria-pressed=true]{background:#007d79;color:white}nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.card{background:white;padding:18px;border-radius:8px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.55 Menlo,monospace;background:white;padding:20px;border-radius:8px}
+.badge{background:#d9ece9;padding:12px;border-radius:6px}a{color:#007d79}</style>
+<header><small>CAMEL + OLLAMA · BACKEND MOCK · SOLA CONSULTAZIONE</small>
+<h1>Evidenze delle esecuzioni registrate</h1><p>Matrice del 16 settembre 2026, ripetizione 1. Questa pagina non esegue inferenza.</p></header>
+<main><label for="scenario">Scenario: </label><select id="scenario"></select>
+<p class="badge" id="status"></p><nav id="views"></nav><section id="content"></section>
+<p>I campi narrativi e il commento LLM restano da valutare. Nessuna contromisura è stata eseguita.</p></main>
+<script id="data" type="application/json">PAYLOAD</script><script>
+const data=JSON.parse(document.querySelector('#data').textContent);
+const labels=['Nominale','Senza manutenzione','Tutte le azioni vietate','Lookup non supportato'];
+const views={'Input':['input'],'Tre artefatti':['runtime_evidence','vulnerability_report','candidate_strategies'],
+'Ranking e validazioni':['ranking','semantic_validation'],'Decisione e fonti':['final_decision'],'Provenienza':['provenance']};
+let active='Input';const select=document.querySelector('#scenario');
+Object.keys(data).forEach((key,i)=>{const opt=document.createElement('option');opt.value=key;opt.textContent=labels[i];select.append(opt)});
+function render(){const values=data[select.value];document.querySelector('#status').textContent='Esito registrato: '+values.final_decision.status+' · Strategia: '+(values.final_decision.selected_strategy_id||'nessuna');
+const content=document.querySelector('#content');content.replaceChildren();
+for(const name of views[active]){const h=document.createElement('h2');h.textContent=name+'.json';const pre=document.createElement('pre');pre.textContent=JSON.stringify(values[name],null,2);content.append(h,pre)}
+document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-pressed',String(b.textContent===active)))}
+for(const title of Object.keys(views)){const b=document.createElement('button');b.textContent=title;b.onclick=()=>{active=title;render()};document.querySelector('#views').append(b)}
+select.onchange=render;render();</script></html>

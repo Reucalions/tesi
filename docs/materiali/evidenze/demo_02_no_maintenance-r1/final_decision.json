@@ -1,0 +1,324 @@
+{
+  "status": "selected",
+  "selected_strategy_id": "S_MONITOR",
+  "ranking": [
+    {
+      "strategy_id": "S_UPGRADE",
+      "score": 0.825
+    },
+    {
+      "strategy_id": "S_MONITOR",
+      "score": 0.65
+    },
+    {
+      "strategy_id": "S_ISOLATE",
+      "score": 0.625
+    },
+    {
+      "strategy_id": "S_BLOCK",
+      "score": 0.5
+    }
+  ],
+  "semantic_validation": {
+    "strategy_id": "S_MONITOR",
+    "valid": true,
+    "status": "accepted",
+    "missing_requirements": [],
+    "conflicts": [],
+    "explanation": "Local fixture requirements satisfied; this is not a Tiny-ME proof.",
+    "backend": "capability-policy-mock-v1"
+  },
+  "evidence_ids": [
+    "E1"
+  ],
+  "explanation": "TelemetryAgent reports service \"payment-api\", software [{\"package\": \"log4j-core\", \"version\": \"2.14.1\"}], endpoint_exposed=true, deserialization_observed=true. These observations do not establish a confirmed exploit.\n\nVulnerabilityAgent reports \"CVE-2021-44228\" with CVSS 10, source \"local-log4j-fixture-v1 (illustrative, not a live KG query)\". These are lookup results, not independent verification or a remediation-version recommendation.\n\nCountermeasureAgent published 4 candidates. This generated set is not an exhaustive inventory of possible countermeasures.\n\nCandidate \"S_UPGRADE\" (upgrade): security_benefit=0.95, operational_impact=0.3. These are estimates supplied by CountermeasureAgent, not measurements.\n\nCandidate \"S_ISOLATE\" (isolate): security_benefit=0.85, operational_impact=0.6. These are estimates supplied by CountermeasureAgent, not measurements.\n\nCandidate \"S_BLOCK\" (block_deployment): security_benefit=0.9, operational_impact=0.9. These are estimates supplied by CountermeasureAgent, not measurements.\n\nCandidate \"S_MONITOR\" (monitor): security_benefit=0.4, operational_impact=0.1. These are estimates supplied by CountermeasureAgent, not measurements.\n\nRanking backend \"signed-one-hop-mock-v1\" returned [{\"strategy_id\": \"S_UPGRADE\", \"score\": 0.825}, {\"strategy_id\": \"S_MONITOR\", \"score\": 0.65}, {\"strategy_id\": \"S_ISOLATE\", \"score\": 0.625}, {\"strategy_id\": \"S_BLOCK\", \"score\": 0.5}]. These scores do not establish measured effectiveness or operational safety.\n\nInput capabilities: [\"package_upgrade\", \"network_isolation\", \"deployment_control\", \"monitoring\"]; prohibited actions: [].\n\nValidation backend \"capability-policy-mock-v1\" returned rejected for \"S_UPGRADE\": missing_requirements=[\"maintenance_window\"], conflicts=[].\n\nValidation backend \"capability-policy-mock-v1\" returned accepted for \"S_MONITOR\": missing_requirements=[], conflicts=[].\n\nDecision: selected \"S_MONITOR\", the first accepted candidate in backend ranking order. Acceptance means the configured validator's checks passed, not proof of safety. This prototype proposes actions; it executes no remediation.",
+  "explanation_method": "artifact-derived-v1",
+  "explanation_claims": [
+    {
+      "category": "reported_fact",
+      "text": "TelemetryAgent reports service \"payment-api\", software [{\"package\": \"log4j-core\", \"version\": \"2.14.1\"}], endpoint_exposed=true, deserialization_observed=true. These observations do not establish a confirmed exploit.",
+      "sources": [
+        {
+          "artifact": "runtime_evidence",
+          "pointer": "/service_name",
+          "producer": "TelemetryAgent"
+        },
+        {
+          "artifact": "runtime_evidence",
+          "pointer": "/software",
+          "producer": "TelemetryAgent"
+        },
+        {
+          "artifact": "runtime_evidence",
+          "pointer": "/endpoint_exposed",
+          "producer": "TelemetryAgent"
+        },
+        {
+          "artifact": "runtime_evidence",
+          "pointer": "/deserialization_observed",
+          "producer": "TelemetryAgent"
+        }
+      ]
+    },
+    {
+      "category": "reported_fact",
+      "text": "VulnerabilityAgent reports \"CVE-2021-44228\" with CVSS 10, source \"local-log4j-fixture-v1 (illustrative, not a live KG query)\". These are lookup results, not independent verification or a remediation-version recommendation.",
+      "sources": [
+        {
+          "artifact": "vulnerability_report",
+          "pointer": "/vulnerabilities/0/cve_id",
+          "producer": "VulnerabilityAgent"
+        },
+        {
+          "artifact": "vulnerability_report",
+          "pointer": "/vulnerabilities/0/cvss",
+          "producer": "VulnerabilityAgent"
+        },
+        {
+          "artifact": "vulnerability_report",
+          "pointer": "/vulnerabilities/0/source",
+          "producer": "VulnerabilityAgent"
+        }
+      ]
+    },
+    {
+      "category": "reported_fact",
+      "text": "CountermeasureAgent published 4 candidates. This generated set is not an exhaustive inventory of possible countermeasures.",
+      "sources": [
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies",
+          "producer": "CountermeasureAgent"
+        }
+      ]
+    },
+    {
+      "category": "estimate",
+      "text": "Candidate \"S_UPGRADE\" (upgrade): security_benefit=0.95, operational_impact=0.3. These are estimates supplied by CountermeasureAgent, not measurements.",
+      "sources": [
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/0/id",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/0/action",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/0/security_benefit",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/0/operational_impact",
+          "producer": "CountermeasureAgent"
+        }
+      ]
+    },
+    {
+      "category": "estimate",
+      "text": "Candidate \"S_ISOLATE\" (isolate): security_benefit=0.85, operational_impact=0.6. These are estimates supplied by CountermeasureAgent, not measurements.",
+      "sources": [
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/1/id",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/1/action",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/1/security_benefit",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/1/operational_impact",
+          "producer": "CountermeasureAgent"
+        }
+      ]
+    },
+    {
+      "category": "estimate",
+      "text": "Candidate \"S_BLOCK\" (block_deployment): security_benefit=0.9, operational_impact=0.9. These are estimates supplied by CountermeasureAgent, not measurements.",
+      "sources": [
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/2/id",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/2/action",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/2/security_benefit",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/2/operational_impact",
+          "producer": "CountermeasureAgent"
+        }
+      ]
+    },
+    {
+      "category": "estimate",
+      "text": "Candidate \"S_MONITOR\" (monitor): security_benefit=0.4, operational_impact=0.1. These are estimates supplied by CountermeasureAgent, not measurements.",
+      "sources": [
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/3/id",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/3/action",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/3/security_benefit",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies/3/operational_impact",
+          "producer": "CountermeasureAgent"
+        }
+      ]
+    },
+    {
+      "category": "reported_fact",
+      "text": "Ranking backend \"signed-one-hop-mock-v1\" returned [{\"strategy_id\": \"S_UPGRADE\", \"score\": 0.825}, {\"strategy_id\": \"S_MONITOR\", \"score\": 0.65}, {\"strategy_id\": \"S_ISOLATE\", \"score\": 0.625}, {\"strategy_id\": \"S_BLOCK\", \"score\": 0.5}]. These scores do not establish measured effectiveness or operational safety.",
+      "sources": [
+        {
+          "artifact": "ranking",
+          "pointer": "/backend",
+          "producer": "StrategicAgent"
+        },
+        {
+          "artifact": "ranking",
+          "pointer": "/ranking",
+          "producer": "StrategicAgent"
+        }
+      ]
+    },
+    {
+      "category": "reported_fact",
+      "text": "Input capabilities: [\"package_upgrade\", \"network_isolation\", \"deployment_control\", \"monitoring\"]; prohibited actions: [].",
+      "sources": [
+        {
+          "artifact": "input",
+          "pointer": "/available_capabilities",
+          "producer": "StaticTelemetry"
+        },
+        {
+          "artifact": "input",
+          "pointer": "/prohibited_actions",
+          "producer": "StaticTelemetry"
+        }
+      ]
+    },
+    {
+      "category": "reported_fact",
+      "text": "Validation backend \"capability-policy-mock-v1\" returned rejected for \"S_UPGRADE\": missing_requirements=[\"maintenance_window\"], conflicts=[].",
+      "sources": [
+        {
+          "artifact": "semantic_validation",
+          "pointer": "/validations/0/backend",
+          "producer": "StrategicAgent"
+        },
+        {
+          "artifact": "semantic_validation",
+          "pointer": "/validations/0/status",
+          "producer": "StrategicAgent"
+        },
+        {
+          "artifact": "semantic_validation",
+          "pointer": "/validations/0/strategy_id",
+          "producer": "StrategicAgent"
+        },
+        {
+          "artifact": "semantic_validation",
+          "pointer": "/validations/0/missing_requirements",
+          "producer": "StrategicAgent"
+        },
+        {
+          "artifact": "semantic_validation",
+          "pointer": "/validations/0/conflicts",
+          "producer": "StrategicAgent"
+        }
+      ]
+    },
+    {
+      "category": "reported_fact",
+      "text": "Validation backend \"capability-policy-mock-v1\" returned accepted for \"S_MONITOR\": missing_requirements=[], conflicts=[].",
+      "sources": [
+        {
+          "artifact": "semantic_validation",
+          "pointer": "/validations/1/backend",
+          "producer": "StrategicAgent"
+        },
+        {
+          "artifact": "semantic_validation",
+          "pointer": "/validations/1/status",
+          "producer": "StrategicAgent"
+        },
+        {
+          "artifact": "semantic_validation",
+          "pointer": "/validations/1/strategy_id",
+          "producer": "StrategicAgent"
+        },
+        {
+          "artifact": "semantic_validation",
+          "pointer": "/validations/1/missing_requirements",
+          "producer": "StrategicAgent"
+        },
+        {
+          "artifact": "semantic_validation",
+          "pointer": "/validations/1/conflicts",
+          "producer": "StrategicAgent"
+        }
+      ]
+    },
+    {
+      "category": "decision",
+      "text": "Decision: selected \"S_MONITOR\", the first accepted candidate in backend ranking order. Acceptance means the configured validator's checks passed, not proof of safety. This prototype proposes actions; it executes no remediation.",
+      "sources": [
+        {
+          "artifact": "vulnerability_report",
+          "pointer": "/lookup_status",
+          "producer": "VulnerabilityAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "ranking",
+          "pointer": "/ranking",
+          "producer": "StrategicAgent"
+        },
+        {
+          "artifact": "semantic_validation",
+          "pointer": "/validations",
+          "producer": "StrategicAgent"
+        }
+      ]
+    }
+  ],
+  "agent_commentary": {
+    "text": "The candidate strategy 'S_MONITOR' was validated as accepted by the capability-policy-mock-v1 backend, with no missing requirements or conflicts. It provides a security benefit of 0.4 and an operational impact of 0.1, addressing CVE-2021-44228 in log4j-core version 2.14.1. The validation process confirmed that the monitoring action satisfies local fixture requirements, making it a feasible mitigation. The strategy is grounded in the vulnerability report and runtime evidence, with support from the argumentation graph. Other candidates such as 'S_UPGRADE' were rejected due to missing prerequisites (maintenance window), and 'S_ISOLATE' and 'S_BLOCK' were not validated. Thus, 'S_MONITOR' is selected as the final decision based on the available evidence and validation outcomes.",
+    "verification": "unverified"
+  }
+}

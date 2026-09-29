@@ -1,0 +1,128 @@
+{
+  "status": "insufficient_evidence",
+  "selected_strategy_id": null,
+  "ranking": [],
+  "semantic_validation": null,
+  "evidence_ids": [
+    "E1"
+  ],
+  "explanation": "TelemetryAgent reports service \"payment-api\", software [{\"package\": \"demo-unsupported-package\", \"version\": \"0.0.0\"}], endpoint_exposed=true, deserialization_observed=true. These observations do not establish a confirmed exploit.\n\nVulnerabilityAgent reports lookup_status=unsupported: the configured lookup does not cover this software/version. Vulnerability status and vendor support status remain unknown; an empty findings list is not proof of safety.\n\nCountermeasureAgent published 0 candidates. This generated set is not an exhaustive inventory of possible countermeasures.\n\nRanking backend \"signed-one-hop-mock-v1\" returned []. These scores do not establish measured effectiveness or operational safety.\n\nInput capabilities: [\"package_upgrade\", \"maintenance_window\", \"network_isolation\", \"deployment_control\", \"monitoring\"]; prohibited actions: [].\n\nDecision: insufficient_evidence. No strategy selected because the lookup lacks coverage. No candidates were validated; this does not establish that every countermeasure is invalid. This prototype proposes actions; it executes no remediation.",
+  "explanation_method": "artifact-derived-v1",
+  "explanation_claims": [
+    {
+      "category": "reported_fact",
+      "text": "TelemetryAgent reports service \"payment-api\", software [{\"package\": \"demo-unsupported-package\", \"version\": \"0.0.0\"}], endpoint_exposed=true, deserialization_observed=true. These observations do not establish a confirmed exploit.",
+      "sources": [
+        {
+          "artifact": "runtime_evidence",
+          "pointer": "/service_name",
+          "producer": "TelemetryAgent"
+        },
+        {
+          "artifact": "runtime_evidence",
+          "pointer": "/software",
+          "producer": "TelemetryAgent"
+        },
+        {
+          "artifact": "runtime_evidence",
+          "pointer": "/endpoint_exposed",
+          "producer": "TelemetryAgent"
+        },
+        {
+          "artifact": "runtime_evidence",
+          "pointer": "/deserialization_observed",
+          "producer": "TelemetryAgent"
+        }
+      ]
+    },
+    {
+      "category": "limitation",
+      "text": "VulnerabilityAgent reports lookup_status=unsupported: the configured lookup does not cover this software/version. Vulnerability status and vendor support status remain unknown; an empty findings list is not proof of safety.",
+      "sources": [
+        {
+          "artifact": "vulnerability_report",
+          "pointer": "/lookup_status",
+          "producer": "VulnerabilityAgent"
+        },
+        {
+          "artifact": "vulnerability_report",
+          "pointer": "/vulnerabilities",
+          "producer": "VulnerabilityAgent"
+        }
+      ]
+    },
+    {
+      "category": "reported_fact",
+      "text": "CountermeasureAgent published 0 candidates. This generated set is not an exhaustive inventory of possible countermeasures.",
+      "sources": [
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies",
+          "producer": "CountermeasureAgent"
+        }
+      ]
+    },
+    {
+      "category": "reported_fact",
+      "text": "Ranking backend \"signed-one-hop-mock-v1\" returned []. These scores do not establish measured effectiveness or operational safety.",
+      "sources": [
+        {
+          "artifact": "ranking",
+          "pointer": "/backend",
+          "producer": "StrategicAgent"
+        },
+        {
+          "artifact": "ranking",
+          "pointer": "/ranking",
+          "producer": "StrategicAgent"
+        }
+      ]
+    },
+    {
+      "category": "reported_fact",
+      "text": "Input capabilities: [\"package_upgrade\", \"maintenance_window\", \"network_isolation\", \"deployment_control\", \"monitoring\"]; prohibited actions: [].",
+      "sources": [
+        {
+          "artifact": "input",
+          "pointer": "/available_capabilities",
+          "producer": "StaticTelemetry"
+        },
+        {
+          "artifact": "input",
+          "pointer": "/prohibited_actions",
+          "producer": "StaticTelemetry"
+        }
+      ]
+    },
+    {
+      "category": "decision",
+      "text": "Decision: insufficient_evidence. No strategy selected because the lookup lacks coverage. No candidates were validated; this does not establish that every countermeasure is invalid. This prototype proposes actions; it executes no remediation.",
+      "sources": [
+        {
+          "artifact": "vulnerability_report",
+          "pointer": "/lookup_status",
+          "producer": "VulnerabilityAgent"
+        },
+        {
+          "artifact": "candidate_strategies",
+          "pointer": "/strategies",
+          "producer": "CountermeasureAgent"
+        },
+        {
+          "artifact": "ranking",
+          "pointer": "/ranking",
+          "producer": "StrategicAgent"
+        },
+        {
+          "artifact": "semantic_validation",
+          "pointer": "/validations",
+          "producer": "StrategicAgent"
+        }
+      ]
+    }
+  ],
+  "agent_commentary": {
+    "text": "The lookup status for the software 'demo-unsupported-package' version '0.0.0' is 'unsupported', as reported by the VulnerabilityAgent. Consequently, no vulnerabilities were identified, and the CountermeasureAgent generated an empty list of candidate strategies. With no valid strategies available for validation, the final decision is null. The argumentation graph and ranking are empty due to the absence of candidate strategies. This situation reflects an unsupported lookup, not a lack of evidence or risk. External backends are local mocks and do not represent real vendor support or active advisories. A proposed mitigation is not equivalent to an executed action.",
+    "verification": "unverified"
+  }
+}

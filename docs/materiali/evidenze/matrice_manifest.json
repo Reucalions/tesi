@@ -1,0 +1,104 @@
+{
+  "created_at": "2026-09-16T07:42:47.387619+00:00",
+  "mode": "camel",
+  "workflow": "pipeline",
+  "model": "tesi-qwen3:4b",
+  "ollama_model": {
+    "name": "tesi-qwen3:4b",
+    "model": "tesi-qwen3:4b",
+    "modified_at": "2026-09-10T21:41:04.130153807+02:00",
+    "size": 2497293817,
+    "digest": "31475760af12be9b5c1621f74b389d3f0a764dc521aca4f55c32cc2f5363f2fc",
+    "details": {
+      "parent_model": "qwen3:4b-instruct",
+      "format": "gguf",
+      "family": "qwen3",
+      "families": [
+        "qwen3"
+      ],
+      "parameter_size": "4.0B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560
+    },
+    "capabilities": [
+      "completion",
+      "tools"
+    ]
+  },
+  "base_url": "http://localhost:11434/v1",
+  "temperature": 0,
+  "max_tokens": 2048,
+  "backend_timeout_seconds": 300,
+  "process_timeout_seconds": 300,
+  "repetitions": 2,
+  "scenarios": [
+    "demo_01_nominal",
+    "demo_02_no_maintenance",
+    "demo_03_all_actions_prohibited",
+    "demo_04_unsupported_lookup"
+  ],
+  "planned_runs": 8,
+  "python": "3.12.6",
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "packages": {
+    "camel-ai": "0.2.90",
+    "pydantic": "2.12.0",
+    "openai": "2.54.0"
+  },
+  "source_hashes": {
+    "pyproject.toml": "d0c9f57f20e24abfd235c63a34ef003a1a9a3ffa2960f01d4a6536ef5c4d581f",
+    "requirements.lock": "4bea9bc04557500b45a118f5ad36c58eeb5b5bba5e86b6178d8ec994935a6ef1",
+    "thesis_agents/__init__.py": "326e727b5f1a2c955eac5a2cabefa3fb306172d6b1b5ac43e9f386c2c4fc6aae",
+    "thesis_agents/agents/__init__.py": "48d3018275f6eca1a3f8db81155f6d16200324375407cb9a4a9173a70311fd4e",
+    "thesis_agents/agents/countermeasure.py": "5df7ff0e94486ae849be07c943c235bf9fbd1d9a30e19045e1a2703fe0cd72cd",
+    "thesis_agents/agents/strategic.py": "e86ef33debbac23e9102b34216d99c6e054bded240c1901b6746809b628b1fb9",
+    "thesis_agents/agents/telemetry.py": "76d784b64f540f0860509bfea269f8e8b68c7b45911bd0ab4081552a35793bd7",
+    "thesis_agents/agents/vulnerability.py": "bdab0e5ede38d8035a037c235f879de492ef03a98db159bdbfc6b227bc529ff4",
+    "thesis_agents/config.py": "a570d4a7ae2a5d6539198b8a4484af1f686308ba32ec9e6413c464f15df3839e",
+    "thesis_agents/data/demo_01_nominal.json": "05121566d57bd980d896c63ef388c07785607fc36b2e759f6742ee2319fd0700",
+    "thesis_agents/data/demo_02_no_maintenance.json": "b75c63ca0f9517c1d635e83ad44b6cd9f62b5186e020050c860865f4cf4c00c4",
+    "thesis_agents/data/demo_03_all_actions_prohibited.json": "8d3e4356653ae632ff676e83080e94710593c44dbc54e9d086d5547cde7a7d9f",
+    "thesis_agents/data/demo_04_unsupported_lookup.json": "0d5c3a6e6ba8c0d7595ca82a784aa4ed7074f2e900ded479523f4bfd7a52de46",
+    "thesis_agents/data/log4j_case.json": "a3f4d3c4f332acc12ef064c6c836246c0a192dbc9185b65f2b7d2d6be6b5e45b",
+    "thesis_agents/demo.py": "ad50e21abe937cc12ec376efcc9f7beda6c436a881420c29daf39fb63248389f",
+    "thesis_agents/demo_audit.py": "1302d94ddbc622dfc2642ab3d561561a26263a8c934c8b002004369282c59229",
+    "thesis_agents/fixtures.py": "376657d1701a4de8083968331eb757e140e6762628b6e57169a229879cf825a9",
+    "thesis_agents/main.py": "89f18811592aeca44c9bd512b56381ce5ada008508471a39b2526d901bae94ae",
+    "thesis_agents/orchestration/__init__.py": "719ab4ff670d69d6404561d8e901934557c5355b474ebdd35a7bbaa8f2e0bc67",
+    "thesis_agents/orchestration/artifacts.py": "467f6caa4018dcfa3379b8f307e9617afb29a89695bd053ed9cd6d4fc1e2484d",
+    "thesis_agents/orchestration/explanations.py": "012e4a091d6c3921d47c13bd73d94c52b5b2b47357f2909ffb7a642b81e1fc23",
+    "thesis_agents/orchestration/publication_tools.py": "cbb1e8670ad7ccc24aa78d658bc8a1eb13bd5315d1ca71872d613283fb34a140",
+    "thesis_agents/orchestration/task_results.py": "94ff825047c668b97550f02a2c6320e63d5bdc8f41bf77b42ef2cbb1cc72f419",
+    "thesis_agents/orchestration/workforce.py": "4eadff0a40c684e977d14d75d9b75a39dd0bc1fa664f874bd61405ad0f3a20b3",
+    "thesis_agents/schemas/__init__.py": "ab434942177f78d804591252fadbfc7fa0d20a23d52e7307e37cb4f64d033e40",
+    "thesis_agents/schemas/argumentation.py": "68f9a470a321b66194e99256814ac299e04575d5b2b8475780a5b557c58ddc00",
+    "thesis_agents/schemas/base.py": "182d6320492466293ceee96d0b3feaeca29d8008de76da45816539d4685dbd2f",
+    "thesis_agents/schemas/countermeasure.py": "2010c13a43f15869943e409cbd77b8262efb79894b723d67274ce6311f4502e9",
+    "thesis_agents/schemas/decision.py": "799b288bcb4a55ec3c078b0b37c058113471c3ef4bfd195e2e3bd2542a4c9f6c",
+    "thesis_agents/schemas/provenance.py": "0a580036992b532172401dcd379185d9af241e8ebdc564bf0bcc3ae0cc1af337",
+    "thesis_agents/schemas/telemetry.py": "197d332632f0f0be1f4aafa4200646f5ca0817d0d8eb3906001b1026da5423d3",
+    "thesis_agents/schemas/vulnerability.py": "631bf2e5445944341d240621ba08a9f5d8b4d83bd81080b0a01fa9342de4a40c",
+    "thesis_agents/tools/__init__.py": "2d7835d3727df7eb906928078e46d31e4139b2073e6c766613a65d6aac67aa8a",
+    "thesis_agents/tools/interfaces.py": "a4ca43fa2bd1dd67c9b52e34be27bccbf2adf4480058c313f07c2006a622b562",
+    "thesis_agents/tools/provenance_mock.py": "5d3e00ff35b53303119d65dd6a5be4c96dcb5ac1982956ad3d94efc68784edcd",
+    "thesis_agents/tools/ranking_mock.py": "b2e390bed4bc201a2a886e8b71c615090d278a00ffcd59282b7cb4f698d94ce5",
+    "thesis_agents/tools/semantic_mock.py": "0d43379d141a16270b0f74ed36049dbb3379133b92dfc11e91fb2ccea2369153",
+    "thesis_agents/tools/vulnerability_mock.py": "c8b53232879319ddc10d48bf6eafd98664cd5b178dc3cefdef927b7bc7e6b325"
+  },
+  "input_hashes": {
+    "demo_01_nominal": "05121566d57bd980d896c63ef388c07785607fc36b2e759f6742ee2319fd0700",
+    "demo_02_no_maintenance": "b75c63ca0f9517c1d635e83ad44b6cd9f62b5186e020050c860865f4cf4c00c4",
+    "demo_03_all_actions_prohibited": "8d3e4356653ae632ff676e83080e94710593c44dbc54e9d086d5547cde7a7d9f",
+    "demo_04_unsupported_lookup": "0d5c3a6e6ba8c0d7595ca82a784aa4ed7074f2e900ded479523f4bfd7a52de46"
+  },
+  "runner_command": [
+    "/Users/reucalion/tesi/.venv/bin/python",
+    "-m",
+    "thesis_agents.demo",
+    "--mode",
+    "camel",
+    "--repetitions",
+    "2"
+  ]
+}

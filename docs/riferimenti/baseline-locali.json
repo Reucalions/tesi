@@ -1,0 +1,72 @@
+[
+  {
+    "id": "BASE-PIPELINE",
+    "repository": "agent-based-cti-argumentation-pipeline",
+    "root": "/Users/reucalion/Desktop/agent-based-cti-argumentation-pipeline",
+    "commit": "c2ea54278bc5f44730693cdf7f86fc3584e54f70",
+    "working_tree_status": "M mcp-fablo-server/package-lock.json\n?? .DS_Store\n?? app/.DS_Store\n?? app/src/.DS_Store\n?? mcp-fablo-server/.DS_Store",
+    "consulted": "2026-09-17",
+    "files": [
+      {
+        "path": "README.md",
+        "sha256": "742dc8ed9b3e21a9440be8727473933e72a080291e415f179adc402abc1c532d",
+        "kind": "source-consulted"
+      },
+      {
+        "path": "app/src/semantic_assets/argumentation_graph.py",
+        "sha256": "77eda25a341e74c5e178f00f774d000a464ffc85b33a494ea60059697ad040fa",
+        "kind": "source-consulted"
+      },
+      {
+        "path": "mcp-fablo-server/src/index.ts",
+        "sha256": "8a690a3f8390ddef29299d3ab3667d43867c2ed0d0cb394336eafa5ca942dc80",
+        "kind": "source-consulted"
+      }
+    ]
+  },
+  {
+    "id": "BASE-LEDGER",
+    "repository": "semantic-cti-ledger-argumentation",
+    "root": "/Users/reucalion/Desktop/semantic-cti-ledger-argumentation",
+    "commit": "a3dab4a5def79dda356dd753aa34306e03ea346a",
+    "working_tree_status": "",
+    "consulted": "2026-09-17",
+    "files": [
+      {
+        "path": "README.md",
+        "sha256": "0ee5a6031c69e99e22c17dea9dabe31ad46bae27402ca1f0e6ac58653c8f81e5",
+        "kind": "source-consulted"
+      },
+      {
+        "path": "chaincode-argumentation/argumentation-contract.go",
+        "sha256": "ad6d3682fadf1e827e07b2b75f6194d7355280580ae5310c6a14ee3a496c3865",
+        "kind": "source-consulted"
+      },
+      {
+        "path": "chaincode-argumentation/graph/graph.go",
+        "sha256": "18c81dcfe3428660d7c0e38a2ece8bd931648c7199083b6f3c47c51cc6f9c8e2",
+        "kind": "source-consulted"
+      },
+      {
+        "path": "chaincode-argumentation/graph/bridge.cpp",
+        "sha256": "ca3084a346f022e10b84f6f7535f805ea88339bb173d35a0e6137478531d70cb",
+        "kind": "source-consulted"
+      },
+      {
+        "path": "chaincode-argumentation/graph/lib/Graph.h",
+        "sha256": "37cf4663a89d025a1173ad7757235243dae66838b9dcfaf8c4cd1967b33860cd",
+        "kind": "source-consulted"
+      },
+      {
+        "path": "chaincode-argumentation/graph/lib/libgraph.so",
+        "sha256": "56182283f2c96444868d5a522adb468f27118f14710f16837242b666c3e78221",
+        "kind": "binary-not-inspected"
+      },
+      {
+        "path": "chaincode/reasoner_wrapper.go",
+        "sha256": "9b4c18cfbbd443175e0b30e282b7591def2b8d379f85bb2f1937d99f669b075c",
+        "kind": "source-consulted"
+      }
+    ]
+  }
+]

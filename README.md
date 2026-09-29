@@ -6,6 +6,10 @@ La [prima relazione tecnica](docs/relazione-mockup.md) raccoglie teoria del
 prototipo, architettura, ruolo di CAMEL/LLM, comandi, attività svolte e risultati
 della matrice dimostrativa, distinguendo componenti effettivi e mock.
 
+I [materiali per la presentazione](docs/materiali/README.md) comprendono un
+PowerPoint modificabile da 15 minuti, la relazione PDF/Word, il copione e una
+demo guidata con visualizzatore offline degli output registrati.
+
 ```mermaid
 flowchart LR
     I[Input statico] --> T[TelemetryAgent]
