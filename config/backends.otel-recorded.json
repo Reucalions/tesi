@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "telemetry": {
+    "transport": "http",
+    "url": "http://127.0.0.1:8004/v1/observations",
+    "source_id": "baseline-small-otel-docker",
+    "acquisition": "recorded"
+  },
+  "vulnerability": {"transport": "local-mock"},
+  "ranking": {"transport": "local-mock"},
+  "semantic": {"transport": "local-mock"},
+  "provenance": {"transport": "local-mock"}
+}

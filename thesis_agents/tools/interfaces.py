@@ -15,6 +15,16 @@ from thesis_agents.schemas import (
     SemanticValidationResult,
     SoftwareObservation,
 )
+from thesis_agents.schemas.supply_chain import SupplyChainQuery, SupplyChainSnapshot
+from thesis_agents.schemas.telemetry_source import TelemetryQuery, TelemetrySnapshot
+
+
+class TelemetryTool(Protocol):
+    def collect(self, query: TelemetryQuery) -> TelemetrySnapshot: ...
+
+
+class SupplyChainTool(Protocol):
+    def collect(self, query: SupplyChainQuery) -> SupplyChainSnapshot: ...
 
 
 class VulnerabilityTool(Protocol):

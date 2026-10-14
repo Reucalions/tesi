@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "vulnerability": {
+    "transport": "mcp",
+    "url": "http://127.0.0.1:8001/mcp",
+    "expected_kind": "mock",
+    "timeout_seconds": 15
+  },
+  "ranking": "local-mock",
+  "semantic": "local-mock",
+  "provenance": "local-mock"
+}

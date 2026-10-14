@@ -71,3 +71,19 @@ def test_structured_tool_keeps_report_authority_and_immutability(session):
         publications.resolve("publish_vulnerability_report")(payload=report)
     assert (session.output_dir / "runtime_evidence.json").read_bytes() == before
     assert not (session.output_dir / "vulnerability_report.json").exists()
+
+
+def test_static_publication_excludes_otel_metadata_in_tool_and_context(session):
+    tool = PublicationTools(session).resolve("publish_runtime_evidence")
+    schema = tool.get_openai_tool_schema()["function"]["parameters"]
+    payload = schema["properties"]["payload"]
+    assert payload["properties"]["telemetry"]["type"] == "null"
+    assert "TelemetryReference" not in schema.get("$defs", {})
+    context = session.get_context()["schemas"]["runtime_evidence"]
+    assert context["properties"]["telemetry"]["type"] == "null"
+    evidence = fixture_evidence(session).model_dump(mode="json")
+    # La metadata non viene rimossa o aggiustata per rendere valida la chiamata.
+    with pytest.raises(ValueError):
+        tool(payload={**evidence, "telemetry": {"source_id": "invented"}})
+    assert not (session.output_dir / "runtime_evidence.json").exists()
+    tool(payload=evidence)

@@ -1,0 +1,10 @@
+{
+  "source": "opentelemetry",
+  "service_name": "otelcol-contrib",
+  "service_instance_id": "279d7212-ec98-40d8-9e1a-3aee4879572f",
+  "package_name": "otelcol-contrib",
+  "start_time": "2026-04-01T09:05:49Z",
+  "end_time": "2026-04-01T09:05:50Z",
+  "available_capabilities": [],
+  "prohibited_actions": []
+}

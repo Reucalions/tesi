@@ -46,6 +46,7 @@ class ExplanationSource(Message):
         "candidate_strategies",
         "ranking",
         "semantic_validation",
+        "countermeasure_context",
     ]
     pointer: str = Field(pattern=r"^(/[^/~]*(~[01][^/~]*)*)*$")
     producer: Text
@@ -65,8 +66,10 @@ class AgentCommentary(Message):
 
 class FinalDecision(Message):
     # selected: proposta accettata; no_valid_strategy: tutte le alternative rifiutate;
-    # insufficient_evidence: lookup non coperto. «Selected» non esegue la contromisura.
-    status: Literal["selected", "no_valid_strategy", "insufficient_evidence"]
+    # insufficient_evidence: copertura/identità insufficienti; no_findings: nessun
+    # finding nelle regole restituite e valutate. Non prova la sicurezza del software.
+    # «Selected» non esegue la contromisura.
+    status: Literal["selected", "no_valid_strategy", "insufficient_evidence", "no_findings"]
     selected_strategy_id: Identifier | None
     ranking: list[RankedStrategy]
     semantic_validation: SemanticValidationResult | None

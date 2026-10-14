@@ -12,6 +12,7 @@ import asyncio
 import json
 import re
 from collections import defaultdict
+from unittest.mock import Mock
 
 import pytest
 from camel.models.stub_model import StubModel
@@ -26,10 +27,12 @@ from thesis_agents.orchestration.artifacts import ArtifactSession
 from thesis_agents.orchestration.workforce import build_workforce, run_camel
 from thesis_agents.schemas import (
     CandidateStrategies,
+    RankingResult,
     RuntimeEvidence,
     SemanticValidationReport,
     VulnerabilityReport,
 )
+from thesis_agents.schemas.telemetry_source import TelemetryInput
 
 
 class ScriptedToolModel(StubModel):
@@ -54,7 +57,8 @@ class ScriptedToolModel(StubModel):
         # La lista dei tool identifica il ruolo senza dipendere dal suo UUID casuale.
         # I modelli gestionali non hanno tool e ricevono invece un prompt di assegnazione.
         tool_names = {t["function"]["name"] for t in tools or []}
-        if not tool_names:
+        strategic = "You are StrategicAgent." in str(messages[0].get("content", ""))
+        if not tool_names and not strategic:
             # Estrae gli ID dei worker dal prompt creato dall'SDK. Non si hardcodano
             # UUID, così il test attraversa l'assegnazione della Workforce effettiva.
             prompt = messages[-1]["content"]
@@ -74,13 +78,23 @@ class ScriptedToolModel(StubModel):
             # Ogni ruolo prima chiama get_context, poi esegue le proprie pubblicazioni.
             # I payload prefissati sostituiscono solo la generazione dei dati nel test.
             role = "telemetry"
-            script = [
-                ("get_context", {}),
-                (
-                    "publish_runtime_evidence",
-                    {"payload": fixture_evidence(self.session).model_dump(mode="json")},
-                ),
-            ]
+            if isinstance(self.session.case, TelemetryInput):
+                script = [("get_context", {}), ("collect_runtime_evidence", {})]
+                if self.session._telemetry_evidence is not None:
+                    script.append(
+                        (
+                            "publish_runtime_evidence",
+                            {"payload": self.session._telemetry_evidence.model_dump(mode="json")},
+                        )
+                    )
+            else:
+                script = [
+                    ("get_context", {}),
+                    (
+                        "publish_runtime_evidence",
+                        {"payload": fixture_evidence(self.session).model_dump(mode="json")},
+                    ),
+                ]
         elif "publish_vulnerability_report" in tool_names:
             role = "vulnerability"
             script = [("get_context", {}), ("lookup_vulnerabilities", {})]
@@ -107,34 +121,47 @@ class ScriptedToolModel(StubModel):
                     },
                 ),
             ]
+            if self.session.supply_chain_tool is not None:
+                script[1:1] = [("collect_countermeasure_context", {}), ("get_context", {})]
         else:
             role = "strategic"
-            unsupported = (
-                self.session.require("vulnerability_report", VulnerabilityReport).lookup_status
-                == "unsupported"
-            )
             script = [
                 ("get_context", {}),
                 ("build_argumentation_graph", {}),
                 ("rank_graph", {}),
-                # Senza candidate il modello deve pubblicare direttamente null;
-                # il tool finale crea anche il report semantico vuoto.
-                *(
-                    []
-                    if unsupported
-                    else [("validate_countermeasure", {"strategy_id": "S_UPGRADE"})]
-                ),
-                (
-                    "publish_final_decision",
-                    {
-                        "selected_strategy_id": None if unsupported else "S_UPGRADE",
-                        "explanation": "Scripted inference test; real CAMEL tool dispatch.",
-                    },
-                ),
-                ("record_provenance", {}),
             ]
+            if "ranking" in self.session._artifacts:
+                # Lo script usa soltanto esiti di tool già eseguiti da CAMEL:
+                # ripercorre i tentativi e propone il successivo dopo un rifiuto.
+                ranking = self.session.require("ranking", RankingResult).ranking
+                attempts = self.session._validation.validations
+                accepted = next((v.strategy_id for v in attempts if v.valid), None)
+                script.extend(
+                    ("validate_countermeasure", {"strategy_id": v.strategy_id}) for v in attempts
+                )
+                if accepted is None and len(attempts) < len(ranking):
+                    script.append(
+                        (
+                            "validate_countermeasure",
+                            {"strategy_id": ranking[len(attempts)].strategy_id},
+                        )
+                    )
+                script.extend(
+                    [
+                        (
+                            "publish_final_decision",
+                            {
+                                "selected_strategy_id": accepted,
+                                "explanation": "Scripted inference test; real CAMEL tool dispatch.",
+                            },
+                        ),
+                        ("record_provenance", {}),
+                    ]
+                )
         step = self.steps[role]
-        if step == 1:
+        if step == 1 or (
+            role == "countermeasure" and self.session.supply_chain_tool is not None and step == 3
+        ):
             # Verifica il vero messaggio di risposta del tool nella memoria passata
             # al modello. Leggere qui session.get_context() aggirerebbe la consegna SDK
             # e non dimostrerebbe che lo StrategicAgent abbia ricevuto i tre artefatti.
@@ -277,6 +304,42 @@ def test_default_pipeline_has_explicit_producer_dependencies(case, tmp_path):
 
 
 @pytest.mark.parametrize(
+    "otel_input,telemetry_configured,supply_configured",
+    [(False, False, False), (False, True, True), (True, False, False), (True, True, True)],
+)
+def test_worker_clones_expose_only_configured_acquisitions(
+    case, tmp_path, otel_input, telemetry_configured, supply_configured
+):
+    if otel_input:
+        case = TelemetryInput(
+            service_name=case.service_name,
+            service_instance_id="test-instance",
+            package_name=case.package_name,
+            start_time="2026-01-01T00:00:00Z",
+            end_time="2026-01-01T00:01:00Z",
+        )
+    telemetry_tool, supply_tool = Mock(), Mock()
+    session = ArtifactSession(
+        case,
+        tmp_path,
+        telemetry_tool=telemetry_tool if telemetry_configured else None,
+        supply_chain_tool=supply_tool if supply_configured else None,
+    )
+    workforce = build_workforce(session, lambda: ScriptedToolModel(session))
+    # Controlla i tool effettivamente registrati nei cloni SDK, non la sola
+    # costante dei nomi. Il filtro non esegue acquisizioni o pubblicazioni.
+    telemetry = workforce._children[0].worker.clone().tool_dict
+    countermeasure = workforce._children[2].worker.clone().tool_dict
+    assert ("collect_runtime_evidence" in telemetry) == (otel_input and telemetry_configured)
+    assert ("collect_countermeasure_context" in countermeasure) == supply_configured
+    assert {"get_context", "publish_runtime_evidence"} <= set(telemetry)
+    assert {"get_context", "publish_candidate_strategies"} <= set(countermeasure)
+    assert set(session.get_context()["artifacts"]) == {"input"}
+    telemetry_tool.collect.assert_not_called()
+    supply_tool.collect.assert_not_called()
+
+
+@pytest.mark.parametrize(
     "failed_role,blocked",
     [
         ("telemetry", {"vulnerability", "countermeasure", "strategic"}),
@@ -376,32 +439,33 @@ def test_camel_worker_rejects_success_without_artifact(case, tmp_path):
 
 def test_pipeline_retries_missing_publications_without_replacing_evidence(case, tmp_path):
     class EarlyExitModel(ScriptedToolModel):
-        stopped_early = False
+        stopped_early = 0
         retry_read_context = False
 
         def _run(self, messages, response_format=None, tools=None):
             names = {t["function"]["name"] for t in tools or []}
             if "publish_final_decision" in names and self.steps["strategic"] == 4:
-                if not self.stopped_early:
-                    self.stopped_early = True
+                if self.stopped_early < 2:
+                    self.stopped_early += 1
                     self.before_retry = {
                         p.name: p.read_bytes() for p in self.session.output_dir.glob("*.json")
                     }
                     return self._completion(content='{"content": "Done", "failed": false}')
-                if not self.retry_read_context:
-                    assert (
-                        "Remaining artifacts: final_decision, provenance" in messages[-1]["content"]
-                    )
-                    self.retry_read_context = True
-                    return self._completion(
-                        tool_calls=[
-                            {
-                                "id": "retry-context",
-                                "type": "function",
-                                "function": {"name": "get_context", "arguments": "{}"},
-                            }
-                        ]
-                    )
+            if names == {"get_context"} and self.stopped_early == 2 and not self.retry_read_context:
+                assert any(
+                    "Remaining artifacts: final_decision, provenance" in str(m.get("content"))
+                    for m in messages
+                )
+                self.retry_read_context = True
+                return self._completion(
+                    tool_calls=[
+                        {
+                            "id": "retry-context",
+                            "type": "function",
+                            "function": {"name": "get_context", "arguments": "{}"},
+                        }
+                    ]
+                )
             return super()._run(messages, response_format, tools)
 
     session = ArtifactSession(case, tmp_path, mode="camel", model="scripted-test-only")

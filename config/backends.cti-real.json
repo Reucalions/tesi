@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "vulnerability_adapter": "cve2owl-v1",
+  "cti_dataset_sha256": "e3566009408385c7aea7901a9e6499132f0ae4bb07ccbd80d22e2171e5f7990c",
+  "vulnerability": {
+    "transport": "mcp",
+    "url": "http://127.0.0.1:8003/mcp",
+    "expected_kind": "real",
+    "timeout_seconds": 60
+  },
+  "ranking": {"transport": "local-mock"},
+  "semantic": {"transport": "local-mock"},
+  "provenance": {"transport": "local-mock"}
+}

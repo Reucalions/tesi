@@ -4,7 +4,6 @@
 # mentre ranking e validazione vengono delegati ai tool registrati per ciascun ruolo.
 import logging
 
-from camel.agents import ChatAgent
 from camel.messages import BaseMessage
 from camel.societies.workforce import Workforce
 from camel.societies.workforce.workforce import WorkforceMode
@@ -13,8 +12,11 @@ from camel.tasks.task import TaskState
 
 from thesis_agents.agents import countermeasure, strategic, telemetry, vulnerability
 from thesis_agents.orchestration.artifacts import ArtifactSession
+from thesis_agents.orchestration.chat_agent import ArtifactChatAgent
 from thesis_agents.orchestration.publication_tools import PublicationTools
+from thesis_agents.orchestration.strategic_policy import StrategicToolPolicy
 from thesis_agents.orchestration.task_results import ArtifactTaskHandler
+from thesis_agents.schemas.telemetry_source import TelemetryInput
 
 # I moduli dei ruoli espongono PROMPT e TOOLS. La tabella permette di costruire
 # ChatAgent omogenei senza duplicare quattro volte configurazione e registrazione.
@@ -48,22 +50,36 @@ ROLE_INPUTS = {
 # Queste istruzioni sono assegnazioni operative, distinte dai prompt di sistema.
 # Gli ID diventano i riferimenti stabili utilizzati dal DAG delle dipendenze.
 TASKS = (
-    ("telemetry", "TelemetryAgent: normalize static input and publish runtime_evidence."),
+    (
+        "telemetry",
+        "TelemetryAgent: acquire configured telemetry and publish runtime_evidence. "
+        "Preserve unknown exposure/deserialization as null: absent observations are a source "
+        "limitation, not incomplete task execution. Do not infer missing facts.",
+    ),
     (
         "vulnerability",
         "VulnerabilityAgent: read runtime_evidence for the software/version lookup and publish "
-        "a separate vulnerability_report.",
+        "a separate vulnerability_report. Preserve missing CVSS/confidence as null and CWE as "
+        "an empty list. Report bounded no_findings or unresolved lookup outcomes faithfully; "
+        "missing source metadata is not a failed task and must not be fabricated.",
     ),
     (
         "countermeasure",
         "CountermeasureAgent: read runtime_evidence and vulnerability_report separately via "
-        "get_context, then generate and publish candidate_strategies.",
+        "get_context, acquire the SBOM/OSV context when configured, then generate and publish "
+        "candidate_strategies. If the report has no findings, publish strategies=[]; "
+        "this is the required successful result, not missing work.",
     ),
     (
         "strategic",
         "StrategicAgent: read runtime_evidence, vulnerability_report and candidate_strategies "
         "separately via get_context, preserving their producers; build graph, rank, validate "
-        "in order, publish decision and provenance.",
+        "in order, publish decision and provenance. With no candidates, publish empty graph, "
+        "ranking and semantic report, select null and record provenance; skip validation calls. "
+        "An empty ranking is a valid outcome, not missing reasoning or missing artifacts. "
+        "After rank_graph, CALL publish_final_decision(selected_strategy_id=null, explanation=...) "
+        "when ranking is empty; this tool also creates the empty semantic report. "
+        "Then CALL record_provenance with {}. Both must be real tool calls before TaskResult.",
     ),
 )
 
@@ -102,7 +118,9 @@ All domain outputs MUST be published with the provided tools as schema-valid
 JSON. For publish_runtime_evidence, publish_vulnerability_report and
 publish_candidate_strategies, payload is a JSON OBJECT matching the artifact schema,
 not a string containing serialized JSON. Do not escape or quote that object.
-A prose answer cannot substitute for publication. Read get_context to access the
+A prose answer cannot substitute for publication. A JSON object naming a tool inside
+your response text does not execute it: use the actual tool-calling mechanism.
+Read get_context to access the
 authoritative shared artifacts, even if dependency task summaries are incomplete.
 If a tool rejects your data, correct it using its error; never claim success before its
 publication succeeds. A tool error is a request to correct the tool call, not to fabricate
@@ -161,12 +179,17 @@ def build_workforce(session: ArtifactSession, backend_factory, *, workflow: str 
         raise ValueError("Unknown workflow")
     # Il coordinatore assegna i task; un clone funge da task agent e un altro da
     # modello per eventuali nuovi worker dell'SDK. Non sono ulteriori ruoli di dominio.
-    management = ChatAgent(
+    management = ArtifactChatAgent(
         system_message=(
             "Coordinate exactly four domain roles: TelemetryAgent, VulnerabilityAgent, "
             "CountermeasureAgent, StrategicAgent. Assign each stage to its matching role. "
             + DAG_INSTRUCTIONS
             + "Do not create extra workers, perform domain work or change tool results."
+            + " Evaluate completion against each task's publication contract, not data richness. "
+            "A summary is not the full artifact. Unknown source metadata and published empty "
+            "results are legitimate when required by the task; never request fabricated facts, "
+            "CVEs or strategies to improve a quality score. Distinguish source limitations from "
+            "missing publications or tool failures. Quality scores are not scientific evidence."
         ),
         model=backend_factory(),
         max_iteration=12,
@@ -174,7 +197,7 @@ def build_workforce(session: ArtifactSession, backend_factory, *, workflow: str 
     # In pipeline i prerequisiti vengono forniti dal codice; in auto CAMEL decompone
     # il task principale. Il controllo di validità degli artefatti vale in entrambi i casi.
     workforce = ArtifactWorkforce(
-        description="Thesis: static telemetry to validated countermeasure with local mock backends",
+        description="Thesis: acquired telemetry to validated countermeasure with configured tools",
         coordinator_agent=management,
         task_agent=management.clone(),
         new_worker_agent=management.clone(),
@@ -190,15 +213,35 @@ def build_workforce(session: ArtifactSession, backend_factory, *, workflow: str 
         failure_handling_config={"max_retries": 2, "enabled_strategies": ["retry"]},
     )
     publications = PublicationTools(session)
+    # I tool di acquisizione sono disponibili solo quando il relativo ingresso
+    # è configurato. Un input statico viene normalizzato dall'agente, senza
+    # suggerirgli una chiamata OTel che la sessione rifiuterebbe comunque.
+    acquisition_available = {
+        "collect_runtime_evidence": isinstance(session.case, TelemetryInput)
+        and session.telemetry_tool is not None,
+        "collect_countermeasure_context": session.supply_chain_tool is not None,
+    }
     for role, module in ROLES:
         # Ogni ruolo riceve solo i metodi elencati nel proprio TOOLS: per esempio
         # CountermeasureAgent non ha un tool per imporre direttamente una decisione.
-        agent = ChatAgent(
+        prompt = module.PROMPT
+        if role == "TelemetryAgent":
+            prompt = (
+                telemetry.OTEL_PROMPT
+                if isinstance(session.case, TelemetryInput)
+                else telemetry.STATIC_PROMPT
+            )
+        agent = ArtifactChatAgent(
             system_message=BaseMessage.make_assistant_message(
-                role_name=role, content=COMMON + "\n" + module.PROMPT
+                role_name=role, content=COMMON + "\n" + prompt
             ),
             model=backend_factory(),
-            tools=[publications.resolve(name) for name in module.TOOLS],
+            tool_policy=StrategicToolPolicy(session) if role == "StrategicAgent" else None,
+            tools=[
+                publications.resolve(name)
+                for name in module.TOOLS
+                if acquisition_available.get(name, True)
+            ],
             # I metodi sono associati alla stessa istanza di ArtifactSession: una
             # pubblicazione diventa quindi leggibile dagli altri ruoli nel run.
             max_iteration=20,
@@ -206,7 +249,7 @@ def build_workforce(session: ArtifactSession, backend_factory, *, workflow: str 
             step_timeout=300,
         )
         workforce.add_single_agent_worker(
-            description=f"{role}: {module.PROMPT}",
+            description=f"{role}: {prompt}",
             worker=agent,
             pool_max_size=1,
             enable_workflow_memory=False,
@@ -237,7 +280,7 @@ def run_camel(session: ArtifactSession, backend_factory, *, workflow: str = "pip
     task = Task(
         id=session.run_id,
         content=(
-            "Analyze the static case using exactly these four subtasks. "
+            "Analyze the configured case using exactly these four subtasks. "
             + DAG_INSTRUCTIONS
             + " ".join(content for _, content in TASKS)
             + " Use get_context for input. Each domain result must be published by tools. "

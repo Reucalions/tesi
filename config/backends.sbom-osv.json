@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "countermeasure_input": {
+    "transport": "http",
+    "url": "http://127.0.0.1:8005/v1/enrichment",
+    "expected_kind": "live",
+    "source_id": "log4j-demo",
+    "sbom_kind": "demo",
+    "sbom_sha256": "2a8614350d3217d029ac34402c7fce774e5c6842171197561bb2fd8c59ac51b2",
+    "timeout_seconds": 300
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "vulnerability_adapter": "cve2owl-v1",
+  "cti_dataset_sha256": "e3566009408385c7aea7901a9e6499132f0ae4bb07ccbd80d22e2171e5f7990c",
+  "vulnerability": {
+    "transport": "mcp",
+    "url": "http://127.0.0.1:8003/mcp",
+    "expected_kind": "real",
+    "timeout_seconds": 60
+  },
+  "ranking": {
+    "transport": "local-mock"
+  },
+  "semantic": {
+    "transport": "local-mock"
+  },
+  "provenance": {
+    "transport": "local-mock"
+  },
+  "countermeasure_input": {
+    "transport": "http",
+    "url": "http://127.0.0.1:8005/v1/enrichment",
+    "expected_kind": "live",
+    "source_id": "log4j-demo",
+    "sbom_kind": "demo",
+    "sbom_sha256": "2a8614350d3217d029ac34402c7fce774e5c6842171197561bb2fd8c59ac51b2",
+    "timeout_seconds": 300
+  }
+}

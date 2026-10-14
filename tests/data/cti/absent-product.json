@@ -1,0 +1,69 @@
+{
+  "contract": "cve2owl-assessment-v1",
+  "backend_kind": "real",
+  "backend": "cve2owl-symbolic-v1",
+  "request_sha256": "67ffde3ad20b6c24853c3f2977ad6d324e4a184fa4d8432b0673985d9efb91dc",
+  "software": {
+    "product": "zzzzcostathesisabsent9f832c",
+    "version": "1.0",
+    "vendor": null,
+    "evidence_id": "real-absent-product"
+  },
+  "dataset": {
+    "id": "cve2owl_20260523_143950",
+    "sha256": "e3566009408385c7aea7901a9e6499132f0ae4bb07ccbd80d22e2171e5f7990c",
+    "kind": "real"
+  },
+  "engine_sha256": {
+    "vector_search.product_identity": "20d56e4cee8e6a746ebcde828f7ddb8c27eb1e80823b5d9587af56106ed6198a",
+    "vector_search.product_matcher": "285973d8697aede74933f0eb1dbbdda8a341c1f7e46a3d6ce22594f2483d1be0",
+    "vector_search.sqlite_product_store": "ba8e3a3441185082b9bb09965a315f6dee8a80b52f92f6ed410b853d420a0ad3",
+    "vector_search.vulnerability_evaluator": "02d5c3875d50e5100be17411cd62adbb47a791ebe4c3a880088cb0f479a3ccbd"
+  },
+  "policy": {
+    "match_limit": 5,
+    "confidence_levels": [
+      "high"
+    ],
+    "vector_search": false
+  },
+  "matching": {
+    "asset": {
+      "product": "zzzzcostathesisabsent9f832c",
+      "version": "1.0",
+      "vendor": null,
+      "asset_type": null
+    },
+    "query": {
+      "product_terms": [
+        "zzzzcostathesisabsent9f832c"
+      ],
+      "normalized_product_terms": [
+        "zzzzcostathesisabsent9f832c"
+      ],
+      "vendor": null,
+      "normalized_vendor": ""
+    },
+    "status": "no_match",
+    "matches": []
+  },
+  "assessment": {
+    "assessment_summary": {
+      "confidence_required": [
+        "high"
+      ],
+      "assets_total": 1,
+      "assets_with_assessments": 0,
+      "matches_total": 0,
+      "matches_evaluated": 0,
+      "matches_skipped_by_confidence": 0,
+      "vulnerability_status_counts": {
+        "vulnerable": 0,
+        "not_vulnerable": 0,
+        "unknown": 0,
+        "not_evaluable": 0
+      }
+    },
+    "results": []
+  }
+}

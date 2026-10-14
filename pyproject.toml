@@ -19,7 +19,12 @@ dependencies = [
   "pydantic==2.12.0",
   # MCP 2 non è compatibile con l'import FastMCP usato da questa versione CAMEL.
   # L'SDK OpenAI è un requisito anche quando i mock di dominio sono tutti locali.
-  "mcp>=1.3,<2",
+  "mcp>=1.30,<2",
+  # Il client MCP usa HTTP e un portal AnyIO; il server di prova usa Uvicorn.
+  # Le versioni dell'ambiente restano quelle già presenti in requirements.lock.
+  "anyio>=4.5,<5",
+  "httpx>=0.28,<1",
+  "uvicorn>=0.31,<1",
   "openai>=1.86,<3",
   # Caricamento opzionale della configurazione da .env nella CLI.
   "python-dotenv>=1,<2",
@@ -44,6 +49,7 @@ thesis_agents = ["data/*.json"]
 [tool.pytest.ini_options]
 # Limita la ricerca automatica dei test alla directory del progetto.
 testpaths = ["tests"]
+markers = ["mcp_http: test MCP/HTTP con server separati su loopback, senza LLM o servizi cloud"]
 
 [tool.ruff]
 # Le regole sintattiche seguono la versione minima Python supportata.

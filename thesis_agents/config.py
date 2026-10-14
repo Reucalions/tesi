@@ -17,6 +17,7 @@ class ModelSettings:
     timeout: float = 120
     temperature: float | None = None
     max_tokens: int | None = None
+    context_tokens: int | None = None
 
     @classmethod
     def from_env(cls) -> "ModelSettings":
@@ -47,7 +48,19 @@ class ModelSettings:
             raise ValueError("LLM_MAX_TOKENS deve essere un intero positivo") from exc
         if max_tokens is not None and max_tokens <= 0:
             raise ValueError("LLM_MAX_TOKENS deve essere un intero positivo")
-        return cls(model, key, os.getenv("LLM_BASE_URL") or None, timeout, temperature, max_tokens)
+        raw_context = os.getenv("LLM_CONTEXT_TOKENS", "").strip()
+        try:
+            context_tokens = int(raw_context) if raw_context else None
+        except ValueError as exc:
+            raise ValueError("LLM_CONTEXT_TOKENS deve essere un intero positivo") from exc
+        base_url = os.getenv("LLM_BASE_URL") or None
+        if context_tokens is not None:
+            if not base_url or max_tokens is None or context_tokens <= max_tokens + 1024:
+                raise ValueError(
+                    "LLM_CONTEXT_TOKENS richiede LLM_BASE_URL, LLM_MAX_TOKENS e spazio "
+                    "maggiore della risposta più 1024 token di margine"
+                )
+        return cls(model, key, base_url, timeout, temperature, max_tokens, context_tokens)
 
     def create_backend(self):
         # L'import locale mantiene la lettura della configurazione indipendente
@@ -61,6 +74,18 @@ class ModelSettings:
         # deve comunque superare i contratti: il limite non completa né ripara JSON.
         if self.max_tokens is not None:
             model_config["max_tokens"] = self.max_tokens
+        if self.context_tokens is not None:
+            from thesis_agents.orchestration.bounded_model import BoundedCompatibleModel
+
+            return BoundedCompatibleModel(
+                model_type=self.model,
+                api_key=self.api_key,
+                url=self.base_url,
+                model_config_dict=model_config,
+                timeout=self.timeout,
+                max_retries=1,
+                context_tokens=self.context_tokens,
+            )
         return ModelFactory.create(
             # Un URL esplicito seleziona il backend compatibile, utile anche per un
             # server locale. Altrimenti viene scelto il backend OpenAI di CAMEL.

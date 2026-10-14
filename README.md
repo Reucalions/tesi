@@ -1,6 +1,53 @@
 # Thesis Agents — primo prototipo CAMEL
 
-Il progetto realizza: quattro ruoli CAMEL, messaggi JSON validati con Pydantic e dipendenze esterne sostituite da tool Python locali.
+Il progetto realizza quattro ruoli CAMEL, messaggi JSON validati con Pydantic e
+backend mock selezionabili in locale o su server MCP HTTP separati.
+
+Lo sviluppo delle integrazioni prosegue su `full`; `mockup` conserva la baseline
+dimostrativa. Il [piano di integrazione MCP](docs/mcp-integration-plan.md) definisce
+servizi remoti, switch dei backend e prove incrementali. Sono disponibili il
+[MCP Tool Layer dello Strategic](docs/mcp-strategic.md) per ranking, validazione
+e provenienza, e il [lookup MCP](docs/mcp-lookup.md). Il profilo consigliato per
+il collaudo strategico è `--backends config/backends.mcp-strategic-mock.json`.
+
+Il [servizio cve2owl](docs/owl-cti-integration.md) è collegato al VulnerabilityAgent
+tramite il [nuovo adapter e profilo CTI](docs/cti-workforce.md). Le prove attraversano
+CAMEL e MCP sul database reale, prima con inferenza programmata e poi nella
+[prova Ollama con i tre ingressi](docs/observed-app-ollama.md). Il report distingue identità ambigue, regole non valutabili
+e finding confermati, conservando risposta originale e riferimenti al dataset.
+Il default resta locale; smart contract e ledger reali non sono ancora collegati.
+
+Il [primo ingresso OpenTelemetry](docs/opentelemetry-integration.md) acquisisce
+via HTTP gli export registrati del Collector della baseline, con snapshot e
+provenienza conservati. `config/backends.otel-cti.json` combina questo ingresso
+con il lookup CTI reale. Il primo collaudo usa CAMEL con un modello programmato
+e osservazioni storiche del Collector.
+
+L'[ingresso SBOM/OSV](docs/sbom-osv-integration.md) aggiunge al CountermeasureAgent
+un contesto HTTP separato: inventario CycloneDX dimostrativo, query OSV e
+correlazioni con il report CTI. Il profilo `config/backends.cti-sbom-osv.json`
+è collaudato con CTI e OSV reali, telemetria statica e modello CAMEL programmato.
+Le fonti restano distinte; nessun advisory OSV aggiunge implicitamente finding al report.
+
+La [prova con tre ingressi coerenti](docs/observed-app-integration.md) usa ora
+un'applicazione Java locale, cinque log emessi dall'SDK OpenTelemetry e una SBOM
+generata dalla build Maven. Versione e hash del JAR osservato coincidono con
+l'inventario. Dopo il collaudo programmato, la **prova Ollama effettiva** ha
+concluso con `no_findings`: 475,59 secondi, 46 richieste LLM e audit passato.
+I tool strategici restano mock. Il [resoconto](docs/observed-app-ollama.md)
+documenta quattro retry qualitativi, una chiamata respinta e i limiti del risultato.
+Le [verifiche successive](docs/ollama-contract-tests.md) aggiungono criteri
+gestionali coerenti con i contratti, budget esplicito e memoria senza sintesi
+automatica nei cloni CAMEL, conservando anche i tentativi falliti.
+Il [controllo delle pubblicazioni per fonte e per fase](docs/agent-tool-phases.md)
+separa il payload statico da quello OTel e limita i tool dello Strategic in base
+agli artefatti già pubblicati, mantenendo l'esecuzione nel ciclo CAMEL.
+Il relativo collaudo conclude con **4 inferenze complete su 4**, due con finding
+CTI e due senza finding su fonti OTel, con audit superati e nessun retry.
+Le due prove positive selezionano strategie diverse perché cambiano le
+candidate e le stime generate: è verificato il flusso, non la ripetibilità
+della raccomandazione. Tempi, comandi e limiti sono nel
+[resoconto delle nuove prove](docs/agent-tool-phases.md#risultati-delle-nuove-inferenze).
 
 La [prima relazione tecnica](docs/relazione-mockup.md) raccoglie teoria del
 prototipo, architettura, ruolo di CAMEL/LLM, comandi, attività svolte e risultati
@@ -9,6 +56,9 @@ della matrice dimostrativa, distinguendo componenti effettivi e mock.
 I [materiali per la presentazione](docs/materiali/README.md) comprendono un
 PowerPoint modificabile da 15 minuti, la relazione PDF/Word, il copione e una
 demo guidata con visualizzatore offline degli output registrati.
+
+Il diagramma seguente rappresenta il profilo mock predefinito; i collegamenti
+dei tre ingressi reali sono nella guida appena citata.
 
 ```mermaid
 flowchart LR
@@ -90,6 +140,12 @@ il default dell'API compatibile coincida con quello del Modelfile. Lascia
 `LLM_MAX_TOKENS` limita la lunghezza di ciascuna risposta, incluse le chiamate ai
 tool. Per Ollama il valore di prova è 2048; lasciarlo vuoto omette il parametro.
 Non è la finestra di contesto e non garantisce che una risposta troncata sia valida.
+`LLM_CONTEXT_TOKENS=16384`, insieme a `LLM_MAX_TOKENS=2048` e all'endpoint
+compatibile, abilita il controllo stimato della richiesta completa con un margine
+di 1024 token. Non modifica il `num_ctx` di Ollama: i due valori vanno allineati.
+Le richieste oltre budget vengono respinte prima del provider, senza tagliare
+messaggi; il contatore CAMEL resta una stima per Qwen. Dettagli e comandi nella
+[guida delle verifiche](docs/ollama-contract-tests.md).
 
 La prima esecuzione completa verificata con `tesi-qwen3:4b` è descritta nel
 [resoconto della prova Ollama](docs/ollama-first-run.md). Lo Strategic ha richiesto
@@ -107,11 +163,15 @@ Ogni esecuzione crea una cartella distinta `output/<timestamp>-<id>/`. Puoi spec
 
 | Componente | Comportamento nel prototipo |
 |---|---|
-| TelemetryAgent | Normalizza l'input statico; la pubblicazione verifica che i fatti siano preservati |
+| TelemetryAgent | Normalizza l'input statico oppure acquisisce osservazioni OTel via HTTP; la pubblicazione preserva i fatti e la fonte |
 | VulnerabilityAgent | Interroga il tool e pubblica il rapporto senza modificare CVE, fonte o punteggi |
-| CountermeasureAgent | Genera strategie, motivazioni e stime di beneficio/impatto tramite il modello |
+| CountermeasureAgent | Acquisisce il contesto SBOM/OSV se configurato e genera strategie, motivazioni e stime tramite il modello |
 | StrategicAgent | Invoca costruzione del grafo, ranking, validazione in ordine e registrazione della decisione |
 | Mock KG | Corrispondenza esatta `log4j-core` / `2.14.1` → fixture `CVE-2021-44228` |
+| MCP lookup | Client HTTP e server mock separato, stesso contratto di lookup, selezione da configurazione |
+| Ingresso OTel | Gateway HTTP separato sugli export della baseline; snapshot validato, valori mancanti espliciti, collaudo su dati registrati |
+| Ingresso SBOM/OSV | Gateway HTTP con associazione esplicita asset/componente Maven; snapshot, query OSV e contesto validati |
+| MCP Strategic | Ranking, validazione e provenienza su server HTTP separato; ricevuta mock persistita in SQLite |
 | Mock ranking | Somma pesata deterministica a un passo; **non implementa l'algoritmo BWAF reale** |
 | Mock semantico | Controlla capacità disponibili e azioni proibite; **non implementa Tiny-ME** |
 | Mock provenienza | Registra input, hash SHA-256, attività e ruoli in JSON locale; nessuna transazione Fabric |
@@ -211,7 +271,13 @@ ruff format --check .
 python -m pip check
 ```
 
-I test verificano il caso completo, il fallback dopo un rifiuto, tutti i candidati rifiutati, lookup sconosciuti, riferimenti e stime invalidi, integrità della provenienza, pubblicazioni immutabili e protezione da esiti inventati. Il test di integrazione esegue la **Workforce CAMEL reale con un backend LLM a risposte programmate**, verificando tool calling e passaggio fra i quattro ruoli, senza rete. Non misura la qualità della generazione e non sostituisce un test con un LLM effettivo.
+I test verificano il caso completo, il fallback dopo un rifiuto, tutti i candidati
+rifiutati, lookup sconosciuti, riferimenti e stime invalidi, integrità della
+provenienza e pubblicazioni immutabili. L'integrazione esegue la **Workforce
+CAMEL reale con un backend LLM a risposte programmate**. Le prove MCP avviano
+server separati su loopback e verificano i quattro scenari con due run distinti.
+Non richiedono Internet e non misurano la qualità di un LLM effettivo. Per
+escludere le prove con socket locali usa `pytest -m 'not mcp_http' -q`.
 
 CAMEL è fissato a `0.2.90`; MCP è limitato alla serie 1 perché la serie 2 risolta inizialmente rendeva impossibile importare `FastMCP` da CAMEL. OpenAI SDK è limitato alla serie 1/2 verificata nel progetto. Per riprodurre le versioni usate nei test, installa prima `requirements.lock` e poi il progetto con `python -m pip install --no-deps -e .`.
 

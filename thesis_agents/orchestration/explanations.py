@@ -16,10 +16,11 @@ from thesis_agents.schemas import (
     VulnerabilityReport,
 )
 from thesis_agents.schemas.decision import ExplanationClaim, ExplanationSource
+from thesis_agents.schemas.telemetry_source import TelemetryInput
 
 
 def build_explanation(
-    case: StaticTelemetry,
+    case: StaticTelemetry | TelemetryInput,
     evidence: RuntimeEvidence,
     report: VulnerabilityReport,
     candidates: CandidateStrategies,
@@ -57,6 +58,18 @@ def build_explanation(
             )
         ),
     )
+    if evidence.telemetry is not None:
+        ref = evidence.telemetry
+        add(
+            "limitation",
+            f"OpenTelemetry source {quoted(ref.source_id)}; acquisition={ref.acquisition}; "
+            f"observed window {ref.query.start_time.isoformat()} "
+            f"to {ref.query.end_time.isoformat()}. "
+            "Null flags mean unknown. "
+            "Instrumentation-declared identity is not a complete inventory. "
+            "Reading a recorded export now does not make its observations current.",
+            source("runtime_evidence", "/telemetry"),
+        )
     if report.lookup_status == "unsupported":
         add(
             "limitation",
@@ -67,12 +80,29 @@ def build_explanation(
             source("vulnerability_report", "/lookup_status"),
             source("vulnerability_report", "/vulnerabilities"),
         )
+    elif report.lookup_status in ("ambiguous", "no_match", "not_evaluable", "no_findings"):
+        meanings = {
+            "ambiguous": "product identity remains unresolved; no candidate was silently selected",
+            "no_match": "the backend returned no matching product; coverage remains unknown",
+            "not_evaluable": (
+                "the returned version rules do not support a complete negative assessment"
+            ),
+            "no_findings": "no confirmed findings within the returned identity and evaluated rules",
+        }
+        add(
+            "limitation",
+            f"{producers['vulnerability_report']} reports lookup_status={report.lookup_status}: "
+            f"{meanings[report.lookup_status]}. An empty finding list is not proof of safety.",
+            source("vulnerability_report", "/lookup_status"),
+            source("vulnerability_report", "/cti"),
+        )
     else:
         for i, finding in enumerate(report.vulnerabilities):
             add(
                 "reported_fact",
                 f"{producers['vulnerability_report']} reports {quoted(finding.cve_id)} with "
-                f"CVSS {finding.cvss:g}, source {quoted(finding.source)}. "
+                + (f"CVSS {finding.cvss:g}" if finding.cvss is not None else "CVSS unavailable")
+                + f", source {quoted(finding.source)}. "
                 "These are lookup results, not independent verification "
                 "or a remediation-version recommendation.",
                 *(
@@ -80,6 +110,18 @@ def build_explanation(
                     for p in ("cve_id", "cvss", "source")
                 ),
             )
+    if report.cti is not None:
+        add(
+            "limitation",
+            f"CTI backend {quoted(report.cti.backend)} ({report.cti.backend_kind}), "
+            f"dataset {quoted(report.cti.dataset_id)}, SHA-256 {report.cti.dataset_sha256}. "
+            f"Identity status={report.cti.identity_status}; "
+            f"rule coverage={report.cti.rule_coverage} "
+            "within returned candidates only. Matching scores are not probabilities. "
+            f"Unavailable metadata: {quoted(report.cti.missing_metadata)}. "
+            "Dataset completeness and independent vulnerability verification are not established.",
+            source("vulnerability_report", "/cti"),
+        )
     add(
         "reported_fact",
         f"{producers['candidate_strategies']} published {len(candidates.strategies)} candidates. "
@@ -129,6 +171,17 @@ def build_explanation(
             "Decision: insufficient_evidence. No strategy selected because the lookup "
             "lacks coverage. No candidates were validated; this does not establish "
             "that every countermeasure is invalid."
+        )
+    elif report.lookup_status in ("ambiguous", "no_match", "not_evaluable"):
+        conclusion = (
+            f"Decision: insufficient_evidence (lookup_status={report.lookup_status}). "
+            "No strategy selected; no candidates were validated. This does not establish "
+            "that every countermeasure is invalid."
+        )
+    elif report.lookup_status == "no_findings":
+        conclusion = (
+            "Decision: no_findings within returned identity and evaluated rules. "
+            "No strategy selected or validated; this is not a claim of software safety."
         )
     elif selected is None:
         conclusion = (

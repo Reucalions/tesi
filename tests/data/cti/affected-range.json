@@ -1,0 +1,392 @@
+{
+  "contract": "cve2owl-assessment-v1",
+  "backend_kind": "real",
+  "backend": "cve2owl-symbolic-v1",
+  "request_sha256": "acc71830f4840d2fc7bd9919447f85222ce8db1d9f3f8906c25726bda7529887",
+  "software": {
+    "product": "Apache Log4j",
+    "version": "1.2.17",
+    "vendor": "Apache Software Foundation",
+    "evidence_id": "real-affected-range"
+  },
+  "dataset": {
+    "id": "cve2owl_20260523_143950",
+    "sha256": "e3566009408385c7aea7901a9e6499132f0ae4bb07ccbd80d22e2171e5f7990c",
+    "kind": "real"
+  },
+  "engine_sha256": {
+    "vector_search.product_identity": "20d56e4cee8e6a746ebcde828f7ddb8c27eb1e80823b5d9587af56106ed6198a",
+    "vector_search.product_matcher": "285973d8697aede74933f0eb1dbbdda8a341c1f7e46a3d6ce22594f2483d1be0",
+    "vector_search.sqlite_product_store": "ba8e3a3441185082b9bb09965a315f6dee8a80b52f92f6ed410b853d420a0ad3",
+    "vector_search.vulnerability_evaluator": "02d5c3875d50e5100be17411cd62adbb47a791ebe4c3a880088cb0f479a3ccbd"
+  },
+  "policy": {
+    "match_limit": 5,
+    "confidence_levels": [
+      "high"
+    ],
+    "vector_search": false
+  },
+  "matching": {
+    "asset": {
+      "product": "Apache Log4j",
+      "version": "1.2.17",
+      "vendor": "Apache Software Foundation",
+      "asset_type": null
+    },
+    "query": {
+      "product_terms": [
+        "Apache Log4j"
+      ],
+      "normalized_product_terms": [
+        "apache log4j"
+      ],
+      "vendor": "Apache Software Foundation",
+      "normalized_vendor": "apache software foundation"
+    },
+    "status": "matched",
+    "matches": [
+      {
+        "canonical_id": "apache software foundation::apache log4j",
+        "vendor": "Apache Software Foundation",
+        "product": "Apache Log4j",
+        "normalized_vendor": "apache software foundation",
+        "normalized_product": "apache log4j",
+        "affected_count": 3,
+        "confidence": "high",
+        "score": 0.9,
+        "evidence": [
+          "sqlite_exact",
+          "product exact match",
+          "vendor exact match"
+        ],
+        "affected_entries": [
+          {
+            "affected_product_id": 101938,
+            "cve_id": "CVE-2017-5645",
+            "affected_iri": "CVE-2017-5645_Containers_Cna_Affected",
+            "json_path": "containers.cna.affected[0]",
+            "vendor": "Apache Software Foundation",
+            "product": "Apache Log4j",
+            "vulnerability_status": null,
+            "vulnerability_reason": null,
+            "version_rules": [],
+            "cpes": []
+          },
+          {
+            "affected_product_id": 223533,
+            "cve_id": "CVE-2021-45046",
+            "affected_iri": "CVE-2021-45046_Containers_Cna_Affected",
+            "json_path": "containers.cna.affected[0]",
+            "vendor": "Apache Software Foundation",
+            "product": "Apache Log4j",
+            "vulnerability_status": null,
+            "vulnerability_reason": null,
+            "version_rules": [],
+            "cpes": []
+          },
+          {
+            "affected_product_id": 299258,
+            "cve_id": "CVE-2023-26464",
+            "affected_iri": "CVE-2023-26464_Containers_Cna_Affected",
+            "json_path": "containers.cna.affected[0]",
+            "vendor": "Apache Software Foundation",
+            "product": "Apache Log4j",
+            "vulnerability_status": null,
+            "vulnerability_reason": null,
+            "version_rules": [],
+            "cpes": []
+          }
+        ],
+        "vulnerability_status": null,
+        "vulnerability_reason": null,
+        "evaluated_asset_version": null,
+        "version_evaluation": null
+      },
+      {
+        "canonical_id": "apache::apache log4j",
+        "vendor": "Apache",
+        "product": "Apache Log4j",
+        "normalized_vendor": "apache",
+        "normalized_product": "apache log4j",
+        "affected_count": 1,
+        "confidence": "high",
+        "score": 0.85,
+        "evidence": [
+          "sqlite_exact",
+          "product exact match",
+          "vendor token overlap"
+        ],
+        "affected_entries": [
+          {
+            "affected_product_id": 185379,
+            "cve_id": "CVE-2020-9488",
+            "affected_iri": "CVE-2020-9488_Containers_Cna_Affected",
+            "json_path": "containers.cna.affected[0]",
+            "vendor": "Apache",
+            "product": "Apache Log4j",
+            "vulnerability_status": null,
+            "vulnerability_reason": null,
+            "version_rules": [],
+            "cpes": []
+          }
+        ],
+        "vulnerability_status": null,
+        "vulnerability_reason": null,
+        "evaluated_asset_version": null,
+        "version_evaluation": null
+      }
+    ]
+  },
+  "assessment": {
+    "assessment_summary": {
+      "confidence_required": [
+        "high"
+      ],
+      "assets_total": 1,
+      "assets_with_assessments": 1,
+      "matches_total": 2,
+      "matches_evaluated": 2,
+      "matches_skipped_by_confidence": 0,
+      "vulnerability_status_counts": {
+        "vulnerable": 1,
+        "not_vulnerable": 0,
+        "unknown": 0,
+        "not_evaluable": 1
+      }
+    },
+    "results": [
+      {
+        "asset": {
+          "product": "Apache Log4j",
+          "version": "1.2.17",
+          "vendor": "Apache Software Foundation",
+          "asset_type": null
+        },
+        "query": {
+          "product_terms": [
+            "Apache Log4j"
+          ],
+          "normalized_product_terms": [
+            "apache log4j"
+          ],
+          "vendor": "Apache Software Foundation",
+          "normalized_vendor": "apache software foundation"
+        },
+        "status": "matched",
+        "matches": [
+          {
+            "canonical_id": "apache software foundation::apache log4j",
+            "vendor": "Apache Software Foundation",
+            "product": "Apache Log4j",
+            "normalized_vendor": "apache software foundation",
+            "normalized_product": "apache log4j",
+            "affected_count": 3,
+            "confidence": "high",
+            "score": 0.9,
+            "evidence": [
+              "sqlite_exact",
+              "product exact match",
+              "vendor exact match"
+            ],
+            "affected_entries": [
+              {
+                "affected_product_id": 101938,
+                "cve_id": "CVE-2017-5645",
+                "affected_iri": "CVE-2017-5645_Containers_Cna_Affected",
+                "json_path": "containers.cna.affected[0]",
+                "vendor": "Apache Software Foundation",
+                "product": "Apache Log4j",
+                "vulnerability_status": "not_evaluable",
+                "vulnerability_reason": "no version rule was comparable",
+                "version_rules": [
+                  {
+                    "affected_version_id": 116536,
+                    "json_path": "containers.cna.affected[0].versions[0]",
+                    "version_iri": "CVE-2017-5645_Containers_Cna_Affected_Versions",
+                    "version": "All versions between 2.0-alpha1 and 2.8.1",
+                    "status": "affected",
+                    "version_type": null,
+                    "less_than": null,
+                    "less_than_or_equal": null,
+                    "changes": [],
+                    "evaluated": false,
+                    "matched_asset_version": false,
+                    "vulnerability_status": "not_evaluable",
+                    "reason": "version rule 'All versions between 2.0-alpha1 and 2.8.1' is not comparable"
+                  }
+                ],
+                "cpes": []
+              },
+              {
+                "affected_product_id": 223533,
+                "cve_id": "CVE-2021-45046",
+                "affected_iri": "CVE-2021-45046_Containers_Cna_Affected",
+                "json_path": "containers.cna.affected[0]",
+                "vendor": "Apache Software Foundation",
+                "product": "Apache Log4j",
+                "vulnerability_status": "not_evaluable",
+                "vulnerability_reason": "no version rule was comparable",
+                "version_rules": [
+                  {
+                    "affected_version_id": 308394,
+                    "json_path": "containers.cna.affected[0].versions[0]",
+                    "version_iri": "CVE-2021-45046_Containers_Cna_Affected_Versions",
+                    "version": "Apache Log4j2",
+                    "status": "affected",
+                    "version_type": "custom",
+                    "less_than": "2.16.0",
+                    "less_than_or_equal": null,
+                    "changes": [],
+                    "evaluated": false,
+                    "matched_asset_version": false,
+                    "vulnerability_status": "not_evaluable",
+                    "reason": "range lower bound is not comparable: 'Apache Log4j2'"
+                  }
+                ],
+                "cpes": []
+              },
+              {
+                "affected_product_id": 299258,
+                "cve_id": "CVE-2023-26464",
+                "affected_iri": "CVE-2023-26464_Containers_Cna_Affected",
+                "json_path": "containers.cna.affected[0]",
+                "vendor": "Apache Software Foundation",
+                "product": "Apache Log4j",
+                "vulnerability_status": "vulnerable",
+                "vulnerability_reason": "at least one affected version rule matched the asset version",
+                "version_rules": [
+                  {
+                    "affected_version_id": 495461,
+                    "json_path": "containers.cna.affected[0].versions[0]",
+                    "version_iri": "CVE-2023-26464_Containers_Cna_Affected_Versions_0",
+                    "version": "1.0.4",
+                    "status": "affected",
+                    "version_type": "maven",
+                    "less_than": "2",
+                    "less_than_or_equal": null,
+                    "changes": [],
+                    "evaluated": true,
+                    "matched_asset_version": true,
+                    "vulnerability_status": "vulnerable",
+                    "reason": "asset version 1.2.17 matches affected rule: 1.0.4 <= asset < 2"
+                  },
+                  {
+                    "affected_version_id": 495462,
+                    "json_path": "containers.cna.affected[0].versions[1]",
+                    "version_iri": "CVE-2023-26464_Containers_Cna_Affected_Versions_1",
+                    "version": "2",
+                    "status": "unaffected",
+                    "version_type": "maven",
+                    "less_than": null,
+                    "less_than_or_equal": "*",
+                    "changes": [],
+                    "evaluated": false,
+                    "matched_asset_version": false,
+                    "vulnerability_status": "not_evaluable",
+                    "reason": "range bounds are not comparable: '2', '*'"
+                  }
+                ],
+                "cpes": []
+              }
+            ],
+            "vulnerability_status": "vulnerable",
+            "vulnerability_reason": "1 CVE affected entry matched the asset version",
+            "evaluated_asset_version": "1.2.17",
+            "version_evaluation": {
+              "eligible": true,
+              "confidence_required": [
+                "high"
+              ],
+              "asset_version_parseable": true,
+              "comparable_version": "1.2.17",
+              "cve_counts": {
+                "vulnerable": 1,
+                "not_vulnerable": 0,
+                "unknown": 0,
+                "not_evaluable": 2
+              }
+            }
+          },
+          {
+            "canonical_id": "apache::apache log4j",
+            "vendor": "Apache",
+            "product": "Apache Log4j",
+            "normalized_vendor": "apache",
+            "normalized_product": "apache log4j",
+            "affected_count": 1,
+            "confidence": "high",
+            "score": 0.85,
+            "evidence": [
+              "sqlite_exact",
+              "product exact match",
+              "vendor token overlap"
+            ],
+            "affected_entries": [
+              {
+                "affected_product_id": 185379,
+                "cve_id": "CVE-2020-9488",
+                "affected_iri": "CVE-2020-9488_Containers_Cna_Affected",
+                "json_path": "containers.cna.affected[0]",
+                "vendor": "Apache",
+                "product": "Apache Log4j",
+                "vulnerability_status": "not_evaluable",
+                "vulnerability_reason": "no version rule was comparable",
+                "version_rules": [
+                  {
+                    "affected_version_id": 258681,
+                    "json_path": "containers.cna.affected[0].versions[0]",
+                    "version_iri": "CVE-2020-9488_Containers_Cna_Affected_Versions_0",
+                    "version": "log4j-core 2.13.0",
+                    "status": "affected",
+                    "version_type": null,
+                    "less_than": null,
+                    "less_than_or_equal": null,
+                    "changes": [],
+                    "evaluated": false,
+                    "matched_asset_version": false,
+                    "vulnerability_status": "not_evaluable",
+                    "reason": "version rule 'log4j-core 2.13.0' is not comparable"
+                  },
+                  {
+                    "affected_version_id": 258682,
+                    "json_path": "containers.cna.affected[0].versions[1]",
+                    "version_iri": "CVE-2020-9488_Containers_Cna_Affected_Versions_1",
+                    "version": "log4j-core",
+                    "status": "affected",
+                    "version_type": "custom",
+                    "less_than": "2.12.3",
+                    "less_than_or_equal": null,
+                    "changes": [],
+                    "evaluated": false,
+                    "matched_asset_version": false,
+                    "vulnerability_status": "not_evaluable",
+                    "reason": "range lower bound is not comparable: 'log4j-core'"
+                  }
+                ],
+                "cpes": []
+              }
+            ],
+            "vulnerability_status": "not_evaluable",
+            "vulnerability_reason": "no affected version rule could be compared with the asset version",
+            "evaluated_asset_version": "1.2.17",
+            "version_evaluation": {
+              "eligible": true,
+              "confidence_required": [
+                "high"
+              ],
+              "asset_version_parseable": true,
+              "comparable_version": "1.2.17",
+              "cve_counts": {
+                "vulnerable": 0,
+                "not_vulnerable": 0,
+                "unknown": 0,
+                "not_evaluable": 1
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

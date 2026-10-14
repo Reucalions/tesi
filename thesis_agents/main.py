@@ -12,9 +12,13 @@ from uuid import uuid4
 
 from dotenv import load_dotenv
 
+from thesis_agents.backends import BackendSettings, connect_backends
 from thesis_agents.config import ModelSettings
 from thesis_agents.orchestration.artifacts import ARTIFACT_SCHEMAS, ArtifactSession
 from thesis_agents.schemas import StaticTelemetry
+from thesis_agents.schemas.telemetry_source import TelemetryInput
+from thesis_agents.telemetry.settings import TelemetryHTTPSettings
+from thesis_agents.tools.sbom_http import SupplyChainHTTPSettings
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -26,7 +30,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--mode", choices=("camel", "fixtures"), default="camel")
     parser.add_argument("--workflow", choices=("pipeline", "auto"), default="pipeline")
     parser.add_argument(
-        "--input", type=Path, help="JSON StaticTelemetry; default: caso Log4j incluso"
+        "--backends", type=Path, help="Profilo JSON dei backend; default mock locali"
+    )
+    parser.add_argument(
+        "--input", type=Path, help="JSON StaticTelemetry o TelemetryInput secondo il profilo"
     )
     parser.add_argument(
         "--output", type=Path, help="Cartella vuota; default: output/<timestamp>-<id>"
@@ -40,7 +47,11 @@ def main(argv: list[str] | None = None) -> int:
         # senza modello, credenziali o una sessione di analisi. Questo ramo termina qui.
         if args.export_schemas:
             args.export_schemas.mkdir(parents=True, exist_ok=True)
-            schemas = {"input": StaticTelemetry, **ARTIFACT_SCHEMAS}
+            schemas = {
+                "input": StaticTelemetry,
+                "telemetry_input": TelemetryInput,
+                **ARTIFACT_SCHEMAS,
+            }
             for name, schema in schemas.items():
                 path = args.export_schemas / f"{name}.schema.json"
                 # «x» crea un file nuovo e fallisce se esiste già: evita sovrascritture.
@@ -52,6 +63,22 @@ def main(argv: list[str] | None = None) -> int:
         # Legge solo .env nella directory corrente, senza cercare nei genitori.
         # override=False preserva eventuali variabili già impostate nella shell.
         load_dotenv(Path.cwd() / ".env", override=False)
+        backends = BackendSettings.load(args.backends) if args.backends else None
+        telemetry_http = backends and isinstance(backends.telemetry, TelemetryHTTPSettings)
+        if telemetry_http and not args.input:
+            raise ValueError("Il profilo OpenTelemetry richiede --input con selettore e finestra")
+        if (
+            args.mode == "fixtures"
+            and backends
+            and (
+                backends.remote_backends()
+                or telemetry_http
+                or isinstance(backends.countermeasure_input, SupplyChainHTTPSettings)
+            )
+        ):
+            raise ValueError(
+                "La modalità fixtures richiede backend locali; usa mcp.probe o mode=camel"
+            )
         # In modalità fixtures non si richiedono configurazione o credenziali LLM.
         settings = ModelSettings.from_env() if args.mode == "camel" else None
         # importlib.resources trova la fixture anche quando il package è installato,
@@ -63,7 +90,8 @@ def main(argv: list[str] | None = None) -> int:
         )
         # La validazione precede la creazione della sessione: un input malformato
         # non deve iniziare un run con dati parziali o campi non riconosciuti.
-        case = StaticTelemetry.model_validate_json(content)
+        schema = TelemetryInput if telemetry_http else StaticTelemetry
+        case = schema.model_validate_json(content)
         # UTC rende il timestamp interpretabile su macchine in fusi orari diversi;
         # il suffisso casuale distingue anche due run avviati nello stesso secondo.
         stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
@@ -74,16 +102,17 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Modalità: {args.mode} | Output: {output.resolve()}", flush=True)
         # Gli import differiti caricano l'orchestrazione CAMEL solo quando serve.
         # Una stampa con flush rende subito visibile dove finiranno gli artefatti.
-        if settings:
-            from thesis_agents.orchestration.workforce import run_camel
+        with connect_backends(session, backends):
+            if settings:
+                from thesis_agents.orchestration.workforce import run_camel
 
-            # Si passa una factory: la Workforce può costruire i backend dei vari
-            # agenti senza conoscere come modello, endpoint e chiave sono configurati.
-            decision = run_camel(session, settings.create_backend, workflow=args.workflow)
-        else:
-            from thesis_agents.fixtures import run_fixtures
+                # Si passa una factory: la Workforce può costruire i backend dei vari
+                # agenti senza conoscere come modello, endpoint e chiave sono configurati.
+                decision = run_camel(session, settings.create_backend, workflow=args.workflow)
+            else:
+                from thesis_agents.fixtures import run_fixtures
 
-            decision = run_fixtures(session)
+                decision = run_fixtures(session)
         print(f"Esito: {decision.status}; strategia: {decision.selected_strategy_id or 'nessuna'}")
         print("Creati gli 8 artefatti JSON e la copia dell’input.")
         return 0

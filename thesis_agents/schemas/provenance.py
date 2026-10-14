@@ -29,7 +29,9 @@ class ProvenanceRecord(Message):
     # dalla sessione alla sua creazione, non è un timestamp per ciascuna attività.
     run_id: Identifier
     mode: Literal["camel", "fixtures"]
-    backend: Literal["local-provenance-mock-v1"] = "local-provenance-mock-v1"
+    # Il default conserva i record storici. Con MCP identifica il canale di
+    # registrazione; la ricevuta separata riporta il backend remoto effettivo.
+    backend: Text = "local-provenance-mock-v1"
     model: str | None
     created_at: Text
     entities: list[ProvenanceEntity]

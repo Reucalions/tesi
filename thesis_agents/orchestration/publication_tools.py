@@ -10,6 +10,8 @@ from camel.toolkits.function_tool import get_openai_tool_schema
 
 from thesis_agents.orchestration.artifacts import ArtifactSession
 from thesis_agents.schemas import CandidateStrategies, RuntimeEvidence, VulnerabilityReport
+from thesis_agents.schemas.telemetry import OTelRuntimeEvidence, StaticRuntimeEvidence
+from thesis_agents.schemas.telemetry_source import TelemetryInput
 
 
 class PublicationTools:
@@ -27,6 +29,30 @@ class PublicationTools:
         """
         evidence = RuntimeEvidence.model_validate(payload)
         return self.session.publish_runtime_evidence(evidence.model_dump_json())
+
+    def publish_static_runtime_evidence(self, payload: StaticRuntimeEvidence) -> dict:
+        """Publish static facts; telemetry must be null, never invented OTel metadata.
+
+        Args:
+            payload (StaticRuntimeEvidence): Normalize the static input, preserving all facts.
+
+        Returns:
+            dict: Validated RuntimeEvidence saved by the session.
+        """
+        evidence = StaticRuntimeEvidence.model_validate(payload)
+        return self.publish_runtime_evidence(evidence)
+
+    def publish_otel_runtime_evidence(self, payload: OTelRuntimeEvidence) -> dict:
+        """Publish the exact collect_runtime_evidence result, including its source reference.
+
+        Args:
+            payload (OTelRuntimeEvidence): Acquired evidence unchanged; do not generate hashes.
+
+        Returns:
+            dict: Validated RuntimeEvidence saved by the session.
+        """
+        evidence = OTelRuntimeEvidence.model_validate(payload)
+        return self.publish_runtime_evidence(evidence)
 
     def publish_vulnerability_report(self, payload: VulnerabilityReport) -> dict:
         """Publish the exact report returned by lookup_vulnerabilities.
@@ -61,7 +87,14 @@ class PublicationTools:
             "publish_candidate_strategies",
         ):
             method = getattr(self, name)
+            if name == "publish_runtime_evidence":
+                method = (
+                    self.publish_otel_runtime_evidence
+                    if isinstance(self.session.case, TelemetryInput)
+                    else self.publish_static_runtime_evidence
+                )
             schema = get_openai_tool_schema(method)
+            schema["function"]["name"] = name
             parameters = schema["function"]["parameters"]
             # Espone direttamente l'oggetto del payload. CAMEL 0.2.90 omette la
             # descrizione sui $ref; manteniamo i $defs per i modelli annidati.

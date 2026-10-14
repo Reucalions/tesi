@@ -1,0 +1,43 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:b2b1b29d-7bdf-4d5c-b784-06a7382113cd",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "type": "application",
+      "bom-ref": "payment-api-demo",
+      "name": "payment-api-demo",
+      "version": "demo-1",
+      "description": "Synthetic application inventory for thesis integration tests; not generated from a deployment."
+    },
+    "properties": [
+      {"name": "thesis:sbom-kind", "value": "demo"},
+      {"name": "thesis:inventory-completeness", "value": "illustrative-only"}
+    ]
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "log4j-core",
+      "group": "org.apache.logging.log4j",
+      "name": "log4j-core",
+      "version": "2.14.1",
+      "purl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "log4j-api",
+      "group": "org.apache.logging.log4j",
+      "name": "log4j-api",
+      "version": "2.14.1",
+      "purl": "pkg:maven/org.apache.logging.log4j/log4j-api@2.14.1"
+    }
+  ],
+  "dependencies": [
+    {"ref": "payment-api-demo", "dependsOn": ["log4j-core", "log4j-api"]},
+    {"ref": "log4j-core", "dependsOn": ["log4j-api"]},
+    {"ref": "log4j-api", "dependsOn": []}
+  ]
+}

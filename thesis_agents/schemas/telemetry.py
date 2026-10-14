@@ -1,9 +1,10 @@
 # Contratti del dato osservato: input statico e output separato di TelemetryAgent.
 # La trasformazione cambia la struttura, non i fatti software/versione/esposizione.
-# Un eventuale ingresso OpenTelemetry richiederà un adapter, non presente qui.
+# L'ingresso OpenTelemetry conserva separatamente lo snapshot della fonte.
 from pydantic import Field, StrictBool, model_validator
 
 from .base import Identifier, Message, Text, require_unique
+from .telemetry_source import TelemetryInput, TelemetryReference
 
 
 class StaticTelemetry(Message):
@@ -33,9 +34,10 @@ class RuntimeEvidence(Message):
     # Lo schema ammette più osservazioni, ma ArtifactSession limita il caso a una.
     service_name: Identifier
     software: list[SoftwareObservation] = Field(min_length=1)
-    endpoint_exposed: StrictBool
-    deserialization_observed: StrictBool
+    endpoint_exposed: StrictBool | None
+    deserialization_observed: StrictBool | None
     observations: list[Text]
+    telemetry: TelemetryReference | None = None
     # observations aggiunge note descrittive; Pydantic non ne verifica la veridicità.
 
     @model_validator(mode="after")
@@ -44,3 +46,21 @@ class RuntimeEvidence(Message):
         # Due osservazioni non possono utilizzare lo stesso riferimento di evidenza.
         require_unique([s.evidence_id for s in self.software], "evidence IDs")
         return self
+
+
+class StaticRuntimeEvidence(RuntimeEvidence):
+    """Contratto di pubblicazione statico; l'artefatto salvato resta RuntimeEvidence."""
+
+    endpoint_exposed: StrictBool
+    deserialization_observed: StrictBool
+    telemetry: None = None
+
+
+class OTelRuntimeEvidence(RuntimeEvidence):
+    """Pubblicazione OTel: riferimento obbligatorio, identico al dato acquisito."""
+
+    telemetry: TelemetryReference
+
+
+def runtime_publication_schema(case):
+    return OTelRuntimeEvidence if isinstance(case, TelemetryInput) else StaticRuntimeEvidence

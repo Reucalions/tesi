@@ -8,7 +8,7 @@ I file Python contengono commenti in italiano su responsabilità, input/output, 
 2. `schemas/`: quali dati possono attraversare i confini fra componenti.
 3. `orchestration/artifacts.py`: chi può pubblicare cosa e quali invarianti vengono controllati.
 4. `orchestration/workforce.py` e `agents/`: come CAMEL assegna i task e i tre produttori convergono nello StrategicAgent.
-5. `tools/`: che cosa simulano i backend e quali operazioni rimangono deterministiche.
+5. `backends.py` e `tools/`: selezione dei servizi, adapter remoti e backend mock.
 6. `tests/`: esempi eseguibili di casi ammessi, errori e controlli del DAG.
 
 ## Avvio, configurazione e dimostrazione
@@ -17,10 +17,12 @@ I file Python contengono commenti in italiano su responsabilità, input/output, 
 |---|---|
 | [main.py](../main.py) | Wrapper dello script locale e conversione del risultato in codice di uscita. |
 | [thesis_agents/main.py](../thesis_agents/main.py) | Parsing degli argomenti, export degli schemi, `.env`, risorsa JSON, directory del run, scelta CAMEL/fixtures ed errori gestiti. |
-| [config.py](../thesis_agents/config.py) | Configurazione immutabile del modello, precedenza delle chiavi, URL opzionale e costruzione differita del backend. |
+| [config.py](../thesis_agents/config.py) | Configurazione immutabile del modello, precedenza delle chiavi, URL opzionale e budget di contesto esplicito prima della costruzione del backend. |
 | [fixtures.py](../thesis_agents/fixtures.py) | Proposte statiche, pubblicazioni attraverso gli stessi contratti, ranking e fallback senza inferenza. |
 | [demo.py](../thesis_agents/demo.py) | Runner della matrice: processi CLI isolati, configurazione locale, input, timeout e riepiloghi. |
 | [demo_audit.py](../thesis_agents/demo_audit.py) | Audit in sola lettura degli artefatti e dei messaggi consegnati allo Strategic. |
+| [backends.py](../thesis_agents/backends.py) | Profilo dei backend, connessioni HTTP/MCP e audit delle chiamate. |
+| [prepare.py](../examples/observed-app/prepare.py) | Build e osservazione dell'applicazione locale, verifica delle fonti e generazione del profilo; esterno alla Workforce. |
 | [log4j_case.json](../thesis_agents/data/log4j_case.json) | Input dimostrativo: la [guida dei dati](../thesis_agents/data/README.md) descrive ogni campo e variazioni del caso. |
 
 `mode` e `workflow` hanno scopi diversi. `mode=camel` usa inferenza tramite CAMEL; `mode=fixtures` esercita i contratti con dati prefissati. Solo nella prima modalità `workflow` decide se usare task dichiarati nella pipeline o decomposizione gestita dal modello.
@@ -33,6 +35,9 @@ I file Python contengono commenti in italiano su responsabilità, input/output, 
 | [explanations.py](../thesis_agents/orchestration/explanations.py) | Spiegazione della decisione derivata da campi strutturati, riferimenti alle fonti e distinzione fra dati riportati, stime e limiti. |
 | [publication_tools.py](../thesis_agents/orchestration/publication_tools.py) | Payload Pydantic strutturati esposti a CAMEL e serializzazione nell'adapter verso la sessione, senza cambiare i contratti degli artefatti. |
 | [workforce.py](../thesis_agents/orchestration/workforce.py) | Ruoli, task, DAG esplicito, componenti gestionali CAMEL, tool concessi ai worker e verifica finale del run. |
+| [chat_agent.py](../thesis_agents/orchestration/chat_agent.py) | Sottoclasse CAMEL che conserva memoria integrale e opzioni dei cloni, senza sintesi automatica degli artefatti. |
+| [strategic_policy.py](../thesis_agents/orchestration/strategic_policy.py) | Determina il prossimo tool dagli artefatti validati e limita il recupero dopo risposte testuali premature; non esegue il dominio. |
+| [bounded_model.py](../thesis_agents/orchestration/bounded_model.py) | Controllo opzionale del budget prima del provider: richiesta completa stimata, risposta riservata e margine. |
 | [task_results.py](../thesis_agents/orchestration/task_results.py) | Distingue le chiamate ai tool dal riepilogo finale e rifiuta il successo del worker quando mancano gli artefatti richiesti. |
 
 Tre strutture non vanno confuse: la memoria conversazionale di ChatAgent contiene i messaggi del modello; `TaskResult` è il risultato gestionale del task; `ArtifactSession` contiene gli output di dominio autorevoli, validati da Pydantic. Il successo della Workforce viene accettato solo se esistono anche tutti gli artefatti previsti.
@@ -61,6 +66,9 @@ Questi file non creano direttamente agenti: espongono `PROMPT` e `TOOLS`. La Wor
 |---|---|
 | [base.py](../thesis_agents/schemas/base.py) | Identificatori, testo non vuoto, score finiti, rifiuto dei campi extra e helper per l'unicità. |
 | [telemetry.py](../thesis_agents/schemas/telemetry.py) | Input statico, osservazione software, evidence e identificatori non duplicati. |
+| [telemetry_source.py](../thesis_agents/schemas/telemetry_source.py) | Selettore OTel, snapshot, fonte e finestra temporale; fatti sconosciuti conservati come `null`. |
+| [cti.py](../thesis_agents/schemas/cti.py) | Identità CTI, regole valutate, metadati mancanti e provenienza del dataset. |
+| [supply_chain.py](../thesis_agents/schemas/supply_chain.py) | Associazione SBOM, query e paginazione OSV, snapshot e proiezione per gli agenti. |
 | [vulnerability.py](../thesis_agents/schemas/vulnerability.py) | Finding, risultato del lookup e report; distinzione fra caso correlato e caso non supportato. |
 | [countermeasure.py](../thesis_agents/schemas/countermeasure.py) | Categorie di azione, candidate, stime, prerequisiti e contesto del controllo semantico. |
 | [argumentation.py](../thesis_agents/schemas/argumentation.py) | Nodi, archi e ranking; integrità dei riferimenti e ordinamento con tie-break. |
@@ -69,17 +77,30 @@ Questi file non creano direttamente agenti: espongono `PROMPT` e `TOOLS`. La Wor
 
 I validatori Pydantic controllano i dati di un modello. I confronti fra modelli pubblicati, come la corrispondenza del ranking con le candidate, richiedono la sessione. I campi testuali restano testo: il superamento della validazione strutturale non certifica la correttezza scientifica di una motivazione generata.
 
-## Interfacce e backend locali
+## Interfacce, adapter e backend locali
 
 | File | Responsabilità e limite |
 |---|---|
-| [interfaces.py](../thesis_agents/tools/interfaces.py) | Quattro `Protocol` per separare i backend dal framework degli agenti, senza imporre ereditarietà alle implementazioni. |
+| [interfaces.py](../thesis_agents/tools/interfaces.py) | Sei `Protocol`: telemetria, supply chain, vulnerabilità, ranking, semantica e provenienza, separati da CAMEL. |
+| [telemetry_http.py](../thesis_agents/tools/telemetry_http.py) | Acquisizione HTTP e mapping validato dello snapshot in runtime evidence. |
+| [cti_mcp.py](../thesis_agents/tools/cti_mcp.py) | Lookup cve2owl tramite MCP, snapshot e mapping conservativo nel report. |
+| [sbom_http.py](../thesis_agents/tools/sbom_http.py) | Acquisizione della fonte SBOM/OSV da un gateway separato. |
+| [strategic_mcp.py](../thesis_agents/tools/strategic_mcp.py) | Contratti remoti dei tool strategici; il trasporto MCP non rende reale un backend mock. |
 | [vulnerability_mock.py](../thesis_agents/tools/vulnerability_mock.py) | Corrispondenza esatta su una coppia pacchetto/versione e conservazione del riferimento all'evidenza. |
 | [ranking_mock.py](../thesis_agents/tools/ranking_mock.py) | Proiezione delle stime in nodi/archi, somma pesata a un passo, clamp e tie-break; non è il BWAF reale. |
 | [semantic_mock.py](../thesis_agents/tools/semantic_mock.py) | Requisiti obbligatori, capacità disponibili e azioni proibite; non interpreta ontologie o caveat liberi. |
 | [provenance_mock.py](../thesis_agents/tools/provenance_mock.py) | Scrittura locale idempotente del record e ricevuta; non esegue transazioni Fabric. |
 
-La dependency injection avviene nel costruttore di `ArtifactSession`: riceve implementazioni dei quattro contratti o usa i mock predefiniti. Cambiare un backend in futuro richiederà un adapter, non un nuovo prompt che chieda all'LLM di calcolare al suo posto.
+La dependency injection avviene nella sessione e in `connect_backends`, prima
+della Workforce. Senza profilo rimangono input statico e tool mock; gli ingressi
+remoti sono espliciti. I processi degli agenti conoscono i contratti pubblici,
+non importano gli algoritmi dei repository backend. Dettagli in
+[architettura](architecture.md) e [piano MCP](mcp-integration-plan.md).
+
+La [prova Ollama dei tre ingressi](observed-app-ollama.md) è il riferimento per
+inferenza effettiva, tempi, dati consegnati agli agenti e criticità recuperate.
+L'audit di `demo_audit.py` nel suo insieme resta specifico della matrice mock;
+il run remoto conserva un audit dedicato, senza assumere risultati mock del lookup.
 
 ## Test
 

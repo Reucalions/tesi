@@ -25,12 +25,22 @@ from thesis_agents.schemas import (
     StaticTelemetry,
     VulnerabilityReport,
 )
-from thesis_agents.schemas.decision import AgentCommentary
+from thesis_agents.schemas.decision import AgentCommentary, ExplanationClaim, ExplanationSource
 from thesis_agents.schemas.provenance import ProvenanceActivity, ProvenanceEntity
+from thesis_agents.schemas.supply_chain import (
+    CountermeasureContext,
+    SupplyChainQuery,
+    SupplyChainSnapshot,
+    countermeasure_context,
+)
+from thesis_agents.schemas.telemetry import runtime_publication_schema
+from thesis_agents.schemas.telemetry_source import TelemetryInput, TelemetrySnapshot
 from thesis_agents.tools.interfaces import (
     ProvenanceTool,
     RankingTool,
     SemanticTool,
+    SupplyChainTool,
+    TelemetryTool,
     VulnerabilityTool,
 )
 from thesis_agents.tools.provenance_mock import MockProvenanceTool
@@ -71,11 +81,13 @@ class ArtifactSession:
 
     def __init__(
         self,
-        case: StaticTelemetry,
+        case: StaticTelemetry | TelemetryInput,
         output_dir: Path,
         *,
         mode: str = "camel",
         model: str | None = None,
+        telemetry_tool: TelemetryTool | None = None,
+        supply_chain_tool: SupplyChainTool | None = None,
         vulnerability_tool: VulnerabilityTool | None = None,
         ranking_tool: RankingTool | None = None,
         semantic_tool: SemanticTool | None = None,
@@ -85,6 +97,10 @@ class ArtifactSession:
         # si rifiuta il riuso, così non si mescolano evidenze e decisioni precedenti.
         if mode not in ("camel", "fixtures"):
             raise ValueError("Unknown execution mode")
+        if mode == "fixtures" and isinstance(case, TelemetryInput):
+            raise ValueError("Fixtures require StaticTelemetry and no remote acquisition")
+        if mode == "fixtures" and supply_chain_tool is not None:
+            raise ValueError("Fixtures do not allow remote supply chain acquisition")
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
         if any(output_dir.iterdir()):
@@ -96,6 +112,12 @@ class ArtifactSession:
         self.model = model
         self.run_id = f"run-{uuid4().hex}"
         self.created_at = datetime.now(UTC).isoformat()
+        self.telemetry_tool = telemetry_tool
+        self.supply_chain_tool = supply_chain_tool
+        self._supply_chain_snapshot: SupplyChainSnapshot | None = None
+        self._countermeasure_context: CountermeasureContext | None = None
+        self._telemetry_snapshot: TelemetrySnapshot | None = None
+        self._telemetry_evidence: RuntimeEvidence | None = None
         self.vulnerability_tool = vulnerability_tool or MockVulnerabilityTool()
         # Dependency injection: i backend forniti rispettano i Protocol del progetto.
         # In loro assenza si usano i mock; gli agenti invocano le stesse interfacce.
@@ -107,6 +129,7 @@ class ArtifactSession:
         # lo pubblichi. _validation accumula i tentativi, inclusi quelli rifiutati.
         self._lookup: VulnerabilityReport | None = None
         self._validation = SemanticValidationReport(validations=[])
+        self._provenance_receipt: dict | None = None
         self._commit("input", self.case)
 
     def _commit(self, name: str, value: T) -> T:
@@ -142,7 +165,7 @@ class ArtifactSession:
         # Ogni artefatto rimane sotto la propria chiave. model_dump produce dati
         # serializzabili separati dai modelli interni; i consumatori non ricevono
         # riferimenti mutabili allo stato. Sono esposti solo produttori già pubblicati.
-        return {
+        context = {
             "run_id": self.run_id,
             "mode": self.mode,
             "artifacts": {k: v.model_dump(mode="json") for k, v in self._artifacts.items()},
@@ -156,6 +179,24 @@ class ArtifactSession:
                 for k in ("runtime_evidence", "vulnerability_report", "candidate_strategies")
             },
         }
+        # Lo schema esposto per la pubblicazione dipende dalla fonte. I dati
+        # salvati e letti dagli altri agenti restano nello schema RuntimeEvidence.
+        context["schemas"]["runtime_evidence"] = runtime_publication_schema(
+            self.case
+        ).model_json_schema()
+        if self.supply_chain_tool is not None:
+            if self._countermeasure_context is not None:
+                self._verify_supply_chain_snapshot()
+            context["external_inputs"] = {
+                "countermeasure": {
+                    "required": True,
+                    "producer": "ArtifactSession.collect_countermeasure_context",
+                    "context": self._countermeasure_context.model_dump(mode="json")
+                    if self._countermeasure_context is not None
+                    else None,
+                }
+            }
+        return context
 
     def _require_strategic_inputs(
         self,
@@ -163,6 +204,7 @@ class ArtifactSession:
         """Validate each producer's artifact independently, never a chain summary."""
         # Tre letture distinte mantengono l'evidenza di TelemetryAgent indipendente
         # dal rapporto e dalle strategie, anche se queste sono già state generate.
+        self._verify_supply_chain_snapshot()
         return (
             self.require("runtime_evidence", RuntimeEvidence),
             self.require("vulnerability_report", VulnerabilityReport),
@@ -179,11 +221,17 @@ class ArtifactSession:
             dict: Validated RuntimeEvidence; publication fails on altered input facts.
         """
         evidence = RuntimeEvidence.model_validate_json(payload)
+        if isinstance(self.case, TelemetryInput):
+            if self._telemetry_evidence is None or evidence != self._telemetry_evidence:
+                raise ValueError("Call collect_runtime_evidence and preserve its exact evidence")
+            self._verify_telemetry_snapshot()
+            return self._commit("runtime_evidence", evidence).model_dump(mode="json")
         # Pydantic controlla struttura e tipi; questo confronto aggiunge il controllo
         # semantico minimo: il modello non può alterare software/versione o fatti booleani.
         case = self.case
         if (
             evidence.service_name != case.service_name
+            or evidence.telemetry is not None
             or evidence.endpoint_exposed != case.endpoint_exposed
             or evidence.deserialization_observed != case.deserialization_observed
             or len(evidence.software) != 1
@@ -192,6 +240,49 @@ class ArtifactSession:
         ):
             raise ValueError("RuntimeEvidence must preserve the static telemetry facts")
         return self._commit("runtime_evidence", evidence).model_dump(mode="json")
+
+    def collect_runtime_evidence(self) -> dict:
+        """Read configured OTEL observations and return evidence ready to publish.
+
+        Call with {} only when input.source is opentelemetry. The input fixes
+        source selector, service instance, package and time window. Unknown flags
+        stay null. No observations or ambiguous versions raise an error.
+
+        Returns:
+            dict: Authoritative RuntimeEvidence, to publish unchanged.
+        """
+        if not isinstance(self.case, TelemetryInput) or self.telemetry_tool is None:
+            raise ValueError("OpenTelemetry input and a configured telemetry tool are required")
+        from thesis_agents.tools.telemetry_http import evidence_from_snapshot
+
+        if self._telemetry_snapshot is None:
+            snapshot = self.telemetry_tool.collect(self.case.query())
+            if snapshot.query != self.case.query():
+                raise ValueError("Telemetry snapshot selector differs from input")
+            with (self.output_dir / "telemetry_snapshot.json").open(
+                "x", encoding="utf-8"
+            ) as stream:
+                stream.write(snapshot.model_dump_json(indent=2) + "\n")
+            self._telemetry_snapshot = snapshot.model_copy(deep=True)
+        # Una query vuota/ambigua conserva lo snapshot per diagnosi, senza pubblicare.
+        self._telemetry_evidence = evidence_from_snapshot(self._telemetry_snapshot)
+        self._verify_telemetry_snapshot()
+        return self._telemetry_evidence.model_dump(mode="json")
+
+    def _verify_telemetry_snapshot(self):
+        if not isinstance(self.case, TelemetryInput):
+            return
+        from thesis_agents.tools.telemetry_http import evidence_from_snapshot
+
+        stored = TelemetrySnapshot.model_validate_json(
+            (self.output_dir / "telemetry_snapshot.json").read_text(encoding="utf-8")
+        )
+        if (
+            stored != self._telemetry_snapshot
+            or stored.query != self.case.query()
+            or evidence_from_snapshot(stored) != self._telemetry_evidence
+        ):
+            raise ValueError("Telemetry snapshot differs from validated source evidence")
 
     def lookup_vulnerabilities(self) -> dict:
         """Query the vulnerability backend for the published software observation.
@@ -203,6 +294,7 @@ class ArtifactSession:
             dict: Authoritative VulnerabilityReport, ready to publish unchanged.
         """
         evidence = self.require("runtime_evidence", RuntimeEvidence)
+        self._verify_telemetry_snapshot()
         if self._lookup is None:
             # Nel primo MVP c'è una sola osservazione software. Il lookup riceve
             # quella pubblicata, non un nome di pacchetto proposto liberamente dall'LLM.
@@ -211,6 +303,7 @@ class ArtifactSession:
                 asset_id=evidence.service_name,
                 lookup_status=result.status,
                 vulnerabilities=result.vulnerabilities,
+                cti=result.cti,
             )
         return self._lookup.model_dump(mode="json")
 
@@ -229,7 +322,30 @@ class ArtifactSession:
         # CVSS/confidenza. La pubblicazione crea un report autonomo; non tocca evidence.
         if self._lookup is None or report != self._lookup:
             raise ValueError("Call lookup_vulnerabilities and preserve its exact report")
+        self._verify_cti_snapshot(report)
         return self._commit("vulnerability_report", report).model_dump(mode="json")
+
+    def _verify_cti_snapshot(self, report):
+        """La sintesi pubblicata deve restare derivabile dallo snapshot MCP salvato."""
+        if report.cti is None:
+            return
+        from thesis_agents.mcp.client import digest
+        from thesis_agents.mcp.cti_contracts import AssessmentResponse
+        from thesis_agents.tools.cti_mcp import map_assessment
+
+        software = self.require("runtime_evidence", RuntimeEvidence).software[0]
+        response = AssessmentResponse.model_validate_json(
+            (self.output_dir / "cti_assessment.json").read_text(encoding="utf-8")
+        )
+        if digest(response.model_dump(mode="json")) != report.cti.response_sha256:
+            raise ValueError("Lo snapshot CTI è cambiato dopo il lookup")
+        mapped = map_assessment(response, software)
+        if (mapped.status, mapped.vulnerabilities, mapped.cti) != (
+            report.lookup_status,
+            report.vulnerabilities,
+            report.cti,
+        ):
+            raise ValueError("Report non derivato dallo snapshot CTI e dall'evidenza runtime")
 
     def publish_candidate_strategies(self, payload: str) -> dict:
         """Validate and publish strategies generated by the CountermeasureAgent.
@@ -242,6 +358,7 @@ class ArtifactSession:
         """
         self.require("runtime_evidence", RuntimeEvidence)
         report = self.require("vulnerability_report", VulnerabilityReport)
+        self._verify_supply_chain_snapshot()
         candidates = CandidateStrategies.model_validate_json(payload)
         known = {v.cve_id for v in report.vulnerabilities}
         # Le strategie devono riferirsi a CVE note. Con lookup non supportato si
@@ -249,11 +366,73 @@ class ArtifactSession:
         if known and not candidates.strategies:
             raise ValueError("Generate at least one strategy for the known vulnerability")
         if not known and candidates.strategies:
-            raise ValueError("An unsupported lookup cannot ground remediation strategies")
+            raise ValueError(
+                "A lookup without confirmed findings cannot ground remediation strategies"
+            )
         for strategy in candidates.strategies:
             if not set(strategy.addressed_vulnerabilities) <= known:
                 raise ValueError("Candidate references an unknown vulnerability")
         return self._commit("candidate_strategies", candidates).model_dump(mode="json")
+
+    def collect_countermeasure_context(self) -> dict:
+        """Acquire configured SBOM/OSV data for the published runtime observation.
+
+        Call with {} after runtime_evidence and vulnerability_report are published,
+        when external_inputs.countermeasure.required is true. Read get_context again
+        before generating candidates. This never changes the authoritative CTI report.
+
+        Returns:
+            dict: Validated supporting context; fixed range events are not safe targets.
+        """
+        if self.supply_chain_tool is None or self.mode == "fixtures":
+            raise ValueError("A configured remote supply chain input is required")
+        evidence = self.require("runtime_evidence", RuntimeEvidence)
+        report = self.require("vulnerability_report", VulnerabilityReport)
+        self._verify_telemetry_snapshot()
+        self._verify_cti_snapshot(report)
+        query = SupplyChainQuery(service_name=evidence.service_name, software=evidence.software[0])
+        if self._supply_chain_snapshot is None:
+            snapshot = SupplyChainSnapshot.model_validate(
+                self.supply_chain_tool.collect(query).model_dump(mode="json")
+            )
+            if snapshot.query != query:
+                raise ValueError("Supply chain query differs from runtime evidence")
+            with (self.output_dir / "supply_chain_snapshot.json").open(
+                "x", encoding="utf-8"
+            ) as stream:
+                stream.write(snapshot.model_dump_json(indent=2) + "\n")
+            self._supply_chain_snapshot = snapshot.model_copy(deep=True)
+        if self._countermeasure_context is None:
+            context = countermeasure_context(self._supply_chain_snapshot, report)
+            with (self.output_dir / "countermeasure_context.json").open(
+                "x", encoding="utf-8"
+            ) as stream:
+                stream.write(context.model_dump_json(indent=2) + "\n")
+            self._countermeasure_context = context.model_copy(deep=True)
+        self._verify_supply_chain_snapshot()
+        return self._countermeasure_context.model_dump(mode="json")
+
+    def _verify_supply_chain_snapshot(self):
+        if self.supply_chain_tool is None:
+            return
+        if self._countermeasure_context is None or self._supply_chain_snapshot is None:
+            raise ValueError("Call collect_countermeasure_context before publishing strategies")
+        evidence = self.require("runtime_evidence", RuntimeEvidence)
+        report = self.require("vulnerability_report", VulnerabilityReport)
+        stored = SupplyChainSnapshot.model_validate_json(
+            (self.output_dir / "supply_chain_snapshot.json").read_text(encoding="utf-8")
+        )
+        context = CountermeasureContext.model_validate_json(
+            (self.output_dir / "countermeasure_context.json").read_text(encoding="utf-8")
+        )
+        if (
+            stored != self._supply_chain_snapshot
+            or stored.query
+            != SupplyChainQuery(service_name=evidence.service_name, software=evidence.software[0])
+            or context != self._countermeasure_context
+            or context != countermeasure_context(stored, report)
+        ):
+            raise ValueError("Supply chain snapshot/context differs from validated evidence")
 
     def build_argumentation_graph(self) -> dict:
         """Project published candidates into strategy, benefit and impact arguments.
@@ -357,6 +536,7 @@ class ArtifactSession:
         """
         ranking = self.require("ranking", RankingResult)
         evidence, report, candidates = self._require_strategic_inputs()
+        self._verify_telemetry_snapshot()
         # Una validazione positiva da sola non basta: la decisione deve continuare
         # a riferirsi alle candidate pubblicate e a entrambi gli artefatti di origine.
         if {r.strategy_id for r in ranking.ranking} != {s.id for s in candidates.strategies}:
@@ -374,9 +554,12 @@ class ArtifactSession:
             # mantenendo completo e uniforme l'insieme degli otto artefatti.
             self._commit("semantic_validation", self._validation)
         status = "selected" if accepted else "no_valid_strategy"
-        if report.lookup_status == "unsupported":
+        if report.lookup_status in ("unsupported", "ambiguous", "no_match", "not_evaluable"):
             # «Nessuna strategia valida» e «dati insufficienti» sono esiti diversi.
             status = "insufficient_evidence"
+        elif report.lookup_status == "no_findings":
+            status = "no_findings"
+        self._verify_cti_snapshot(report)
         claims = self._decision_claims(expected_id)
         decision = FinalDecision(
             status=status,
@@ -400,8 +583,10 @@ class ArtifactSession:
         }
         if self.mode == "fixtures":
             producers = {name: f"fixture:{producer}" for name, producer in producers.items()}
-        producers["input"] = "StaticTelemetry"
-        return build_explanation(
+        producers["input"] = (
+            "TelemetryInput" if isinstance(self.case, TelemetryInput) else "StaticTelemetry"
+        )
+        claims = build_explanation(
             self.case,
             evidence,
             report,
@@ -411,16 +596,44 @@ class ArtifactSession:
             selected_strategy_id,
             producers,
         )
+        if self._countermeasure_context is not None:
+            context = self._countermeasure_context
+            claims.append(
+                ExplanationClaim(
+                    category="limitation",
+                    text=(
+                        f"Countermeasure input uses SBOM kind={context.sbom_kind} and "
+                        f"OSV kind={context.osv_kind}; {len(context.advisories)} active advisories "
+                        "correlate with existing CTI findings. "
+                        "SBOM binding is declared, not attested. "
+                        "OSV fixed boundaries do not establish a globally safe "
+                        "or compatible upgrade; "
+                        "OSV-only advisories do not become confirmed CTI findings."
+                    ),
+                    sources=[
+                        ExplanationSource(
+                            artifact="countermeasure_context",
+                            pointer=pointer,
+                            producer="ArtifactSession.collect_countermeasure_context",
+                        )
+                        for pointer in ("/sbom_kind", "/osv_kind", "/advisories", "/limitations")
+                    ],
+                )
+            )
+        return claims
 
     def record_provenance(self) -> dict:
         """Record input/output hashes and the agents responsible for each activity.
 
         Returns:
-            dict: Local provenance receipt. Must be called after publishing the decision.
+            dict: Configured backend receipt. Must follow publication of the decision.
         """
         self.require("final_decision", FinalDecision)
+        self._verify_supply_chain_snapshot()
         if "provenance" in self._artifacts:
-            return {"run_id": self.run_id, "stored": True}
+            # Un retry restituisce anche l'identità/digest della ricevuta remota,
+            # senza ripetere una scrittura di cui abbiamo già conferma.
+            return dict(self._provenance_receipt)
         stages = [
             # Proiezione dichiarativa delle dipendenze di dominio. Non è un log
             # di tutte le chiamate LLM o dei retry; collega used/generated ai file.
@@ -470,12 +683,77 @@ class ArtifactSession:
             )
             for name in self._artifacts
         ]
+        report = self.require("vulnerability_report", VulnerabilityReport)
+        if isinstance(self.case, TelemetryInput):
+            self._verify_telemetry_snapshot()
+            entities.append(
+                ProvenanceEntity(
+                    id="telemetry_snapshot",
+                    filename="telemetry_snapshot.json",
+                    sha256=hashlib.sha256(
+                        (self.output_dir / "telemetry_snapshot.json").read_bytes()
+                    ).hexdigest(),
+                )
+            )
+            stages.insert(0, ("collect", "TelemetryAgent", ["input"], ["telemetry_snapshot"]))
+            next(stage for stage in stages if stage[0] == "telemetry")[2].append(
+                "telemetry_snapshot"
+            )
+        if report.cti is not None:
+            self._verify_cti_snapshot(report)
+            entities.append(
+                ProvenanceEntity(
+                    id="cti_assessment",
+                    filename="cti_assessment.json",
+                    sha256=hashlib.sha256(
+                        (self.output_dir / "cti_assessment.json").read_bytes()
+                    ).hexdigest(),
+                )
+            )
+            stages.insert(
+                next(i for i, stage in enumerate(stages) if stage[0] == "lookup"),
+                ("remote_lookup", "VulnerabilityAgent", ["runtime_evidence"], ["cti_assessment"]),
+            )
+            next(stage for stage in stages if stage[0] == "lookup")[2].append("cti_assessment")
+        if self.supply_chain_tool is not None:
+            for name in ("supply_chain_snapshot", "countermeasure_context"):
+                entities.append(
+                    ProvenanceEntity(
+                        id=name,
+                        filename=f"{name}.json",
+                        sha256=hashlib.sha256(
+                            (self.output_dir / f"{name}.json").read_bytes()
+                        ).hexdigest(),
+                    )
+                )
+            offset = next(i for i, stage in enumerate(stages) if stage[0] == "candidates")
+            stages[offset:offset] = [
+                (
+                    "supply_chain_lookup",
+                    "CountermeasureAgent",
+                    ["runtime_evidence"],
+                    ["supply_chain_snapshot"],
+                ),
+                (
+                    "supply_chain_context",
+                    "CountermeasureAgent",
+                    ["supply_chain_snapshot", "vulnerability_report"],
+                    ["countermeasure_context"],
+                ),
+            ]
+            next(stage for stage in stages if stage[0] == "candidates")[2].append(
+                "countermeasure_context"
+            )
+            next(stage for stage in stages if stage[0] == "decision")[2].append(
+                "countermeasure_context"
+            )
         record = ProvenanceRecord(
             # La modalità fixtures rende esplicito che i produttori erano dati di
             # prova; evita di attribuire a un LLM output che non ha generato.
             run_id=self.run_id,
             mode=self.mode,
             model=self.model,
+            backend=getattr(self.provenance_tool, "backend", "local-provenance-mock-v1"),
             created_at=self.created_at,
             entities=entities,
             activities=[
@@ -502,16 +780,20 @@ class ArtifactSession:
             if ProvenanceRecord.model_validate_json(path.read_text()) != record:
                 raise ValueError("Stored provenance differs from the submitted record")
             self._artifacts["provenance"] = record
+        self._provenance_receipt = dict(receipt)
         return receipt
 
     def assert_complete(self) -> FinalDecision:
         # Controllo finale su presenza, schema e corrispondenza memoria/file. Non
         # basta che il task CAMEL termini con DONE o che esista final_decision.json.
+        self._verify_telemetry_snapshot()
+        self._verify_supply_chain_snapshot()
         for name, schema in ARTIFACT_SCHEMAS.items():
             value = self.require(name, schema)
             stored = schema.model_validate_json((self.output_dir / f"{name}.json").read_text())
             if value != stored:
                 raise ValueError(f"Stored artifact differs from validated state: {name}")
+        self._verify_cti_snapshot(self.require("vulnerability_report", VulnerabilityReport))
         decision = self.require("final_decision", FinalDecision)
         # Ricostruisce la spiegazione dalle fonti: non basta che riferimenti e
         # testo abbiano la forma corretta o che file e memoria coincidano.

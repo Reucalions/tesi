@@ -21,7 +21,8 @@ def test_cli_fixtures_and_separate_runs(tmp_path):
 def test_schema_export_requires_no_credentials(tmp_path):
     # L'esportazione è indipendente dall'LLM e produce input + otto schemi di output.
     assert main(["--export-schemas", str(tmp_path / "schemas")]) == 0
-    assert len(list((tmp_path / "schemas").glob("*.schema.json"))) == 9
+    assert len(list((tmp_path / "schemas").glob("*.schema.json"))) == 10
+    assert (tmp_path / "schemas/telemetry_input.schema.json").exists()
 
 
 def test_missing_model_has_actionable_error(monkeypatch, tmp_path, capsys):

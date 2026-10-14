@@ -17,3 +17,5 @@ workforce_logs/
 build/
 dist/
 .DS_Store
+# Build locale dell'applicazione osservata; la SBOM di ogni prova va in output/.
+examples/observed-app/target/
