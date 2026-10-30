@@ -4,6 +4,7 @@ import argparse
 import asyncio
 import os
 import socket
+import sys
 from pathlib import Path
 
 import uvicorn
@@ -114,7 +115,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--fd", type=int, required=True)
     parser.add_argument("--fault", default="none")
-    parser.add_argument("--kind", choices=("lookup", "strategic", "cti"), default="lookup")
+    parser.add_argument(
+        "--kind", choices=("lookup", "strategic", "cti", "evidence", "fabric"), default="lookup"
+    )
     parser.add_argument("--data-dir", type=Path, required=True)
     args = parser.parse_args()
     server = (
@@ -124,6 +127,27 @@ def main():
     )
     if args.kind == "cti":
         server = create_cti_server(args.fault)
+    if args.kind == "evidence":
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+        from services.strategic_gateway.server import create_server as create_evidence_server
+
+        server = create_evidence_server(args.data_dir)
+    if args.kind == "fabric":
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+        import httpx
+        from fablo_fixture import SimulatedFablo
+
+        from services.strategic_gateway.fablo import FabloClient, FabloSettings
+        from services.strategic_gateway.fabric import FabricGateway
+        from services.strategic_gateway.fabric_server import create_server as create_fabric_server
+
+        os.environ["TEST_FABLO_SECRET"] = "test-only-secret"
+        fixture = SimulatedFablo()
+        client = FabloClient(
+            FabloSettings(url="http://fablo.test", secret_env="TEST_FABLO_SECRET"),
+            transport=httpx.MockTransport(fixture),
+        )
+        server = create_fabric_server(FabricGateway(client))
     if args.kind == "strategic" and args.fault != "none":
         strategic_fault(server, args.fault, args.data_dir)
     elif args.kind == "lookup" and args.fault != "none":

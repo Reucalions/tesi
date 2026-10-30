@@ -3,7 +3,7 @@
 # l'interfaccia implementando il metodo richiesto, senza ereditarne la classe.
 # Le firme sono indicazioni di tipo, non implementazioni né controlli runtime;
 # ArtifactSession applica i controlli sui risultati ricevuti dai backend.
-from typing import Protocol
+from typing import Protocol, runtime_checkable
 
 from thesis_agents.schemas import (
     ArgumentationGraph,
@@ -12,6 +12,7 @@ from thesis_agents.schemas import (
     LookupResult,
     ProvenanceRecord,
     RankingResult,
+    RuntimeEvidence,
     SemanticValidationResult,
     SoftwareObservation,
 )
@@ -31,6 +32,15 @@ class VulnerabilityTool(Protocol):
     # Ingresso: un'osservazione software già pubblicata, con riferimento all'evidenza.
     # Uscita: finding correlati oppure indicazione che il backend non copre il caso.
     def lookup_vulnerabilities(self, software: SoftwareObservation) -> LookupResult: ...
+
+
+@runtime_checkable
+class RuntimeVulnerabilityTool(Protocol):
+    """Backend che richiede il contesto completo verificato, oltre al banner software."""
+
+    def lookup_runtime_vulnerabilities(
+        self, evidence: RuntimeEvidence, snapshot: TelemetrySnapshot
+    ) -> LookupResult: ...
 
 
 class RankingTool(Protocol):

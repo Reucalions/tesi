@@ -1,0 +1,12 @@
+{
+  "url": "http://127.0.0.1:8800",
+  "channel": "my-channel",
+  "argumentation_chaincode": "argumentation",
+  "semantic_chaincode": "user-registry",
+  "provenance_chaincode": "thesis-provenance",
+  "user": "admin",
+  "secret_env": "THESIS_FABLO_SECRET",
+  "invoke_path": "/invoke/{channel}/{chaincode}",
+  "query_path": "/query/{channel}/{chaincode}",
+  "timeout_seconds": 300
+}

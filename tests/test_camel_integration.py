@@ -58,7 +58,8 @@ class ScriptedToolModel(StubModel):
         # I modelli gestionali non hanno tool e ricevono invece un prompt di assegnazione.
         tool_names = {t["function"]["name"] for t in tools or []}
         strategic = "You are StrategicAgent." in str(messages[0].get("content", ""))
-        if not tool_names and not strategic:
+        countermeasure = "You are CountermeasureAgent." in str(messages[0].get("content", ""))
+        if not tool_names and not strategic and not countermeasure:
             # Estrae gli ID dei worker dal prompt creato dall'SDK. Non si hardcodano
             # UUID, così il test attraversa l'assegnazione della Workforce effettiva.
             prompt = messages[-1]["content"]
@@ -107,7 +108,9 @@ class ScriptedToolModel(StubModel):
                         {"payload": self.session._lookup.model_dump(mode="json")},
                     )
                 )
-        elif "publish_candidate_strategies" in tool_names:
+        elif "publish_candidate_strategies" in tool_names or (
+            "You are CountermeasureAgent." in str(messages[0].get("content", ""))
+        ):
             role = "countermeasure"
             report = self.session.require("vulnerability_report", VulnerabilityReport)
             script = [
@@ -123,6 +126,13 @@ class ScriptedToolModel(StubModel):
             ]
             if self.session.supply_chain_tool is not None:
                 script[1:1] = [("collect_countermeasure_context", {}), ("get_context", {})]
+            if report.package_assessment is not None:
+                script[1:1] = [("prepare_package_verification", {}), ("get_context", {})]
+                context = self.session._package_verification_context
+                if context is not None and context.verification_requests:
+                    script[-1][1]["payload"]["verification_requests"] = [
+                        request.model_dump(mode="json") for request in context.verification_requests
+                    ]
         else:
             role = "strategic"
             script = [

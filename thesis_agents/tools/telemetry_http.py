@@ -28,6 +28,18 @@ def evidence_from_snapshot(snapshot: TelemetrySnapshot) -> RuntimeEvidence:
         values = {getattr(r, field) for r in rows}
         return values.pop() if len(values) == 1 else None
 
+    context = snapshot.recorded_context
+    identity_note = (
+        "Identity is declared by instrumentation; this is not a complete software inventory."
+        if context is None
+        else "Historical testbed logs matched to original files. Service selection uses a declared "
+        "dataset/host/service scope, not an observed runtime instance ID. "
+        f"Inventory separately reports {context.package_name} {context.package_version} "
+        f"on {context.distribution} {context.distribution_version}; facts collected at "
+        f"{context.facts_collected_at.isoformat()}. This later snapshot does not attest "
+        "the package at each log event. CTI identity and distribution patch status are assessed "
+        "separately from this telemetry acquisition."
+    )
     return RuntimeEvidence(
         service_name=snapshot.query.service_name,
         software=[
@@ -40,7 +52,7 @@ def evidence_from_snapshot(snapshot: TelemetrySnapshot) -> RuntimeEvidence:
         observations=[
             f"{len(rows)} explicit OTEL log observations; acquisition={snapshot.acquisition}.",
             "Unknown flags remain null; observations do not establish an exploit.",
-            "Identity is declared by instrumentation; this is not a complete software inventory.",
+            identity_note,
         ],
         telemetry=TelemetryReference(
             source_id=snapshot.source_id,
@@ -49,6 +61,7 @@ def evidence_from_snapshot(snapshot: TelemetrySnapshot) -> RuntimeEvidence:
             snapshot_sha256=digest(snapshot.model_dump(mode="json")),
             query=snapshot.query,
             evidence_ids=[r.evidence_id for r in rows],
+            recorded_context=context,
         ),
     )
 

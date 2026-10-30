@@ -41,10 +41,12 @@ pydantic-core==2.41.1
 pydantic-settings==2.15.0
 pygments==2.21.0
 pyjwt==2.13.0
+pyparsing==3.3.3
 pytest==9.1.1
 python-dotenv==1.2.3
 python-multipart==0.0.32
 pyyaml==6.0.3
+rdflib==7.6.0
 referencing==0.37.0
 regex==2026.9.3
 requests==2.34.2

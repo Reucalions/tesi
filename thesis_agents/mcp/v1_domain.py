@@ -73,7 +73,7 @@ class DecisionContext(Message):
 
 
 def legacy_payload(value):
-    """Rimuove solo il campo nuovo assente; rifiuta dati CTI reali nel wire v1."""
+    """Rimuove solo estensioni assenti; rifiuta nuove evidenze nel wire v1."""
     data = value.model_dump(mode="json") if hasattr(value, "model_dump") else dict(value)
     if "evidence" in data:
         evidence = dict(data["evidence"])
@@ -86,4 +86,8 @@ def legacy_payload(value):
         if report["cti"] is not None:
             raise ValueError("Il contratto MCP v1 non rappresenta il contesto cve2owl")
         del report["cti"]
+    if isinstance(report, dict) and "package_assessment" in report:
+        if report["package_assessment"] is not None:
+            raise ValueError("Il contratto MCP v1 non rappresenta la valutazione Ubuntu")
+        del report["package_assessment"]
     return data

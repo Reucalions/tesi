@@ -10,7 +10,7 @@ from uuid import uuid4
 from thesis_agents.backends import BackendSettings, connect_backends
 from thesis_agents.orchestration.artifacts import ArtifactSession
 from thesis_agents.orchestration.workforce import run_camel
-from thesis_agents.schemas import RuntimeEvidence, VulnerabilityReport
+from thesis_agents.schemas import RankingResult, RuntimeEvidence, VulnerabilityReport
 from thesis_agents.schemas.telemetry_source import TelemetryInput
 
 
@@ -67,7 +67,28 @@ def main(argv=None):
             lookup_status=report.lookup_status,
             decision_status=decision.status,
             cti_backend_kind=report.cti.backend_kind if report.cti else None,
+            ranking_backend=session.require("ranking", RankingResult).backend,
         )
+        if (session.output_dir / "provenance_receipt.json").exists():
+            summary["provenance_receipt"] = json.loads(
+                (session.output_dir / "provenance_receipt.json").read_text()
+            )
+        if report.package_assessment is not None:
+            package = report.package_assessment
+            summary.update(
+                package_backend_kind=package.backend_kind,
+                identity_status=package.identity_status,
+                package_status=package.package_status,
+                package_counts=package.counts,
+                runtime_applicability=package.runtime_applicability,
+                package_response_sha256=package.response_sha256,
+                verification_requests=[
+                    {"kind": r["kind"], "cve_count": len(r["cve_ids"]), "status": r["status"]}
+                    for r in context["artifacts"]["candidate_strategies"].get(
+                        "verification_requests", []
+                    )
+                ],
+            )
     except Exception as error:
         summary["error_type"] = type(error).__name__
         raise

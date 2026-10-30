@@ -1,0 +1,10 @@
+{
+  "source": "opentelemetry",
+  "service_name": "apache2",
+  "service_instance_id": "dataset:russellmitchell:webserver:apache2",
+  "package_name": "Apache",
+  "start_time": "2026-04-11T15:02:34Z",
+  "end_time": "2026-04-11T15:02:35Z",
+  "available_capabilities": [],
+  "prohibited_actions": []
+}

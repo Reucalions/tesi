@@ -1,14 +1,30 @@
-# Thesis Agents — primo prototipo CAMEL
+# Thesis Agents — prototipo CTI multi-agente
 
-Il progetto realizza quattro ruoli CAMEL, messaggi JSON validati con Pydantic e
-backend mock selezionabili in locale o su server MCP HTTP separati.
+Il progetto realizza quattro ruoli CAMEL, messaggi JSON validati con Pydantic,
+ingressi OTel e CTI, backend selezionabili e provenienza PROV-O. Conserva i mock
+per il confronto e prepara i collegamenti nativi a Fabric tramite MCP e Fablo.
+
+**Documentazione aggiornata al 29 ottobre 2026:** partire dallo
+[stato del progetto e percorso di studio](docs/stato-progetto.md), poi dalla
+[nuova architettura illustrata](docs/architettura-implementata.md) e dalla
+[guida al codice](docs/reading-guide.md). Il
+[report Word aggiornato](docs/materiali/relazione-aggiornata-20261029.docx)
+conserva la relazione manuale e aggiunge i capitoli 19–24 con le nuove figure.
+È disponibile anche l'[aggiornamento in PDF](docs/materiali/aggiornamento-relazione-20261029.pdf).
+
+L'ultimo run Apache con Ollama completa il ramo `insufficient_evidence`, senza
+contromisure selezionate. Il gateway Fabric è implementato e testato con Fablo
+simulato e stub, ma mapping e collaudo on-chain rimangono aperti. Gli esperimenti
+citati sono del 18 ottobre: la revisione documentale non esegue nuove inferenze.
+
+## Evoluzione delle integrazioni
 
 Lo sviluppo delle integrazioni prosegue su `full`; `mockup` conserva la baseline
 dimostrativa. Il [piano di integrazione MCP](docs/mcp-integration-plan.md) definisce
 servizi remoti, switch dei backend e prove incrementali. Sono disponibili il
 [MCP Tool Layer dello Strategic](docs/mcp-strategic.md) per ranking, validazione
-e provenienza, e il [lookup MCP](docs/mcp-lookup.md). Il profilo consigliato per
-il collaudo strategico è `--backends config/backends.mcp-strategic-mock.json`.
+e provenienza, e il [lookup MCP](docs/mcp-lookup.md). Per riprodurre il profilo
+strategico mock usare `--backends config/backends.mcp-strategic-mock.json`.
 
 Il [servizio cve2owl](docs/owl-cti-integration.md) è collegato al VulnerabilityAgent
 tramite il [nuovo adapter e profilo CTI](docs/cti-workforce.md). Le prove attraversano
@@ -22,6 +38,59 @@ via HTTP gli export registrati del Collector della baseline, con snapshot e
 provenienza conservati. `config/backends.otel-cti.json` combina questo ingresso
 con il lookup CTI reale. Il primo collaudo usa CAMEL con un modello programmato
 e osservazioni storiche del Collector.
+
+L'[adattatore Apache registrato](docs/apache-recorded-integration.md) riutilizza
+i log AIT della baseline, verificandoli contro i file originali e mantenendo
+separato l'inventario Ubuntu. Il collaudo CAMEL senza LLM con CTI reale via MCP
+completa il flusso con `insufficient_evidence`: il nome letterale `Apache`
+non viene normalizzato implicitamente per ottenere finding.
+
+Il [resolver CTI Apache v2](docs/cti-identity-resolution-v2.md) aggiunge una
+normalizzazione esplicita tramite un tool MCP separato. Il probe reale r3
+risolve sei identità equivalenti fra 113 candidate, con copertura dichiarata
+della ricerca lessicale sullo snapshot. Il contratto d'identità mantiene
+`package_applicability=not_assessed`; la valutazione del pacchetto rimane separata.
+Il [contratto v1 e il probe ambiguo precedente](docs/cti-identity-resolution.md)
+rimangono documentati.
+
+La [valutazione Ubuntu separata](docs/ubuntu-package-applicability.md) usa
+record ufficiali e revisioni Debian complete per il pacchetto inventariato.
+Il probe MCP reale distingue 34 CVE corrette, 28 non applicabili secondo
+Ubuntu, 46 potenzialmente applicabili e 12 indeterminate. Restano da verificare
+le condizioni runtime e lo stato storico del processo.
+L'[integrazione nel VulnerabilityAgent](docs/ubuntu-vulnerability-agent.md)
+è completata: `config/backends.otel-apache-ubuntu.json` porta nella Workforce
+identità risolta e tutte le 120 classificazioni. Il report compatto conserva
+il riferimento alla risposta integrale; la decisione resta `insufficient_evidence`
+per l'applicabilità runtime non verificata. Collaudo con OTel e MCP reali,
+CAMEL a inferenza programmata e tool strategici mock locali, senza LLM.
+
+Il [CountermeasureAgent per Ubuntu](docs/ubuntu-countermeasure-agent.md)
+pubblica ora quattro richieste di evidenza su 58 CVE uniche: stato storico,
+condizioni runtime, casi Ubuntu indeterminati e compatibilità di un eventuale
+upgrade. Le richieste pendenti restano distinte dalle strategie e fuori dal
+ranking; non implicano verifiche eseguite o vulnerabilità runtime confermate.
+
+Lo [StrategicAgent sul ramo Apache senza candidate](docs/apache-strategic-agent.md)
+completa la decisione `insufficient_evidence` con astensione esplicita e
+archivio MCP PROV-O, verificato tramite rilettura e parsing RDF. Il profilo
+`config/backends.otel-apache-strategic.json` rifiuta grafi non vuoti: BWAF,
+Tiny-ME e commit Fabric restano integrazioni aperte. Nessuna validazione
+semantica o mitigazione viene eseguita nel run corrente.
+
+Il [gateway MCP nativo Fabric](docs/fabric-native-integration.md) aggiunge
+store/rank/retrieve del grafo, analisi Tiny-ME e provenienza su un chaincode
+dedicato, con adapter PROV-O per la Workforce. I collegamenti sono collaudati
+con Fablo simulato e stub Fabric; il collaudo on-chain resta da eseguire con
+una rete raggiungibile. Il mapping delle candidate al formato ontologico
+nativo rimane esplicito lavoro aperto.
+
+La [prova completa con Ollama sul caso Apache](docs/apache-ollama-use-case.md)
+ha completato tutti e quattro gli agenti e superato l'audit. Conserva un
+primo fallimento, la correzione delle fasi Countermeasure e un run riuscito
+con due retry per timeout: 120 classificazioni e quattro verifiche pendenti,
+decisione `insufficient_evidence`. È una prova su dati reali registrati,
+con inferenza locale effettiva, distinta dai collaudi programmati.
 
 L'[ingresso SBOM/OSV](docs/sbom-osv-integration.md) aggiunge al CountermeasureAgent
 un contesto HTTP separato: inventario CycloneDX dimostrativo, query OSV e

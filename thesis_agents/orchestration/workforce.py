@@ -13,10 +13,12 @@ from camel.tasks.task import TaskState
 from thesis_agents.agents import countermeasure, strategic, telemetry, vulnerability
 from thesis_agents.orchestration.artifacts import ArtifactSession
 from thesis_agents.orchestration.chat_agent import ArtifactChatAgent
+from thesis_agents.orchestration.countermeasure_policy import CountermeasureToolPolicy
 from thesis_agents.orchestration.publication_tools import PublicationTools
 from thesis_agents.orchestration.strategic_policy import StrategicToolPolicy
 from thesis_agents.orchestration.task_results import ArtifactTaskHandler
 from thesis_agents.schemas.telemetry_source import TelemetryInput
+from thesis_agents.tools.interfaces import RuntimeVulnerabilityTool
 
 # I moduli dei ruoli espongono PROMPT e TOOLS. La tabella permette di costruire
 # ChatAgent omogenei senza duplicare quattro volte configurazione e registrazione.
@@ -67,7 +69,9 @@ TASKS = (
         "countermeasure",
         "CountermeasureAgent: read runtime_evidence and vulnerability_report separately via "
         "get_context, acquire the SBOM/OSV context when configured, then generate and publish "
-        "candidate_strategies. If the report has no findings, publish strategies=[]; "
+        "candidate_strategies. When package verification is required, call "
+        "prepare_package_verification and preserve its pending verification_requests. "
+        "If the report has no findings, publish strategies=[]; "
         "this is the required successful result, not missing work.",
     ),
     (
@@ -236,7 +240,14 @@ def build_workforce(session: ArtifactSession, backend_factory, *, workflow: str 
                 role_name=role, content=COMMON + "\n" + prompt
             ),
             model=backend_factory(),
-            tool_policy=StrategicToolPolicy(session) if role == "StrategicAgent" else None,
+            tool_policy=(
+                StrategicToolPolicy(session)
+                if role == "StrategicAgent"
+                else CountermeasureToolPolicy(session)
+                if role == "CountermeasureAgent"
+                and isinstance(session.vulnerability_tool, RuntimeVulnerabilityTool)
+                else None
+            ),
             tools=[
                 publications.resolve(name)
                 for name in module.TOOLS

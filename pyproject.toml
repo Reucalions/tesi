@@ -32,7 +32,7 @@ dependencies = [
 
 [project.optional-dependencies]
 # L'extra dev aggiunge test e controlli statici: pip install -e '.[dev]'.
-dev = ["pytest>=8,<10", "ruff>=0.12,<1"]
+dev = ["pytest>=8,<10", "ruff>=0.12,<1", "rdflib>=7,<8"]
 
 [project.scripts]
 # Crea il comando di shell «thesis-agents», equivalente alla funzione main del package.

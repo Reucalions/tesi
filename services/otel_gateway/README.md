@@ -26,3 +26,9 @@ caso la freschezza va verificata dai timestamp.
 
 Fonti, limiti del parser, comandi dei profili e risultati sono nella
 [guida dell'integrazione](../../docs/opentelemetry-integration.md).
+
+L'opzione `--apache-binding` abilita un adattatore separato per gli avvii Apache
+AIT registrati, con confronto esatto dei log originali e inventario dell'host
+distinto dalla versione runtime. Preparazione, profili e prova senza LLM sono
+nella [guida Apache](../../docs/apache-recorded-integration.md). Il binding
+non risolve automaticamente identità CTI o patch della distribuzione.

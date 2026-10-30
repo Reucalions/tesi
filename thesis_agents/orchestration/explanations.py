@@ -66,10 +66,30 @@ def build_explanation(
             f"observed window {ref.query.start_time.isoformat()} "
             f"to {ref.query.end_time.isoformat()}. "
             "Null flags mean unknown. "
-            "Instrumentation-declared identity is not a complete inventory. "
-            "Reading a recorded export now does not make its observations current.",
+            + (
+                "Source identity comes from a recorded dataset binding, not runtime "
+                "instance instrumentation. "
+                if ref.recorded_context
+                else "Instrumentation-declared identity is not a complete inventory. "
+            )
+            + "Reading a recorded export now does not make its observations current.",
             source("runtime_evidence", "/telemetry"),
         )
+        if ref.recorded_context:
+            context = ref.recorded_context
+            add(
+                "limitation",
+                f"Recorded testbed host {quoted(context.host)}, service {quoted(context.service)}; "
+                f"scope {quoted(context.scope_id)} is not an observed runtime instance ID. "
+                f"Inventory snapshot reports {quoted(context.package_name)} "
+                f"{quoted(context.package_version)} on {context.distribution} "
+                f"{context.distribution_version}, collected at "
+                f"{context.facts_collected_at.isoformat()}. It does not attest the package "
+                "at every earlier event; telemetry alone does not establish "
+                "distribution patch status. "
+                "Runtime upstream version and inventory package revision remain separate.",
+                source("runtime_evidence", "/telemetry/recorded_context"),
+            )
     if report.lookup_status == "unsupported":
         add(
             "limitation",
@@ -89,12 +109,19 @@ def build_explanation(
             ),
             "no_findings": "no confirmed findings within the returned identity and evaluated rules",
         }
+        if report.package_assessment is not None:
+            meanings["not_evaluable"] = (
+                "the inventory assessment does not establish historical runtime applicability"
+            )
         add(
             "limitation",
             f"{producers['vulnerability_report']} reports lookup_status={report.lookup_status}: "
             f"{meanings[report.lookup_status]}. An empty finding list is not proof of safety.",
             source("vulnerability_report", "/lookup_status"),
-            source("vulnerability_report", "/cti"),
+            source(
+                "vulnerability_report",
+                "/package_assessment" if report.package_assessment else "/cti",
+            ),
         )
     else:
         for i, finding in enumerate(report.vulnerabilities):
@@ -110,6 +137,19 @@ def build_explanation(
                     for p in ("cve_id", "cvss", "source")
                 ),
             )
+    if report.package_assessment is not None:
+        package = report.package_assessment
+        add(
+            "reported_fact",
+            f"Ubuntu inventory assessment ({package.backend_kind}), "
+            f"identity={package.identity_status}, "
+            f"package {package.inventory_package} {package.inventory_version}: "
+            + ", ".join(f"{key}={value}" for key, value in package.counts.items())
+            + ". These retrospective package verdicts do not establish historical runtime "
+            "applicability or exploitation conditions. Full evidence remains in "
+            f"{package.response_file}, SHA-256 {package.response_sha256}.",
+            source("vulnerability_report", "/package_assessment"),
+        )
     if report.cti is not None:
         add(
             "limitation",
@@ -128,6 +168,18 @@ def build_explanation(
         "This generated set is not an exhaustive inventory of possible countermeasures.",
         source("candidate_strategies", "/strategies"),
     )
+    if candidates.verification_requests:
+        add(
+            "limitation",
+            f"CountermeasureAgent published {len(candidates.verification_requests)} pending "
+            "evidence requests: "
+            + ", ".join(
+                f"{r.kind} ({len(r.cve_ids)} CVEs)" for r in candidates.verification_requests
+            )
+            + ". These checks have not been executed and provide no new runtime evidence. "
+            "They are excluded from remediation ranking and selection.",
+            source("candidate_strategies", "/verification_requests"),
+        )
     for i, candidate in enumerate(candidates.strategies):
         add(
             "estimate",
@@ -155,6 +207,15 @@ def build_explanation(
         source("input", "/available_capabilities"),
         source("input", "/prohibited_actions"),
     )
+    if ranking.backend == "empty-strategy-gate-v1":
+        add(
+            "limitation",
+            "The empty-strategy gate returned an empty ranking. No BWAF ranking or semantic "
+            "validation was executed; pending evidence requests are not selectable strategies.",
+            source("ranking", "/backend"),
+            source("ranking", "/ranking"),
+            source("semantic_validation", "/validations"),
+        )
     for i, validation in enumerate(validations.validations):
         add(
             "reported_fact",

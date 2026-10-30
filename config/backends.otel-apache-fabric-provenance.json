@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "telemetry": {
+    "transport": "http",
+    "url": "http://127.0.0.1:8004/v1/observations",
+    "source_id": "ait-russellmitchell-apache",
+    "acquisition": "recorded"
+  },
+  "vulnerability_adapter": "ubuntu-package-v1",
+  "cti_dataset_sha256": "e3566009408385c7aea7901a9e6499132f0ae4bb07ccbd80d22e2171e5f7990c",
+  "ubuntu_sources_sha256": "6e11b205b3e465d1afe5ac5757679af0f612a31530c060f148732d50a289af62",
+  "strategic_adapter": "empty-evidence-v1",
+  "vulnerability": {
+    "transport": "mcp",
+    "url": "http://127.0.0.1:8006/mcp",
+    "expected_kind": "real",
+    "timeout_seconds": 60
+  },
+  "ranking": {
+    "transport": "mcp",
+    "url": "http://127.0.0.1:8007/mcp",
+    "expected_kind": "real"
+  },
+  "semantic": {
+    "transport": "local-mock"
+  },
+  "provenance": {
+    "transport": "mcp",
+    "url": "http://127.0.0.1:8008/mcp",
+    "expected_kind": "real",
+    "timeout_seconds": 300
+  },
+  "provenance_adapter": "fabric-native-v1",
+  "fabric_provenance": {
+    "channel": "my-channel",
+    "chaincode": "thesis-provenance"
+  }
+}

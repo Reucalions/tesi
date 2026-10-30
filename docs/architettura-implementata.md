@@ -1,165 +1,149 @@
-# Architettura attualmente implementata
+# Architettura implementata al 29 ottobre 2026
 
-Il grafo rappresenta `--mode camel --workflow pipeline` con il profilo
-`config/backends.mcp-strategic-mock.json`: lookup locale e tre backend dello
-Strategic su MCP. È un profilo implementato e collaudato; il default senza
-`--backends` rimane interamente locale. Il diagramma non attesta che i server
-siano attualmente accesi.
+Questa è la mappa corrente dei componenti, aggiornata rispetto al mockup.
+La precedente figura del solo profilo strategico mock è conservata in
+[architettura-profilo-mock.md](architettura-profilo-mock.md).
+La [guida allo stato del progetto](stato-progetto.md) raccoglie confronto,
+risultati e ordine di studio.
 
-È disponibile anche il [profilo cve2owl reale](cti-workforce.md): usa un servizio
-CTI MCP separato per il lookup e mantiene locali i mock strategici. Il diagramma
-seguente continua a rappresentare specificamente il profilo strategico mock.
+La data indica la revisione documentale. Il caso Apache con Ollama e l'ultimo
+incremento Fabric descritti qui sono del **18 ottobre 2026**. Non si assume che
+i servizi siano accesi oggi e non è stato eseguito un nuovo collaudo on-chain.
 
-Il [profilo OTel + CTI](opentelemetry-integration.md#flusso-implementato) aggiunge
-un ingresso HTTP per il TelemetryAgent, con export registrati del Collector
-della baseline e snapshot validati. Il collegamento è separato dal MCP Tool
-Layer dello Strategic; il relativo grafo è nella guida dedicata.
+![Schema aggiornato dell'architettura](materiali/architettura-aggiornata.png)
 
-L'[ingresso SBOM/OSV](sbom-osv-integration.md#architettura-e-responsabilità)
-aggiunge al CountermeasureAgent un contesto da gateway HTTP. Il profilo
-`backends.cti-sbom-osv.json` usa CTI e OSV reali con SBOM dimostrativa e
-telemetria statica; non modifica il diagramma del profilo strategico mock qui sotto.
+Versioni per il report: [SVG modificabile](materiali/architettura-aggiornata.svg)
+e [PDF vettoriale](materiali/architettura-aggiornata.pdf).
+La figura rappresenta componenti e dipendenze, non il BWAF del caso Apache.
 
-La [demo con applicazione osservata](observed-app-integration.md) combina log
-SDK e SBOM della stessa build con CTI e OSV reali. La relativa
-[inferenza Ollama](observed-app-ollama.md) è conclusa e verificata, con decisione
-`no_findings`, retry qualitativi e una chiamata errata respinta. Anche quel
-profilo mantiene i tool strategici mock, locali.
+## Agenti e stato condiviso
 
 ```mermaid
 flowchart TB
-    INPUT["Input JSON statico<br/>StaticTelemetry"]
-    LLM["Backend LLM configurato<br/>es. Ollama locale"]
-
-    subgraph WF["CAMEL Workforce — pipeline con DAG esplicito"]
-        direction TB
-        T["TelemetryAgent"]
-        V["VulnerabilityAgent"]
-        C["CountermeasureAgent"]
-        S["StrategicAgent"]
-        T -->|RuntimeEvidence| V
-        T -->|RuntimeEvidence| C
-        V -->|VulnerabilityReport| C
-        T -->|RuntimeEvidence| S
-        V -->|VulnerabilityReport| S
-        C -->|CandidateStrategies| S
+    OT["Gateway OTel HTTP<br/>Snapshot registrato / log SDK"] --> T
+    KG["Servizio CTI MCP<br/>cve2owl / assessment Ubuntu"] <--> V
+    SC["Gateway SBOM / OSV<br/>Opzionale: profilo Java"] --> C
+    subgraph WF["CAMEL Workforce · Ollama locale"]
+        T["TelemetryAgent"] --> RE["RuntimeEvidence"]
+        RE --> V["VulnerabilityAgent"]
+        V --> VR["VulnerabilityReport"]
+        RE --> C["CountermeasureAgent"]
+        VR --> C
+        C --> CS["CandidateStrategies<br/>+ richieste di verifica"]
+        RE --> S["StrategicAgent"]
+        VR --> S
+        CS --> S
     end
-
-    INPUT --> AS
-    WF -.->|richieste di inferenza| LLM
-    WF <-->|tool consentiti per ruolo| AS
-
-    AS["ArtifactSession<br/>Pydantic · get_context · pubblicazioni<br/>Grafo e decisione finale"]
-    KG["MockVulnerabilityTool locale<br/>Fixture di lookup Log4j"]
-    AD["Adapter MCP dello Strategic<br/>MCPRankingTool<br/>MCPSemanticTool<br/>MCPProvenanceTool"]
-    CLIENT["Client MCP — SDK Python<br/>Handshake · discovery · tools/call"]
-    OUT["Output del run<br/>Artefatti JSON validati<br/>FinalDecision e ProvenanceRecord"]
-    RECEIPT["provenance_receipt.json<br/>Ricevuta remota verificata"]
-    AUDIT["mcp_events.jsonl<br/>Chiamate, digest ed esiti"]
-
-    AS <-->|lookup richiesto da Vulnerability| KG
-    AS <-->|ranking, validazione, provenienza| AD
-    AD <--> CLIENT
-    AS --> OUT
-    AD --> RECEIPT
-    CLIENT --> AUDIT
-
-    subgraph REMOTE["Processo server separato — mock"]
-        SERVER["Server MCP strategico<br/>rank_graph<br/>validate_countermeasure<br/>record_provenance"]
-        DB[("SQLite<br/>Record di provenienza")]
-        SERVER -->|persistenza idempotente| DB
-    end
-
-    CLIENT <-->|MCP Streamable HTTP · porta 8002| SERVER
-
-    classDef agent fill:#ece8ff,stroke:#6b55a3,color:#20202b
-    classDef state fill:#fff0d5,stroke:#b78129,color:#20202b
-    classDef source fill:#e4f4e8,stroke:#4e865b,color:#20202b
-    classDef transport fill:#e4f0ff,stroke:#487ca6,color:#20202b
-    classDef mock fill:#fde7ec,stroke:#a46072,color:#20202b
-    class T,V,C,S agent
-    class AS,OUT,RECEIPT,AUDIT state
-    class INPUT,LLM source
-    class AD,CLIENT transport
-    class KG,SERVER,DB mock
+    AS["ArtifactSession<br/>Pydantic · get_context · pubblicazioni · cache"] --- WF
+    S --> DEC["Grafo / ranking / validazioni / decisione"]
+    DEC --> PROV["ProvenanceRecord + PROV-O"]
 ```
 
-Le frecce tra agenti rappresentano **dipendenze dati**, non messaggi che
-sostituiscono gli output precedenti. Gli agenti pubblicano nella stessa
-`ArtifactSession` e leggono tramite `get_context()`. La memoria conversazionale
-dei ChatAgent non è condivisa: lo stato autorevole comune è la sessione.
+Le frecce nel DAG indicano dipendenze dati. I quattro agenti pubblicano tramite
+tool nella stessa `ArtifactSession`; le loro memorie conversazionali non sono
+una memoria condivisa. Lo Strategic legge separatamente i tre artefatti dei
+produttori. Il report CTI non sostituisce la telemetria e la generazione delle
+candidate non sostituisce il ranking o la validazione.
 
-Telemetry produce `RuntimeEvidence`. Vulnerability lo usa per il lookup e
-pubblica un `VulnerabilityReport` separato. Countermeasure usa entrambi per
-generare `CandidateStrategies`. Strategic legge tutti e tre, costruisce il
-grafo tramite il tool locale, richiede ranking e validazioni, pubblica la
-decisione e infine registra la provenienza.
+La Workforce contiene anche ruoli gestionali CAMEL. Gli otto artefatti principali
+rimangono `runtime_evidence`, `vulnerability_report`, `candidate_strategies`,
+`argumentation_graph`, `ranking`, `semantic_validation`, `final_decision` e
+`provenance`. Input, snapshot, contesti, export RDF e ricevute sono file aggiuntivi.
 
-Nel riquadro CAMEL sono mostrati i quattro ruoli di dominio. La Workforce ha
-anche agenti gestionali dell'SDK per coordinamento e assegnazione; non sono
-ulteriori produttori di evidenze di dominio.
+## Profili e livello di verifica
 
-Il server MCP riusa `MockRankingTool` e `MockSemanticTool`. Il ranking è
-l'euristica dimostrativa a un passo; la validazione verifica capacità e policy.
-La registrazione scrive il documento JSON in SQLite e restituisce una ricevuta
-mock. Nel profilo rappresentato, il processo degli agenti chiama queste tre
-operazioni tramite contratti pubblici senza eseguirne localmente i backend.
-
-## Profili alternativi implementati
-
-La selezione avviene in `backends.py`, prima di avviare la Workforce. Ogni
-servizio può avere un proprio endpoint; nel profilo illustrato i tre tool
-strategici condividono il server ma hanno sessioni client MCP distinte.
-
-| Profilo in `config/` | Lookup | Ranking e validazione | Provenienza |
+| Profilo | Ingressi | Percorso strategico | Provenienza e verifica |
 |---|---|---|---|
-| Nessun profilo, oppure `backends.local-mock.json` | Mock locale | Mock locali | JSON locale |
-| `backends.mcp-mock.json` | Server MCP mock, porta 8001 | Mock locali | JSON locale |
-| **`backends.mcp-strategic-mock.json`** | **Mock locale** | **Server MCP mock, porta 8002** | **SQLite sul server e ricevuta locale** |
-| `backends.mcp-all-mock.json` | Server MCP mock, porta 8001 | Server MCP mock, porta 8002 | SQLite sul server e ricevuta locale |
+| Default / `backends.local-mock.json` | Input statico e fixture Log4j | Ranking e semantica mock locali | JSON e ricevuta mock |
+| `backends.mcp-strategic-mock.json` | Input statico, lookup mock locale | Ranking e semantica mock su MCP HTTP | SQLite sul server mock; trasporto collaudato |
+| `backends.otel-cti.json` | OTel registrato e cve2owl MCP | Tool strategici mock | Percorso di acquisizione e correlazione collaudato |
+| Profilo generato dall'applicazione Java | Log SDK, SBOM della build, CTI e OSV | Tool strategici mock | Prove CAMEL programmate e Ollama; caso negativo documentato |
+| `backends.otel-apache-ubuntu.json` | Log Apache verificati e inventario Ubuntu; assessment MCP | Candidate vuote e richieste pendenti; mock strategici | Collaudo programmato |
+| `backends.otel-apache-strategic.json` | Stessi ingressi Apache | Gate MCP di astensione sul grafo vuoto; nessuna semantica invocata | PROV-O su file via MCP, rilettura e audit; Ollama r2 completato |
+| `backends.otel-apache-fabric-provenance.json` | Stessi ingressi Apache | Mantiene l'astensione sul grafo vuoto | Adapter PROV-O/Fabric configurato; rete effettiva ancora da collaudare |
 
-Nel profilo `all-mock` il ramo del lookup diventa:
+`real` nella configurazione indica il servizio atteso e deve concordare con la
+risposta. Non certifica da solo l'autenticità del backend o l'esecuzione BWAF.
+Il gate Apache è un servizio effettivo che si astiene, non un motore di ranking.
+Un profilo configurabile non è automaticamente un esperimento già eseguito.
+
+## Percorso Apache effettivamente collaudato
 
 ```mermaid
 flowchart LR
-    V["VulnerabilityAgent"] <-->|tool di lookup| AS["ArtifactSession"]
-    AS <--> AD["MCPVulnerabilityTool"]
-    AD <--> CL["Client MCP"]
-    CL <-->|Streamable HTTP · 8001| SV["Server MCP lookup<br/>MockVulnerabilityTool"]
+    A["OTel registrato<br/>+ facts Ubuntu associati"] --> T["TelemetryAgent"]
+    T --> V["VulnerabilityAgent<br/>assessment Ubuntu MCP"]
+    V --> C["CountermeasureAgent<br/>4 richieste pendenti"]
+    C --> S["StrategicAgent<br/>3 artefatti distinti in ingresso"]
+    S --> R["Grafo vuoto<br/>Gate MCP di astensione"]
+    R --> D["insufficient_evidence<br/>Nessuna selezione"]
+    D --> P["PROV-O JSON-LD<br/>Archivio MCP + rilettura"]
 ```
 
-Gli altri collegamenti restano quelli del grafo principale. `all-mock` riguarda
-i quattro backend attualmente configurabili, non tutti i servizi dell'architettura
-finale della tesi. La modalità `fixtures` è invece una prova deterministica
-senza CAMEL/LLM e accetta soltanto backend locali.
+Questo secondo diagramma sintetizza l'ordine delle attività: le dipendenze
+dirette Telemetry → Countermeasure e Telemetry/Vulnerability → Strategic restano
+quelle del DAG precedente. Il caso conserva 120 CVE classificate sul pacchetto
+inventariato: 34 `fixed`, 28 `not_affected`, 46 `potentially_affected`, 12 `unknown`.
+I facts successivi ai log non attestano lo stato storico del processo.
 
-## Confine con l'architettura finale
+Il contratto restituisce `not_evaluable`, che la sessione traduce in
+`insufficient_evidence`. Le quattro richieste interessano 58 CVE uniche e
+restano fuori da strategie e ranking. Il run non seleziona né esegue azioni.
+Il servizio semantico non viene chiamato, anche se il profilo conserva un
+backend locale per compatibilità. Dettagli: [prova Ollama](apache-ollama-use-case.md).
 
-Sono collegati ingressi OTel delimitati, il servizio cve2owl sullo snapshot
-reale e SBOM/OSV per un componente Maven. Questo non comprende monitoraggio
-continuo, ragionamento OWL completo o valutazione di tutto l'inventario.
-Non sono ancora collegati Argumentation SC, Semantic Validation SC/Tiny-ME
-e Hyperledger Fabric reali.
-`ProvenanceRecord` non è ancora un documento PROV-O; SQLite non rappresenta
-Fabric. La decisione seleziona una mitigazione ma non la applica al sistema.
-Non sono implementati store/retrieve remoto degli asset generici né feedback
-runtime dell'azione applicata.
+## Nuovo collegamento Fabric: implementato e da collaudare
 
-## Corrispondenza con il codice
+```mermaid
+flowchart TB
+    S["StrategicAgent"] -. "Mapping delle candidate aperto" .-> M["Grafo e individui ontologici nativi"]
+    M -.-> GW["Gateway MCP nativo · 9 tool implementati"]
+    P["ProvenanceRecord"] --> AD["FabricProvenanceTool<br/>Adapter Workforce implementato"]
+    AD --> GW
+    GW -. "Rete da rendere disponibile" .-> F["Fablo REST"]
+    F -.-> BW["Argumentation chaincode<br/>StoreGraph / RankGraph / Get"]
+    F -.-> TM["Tiny-ME chaincode<br/>AnalyzeOntology / ReadReasonerResult"]
+    F -.-> PC["Chaincode PROV-O dedicato<br/>StoreProvenance / GetProvenance"]
+    BW -.-> L["Hyperledger Fabric"]
+    TM -.-> L
+    PC -.-> L
+```
 
-| Elemento | Implementazione |
-|---|---|
-| CLI e creazione del run | [main.py](../thesis_agents/main.py) |
-| Agenti, scheduling e DAG | [workforce.py](../thesis_agents/orchestration/workforce.py) e [agents/](../thesis_agents/agents/) |
-| Stato validato, contesto e tool | [artifacts.py](../thesis_agents/orchestration/artifacts.py) |
-| Pubblicazioni strutturate per CAMEL | [publication_tools.py](../thesis_agents/orchestration/publication_tools.py) |
-| Selezione e connessione dei backend | [backends.py](../thesis_agents/backends.py) |
-| Adapter strategici | [strategic_mcp.py](../thesis_agents/tools/strategic_mcp.py) |
-| Client e contratti MCP | [client.py](../thesis_agents/mcp/client.py), [contracts.py](../thesis_agents/mcp/contracts.py) |
-| Server strategico e persistenza mock | [strategic_mock_server.py](../thesis_agents/mcp/strategic_mock_server.py) |
-| Server di lookup opzionale | [mock_server.py](../thesis_agents/mcp/mock_server.py) |
+I nove tool implementati coprono grafo, ranking, recupero dei risultati,
+abduzione/bonus/contrazione Tiny-ME e provenienza. Gateway e adapter sono
+verificati con Fablo HTTP simulato, MCP effettivo e stub Fabric; il chaincode
+PROV-O è compilato anche per Linux amd64. Nessuna ricevuta on-chain è stata
+generata nelle prove documentate. L'ultima verifica della disponibilità di rete
+è del 18 ottobre: Docker e Fablo sulle porte 8800/8801 non erano raggiungibili.
 
-Avvio, test e ricevute sono descritti nella [guida MCP dello Strategic](mcp-strategic.md).
-Il grafo descrive il profilo strategico mock implementato; non è una figura
-ripresa da un paper. I backend reali dei profili alternativi sono rappresentati
-nelle guide degli ingressi collegate sopra.
+Il formato nativo `nodes(id,type)` / `edges(from,to)` non rappresenta direttamente
+segno e pesi del grafo MVP. Non viene quindi applicata una conversione implicita.
+Gli score nativi sono conservati senza normalizzazione a `[0,1]`.
+La coerenza di un'ontologia Tiny-ME non equivale all'accettazione di una strategia.
+Il tool nativo `analyze_ontology` non è ancora il validatore di dominio delle
+candidate nella Workforce.
+
+L'adapter Fabric della provenienza verifica canale, chaincode, documento,
+hash e ID della transazione, poi effettua una nuova lettura MCP. La ricevuta
+prevista dichiara `peer_readback_verified`, con `block_commit_verified=false`:
+rilettura dal peer e verifica indipendente del commit sono livelli distinti.
+Questa logica è collaudata con servizi simulati, non ancora sul deployment reale.
+Dettagli: [integrazione nativa Fabric](fabric-native-integration.md).
+
+## Differenze rispetto al mockup e lavoro aperto
+
+![Confronto dei componenti](materiali/confronto-mockup-attuale.png)
+
+Sono cambiati soprattutto ingressi, contratti, controllo delle pubblicazioni e
+provenienza. Restano quattro agenti e lo stesso DAG. I backend mock sono ancora
+disponibili per i confronti storici e per i rami non sostituiti.
+
+Restano da completare rete e deployment Fabric, probe nativo effettivo, mapping
+ontologico e una prova con candidate non vuote e validazione reale. Seguono
+il caso controllato con fonti coerenti e la valutazione comparativa. Sono
+proposte, non funzionalità già realizzate: scelta di piani di verifica,
+raccolta continua, attuazione delle mitigazioni e feedback dell'azione.
+
+Riferimenti per studiare: [stato del progetto](stato-progetto.md),
+[guida al codice](reading-guide.md), [contratti](architecture.md),
+[report aggiornato](materiali/aggiornamento-relazione-20261029.md).

@@ -51,6 +51,10 @@ Describe backend limitations using the identifiers and results returned by the t
 Read vulnerability_report.cti when present: preserve identity ambiguity, coverage and
 dataset provenance. Missing CVSS/confidence stays unknown. A partial rule coverage
 remains a limitation even if some CVEs have confirmed findings.
+Read package_assessment when present: retain all four verdict counts and the inventory
+scope. Potentially affected and unknown CVEs do not establish historical runtime findings.
+Read candidate_strategies.verification_requests when present. They are pending evidence
+requests: report them as outstanding, never rank, validate or select them as remediation.
 A remote MCP backend can still be a mock; do not infer real BWAF, Tiny-ME or Fabric
 execution merely from a successful tool call. Distinguish a proposed mitigation from
 an executed action. Finish only after decision AND provenance have been recorded."""

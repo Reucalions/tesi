@@ -1,0 +1,21 @@
+{
+  "base_sha256": "a47b03aeb6b3a9a6545d0d30694c169b3494591547e4e6ca98ecfd4166d9a10d",
+  "updated_sha256": "bdbf7aca172d7832897dccab9882e9f9a77ed61746e43d48aa2b96d3e5fbfe5b",
+  "original_body_elements_preserved": 259,
+  "original_media_preserved": 2,
+  "document_revision": "29 ottobre 2026",
+  "last_experiments": "18 ottobre 2026",
+  "new_inference_or_on_chain_run": false,
+  "generator_sha256": "808804b7fcfdc9551d669b7ed574a318ef374756390dba6062688a10b1132a3d",
+  "source_markdown_sha256": "e240b7773f99540438806ec6cff56cb3b4d0bbf8ae8e5c492a74496fa25bcdf2",
+  "files": {
+    "architettura-aggiornata.svg": "e447067f9c8746355270495e1b214c1fa04afc5a307d214667053ab7b10b9c0c",
+    "architettura-aggiornata.png": "3c01faaf52e98ca82240b313661078349e7e9bccc6f2106350602ac8f00259ac",
+    "architettura-aggiornata.pdf": "236278f42a7ad9c2b29e66dffd81d3d44a8781ec92d8fc87441c114859487c40",
+    "aggiornamento-relazione-20261029.pdf": "cae745dc681b55d464ae8f5846e62f1afbd0116c4eaf0672b22c2f02bb0a3838",
+    "relazione-aggiornata-20261029.docx": "bdbf7aca172d7832897dccab9882e9f9a77ed61746e43d48aa2b96d3e5fbfe5b",
+    "confronto-mockup-attuale.png": "b1b76b39d33cc75c79888d9df8993eb6180bfd9b816657067b2e7b16e9381e16",
+    "confronto-mockup-attuale.pdf": "3a5de1bd3b41f037c6021bc4554893ea69576d7328105fedcd650ece248d7b4d",
+    "confronto-mockup-attuale.svg": "ef4192d559b743af5b4fca5f6692a38ed37ee87629931fa917b8d2ecb5b6e9f8"
+  }
+}

@@ -35,9 +35,11 @@ from thesis_agents.schemas.supply_chain import (
 )
 from thesis_agents.schemas.telemetry import runtime_publication_schema
 from thesis_agents.schemas.telemetry_source import TelemetryInput, TelemetrySnapshot
+from thesis_agents.schemas.verification import PackageVerificationContext
 from thesis_agents.tools.interfaces import (
     ProvenanceTool,
     RankingTool,
+    RuntimeVulnerabilityTool,
     SemanticTool,
     SupplyChainTool,
     TelemetryTool,
@@ -88,7 +90,7 @@ class ArtifactSession:
         model: str | None = None,
         telemetry_tool: TelemetryTool | None = None,
         supply_chain_tool: SupplyChainTool | None = None,
-        vulnerability_tool: VulnerabilityTool | None = None,
+        vulnerability_tool: VulnerabilityTool | RuntimeVulnerabilityTool | None = None,
         ranking_tool: RankingTool | None = None,
         semantic_tool: SemanticTool | None = None,
         provenance_tool: ProvenanceTool | None = None,
@@ -116,6 +118,7 @@ class ArtifactSession:
         self.supply_chain_tool = supply_chain_tool
         self._supply_chain_snapshot: SupplyChainSnapshot | None = None
         self._countermeasure_context: CountermeasureContext | None = None
+        self._package_verification_context: PackageVerificationContext | None = None
         self._telemetry_snapshot: TelemetrySnapshot | None = None
         self._telemetry_evidence: RuntimeEvidence | None = None
         self.vulnerability_tool = vulnerability_tool or MockVulnerabilityTool()
@@ -184,6 +187,9 @@ class ArtifactSession:
         context["schemas"]["runtime_evidence"] = runtime_publication_schema(
             self.case
         ).model_json_schema()
+        context["schemas"]["vulnerability_report"] = (
+            self.vulnerability_publication_schema().model_json_schema()
+        )
         if self.supply_chain_tool is not None:
             if self._countermeasure_context is not None:
                 self._verify_supply_chain_snapshot()
@@ -196,7 +202,30 @@ class ArtifactSession:
                     else None,
                 }
             }
+        report = self._artifacts.get("vulnerability_report")
+        if report is not None and report.package_assessment is not None:
+            if self._package_verification_context is not None:
+                self._verify_package_verification_context()
+            context.setdefault("external_inputs", {})["package_verification"] = {
+                "required": True,
+                "producer": "ArtifactSession.prepare_package_verification",
+                "context": self._package_verification_context.model_dump(mode="json")
+                if self._package_verification_context is not None
+                else None,
+            }
         return context
+
+    def vulnerability_publication_schema(self):
+        from thesis_agents.schemas.vulnerability import (
+            LegacyVulnerabilityReport,
+            UbuntuVulnerabilityReport,
+        )
+
+        return (
+            UbuntuVulnerabilityReport
+            if isinstance(self.vulnerability_tool, RuntimeVulnerabilityTool)
+            else LegacyVulnerabilityReport
+        )
 
     def _require_strategic_inputs(
         self,
@@ -205,6 +234,7 @@ class ArtifactSession:
         # Tre letture distinte mantengono l'evidenza di TelemetryAgent indipendente
         # dal rapporto e dalle strategie, anche se queste sono già state generate.
         self._verify_supply_chain_snapshot()
+        self._verify_package_verification_context()
         return (
             self.require("runtime_evidence", RuntimeEvidence),
             self.require("vulnerability_report", VulnerabilityReport),
@@ -298,12 +328,20 @@ class ArtifactSession:
         if self._lookup is None:
             # Nel primo MVP c'è una sola osservazione software. Il lookup riceve
             # quella pubblicata, non un nome di pacchetto proposto liberamente dall'LLM.
-            result = self.vulnerability_tool.lookup_vulnerabilities(evidence.software[0])
+            if isinstance(self.vulnerability_tool, RuntimeVulnerabilityTool):
+                if self._telemetry_snapshot is None:
+                    raise ValueError("Runtime vulnerability lookup requires verified telemetry")
+                result = self.vulnerability_tool.lookup_runtime_vulnerabilities(
+                    evidence, self._telemetry_snapshot
+                )
+            else:
+                result = self.vulnerability_tool.lookup_vulnerabilities(evidence.software[0])
             self._lookup = VulnerabilityReport(
                 asset_id=evidence.service_name,
                 lookup_status=result.status,
                 vulnerabilities=result.vulnerabilities,
                 cti=result.cti,
+                package_assessment=result.package_assessment,
             )
         return self._lookup.model_dump(mode="json")
 
@@ -327,6 +365,28 @@ class ArtifactSession:
 
     def _verify_cti_snapshot(self, report):
         """La sintesi pubblicata deve restare derivabile dallo snapshot MCP salvato."""
+        if report.package_assessment is not None:
+            from thesis_agents.mcp.client import digest
+            from thesis_agents.mcp.ubuntu_contracts import PackageAssessment
+            from thesis_agents.tools.ubuntu_mcp import map_ubuntu_assessment
+
+            self._verify_telemetry_snapshot()
+            response = PackageAssessment.model_validate_json(
+                (self.output_dir / report.package_assessment.response_file).read_text()
+            )
+            if (
+                digest(response.model_dump(mode="json"))
+                != report.package_assessment.response_sha256
+            ):
+                raise ValueError("Ubuntu assessment snapshot changed after lookup")
+            mapped = map_ubuntu_assessment(response, self._telemetry_snapshot)
+            if (mapped.status, mapped.vulnerabilities, mapped.package_assessment) != (
+                report.lookup_status,
+                report.vulnerabilities,
+                report.package_assessment,
+            ):
+                raise ValueError("Report differs from the Ubuntu assessment and telemetry")
+            return
         if report.cti is None:
             return
         from thesis_agents.mcp.client import digest
@@ -360,6 +420,15 @@ class ArtifactSession:
         report = self.require("vulnerability_report", VulnerabilityReport)
         self._verify_supply_chain_snapshot()
         candidates = CandidateStrategies.model_validate_json(payload)
+        if report.package_assessment is not None:
+            self._verify_package_verification_context()
+            if (
+                candidates.verification_requests
+                != self._package_verification_context.verification_requests
+            ):
+                raise ValueError("Preserve all pending package verification requests unchanged")
+        elif candidates.verification_requests:
+            raise ValueError("Package verification requests require Ubuntu package evidence")
         known = {v.cve_id for v in report.vulnerabilities}
         # Le strategie devono riferirsi a CVE note. Con lookup non supportato si
         # richiede un set vuoto: non si scambia la mancanza di dati per una diagnosi.
@@ -373,6 +442,48 @@ class ArtifactSession:
             if not set(strategy.addressed_vulnerabilities) <= known:
                 raise ValueError("Candidate references an unknown vulnerability")
         return self._commit("candidate_strategies", candidates).model_dump(mode="json")
+
+    def prepare_package_verification(self) -> dict:
+        """Prepare pending checks for Ubuntu package evidence; acquire or execute nothing.
+
+        Call with {} when external_inputs.package_verification.required is true.
+        Copy verification_requests into CandidateStrategies alongside strategies.
+
+        Returns:
+            dict: Source-bound pending checks, with no upgrade target or runtime finding.
+        """
+        from thesis_agents.tools.package_verification import package_verification_context
+
+        evidence = self.require("runtime_evidence", RuntimeEvidence)
+        report = self.require("vulnerability_report", VulnerabilityReport)
+        self._verify_telemetry_snapshot()
+        self._verify_cti_snapshot(report)
+        if self._package_verification_context is None:
+            context = package_verification_context(evidence, report)
+            with (self.output_dir / "package_verification_context.json").open("x") as stream:
+                stream.write(context.model_dump_json(indent=2) + "\n")
+            self._package_verification_context = context.model_copy(deep=True)
+        self._verify_package_verification_context()
+        return self._package_verification_context.model_dump(mode="json")
+
+    def _verify_package_verification_context(self):
+        from thesis_agents.tools.package_verification import package_verification_context
+
+        report = self._artifacts.get("vulnerability_report")
+        if report is None or report.package_assessment is None:
+            return
+        if self._package_verification_context is None:
+            raise ValueError("Call prepare_package_verification before publishing strategies")
+        self._verify_telemetry_snapshot()
+        self._verify_cti_snapshot(report)
+        stored = PackageVerificationContext.model_validate_json(
+            (self.output_dir / "package_verification_context.json").read_text()
+        )
+        expected = package_verification_context(
+            self.require("runtime_evidence", RuntimeEvidence), report
+        )
+        if stored != self._package_verification_context or stored != expected:
+            raise ValueError("Package verification context differs from validated evidence")
 
     def collect_countermeasure_context(self) -> dict:
         """Acquire configured SBOM/OSV data for the published runtime observation.
@@ -630,6 +741,7 @@ class ArtifactSession:
         """
         self.require("final_decision", FinalDecision)
         self._verify_supply_chain_snapshot()
+        self._verify_package_verification_context()
         if "provenance" in self._artifacts:
             # Un retry restituisce anche l'identità/digest della ricevuta remota,
             # senza ripetere una scrittura di cui abbiamo già conferma.
@@ -715,6 +827,28 @@ class ArtifactSession:
                 ("remote_lookup", "VulnerabilityAgent", ["runtime_evidence"], ["cti_assessment"]),
             )
             next(stage for stage in stages if stage[0] == "lookup")[2].append("cti_assessment")
+        if report.package_assessment is not None:
+            self._verify_cti_snapshot(report)
+            name = "ubuntu_package_assessment"
+            entities.append(
+                ProvenanceEntity(
+                    id=name,
+                    filename=f"{name}.json",
+                    sha256=hashlib.sha256(
+                        (self.output_dir / f"{name}.json").read_bytes()
+                    ).hexdigest(),
+                )
+            )
+            stages.insert(
+                next(i for i, stage in enumerate(stages) if stage[0] == "lookup"),
+                (
+                    "remote_package_assessment",
+                    "VulnerabilityAgent",
+                    ["runtime_evidence", "telemetry_snapshot"],
+                    [name],
+                ),
+            )
+            next(stage for stage in stages if stage[0] == "lookup")[2].append(name)
         if self.supply_chain_tool is not None:
             for name in ("supply_chain_snapshot", "countermeasure_context"):
                 entities.append(
@@ -747,6 +881,27 @@ class ArtifactSession:
             next(stage for stage in stages if stage[0] == "decision")[2].append(
                 "countermeasure_context"
             )
+        if self._package_verification_context is not None:
+            name = "package_verification_context"
+            entities.append(
+                ProvenanceEntity(
+                    id=name,
+                    filename=f"{name}.json",
+                    sha256=hashlib.sha256(
+                        (self.output_dir / f"{name}.json").read_bytes()
+                    ).hexdigest(),
+                )
+            )
+            stages.insert(
+                next(i for i, stage in enumerate(stages) if stage[0] == "candidates"),
+                (
+                    "prepare_package_verification",
+                    "CountermeasureAgent",
+                    ["runtime_evidence", "vulnerability_report", "ubuntu_package_assessment"],
+                    [name],
+                ),
+            )
+            next(stage for stage in stages if stage[0] == "candidates")[2].append(name)
         record = ProvenanceRecord(
             # La modalità fixtures rende esplicito che i produttori erano dati di
             # prova; evita di attribuire a un LLM output che non ha generato.
@@ -793,7 +948,14 @@ class ArtifactSession:
             stored = schema.model_validate_json((self.output_dir / f"{name}.json").read_text())
             if value != stored:
                 raise ValueError(f"Stored artifact differs from validated state: {name}")
+        self._verify_package_verification_context()
         self._verify_cti_snapshot(self.require("vulnerability_report", VulnerabilityReport))
+        if hasattr(self.provenance_tool, "verify_export"):
+            receipt = self.provenance_tool.verify_export(
+                self.require("provenance", ProvenanceRecord)
+            )
+            if receipt != self._provenance_receipt:
+                raise ValueError("Stored provenance receipt differs from validated state")
         decision = self.require("final_decision", FinalDecision)
         # Ricostruisce la spiegazione dalle fonti: non basta che riferimenti e
         # testo abbiano la forma corretta o che file e memoria coincidano.

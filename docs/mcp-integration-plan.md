@@ -1,5 +1,26 @@
 # Integrazione MCP sul branch `full`
 
+**Priorita aggiornata al 30 ottobre 2026:** dopo il
+[porting dei servizi condivisi su costa-thesis](porting-principe-costa.md),
+il percorso principale usa il bridge MCP e il backend SaaS riutilizzati.
+Le [prossime azioni dettagliate](prossime-azioni.md) definiscono ordine,
+dipendenze e criteri di completamento. Le sezioni storiche su gateway Fabric
+e chaincode PROV-O separato non costituiscono il piano principale di integrazione.
+Il porting e collaudato con Fabric simulato; l'integrazione reale resta da completare.
+
+**Aggiornamento 18 ottobre 2026:** il
+[gateway nativo Fabric](fabric-native-integration.md) implementa nove tool
+per grafo, ranking, analisi Tiny-ME e provenienza, con un chaincode PROV-O
+separato e adapter di provenienza nella Workforce. I test usano Fablo
+simulato e stub Fabric: non attestano un deployment on-chain. Restano rete
+raggiungibile, installazione del chaincode, probe effettivo e mapping
+ontologico delle candidate per il percorso completo con grafo non vuoto.
+Le sezioni seguenti conservano anche lo stato dei precedenti incrementi.
+Per la mappa aggiornata al 29 ottobre e il confronto con il mockup leggere
+[stato del progetto](stato-progetto.md) e
+[architettura implementata](architettura-implementata.md). La revisione delle
+guide non costituisce una nuova prova dei servizi.
+
 Questo documento definisce l'architettura obiettivo e le integrazioni successive.
 Sono implementati client MCP e server mock HTTP per il lookup e per i tre tool
 strategici: ranking, validazione semantica e registrazione della provenienza.
@@ -10,8 +31,10 @@ su export registrati della baseline. È disponibile anche
 l'[ingresso SBOM/OSV](sbom-osv-integration.md), collaudato con inventario
 dimostrativo Maven e OSV reale. La [prova dei tre ingressi](observed-app-integration.md)
 combina ora log SDK nuovi e SBOM della stessa applicazione locale, con CTI e
-OSV reali. Raccolta continua in un deployment, smart contract, Fabric,
-store/retrieve generico e PROV-O restano da collegare.
+OSV reali. Raccolta continua, store/retrieve generico e collaudo degli smart
+contract su Fabric restano aperti. L'export PROV-O e l'archivio MCP su file
+sono ora implementati; chaincode e adapter Fabric sono predisposti e testati
+con servizi simulati, come descritto nell'aggiornamento iniziale.
 
 Il primo servizio cve2owl è stato aggiunto nella copia del backend sul branch
 `costa-thesis`: espone matching e valutazione delle versioni tramite MCP. Il
@@ -25,6 +48,55 @@ Dettagli nella [guida cve2owl](owl-cti-integration.md) e nei
 [risultati del collaudo reale](cti-real-runs.md).
 
 ## Punto di partenza verificato
+
+La [verifica del caso Apache nei log della baseline](baseline-apache-verification.md)
+documenta due nuove interrogazioni MCP senza LLM: il nome letterale restituisce
+`no_match`, quello interpretato `ambiguous`. Il gateway non è stato modificato;
+la risoluzione tracciabile dell'identità precede una prova OTel con finding.
+La verifica successiva ha collegato esattamente tre record ai log originali
+AIT-LDS dell'host `webserver`, recuperando il pacchetto Ubuntu
+`apache2 2.4.29-1ubuntu4.21`. L'attribuzione della sorgente è documentata;
+risoluzione CTI e valutazione delle patch della distribuzione restano distinte
+e non sono risolte dal solo recupero dei metadati.
+L'[adattatore Apache registrato](apache-recorded-integration.md) è ora
+implementato: gateway HTTP, binding dei file con hash, contesto inventariale
+separato e collaudo completo CAMEL con modello programmato e CTI reale MCP.
+L'esito è `insufficient_evidence` per `no_match` sul nome letterale `Apache`.
+
+È completato anche il [resolver CTI Apache v2](cti-identity-resolution-v2.md),
+tool MCP separato con contratto `cti-identity-resolution-v2`. Il probe reale r3
+conferma `resolved`: sei identità equivalenti fra 113 candidate, con copertura
+dichiarata della ricerca lessicale sullo snapshot e regole curate per gli alias.
+Nome osservato, inventario e lookup upstream originale sono conservati.
+Il contratto d'identità mantiene `package_applicability=not_assessed`.
+Il [collaudo v1](cti-identity-resolution.md)
+conserva il risultato storico `ambiguous` e i suoi limiti.
+
+La [valutazione Ubuntu del pacchetto inventariato](ubuntu-package-applicability.md)
+è ora implementata in un tool MCP separato, con snapshot ufficiali e confronto
+delle revisioni Debian. Il collaudo reale su 120 CVE restituisce 34 `fixed`,
+28 `not_affected`, 46 `potentially_affected` e 12 `unknown`. L'identità risolta
+resta distinta dal risultato sul pacchetto e dall'applicabilità runtime,
+ancora non valutata. Il [collegamento al VulnerabilityAgent](ubuntu-vulnerability-agent.md)
+è completato attraverso l'adapter `ubuntu-package-v1`: una chiamata MCP conserva
+identità, tutti i verdetti e snapshot integrale, con sintesi per gli agenti.
+La Workforce è collaudata con servizi reali e inferenza programmata. Lo stato
+`not_evaluable` conserva i limiti runtime; il risultato strategico rimane
+`insufficient_evidence` senza promuovere i casi potenziali a finding accertati.
+
+L'[estensione del CountermeasureAgent](ubuntu-countermeasure-agent.md) aggiunge
+richieste di evidenza strutturate per i 46 casi potenziali e i 12 indeterminati.
+Il contesto è derivato dagli artefatti verificati, senza nuove acquisizioni
+o versioni di upgrade scelte. Lo Strategic conserva le richieste come lavoro
+aperto nella spiegazione; ranking e selezione riguardano solo le strategie.
+L'integrazione dei servizi strategici reali resta un incremento successivo.
+
+Il successivo [incremento StrategicAgent](apache-strategic-agent.md) conclude
+il ramo Apache senza candidate: astensione MCP esplicita, archivio su file
+con export PROV-O e rilettura verificata dal client. Il profilo
+`backends.otel-apache-strategic.json` non simula BWAF su grafi non vuoti e
+non attesta Tiny-ME o Fabric. Mapping ontologico, ranking reale delle
+contromisure e registrazione su ledger restano aperti.
 
 - Il branch di lavoro è già `full`. Il branch `mockup` conserva il commit
   `0c8804c` (`updated mockup with doc`), da cui parte anche `full`.

@@ -12,6 +12,7 @@ from thesis_agents.orchestration.artifacts import ArtifactSession
 from thesis_agents.schemas import CandidateStrategies, RuntimeEvidence, VulnerabilityReport
 from thesis_agents.schemas.telemetry import OTelRuntimeEvidence, StaticRuntimeEvidence
 from thesis_agents.schemas.telemetry_source import TelemetryInput
+from thesis_agents.schemas.vulnerability import LegacyVulnerabilityReport, UbuntuVulnerabilityReport
 
 
 class PublicationTools:
@@ -78,6 +79,28 @@ class PublicationTools:
         candidates = CandidateStrategies.model_validate(payload)
         return self.session.publish_candidate_strategies(candidates.model_dump_json())
 
+    def publish_legacy_vulnerability_report(self, payload: LegacyVulnerabilityReport) -> dict:
+        """Publish the exact lookup report.
+
+        Args:
+            payload (LegacyVulnerabilityReport): Authoritative report as a JSON object.
+
+        Returns:
+            dict: Validated vulnerability report.
+        """
+        return self.publish_vulnerability_report(payload)
+
+    def publish_ubuntu_vulnerability_report(self, payload: UbuntuVulnerabilityReport) -> dict:
+        """Publish the exact Ubuntu report, preserving package verdicts and snapshot hashes.
+
+        Args:
+            payload (UbuntuVulnerabilityReport): Authoritative report as a JSON object.
+
+        Returns:
+            dict: Validated vulnerability report.
+        """
+        return self.publish_vulnerability_report(payload)
+
     def resolve(self, name: str):
         # Solo le tre pubblicazioni richiedono un adapter. Gli altri tool restano
         # i metodi originali della medesima sessione, inclusa get_context.
@@ -87,6 +110,12 @@ class PublicationTools:
             "publish_candidate_strategies",
         ):
             method = getattr(self, name)
+            if name == "publish_vulnerability_report":
+                method = (
+                    self.publish_ubuntu_vulnerability_report
+                    if self.session.vulnerability_publication_schema() is UbuntuVulnerabilityReport
+                    else self.publish_legacy_vulnerability_report
+                )
             if name == "publish_runtime_evidence":
                 method = (
                     self.publish_otel_runtime_evidence

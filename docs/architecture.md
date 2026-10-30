@@ -1,8 +1,11 @@
-# Contratti del primo MVP
+# Contratti architetturali e loro evoluzione
 
-Il [grafo dell'architettura implementata](architettura-implementata.md) mostra
-agenti, sessione validata e server MCP mock, distinguendo i profili disponibili
-dai componenti dell'architettura finale ancora da collegare.
+Il [grafo dell'architettura implementata](architettura-implementata.md), aggiornato
+al 29 ottobre 2026, mostra agenti, fonti collegate, provenienza e gateway nativo
+Fabric. La [guida allo stato del progetto](stato-progetto.md) distingue il mockup,
+gli incrementi collaudati e le parti ancora aperte. Le regole del MVP descritte
+qui rimangono valide per i relativi profili, senza implicare che ogni backend
+sia mock o che il collegamento Fabric sia già collaudato on-chain.
 
 Questo documento descrive le responsabilità architetturali. La [guida alla lettura](reading-guide.md) collega ogni componente al relativo file commentato e distingue i controlli dello schema da quelli della sessione.
 
@@ -52,6 +55,12 @@ Il risultato della CLI conserva la causa del produttore e i nomi dei task blocca
 | `SemanticValidationReport` | Semantic tool | StrategicAgent | Registro dei tentativi in ordine di ranking; arresto al primo esito accettato |
 | `FinalDecision` | StrategicAgent + validatore di pubblicazione | Output | Selezione uguale al primo candidato accettato; esito esplicito se non selezionabile |
 | `ProvenanceRecord` | Provenance tool | Output | Input/output, hash, attività, ruoli e modalità di esecuzione |
+
+Nel percorso Ubuntu `VulnerabilityReport` conserva anche `package_assessment`:
+classificazioni del pacchetto e applicabilità runtime restano distinte. Le
+`verification_requests` opzionali di `CandidateStrategies` non sono candidate
+classificabili. I contratti nativi `fabric-native-v1` sono separati dagli schemi
+MVP: non eliminano pesi o segni per adattare il grafo al chaincode originale.
 
 `StaticTelemetry` è l'input predefinito. Con il profilo HTTP, `TelemetryInput`
 contiene invece il selettore della sorgente e le policy; i fatti runtime vengono
@@ -172,9 +181,10 @@ Workforce. Sono implementati il [lookup MCP](mcp-lookup.md) e i tre
 con server mock HTTP separati. La CLI accetta `--backends` con una scelta per
 ciascun backend; senza profilo il comportamento resta locale. Il profilo
 `backends.mcp-strategic-mock.json` porta su MCP solo i tool dello Strategic.
-La provenienza conserva una ricevuta remota verificata in un file separato;
-il server mock la associa a un record persistito in SQLite. Il documento e
-la ricevuta non sono ancora PROV-O o una transazione Fabric. Il
+La provenienza del profilo mock conserva una ricevuta remota verificata in un
+file separato e un record SQLite; tale ricevuta non è una transazione Fabric.
+Il profilo Apache successivo esporta invece PROV-O JSON-LD e ne verifica
+scrittura e rilettura MCP nell'archivio su file. Il
 [profilo CTI reale](cti-workforce.md) collega il servizio cve2owl al lookup,
 con artefatti estesi e tool strategici locali. Il profilo `backends.otel-cti.json`
 aggiunge l'ingresso HTTP di telemetria registrata. `backends.cti-sbom-osv.json`
@@ -206,13 +216,19 @@ Il primo adapter reale è `CTIVulnerabilityTool`. Lo stato dei collegamenti è:
 
 1. `lookup_vulnerabilities` usa il servizio MCP `assess_software` e il matcher
    esistente sullo snapshot cve2owl; nessuna inferenza OWL nel client.
-2. `rank_graph` potrà incapsulare `store_graph`, `rank_graph`, `get_rank_result` e, se necessario, `get_annotated_graph` via MCP, restituendo lo stesso `RankingResult` normalizzato.
-3. `validate_countermeasure` mapperà candidate e contesto ai concetti Tiny-ME, conservando l'esito strutturato.
-4. `record_provenance` mapperà entità, attività, agenti e dipendenze a PROV-O e persistenza Fabric.
+2. Il gateway nativo implementa store/rank/get del grafo e recupero del grafo annotato. Il mapping delle candidate è ancora aperto; gli score nativi non vengono normalizzati implicitamente per lo schema MVP.
+3. Le chiamate Tiny-ME di abduzione, bonus e contrazione sono implementate. Il mapping verso `validate_countermeasure` e la policy di accettazione di dominio restano aperti.
+4. L'export PROV-O e l'archivio MCP su file sono collaudati. Chaincode e adapter Fabric sono implementati e testati con Fablo simulato e stub; manca il collaudo on-chain.
 
 Prima del collegamento reale bisognerà concordare la semantica dei pesi, l'ontologia delle capacità/azioni, il formato BWAF e i riferimenti alle transazioni. Le copie delle baseline sulla Scrivania sono state esaminate in sola lettura durante la revisione bibliografica del 17 settembre; non sono integrate nel mock. Il ranking locale resta un'euristica distinta dal backend. Fonti, commit e limiti della verifica sono in [fonti e scelte](fonti-e-scelte.md).
 
-La provenienza locale è una proiezione delle dipendenze di dominio, registrata solo dopo la decisione. Nei profili CTI e OTel include anche gli snapshot remoti e le attività che li usano. Include gli hash dei file e conserva tutti i tentativi semantici nel relativo artefatto. Non è un log completo dei prompt/token o degli errori della Workforce, non è firmata e non dichiara conformità PROV-O.
+La provenienza applicativa è una proiezione delle dipendenze di dominio, registrata
+dopo la decisione. Nei profili CTI e OTel include snapshot e attività correlate.
+Il JSON applicativo e il suo export PROV-O sono rappresentazioni distinte.
+La provenienza non è un log completo dei prompt/token o degli errori, non è
+firmata e non attesta la verità delle fonti. Nel nuovo adapter Fabric rilettura
+dal peer e verifica indipendente del commit restano distinte. Dettagli e stato:
+[gateway nativo](fabric-native-integration.md).
 
 ## Prove con un modello effettivo
 

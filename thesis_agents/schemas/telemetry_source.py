@@ -42,6 +42,44 @@ class TelemetryInput(TelemetryQuery):
         )
 
 
+class RecordedLogReference(Message):
+    """Record originale, distinto dalla sua posizione nell'export OTel."""
+
+    file: Text
+    sha256: SHA256
+    line: Annotated[int, Field(ge=1, strict=True)]
+    event_time_text: Text  # Ora nel body: non si assume un fuso orario mancante.
+
+
+class RecordedApacheContext(Message):
+    """Attribuzione documentale e inventario: non attributi runtime strumentati."""
+
+    kind: Literal["recorded-apache-binding-v1"] = "recorded-apache-binding-v1"
+    dataset_url: Literal["https://zenodo.org/records/5789064"]
+    scenario: Literal["russellmitchell"]
+    host: Literal["webserver"]
+    fqdn: Text
+    service: Literal["apache2"] = "apache2"
+    # Etichetta di selezione deterministica, NON service.instance.id osservato.
+    scope_id: Literal["dataset:russellmitchell:webserver:apache2"] = (
+        "dataset:russellmitchell:webserver:apache2"
+    )
+    instance_basis: Literal["dataset-host-service-scope"] = "dataset-host-service-scope"
+    export_sha256: SHA256
+    binding_sha256: SHA256
+    facts_file: Literal["gather/webserver/facts.json"] = "gather/webserver/facts.json"
+    facts_sha256: SHA256
+    facts_collected_at: AwareDatetime
+    distribution: Literal["Ubuntu"]
+    distribution_version: Text
+    distribution_release: Text
+    package_name: Literal["apache2"] = "apache2"
+    package_version: Text
+    package_origin: Literal["Ubuntu"]
+    package_manager: Literal["apt"]
+    package_pointer: Literal["/packages/apache2/0"] = "/packages/apache2/0"
+
+
 class TelemetryObservation(Message):
     evidence_id: Identifier
     service_name: Identifier
@@ -52,10 +90,19 @@ class TelemetryObservation(Message):
     # Nessuna assenza di attributo viene convertita in false.
     endpoint_exposed: StrictBool | None = None
     deserialization_observed: StrictBool | None = None
-    identity_basis: Literal["collector-self-log", "explicit-resource-attributes"]
+    identity_basis: Literal[
+        "collector-self-log", "explicit-resource-attributes", "recorded-apache-startup"
+    ]
+    original_log: RecordedLogReference | None = None
     line: Annotated[int, Field(ge=1, strict=True)]
     pointer: str = Field(pattern=r"^/resourceLogs/\d+/scopeLogs/\d+/logRecords/\d+$")
     record_sha256: SHA256
+
+    @model_validator(mode="after")
+    def original_source_required(self):
+        if (self.identity_basis == "recorded-apache-startup") != (self.original_log is not None):
+            raise ValueError("Recorded Apache observations require an original log reference")
+        return self
 
 
 class TelemetrySnapshot(Message):
@@ -72,13 +119,28 @@ class TelemetrySnapshot(Message):
     file_record_count: Count
     recognized_record_count: Count
     observations: list[TelemetryObservation] = Field(max_length=100)
+    recorded_context: RecordedApacheContext | None = None
 
     @model_validator(mode="after")
     def selected_records(self):
         if not len(self.observations) <= self.recognized_record_count <= self.file_record_count:
             raise ValueError("Inconsistent telemetry counts")
         require_unique([r.evidence_id for r in self.observations], "telemetry evidence IDs")
+        context = self.recorded_context
+        if context is not None and (
+            self.acquisition != "recorded" or context.export_sha256 != self.source_sha256
+        ):
+            raise ValueError("Recorded binding must match the recorded export")
         for r in self.observations:
+            if (r.identity_basis == "recorded-apache-startup") != (context is not None):
+                raise ValueError("Recorded observations and context must remain together")
+            if context is not None and (
+                (r.service_name, r.service_instance_id, r.package)
+                != (context.service, context.scope_id, "Apache")
+                or r.endpoint_exposed is not None
+                or r.deserialization_observed is not None
+            ):
+                raise ValueError("Recorded Apache identity/unknown flags do not match the binding")
             if (r.service_name, r.service_instance_id, r.package) != (
                 self.query.service_name,
                 self.query.service_instance_id,
@@ -99,3 +161,16 @@ class TelemetryReference(Message):
     snapshot_sha256: SHA256
     query: TelemetryQuery
     evidence_ids: list[Identifier] = Field(min_length=1)
+    recorded_context: RecordedApacheContext | None = None
+
+    @model_validator(mode="after")
+    def recorded_source(self):
+        c = self.recorded_context
+        if c is not None and (
+            self.acquisition != "recorded"
+            or self.source_sha256 != c.export_sha256
+            or (self.query.service_name, self.query.service_instance_id, self.query.package_name)
+            != (c.service, c.scope_id, "Apache")
+        ):
+            raise ValueError("Recorded context must match the telemetry reference")
+        return self

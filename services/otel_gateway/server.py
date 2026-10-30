@@ -22,6 +22,12 @@ from thesis_agents.schemas.telemetry_source import (
     unix_nano,
 )
 
+if __name__ == "__main__" and not __package__:
+    # Mantiene il comando storico `python services/otel_gateway/server.py`.
+    from apache_recorded import ApacheSource
+else:
+    from services.otel_gateway.apache_recorded import ApacheSource
+
 MAX_FILE_BYTES = 16 * 1024 * 1024
 
 
@@ -91,7 +97,9 @@ def identify(resource, record):
     }
 
 
-def read_snapshot(path: Path, query: TelemetryQuery, *, source_id, acquisition):
+def read_snapshot(
+    path: Path, query: TelemetryQuery, *, source_id, acquisition, apache_binding=None
+):
     with path.open("rb") as stream:
         before = os.fstat(stream.fileno())
         raw = stream.read(MAX_FILE_BYTES + 1)
@@ -107,6 +115,10 @@ def read_snapshot(path: Path, query: TelemetryQuery, *, source_id, acquisition):
     }
     if len(signatures) != 1:
         raise ValueError("Export changed while reading; retry on a stable snapshot")
+    source_hash = hashlib.sha256(raw).hexdigest()
+    if apache_binding is not None and acquisition != "recorded":
+        raise ValueError("Apache dataset binding only supports recorded acquisition")
+    apache = ApacheSource(apache_binding, source_hash) if apache_binding is not None else None
     rows, total, recognized = [], 0, 0
     for line_number, line in enumerate(raw.splitlines(), 1):
         if not line.strip():
@@ -119,7 +131,9 @@ def read_snapshot(path: Path, query: TelemetryQuery, *, source_id, acquisition):
             for si, scope_logs in enumerate(resource_logs.get("scopeLogs", [])):
                 for li, record in enumerate(scope_logs.get("logRecords", [])):
                     total += 1
-                    identity = identify(resource, record)
+                    identity = (
+                        apache.identify(resource, record) if apache else identify(resource, record)
+                    )
                     if identity is None:
                         continue
                     observed = int(record.get("observedTimeUnixNano", 0))
@@ -154,7 +168,7 @@ def read_snapshot(path: Path, query: TelemetryQuery, *, source_id, acquisition):
                         raise ValueError("More than 100 observations; narrow the query window")
     return TelemetrySnapshot(
         source_id=source_id,
-        source_sha256=hashlib.sha256(raw).hexdigest(),
+        source_sha256=source_hash,
         source_size_bytes=len(raw),
         acquisition=acquisition,
         acquired_at=datetime.now(UTC),
@@ -163,10 +177,11 @@ def read_snapshot(path: Path, query: TelemetryQuery, *, source_id, acquisition):
         file_record_count=total,
         recognized_record_count=recognized,
         observations=rows,
+        recorded_context=apache.context if apache else None,
     )
 
 
-def handler_for(path, source_id, acquisition):
+def handler_for(path, source_id, acquisition, apache_binding=None):
     class Handler(BaseHTTPRequestHandler):
         def send_json(self, status, payload):
             content = json.dumps(payload, ensure_ascii=False).encode()
@@ -191,7 +206,13 @@ def handler_for(path, source_id, acquisition):
                 if not 0 < length <= 8192:
                     raise ValueError("Invalid request length")
                 query = TelemetryQuery.model_validate_json(self.rfile.read(length))
-                result = read_snapshot(path, query, source_id=source_id, acquisition=acquisition)
+                result = read_snapshot(
+                    path,
+                    query,
+                    source_id=source_id,
+                    acquisition=acquisition,
+                    apache_binding=apache_binding,
+                )
             except (ValueError, OSError, KeyError, TypeError, AttributeError):
                 # Il client non riceve percorsi filesystem o frammenti di log.
                 self.send_json(422, {"error": "invalid_query_or_export"})
@@ -209,13 +230,18 @@ def main():
         "--acquisition", choices=("recorded", "collector-file", "sdk-file"), default="recorded"
     )
     parser.add_argument("--port", type=int, default=8004)
+    parser.add_argument("--apache-binding", type=Path, help="Binding esplicito dei log AIT Apache")
     parser.add_argument("--fd", type=int, help="Socket riservato dal runner di test")
     args = parser.parse_args()
     if not args.file.is_file():
         parser.error("Export file not found")
+    if args.apache_binding and (
+        not args.apache_binding.is_file() or args.acquisition != "recorded"
+    ):
+        parser.error("Apache binding requires an existing file and acquisition=recorded")
     server = ThreadingHTTPServer(
         ("127.0.0.1", args.port),
-        handler_for(args.file, args.source_id, args.acquisition),
+        handler_for(args.file, args.source_id, args.acquisition, args.apache_binding),
         bind_and_activate=args.fd is None,
     )
     if args.fd is not None:

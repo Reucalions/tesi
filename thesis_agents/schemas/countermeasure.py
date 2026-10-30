@@ -7,6 +7,7 @@ from pydantic import Field, model_validator
 
 from .base import Identifier, Message, Text, UnitScore, require_unique
 from .telemetry import RuntimeEvidence
+from .verification import VerificationRequest
 from .vulnerability import VulnerabilityReport
 
 # Vocabolario chiuso del primo MVP: il mock associa requisiti a queste categorie.
@@ -36,11 +37,16 @@ class CandidateStrategies(Message):
     # Fino a otto alternative per mantenere piccolo il caso. Il set vuoto è lecito
     # nello schema; la sessione lo consente solo quando manca un finding utilizzabile.
     strategies: list[CountermeasureCandidate] = Field(max_length=8)
+    verification_requests: list[VerificationRequest] = Field(
+        default_factory=list, max_length=4, exclude_if=lambda value: not value
+    )
 
     @model_validator(mode="after")
     def unique_strategies(self):
         # Un ID duplicato renderebbe ambigua la scelta effettuata dallo StrategicAgent.
         require_unique([s.id for s in self.strategies], "strategy IDs")
+        require_unique([r.id for r in self.verification_requests], "verification request IDs")
+        require_unique([r.kind for r in self.verification_requests], "verification request kinds")
         return self
 
 

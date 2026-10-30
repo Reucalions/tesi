@@ -1,14 +1,72 @@
 # Materiali per l'incontro con il docente
 
+## Versione aggiornata per lo studio — 29 ottobre 2026
+
+Il punto di ingresso corrente è [stato del progetto](../stato-progetto.md).
+La revisione aggiunge le integrazioni Apache/Ubuntu, il ramo strategico senza
+candidate, la prova Ollama e i collegamenti nativi Fabric predisposti. Le
+ultime prove citate rimangono quelle del 18 ottobre: non sono nuove inferenze.
+
+| File corrente | Uso |
+|---|---|
+| [relazione-aggiornata-20261029.docx](relazione-aggiornata-20261029.docx) | Copia completa del report manuale, con nota di lettura, capitoli 19–24 e nuove figure |
+| [aggiornamento-relazione-20261029.md](aggiornamento-relazione-20261029.md) | Sorgente modificabile dei soli capitoli aggiunti |
+| [aggiornamento-relazione-20261029.pdf](aggiornamento-relazione-20261029.pdf) | PDF dei soli capitoli aggiunti, per lettura; non è l'export dell'intero nuovo DOCX |
+| [architettura-aggiornata.png](architettura-aggiornata.png) | Nuova figura dei componenti e dei collegamenti, con livelli di verifica |
+| [architettura-aggiornata.svg](architettura-aggiornata.svg), [PDF](architettura-aggiornata.pdf) | Figura vettoriale, SVG con font incorporati |
+| [confronto-mockup-attuale.png](confronto-mockup-attuale.png) | Confronto visivo con il mockup; disponibili anche SVG e PDF con lo stesso nome |
+| [aggiornamento-verifica-20261029.json](aggiornamento-verifica-20261029.json) | Hash dei materiali e controllo di conservazione della relazione originale |
+
+La copia manuale `relazione.docx` è rimasta invariata durante la generazione.
+Sono conservati nella nuova copia tutti i **259 elementi originali del corpo**
+(paragrafi, tabelle e proprietà della sezione) e le **due immagini preesistenti**.
+Una nota prima della sintesi distingue capitoli storici e stato corrente.
+La nuova figura è uno schema architetturale: non è un BWAF con strategie
+selezionate. Il BWAF del run Apache è vuoto.
+
+Il PDF dell'aggiornamento e le figure sono stati generati e ispezionati.
+Il DOCX è verificato strutturalmente; la resa e l'impaginazione nativa vanno
+controllate nell'editor Word utilizzato per la consegna. La nuova copia contiene
+le revisioni manuali del documento base; il vecchio `relazione.pdf` e le slide
+non rappresentano lo stato del report aggiornato.
+
+Per rigenerare soltanto gli export aggiornati, in un ambiente con le dipendenze
+di `requirements.txt`:
+
+```sh
+python docs/materiali/genera_aggiornamento.py \
+  --base-docx docs/materiali/relazione.docx \
+  --output-dir docs/materiali
+```
+
+Il comando non invoca `genera_materiali.py` e non sovrascrive il documento base.
+Sovrascrive invece gli export datati prodotti dal nuovo generatore: conservare
+con un altro nome eventuali successive correzioni manuali alla copia aggiornata.
+`--output-dir` consente una destinazione diversa. Nessuna rete o inferenza viene
+utilizzata dal generatore; i font PT Sans provengono dalla cartella già inclusa.
+
+## Materiali storici dell'incontro sul mockup
+
 Pacchetto preparato per **15 minuti**, con PowerPoint modificabile e demo locale.
 Non sono state avviate nuove inferenze per preparare questi materiali.
+
+La relazione modificata manualmente in `relazione.docx` è stata proseguita con
+i capitoli 11–18, relativi alle integrazioni e alle prove successive. I capitoli
+precedenti, le immagini e gli stili sono conservati. Il solo testo aggiunto è
+in [integrazione-relazione.md](integrazione-relazione.md). `relazione-mockup.md`
+resta il sorgente della versione precedente e non contiene le revisioni manuali:
+non rigenerare il DOCX con `genera_materiali.py`, perché le sovrascriverebbe.
+Il PDF e le slide restano alla versione precedente; l'esportazione del DOCX
+integrato tramite Word è terminata per timeout. La copia precedente e il
+confronto strutturale sono conservati localmente in
+`output/relazione-integrazioni-verifica/`.
 
 | File | Uso |
 |---|---|
 | [presentazione.pptx](presentazione.pptx) | 10 slide principali + 2 appendici, testo e diagramma modificabili, note del relatore |
-| [relazione.pdf](relazione.pdf) | Relazione impaginata per lettura o consegna |
-| [relazione.docx](relazione.docx) | Copia modificabile in Word |
-| [relazione sorgente](../relazione-mockup.md) | Versione principale della relazione nel repository |
+| [relazione.pdf](relazione.pdf) | Export storico della relazione sul mockup, non aggiornato alle integrazioni |
+| [relazione.docx](relazione.docx) | Base manuale con capitoli 1–18, conservata senza modifiche in questa revisione |
+| [relazione sorgente](../relazione-mockup.md) | Sorgente della versione mockup; non contiene le revisioni manuali successive |
 | [copione-slide.md](copione-slide.md) | Note da esporre e tempi di ciascuna slide |
 | [demo-guida.md](demo-guida.md) | Comandi, file da mostrare, gestione del live e domande probabili |
 | [demo-evidenze.html](demo-evidenze.html) | Visualizzatore offline e interattivo di quattro run registrati |
@@ -37,7 +95,7 @@ I numeri delle slide sono quelli della matrice documentata: **8/8 run verificati
 95 test passati prima della matrice, 212 richieste LLM e 985,35 secondi**.
 Non vanno presentati come risultati di una nuova esecuzione fatta durante l'incontro.
 
-## Modifica e rigenerazione
+## Modifica e rigenerazione dei materiali storici
 
 Puoi modificare direttamente PowerPoint e Word. Per una rigenerazione coerente,
 modifica invece `slides.json` e `../relazione-mockup.md`; il generatore sovrascrive
