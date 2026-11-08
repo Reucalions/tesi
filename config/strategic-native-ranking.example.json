@@ -1,0 +1,7 @@
+{
+  "contract": "shared-strategic-ranking-v1",
+  "tenant_id": "REPLACE_WITH_TENANT_ID",
+  "knowledge_snapshot_id": "REPLACE_WITH_PREPARATION_SNAPSHOT_ID",
+  "knowledge_snapshot_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "ontology_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+}

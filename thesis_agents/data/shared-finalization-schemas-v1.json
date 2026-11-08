@@ -1,0 +1,42 @@
+{
+  "finalize_recommendation": [
+    {
+      "type": "object",
+      "properties": {
+        "document_json": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4194304
+        }
+      },
+      "required": [
+        "document_json"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    null
+  ],
+  "get_finalization": [
+    {
+      "type": "object",
+      "properties": {
+        "decision_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "finalization_id": {
+          "type": "string",
+          "pattern": "^FIN_[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "decision_id",
+        "finalization_id"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    null
+  ]
+}

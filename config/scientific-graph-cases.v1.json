@@ -1,0 +1,430 @@
+{
+  "contract": "scientific-graph-consolidation-v1",
+  "updated": "2026-11-05",
+  "baseline_ontology_sha256": "688c1944633cb03e24f503d8905c843d5ce771f6dc0aabc0b4d508b03f154625",
+  "native_library_sha256": "56182283f2c96444868d5a522adb468f27118f14710f16837242b666c3e78221",
+  "generator_manifest_sha256": "84d03335cb79787c114429b291a67957d22e896e9355d3c3abbb18fc43eb376e",
+  "native_library_equivalence_to_paper": "not_attested; Graph.cpp absent from local history",
+  "topology_policy": "bottalico-directed-ring-v1 retained as a declared experimental comparison policy",
+  "score_spaces": {
+    "bwaf_relation_weight": "signed [-1,1], native value; no framework assignment",
+    "native_argument_rank": "finite real native value, no clamp or probability interpretation",
+    "explain_affinity_v1": "100 minus selected native penalty, clamped to [0,100]",
+    "shared_affinity": "native affinity divided by 100; distinct from ranking",
+    "operational_feasibility": "separate SaaS policy; no semantic feature invention"
+  },
+  "symmetry_reference": {
+    "source": "existing pinned Bottalico builder and ALN class_assertion",
+    "profile": "same Solutions description for all four strategies; one CVE with directed ring",
+    "expected": "one tied strategy equivalence class for a label-independent semantics",
+    "proof": "cyclic rotation is a graph automorphism preserving all semantic descriptions",
+    "numeric_score_expected": null,
+    "tie_break": "ascending ID for deterministic serialization, not a semantic preference",
+    "status": "structural proof checked; native numeric execution pending"
+  },
+  "cases": [
+    {
+      "id": "baseline-1",
+      "scope": "existing_native_core_benchmark_not_a_single_cve_mas_decision",
+      "original": "chaincode-argumentation/client/tests/graph_test_1.json",
+      "reordered": "chaincode-argumentation/client/tests/graph_test_1_reordered.json",
+      "sha256": {
+        "graph_test_1.json": "a097b026f32c39dc17d9bdb4b7589a9bb37b4ef1778ead6348d8c6bb92a28367",
+        "graph_test_1_reordered.json": "f2ef5d635ee3e7e91babe30259a6887a7243a0acc953c15cb92a8fc57f2156ba"
+      },
+      "nodes": 6,
+      "edges": 11,
+      "free_nodes": [
+        "Vulnerability_CVE_2025_0160",
+        "Vulnerability_CVE_2025_0161"
+      ],
+      "expected_properties": [
+        "same node/type and directed-edge sets",
+        "same finite scores by candidate after array reordering within absolute tolerance 1e-6",
+        "native relation weights finite in [-1,1] with zero explicitly not an attack/support claim"
+      ],
+      "expected_attack_edges": [
+        {
+          "from": "AutomatedCountermeasure",
+          "to": "AIBasedCountermeasure",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":AutomatedCountermeasure",
+              "target_class": ":AIBasedCountermeasure",
+              "disjoint_classes": [
+                ":AIBasedCountermeasure",
+                ":AutomatedCountermeasure"
+              ]
+            }
+          ]
+        }
+      ],
+      "unproved_polarities": "unknown; absence of a direct clash is not a compatibility proof",
+      "numeric_ranking_expected": null,
+      "live_status": "not_executed"
+    },
+    {
+      "id": "baseline-2",
+      "scope": "existing_native_core_benchmark_not_a_single_cve_mas_decision",
+      "original": "chaincode-argumentation/client/tests/graph_test_2.json",
+      "reordered": "chaincode-argumentation/client/tests/graph_test_2_reordered.json",
+      "sha256": {
+        "graph_test_2.json": "953f1c2ea322b010c95c0b3cdb6684eb80ccdc0d8b159c859378e83493f0bae9",
+        "graph_test_2_reordered.json": "9aacd8589c6798a80d3b4be036101913e32163d23433d5325fc2002224d5abd4"
+      },
+      "nodes": 8,
+      "edges": 20,
+      "free_nodes": [
+        "Vulnerability_CVE_2025_0001",
+        "Vulnerability_CVE_2025_0014",
+        "Vulnerability_CVE_2025_0015"
+      ],
+      "expected_properties": [
+        "same node/type and directed-edge sets",
+        "same finite scores by candidate after array reordering within absolute tolerance 1e-6",
+        "native relation weights finite in [-1,1] with zero explicitly not an attack/support claim"
+      ],
+      "expected_attack_edges": [
+        {
+          "from": "PhishingCountermeasure",
+          "to": "RansomwareDefense",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":PhishingCountermeasure",
+              "target_class": ":RansomwareDefense",
+              "disjoint_classes": [
+                ":PhishingCountermeasure",
+                ":RansomwareDefense",
+                ":SCADADefense"
+              ]
+            }
+          ]
+        },
+        {
+          "from": "RansomwareDefense",
+          "to": "SCADADefense",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":RansomwareDefense",
+              "target_class": ":SCADADefense",
+              "disjoint_classes": [
+                ":PhishingCountermeasure",
+                ":RansomwareDefense",
+                ":SCADADefense"
+              ]
+            }
+          ]
+        },
+        {
+          "from": "RansomwareDefense",
+          "to": "PhishingCountermeasure",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":RansomwareDefense",
+              "target_class": ":PhishingCountermeasure",
+              "disjoint_classes": [
+                ":PhishingCountermeasure",
+                ":RansomwareDefense",
+                ":SCADADefense"
+              ]
+            }
+          ]
+        },
+        {
+          "from": "PhishingCountermeasure",
+          "to": "SCADADefense",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":PhishingCountermeasure",
+              "target_class": ":SCADADefense",
+              "disjoint_classes": [
+                ":PhishingCountermeasure",
+                ":RansomwareDefense",
+                ":SCADADefense"
+              ]
+            }
+          ]
+        }
+      ],
+      "unproved_polarities": "unknown; absence of a direct clash is not a compatibility proof",
+      "numeric_ranking_expected": null,
+      "live_status": "not_executed"
+    },
+    {
+      "id": "baseline-3",
+      "scope": "existing_native_core_benchmark_not_a_single_cve_mas_decision",
+      "original": "chaincode-argumentation/client/tests/graph_test_3.json",
+      "reordered": "chaincode-argumentation/client/tests/graph_test_3_reordered.json",
+      "sha256": {
+        "graph_test_3.json": "4d3fde8aedd6bbad8c5158129851bb513d1d345367981e94622bd669be7b1848",
+        "graph_test_3_reordered.json": "45268964742909a18c3edf0f453b45894e51d8b893d615c16a3469fe2712009f"
+      },
+      "nodes": 12,
+      "edges": 21,
+      "free_nodes": [
+        "Vulnerability_CVE_2025_0001",
+        "Vulnerability_CVE_2025_0014",
+        "Vulnerability_CVE_2025_0015",
+        "Vulnerability_CVE_2025_0035",
+        "Vulnerability_CVE_2025_0160",
+        "Vulnerability_CVE_2025_0161"
+      ],
+      "expected_properties": [
+        "same node/type and directed-edge sets",
+        "same finite scores by candidate after array reordering within absolute tolerance 1e-6",
+        "native relation weights finite in [-1,1] with zero explicitly not an attack/support claim"
+      ],
+      "expected_attack_edges": [
+        {
+          "from": "AutomatedCountermeasure",
+          "to": "AIBasedCountermeasure",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":AutomatedCountermeasure",
+              "target_class": ":AIBasedCountermeasure",
+              "disjoint_classes": [
+                ":AIBasedCountermeasure",
+                ":AutomatedCountermeasure"
+              ]
+            }
+          ]
+        },
+        {
+          "from": "RansomwareDefense",
+          "to": "PhishingCountermeasure",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":RansomwareDefense",
+              "target_class": ":PhishingCountermeasure",
+              "disjoint_classes": [
+                ":PhishingCountermeasure",
+                ":RansomwareDefense",
+                ":SCADADefense"
+              ]
+            }
+          ]
+        }
+      ],
+      "unproved_polarities": "unknown; absence of a direct clash is not a compatibility proof",
+      "numeric_ranking_expected": null,
+      "live_status": "not_executed"
+    },
+    {
+      "id": "baseline-4",
+      "scope": "existing_native_core_benchmark_not_a_single_cve_mas_decision",
+      "original": "chaincode-argumentation/client/tests/graph_test_4.json",
+      "reordered": "chaincode-argumentation/client/tests/graph_test_4_reordered.json",
+      "sha256": {
+        "graph_test_4.json": "c1acee90ff9cada54b26f46acc5735f4d3e09755372af1383474c911f39161af",
+        "graph_test_4_reordered.json": "354de4f792d4a5c178b8905a370e3498d3045648ed37ebac5fe7a6f415adf0ad"
+      },
+      "nodes": 24,
+      "edges": 43,
+      "free_nodes": [
+        "Vulnerability_CVE_2025_0001",
+        "Vulnerability_CVE_2025_0014",
+        "Vulnerability_CVE_2025_0015",
+        "Vulnerability_CVE_2025_0035",
+        "Vulnerability_CVE_2025_0036",
+        "Vulnerability_CVE_2025_0037",
+        "Vulnerability_CVE_2025_0049",
+        "Vulnerability_CVE_2025_0050",
+        "Vulnerability_CVE_2025_0053",
+        "Vulnerability_CVE_2025_0054",
+        "Vulnerability_CVE_2025_0055",
+        "Vulnerability_CVE_2025_0056",
+        "Vulnerability_CVE_2025_0057",
+        "Vulnerability_CVE_2025_0058",
+        "Vulnerability_CVE_2025_0160",
+        "Vulnerability_CVE_2025_0161"
+      ],
+      "expected_properties": [
+        "same node/type and directed-edge sets",
+        "same finite scores by candidate after array reordering within absolute tolerance 1e-6",
+        "native relation weights finite in [-1,1] with zero explicitly not an attack/support claim"
+      ],
+      "expected_attack_edges": [
+        {
+          "from": "AutomatedCountermeasure",
+          "to": "AIBasedCountermeasure",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":AutomatedCountermeasure",
+              "target_class": ":AIBasedCountermeasure",
+              "disjoint_classes": [
+                ":AIBasedCountermeasure",
+                ":AutomatedCountermeasure"
+              ]
+            }
+          ]
+        },
+        {
+          "from": "RansomwareDefense",
+          "to": "PhishingCountermeasure",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":RansomwareDefense",
+              "target_class": ":PhishingCountermeasure",
+              "disjoint_classes": [
+                ":PhishingCountermeasure",
+                ":RansomwareDefense",
+                ":SCADADefense"
+              ]
+            }
+          ]
+        },
+        {
+          "from": "SCADADefense",
+          "to": "RansomwareDefense",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":SCADADefense",
+              "target_class": ":RansomwareDefense",
+              "disjoint_classes": [
+                ":PhishingCountermeasure",
+                ":RansomwareDefense",
+                ":SCADADefense"
+              ]
+            }
+          ]
+        }
+      ],
+      "unproved_polarities": "unknown; absence of a direct clash is not a compatibility proof",
+      "numeric_ranking_expected": null,
+      "live_status": "not_executed"
+    },
+    {
+      "id": "baseline-5",
+      "scope": "existing_native_core_benchmark_not_a_single_cve_mas_decision",
+      "original": "chaincode-argumentation/client/tests/graph_test_5.json",
+      "reordered": "chaincode-argumentation/client/tests/graph_test_5_reordered.json",
+      "sha256": {
+        "graph_test_5.json": "a0f7f3c5bda270b2d596cba7849ab739cdd374bea905d7a7b252f11c1ae0a55a",
+        "graph_test_5_reordered.json": "5d7d0c7fa1d18f878e339d846166793fc060aa6b500093228416a9ab62f36366"
+      },
+      "nodes": 40,
+      "edges": 75,
+      "free_nodes": [
+        "Vulnerability_CVE_2025_0001",
+        "Vulnerability_CVE_2025_0014",
+        "Vulnerability_CVE_2025_0015",
+        "Vulnerability_CVE_2025_0035",
+        "Vulnerability_CVE_2025_0036",
+        "Vulnerability_CVE_2025_0037",
+        "Vulnerability_CVE_2025_0049",
+        "Vulnerability_CVE_2025_0050",
+        "Vulnerability_CVE_2025_0053",
+        "Vulnerability_CVE_2025_0054",
+        "Vulnerability_CVE_2025_0055",
+        "Vulnerability_CVE_2025_0056",
+        "Vulnerability_CVE_2025_0057",
+        "Vulnerability_CVE_2025_0058",
+        "Vulnerability_CVE_2025_0059",
+        "Vulnerability_CVE_2025_0060",
+        "Vulnerability_CVE_2025_0061",
+        "Vulnerability_CVE_2025_0062",
+        "Vulnerability_CVE_2025_0063",
+        "Vulnerability_CVE_2025_0064",
+        "Vulnerability_CVE_2025_0065",
+        "Vulnerability_CVE_2025_0066",
+        "Vulnerability_CVE_2025_0067",
+        "Vulnerability_CVE_2025_0068",
+        "Vulnerability_CVE_2025_0069",
+        "Vulnerability_CVE_2025_0070",
+        "Vulnerability_CVE_2025_0071",
+        "Vulnerability_CVE_2025_0072",
+        "Vulnerability_CVE_2025_0073",
+        "Vulnerability_CVE_2025_0074",
+        "Vulnerability_CVE_2025_0160",
+        "Vulnerability_CVE_2025_0161"
+      ],
+      "expected_properties": [
+        "same node/type and directed-edge sets",
+        "same finite scores by candidate after array reordering within absolute tolerance 1e-6",
+        "native relation weights finite in [-1,1] with zero explicitly not an attack/support claim"
+      ],
+      "expected_attack_edges": [
+        {
+          "from": "AutomatedCountermeasure",
+          "to": "AIBasedCountermeasure",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":AutomatedCountermeasure",
+              "target_class": ":AIBasedCountermeasure",
+              "disjoint_classes": [
+                ":AIBasedCountermeasure",
+                ":AutomatedCountermeasure"
+              ]
+            }
+          ]
+        },
+        {
+          "from": "RansomwareDefense",
+          "to": "PhishingCountermeasure",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":RansomwareDefense",
+              "target_class": ":PhishingCountermeasure",
+              "disjoint_classes": [
+                ":PhishingCountermeasure",
+                ":RansomwareDefense",
+                ":SCADADefense"
+              ]
+            }
+          ]
+        },
+        {
+          "from": "SCADADefense",
+          "to": "RansomwareDefense",
+          "expected_polarity": "attack",
+          "basis": "explicit asserted class clash; conditional on published relation evaluator",
+          "proof": [
+            {
+              "source_class": ":SCADADefense",
+              "target_class": ":RansomwareDefense",
+              "disjoint_classes": [
+                ":PhishingCountermeasure",
+                ":RansomwareDefense",
+                ":SCADADefense"
+              ]
+            }
+          ]
+        }
+      ],
+      "unproved_polarities": "unknown; absence of a direct clash is not a compatibility proof",
+      "numeric_ranking_expected": null,
+      "live_status": "not_executed"
+    }
+  ],
+  "deferred": [
+    "native numeric ranking with the exact pinned library/ontology",
+    "domain validation of ring interactions",
+    "distinct, sourced action requirements/effects beyond shared CVE context",
+    "runtime evidence as explicit argument nodes where justified",
+    "backend ontology/IRI deployment binding"
+  ]
+}

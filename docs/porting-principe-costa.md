@@ -43,15 +43,40 @@ Patch, backup dei file sostituiti, manifest con revisioni e hash, risultati Jest
 e smoke test MCP si trovano in `output/porting-principe-costa-20261030/`.
 Ogni componente importato contiene inoltre `PORTING-COSTA.md`.
 
+Dopo il collaudo sono stati rimossi dalla copia isolata dipendenze npm, cache,
+runtime Node temporaneo e sorgenti duplicati. Patch, backup, manifest e risultati
+restano conservati. Per ripetere build e test usare i lock nei componenti importati.
+
+## Consolidamento dei contratti del 31 ottobre
+
+Applicati 23 file nei due componenti, con backup e verifica degli hash.
+Binding chaincode configurabili, chiave ontologica aggiunta a ExplainAffinity,
+mapping della risposta nativa Go, parsing stretto del ranking e gestione degli
+errori tecnici sono ora implementati. Il bridge propaga snapshot/ontologia,
+espone errorCode/isError, limita le richieste HTTP e usa le rotte legacy del REST.
+Il SaaS dichiara ora la dipendenza runtime dotenv prima mancante.
+
+L'assurance viene conservata con la decisione e riletta senza inventare una
+verifica del codice; il digest dell'input precede l'arricchimento D3FEND.
+Per record storici privi di assurance verificabile non viene dichiarato verified.
+
+Verifica con Node 22.12.0: build dei due componenti, 105 test Jest in 14 suite,
+12 test del bridge e smoke effettivo HTTP REST/MCP stdio. Quest'ultimo confronta
+ranking e semantica, rilegge decisioni/provenance e verifica gli errori tecnici;
+Fabric e identita restano simulati. Discovery: 19 tool.
+
+Patch, backup, manifest e risultati: `output/backend-contracts-20261031/` nel
+framework. I file `PORTING-COSTA.md` nei componenti descrivono contratti e scale.
+Nessun commit/push, cambio di branch o modifica a Identity/Ubuntu, credenziali
+e rete. La rete live non e collaudata: Docker non raggiungibile e porte locali
+8800/7040/7041 chiuse durante la verifica.
+
 ## Passaggi ancora necessari
 
-1. Allineare i binding Fabric nel backend condiviso: la sorgente usa
-   `chaincode-argumentation` e `chaincode-semantic`, mentre la configurazione
-   locale definisce `argumentation` e `user-registry`.
-2. Allineare `ExplainAffinity`: il chaincode richiede chiave dell'ontologia e
-   due IRI, ma il servizio importato passa solo i due IRI. Verificare anche
-   la normalizzazione delle penalita e la distinzione tra errore tecnico ed
-   esito semantico negativo.
+1. Verificare sulla rete esistente i binding configurabili argumentation/user-registry,
+   i contratti distribuiti e le versioni: la configurazione non prova il deployment.
+2. Verificare chiave ontologica, IRI e direzione resource/request sul caso di dominio.
+   Il mapping usa score nativo /100 e penalita grezze, preservando condizioni e spiegazioni.
 3. Configurare endpoint, identita e certificati TLS sul backend, riusando la rete
    disponibile. Non e stata avviata o modificata alcuna rete.
 4. Collegare il client MCP del framework al bridge stdio e adattare il grafo
@@ -61,3 +86,20 @@ Ogni componente importato contiene inoltre `PORTING-COSTA.md`.
    sul ledger. La strategia deve restare raccomandata in dry-run.
 6. Identificare il modulo LLM per annotazioni e argomenti citato dal professore,
    integrarlo come agente e collegare la dashboard esistente ai risultati.
+
+
+## Estensione autorizzata del 5 novembre 2026
+
+Dopo l'ispezione completa e il permesso dell'utente, integrata la finalizzazione
+nei due costa-thesis: 28 file sorgente/test/documentazione, con confronto degli
+hash prima e dopo ogni applicazione e riferimenti Git invariati. Backend, bridge
+e ArgumentationContract esistenti estesi; nessun servizio autonomo aggiuntivo.
+Metodi StoreRecommendation/ReadRecommendation, persistenza delle validazioni,
+ricevuta Gateway e readback, PROV-O collegata alla scelta effettiva e JSON-LD
+corretto. Identita immutabile per CVE, idempotenza, conflitti e riavvio verificati.
+
+640 test Python, 163 SaaS, 19 bridge e test Go/contract-api passati; build Node
+22.12.0 e smoke HTTP/stdio con riavvio effettivo del backend. Fabric/Tiny-ME e
+autenticazione simulati; nessun deployment live o esecuzione di remediation.
+[Guida](integrazioni/strategic-finalization.md),
+[evidenze](../output/shared-finalization-20261103/report.md).

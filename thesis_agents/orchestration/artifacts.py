@@ -12,12 +12,14 @@ from uuid import uuid4
 
 from pydantic import BaseModel
 
+from thesis_agents.agents.contracts import ARTIFACT_OWNERS, ROLE_INPUTS
 from thesis_agents.orchestration.explanations import build_explanation
 from thesis_agents.schemas import (
     ArgumentationGraph,
     CandidateStrategies,
     DecisionContext,
     FinalDecision,
+    LookupResult,
     ProvenanceRecord,
     RankingResult,
     RuntimeEvidence,
@@ -68,9 +70,7 @@ ARTIFACT_SCHEMAS = {
 # Produttori dei tre input strategici: metadati del contesto, non nuovi artefatti.
 # La provenienza completa viene registrata separatamente dopo la decisione.
 ARTIFACT_PRODUCERS = {
-    "runtime_evidence": "TelemetryAgent",
-    "vulnerability_report": "VulnerabilityAgent",
-    "candidate_strategies": "CountermeasureAgent",
+    name: ARTIFACT_OWNERS[name] for name in ROLE_INPUTS["StrategicAgent"]
 }
 
 
@@ -190,6 +190,9 @@ class ArtifactSession:
         context["schemas"]["vulnerability_report"] = (
             self.vulnerability_publication_schema().model_json_schema()
         )
+        context["schemas"]["candidate_strategies"] = (
+            self.candidate_publication_schema().model_json_schema()
+        )
         if self.supply_chain_tool is not None:
             if self._countermeasure_context is not None:
                 self._verify_supply_chain_snapshot()
@@ -214,6 +217,15 @@ class ArtifactSession:
                 else None,
             }
         return context
+
+    def candidate_publication_schema(self):
+        from thesis_agents.schemas.countermeasure import NonPackageCandidateStrategies
+
+        return (
+            CandidateStrategies
+            if isinstance(self.vulnerability_tool, RuntimeVulnerabilityTool)
+            else NonPackageCandidateStrategies
+        )
 
     def vulnerability_publication_schema(self):
         from thesis_agents.schemas.vulnerability import (
@@ -336,14 +348,38 @@ class ArtifactSession:
                 )
             else:
                 result = self.vulnerability_tool.lookup_vulnerabilities(evidence.software[0])
-            self._lookup = VulnerabilityReport(
+            # Ricontrolla anche i backend Python: gli adapter remoti non sono
+            # l'unico confine possibile e un modello annidato può essere mutato.
+            result = LookupResult.model_validate(result.model_dump())
+            report = VulnerabilityReport(
                 asset_id=evidence.service_name,
                 lookup_status=result.status,
                 vulnerabilities=result.vulnerabilities,
                 cti=result.cti,
                 package_assessment=result.package_assessment,
             )
+            self._verify_report_evidence(report)
+            self._lookup = report
+        self._verify_report_evidence(self._lookup)
         return self._lookup.model_dump(mode="json")
+
+    def _verify_report_evidence(self, report: VulnerabilityReport) -> None:
+        """Un finding riguarda l'osservazione pubblicata, anche con backend sostitutivi."""
+        evidence = self.require("runtime_evidence", RuntimeEvidence)
+        software = evidence.software[0]
+        if report.asset_id != evidence.service_name:
+            raise ValueError("Vulnerability report must reference the observed asset")
+        for finding in report.vulnerabilities:
+            if (
+                finding.package != software.package
+                or finding.observed_version != software.version
+                or finding.evidence_ids != [software.evidence_id]
+            ):
+                raise ValueError(
+                    "Vulnerability finding must reference the observed software evidence"
+                )
+        if report.cti is not None and report.cti.observed_software != software:
+            raise ValueError("CTI report must reference the observed software evidence")
 
     def publish_vulnerability_report(self, payload: str) -> dict:
         """Validate and publish the backend report without invented CVEs or scores.
@@ -360,8 +396,19 @@ class ArtifactSession:
         # CVSS/confidenza. La pubblicazione crea un report autonomo; non tocca evidence.
         if self._lookup is None or report != self._lookup:
             raise ValueError("Call lookup_vulnerabilities and preserve its exact report")
+        self._verify_report_evidence(report)
         self._verify_cti_snapshot(report)
         return self._commit("vulnerability_report", report).model_dump(mode="json")
+
+    def publish_acquired_vulnerability_report(self) -> dict:
+        """Explicitly publish the already acquired CTI report, without LLM recopying.
+
+        The lookup must have succeeded first. The normal publication path still
+        checks the source snapshot, evidence, schemas and immutability.
+        """
+        if self._lookup is None:
+            raise ValueError("Call lookup_vulnerabilities before publishing its report")
+        return self.publish_vulnerability_report(self._lookup.model_dump_json())
 
     def _verify_cti_snapshot(self, report):
         """La sintesi pubblicata deve restare derivabile dallo snapshot MCP salvato."""

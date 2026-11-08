@@ -1,10 +1,16 @@
 # Il caso statico `log4j_case.json`
 
+`shared-mcp-schemas-v1.json` conserva la discovery dei quattro tool di dominio
+del bridge SaaS condiviso (`mcp-semantic-cti-saas` 1.0.0). Contiene inputSchema
+senza titoli/descrizioni e outputSchema esplicitamente assente; gli output sono
+validati in `mcp/shared_contracts.py`. Provenienza e collaudo:
+`output/mcp-stdio-20261031/discovery.json` e `framework-smoke-r1/`.
+
 Questa directory contiene l'ingresso dimostrativo del prototipo. Il JSON resta privo di commenti perché il formato non li ammette: questa guida ne spiega i campi senza aggiungere chiavi estranee al contratto Pydantic.
 
 I quattro input `demo_*.json` preparano il caso nominale, l'assenza di una finestra
 di manutenzione, il divieto di tutte le azioni e un lookup non supportato.
-La [guida agli scenari](../../docs/demo-scenarios.md) descrive risultati attesi,
+La [guida agli scenari](../../docs/tecnica/demo-scenarios.md) descrive risultati attesi,
 comandi e differenze tra verifica con fixture e inferenza locale reale.
 
 ## Campi dell'input

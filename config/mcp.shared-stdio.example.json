@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "contract": "shared-saas-v1",
+  "server_name": "mcp-semantic-cti-saas",
+  "connection": {
+    "transport": "mcp-stdio",
+    "command": "node",
+    "args": [
+      "/Users/reucalion/Desktop/agent-based-cti-argumentation-pipeline/mcp-fablo-server/build/index.js"
+    ],
+    "cwd": "/Users/reucalion/Desktop/agent-based-cti-argumentation-pipeline/mcp-fablo-server",
+    "env_from": {
+      "FABLO_REST_URL": "FABLO_REST_URL",
+      "FABLO_USER": "FABLO_USER",
+      "FABLO_PASSWORD": "FABLO_PASSWORD"
+    },
+    "expected_kind": "real",
+    "timeout_seconds": 180
+  }
+}

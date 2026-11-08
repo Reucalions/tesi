@@ -1,0 +1,21 @@
+{
+  "contract": "native-validation-profile-v1",
+  "run_id": "REPLACE_WITH_RANKING_RUN_ID",
+  "asset_id": "REPLACE_WITH_RANKING_ASSET_ID",
+  "ranking_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "ontology_key": "REPLACE_WITH_SEMANTIC_ONTOLOGY_KEY",
+  "asset_iri": "urn:example:REPLACE_WITH_ASSET_IRI",
+  "bindings": [
+    {
+      "cve_id": "CVE-2021-44228",
+      "strategy_id": "S_UPGRADE",
+      "ontology_individual": "CVE-2021-44228_Containers_Cna_Solutions_0",
+      "countermeasure_iri": "urn:example:REPLACE_WITH_COUNTERMEASURE_IRI"
+    }
+  ],
+  "available_capabilities": [],
+  "prohibited_actions": [],
+  "constraint_mappings": [],
+  "policy_source": "Configurazione dell'operatore: compilare capacità confermate, policy e mapping; non è telemetria",
+  "iri_binding_origin": "operator_configuration"
+}

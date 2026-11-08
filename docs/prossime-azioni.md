@@ -1,9 +1,47 @@
 # Prossime azioni dopo il porting dei servizi condivisi
 
-Stato di riferimento: 30 ottobre 2026. Il piano considera il codice verificato,
+## Chiusura C1 verificata: 7 novembre 2026
+
+C1-r2 ha completato il launcher reale CAMEL/Ollama e tutti gli otto nodi del DAG
+con `dry_run_completed` e finalizzazione condivisa `completed`.
+Esito decisionale: **requires_prerequisites**, con `selected_strategy_id=null`.
+Tiny-ME restituisce abduzione 38 e score 62; il controllo operativo restituisce
+`requires_review`. Il completamento tecnico non attesta una contromisura accettata.
+C2/C3 restano completati; C4 e i suoi tentativi di ripresa restano non completati.
+
+[Report corrente](../output/case-improvements-20261106/report-C1.md). Le sezioni datate sotto conservano la preparazione
+e gli esiti precedenti; Logback e ora adottato nel protocollo v2.
+
+Stato di riferimento: 6 novembre 2026. Il piano considera il codice verificato,
 la proposta di tesi e le successive indicazioni del professore. La dimostrazione
 attesa termina con una raccomandazione in dry-run; non richiede l'applicazione
 automatica di contromisure al sistema.
+
+**Decisione di chiusura dell'utente, 5 novembre:** nessuna ulteriore estensione
+semantica o nuovo componente. Profili d'azione distinti, topologie alternative e
+nodi runtime aggiuntivi restano sviluppi futuri, non prerequisiti di implementazione
+per la chiusura concordata. La copertura parziale rispetto alla proposta e i limiti
+scientifici restano espliciti. Completare casi controllati, collaudo del percorso
+esistente, misure sostenibili e relazione; correggere soltanto difetti che impediscono
+queste verifiche. I servizi reali si verificano a fine progettazione.
+
+**Primo collaudo reale del 5–6 novembre:** dopo la richiesta dell'utente sono state
+realizzate le due build Java coerenti e avviata la configurazione Fabric originale
+dal repository costa-thesis, seguendo la guida. SaaS e MCP operativi, sei chiamate
+reali con ranking nativo verificate. I tentativi dei produttori CAMEL/Ollama e i
+limiti sono nel [report](../output/real-cases-20261105-r1/report.md). Il prossimo
+lavoro riguarda gli ostacoli riprodotti alla pubblicazione delle candidate e la
+copertura dei rimedi nel KG, senza nuove estensioni semantiche. Il percorso
+positivo completo e le ricevute MAS restano da collaudare.
+
+**Audit KG del 6 novembre:** scansione integrale e query del motore esistente
+confermano rimedi assenti per le tre CVE Log4j. Individuata la coppia
+Logback-core 1.5.24/1.5.25: CTI completo e proiezione ALN positiva verificati,
+un solo rimedio di aggiornamento. Consigliata come adattamento contenuto del
+caso Java, senza ampliare il KG; scelta non ancora applicata. C4 puo verificare
+l'upgrade bloccato senza manutenzione, non un fallback. Prima dei nuovi run
+servono fonti realmente osservate, binding/distribuzione nativa e correzioni LLM.
+[Prove, alternative e limiti](../output/kg-coverage-20261106/report.md).
 
 ## 1. Punto di partenza e risultato da raggiungere
 
@@ -12,13 +50,13 @@ su `costa-thesis`. Il porting non ha spostato il framework sul branch esterno.
 
 | Area | Stato verificato | Lavoro ancora necessario |
 | --- | --- | --- |
-| Agenti CAMEL | Quattro ruoli, artefatti validati e orchestrazione implementati | Collegare il percorso strategico ai servizi condivisi e inserire la responsabilita generativa richiesta |
+| Agenti CAMEL | Quattro ruoli, SemanticPreparationAgent e DAG composto fino alla finalizzazione condivisa; switch mockup/reale | Collaudo reale del percorso completo |
 | Telemetria e CTI | Ingressi OTel, lookup CTI, identita Apache e assessment Ubuntu disponibili | Caso principale con inventario, build e componente realmente osservato coerenti |
 | Servizi condivisi | Sorgenti MCP e SaaS trasferiti nei due `costa-thesis` | Configurazione e collaudo sulla rete esistente |
-| Verifica del porting | Build dei due componenti, discovery di 19 tool e 66 test in 13 suite | Test effettivi di ranking, Tiny-ME e ledger; Fabric e simulato nella suite importata |
-| Provenance | Export locale e servizio condiviso di lettura disponibili | Provenance della raccomandazione completa, commit e rilettura dal backend |
+| Verifica del porting | Mapping MAS/canonico, finalizzazione, build SaaS e collaudo HTTP/stdio con riavvio; 652 test Python e 167 SaaS, Fabric simulato | Collaudo finale su rete reale |
+| Provenance | Raccomandazione/provenance immutabili, commit/rilettura e riavvio verificati con fixture | Collaudo su rete reale e gestione operativa degli archivi |
 | Dashboard | Dashboard Grafana Fabric presente nella baseline | Identificare la UI indicata dal professore e collegarla alle decisioni |
-| Casi di argumentation | Cinque grafi e varianti riordinate disponibili | Ranking atteso documentato e collaudo attraverso i contratti condivisi |
+| Casi di argumentation | Cinque coppie verificate, aspettative qualitative e controlli client consolidati offline | Profili d'azione distinti, relazioni motivate e verifica numerica del core |
 
 Il risultato finale deve consentire di ricostruire questa catena:
 
@@ -39,6 +77,22 @@ il chaincode di provenance separato non devono diventare dipendenze obbligatorie
 del percorso principale, che deve usare i servizi condivisi.
 
 ## 2. Consolidare il porting e congelare i contratti
+
+Prima fase del 31 ottobre: consolidati i contratti dei quattro agenti in un
+registro condiviso, i controlli di corrispondenza fra lookup ed evidenza anche
+per backend Python e i limiti dei tool acquisiti dai ruoli. Il confronto con
+i contratti SaaS/MCP e documentato in
+[architettura dei contratti](tecnica/architecture.md#consolidamento-degli-agenti-prima-del-collegamento-saas).
+Corretti successivamente i binding e i comportamenti del SaaS che mascheravano
+errori come ranking vuoto o rifiuto semantico, insieme ai contratti del bridge.
+Build, 105 test backend, 12 test bridge e smoke REST/MCP sono passati con Fabric
+simulato. Anche trasporto stdio e client nativo del framework sono implementati
+e collaudati. Per decisione dell'utente la verifica dei servizi disponibili e
+rinviata alla fine della progettazione: ora generazione e grafo canonico.
+L'ispezione approfondita successiva ha individuato la pipeline ibrida Bottalico,
+il wrapper LLM ProductionExtractor e i costruttori deterministici OWL/grafo/ALN.
+Il [rapporto](../output/generator-inspection-20261031/report.md) conserva versioni,
+prove e limiti; non emerge un generatore LLM separato di argomenti BWAF.
 
 Prima di ampliare il codice, rendere riproducibile quanto importato:
 
@@ -65,18 +119,22 @@ per lo stesso servizio condiviso.
 
 ## 3. Rendere operativo il backend sulla rete Fabric esistente
 
-Questo e il primo intervento tecnico sui servizi importati.
+La verifica dei servizi disponibili e della rete reale e rinviata alla fine
+della progettazione, come richiesto dall'utente. Questa sezione ne conserva
+i controlli da eseguire in quel momento.
+Le correzioni di binding e parsing dei punti seguenti sono implementate dal
+31 ottobre e testate con Fabric simulato. Rimane da verificarle sulla rete reale;
+non sostituire questa verifica con le sole build o con la discovery MCP.
 
 1. Verificare la rete effettivamente disponibile, i chaincode installati,
    le versioni e l'ontologia caricata. La configurazione su file non prova che
    i corrispondenti contratti siano distribuiti e raggiungibili.
-2. Allineare i binding del backend: il sorgente importato usa
-   `chaincode-argumentation` e `chaincode-semantic`, mentre `fablo-config.json`
-   di costa-thesis definisce `argumentation` e `user-registry`. Confermare quali
-   contratti sono realmente esposti, senza limitarsi a sostituire due stringhe.
-3. Correggere il binding `ExplainAffinity`: il chaincode richiede
-   `ontologyKey`, `resourceIRI`, `requestIRI`; il servizio passa solo due IRI.
-   Verificare che gli IRI esistano nello snapshot ontologico utilizzato.
+2. Confermare i contratti realmente esposti: il backend ora usa binding
+   configurabili con default `argumentation` e `user-registry`, coerenti con
+   fablo-config.json. Questi valori non provano il deployment.
+3. Collaudare il binding `ExplainAffinity`, che ora passa
+   `ontologyKey`, `resourceIRI`, `requestIRI`. Verificare che gli IRI esistano
+   nello snapshot ontologico utilizzato e abbiano i ruoli di dominio attesi.
 4. Verificare il formato reale della risposta Tiny-ME, inclusi score,
    penalita, prerequisiti e spiegazioni. Non usare valori predefiniti favorevoli
    quando mancano i campi necessari a stabilire la validita.
@@ -94,8 +152,13 @@ Non occorre creare una seconda rete o duplicare gli smart contract.
 
 ## 4. Collegare il framework al bridge MCP condiviso
 
-Il client attuale del framework usa HTTP; il bridge importato espone stdio.
-Serve quindi un adattamento del trasporto e del contratto.
+Completato il 31 ottobre: trasporto HTTP/stdio, configurazione del processo,
+timeout e chiusura tramite SDK, audit e stderr separato. Il client nativo
+`SharedServicesClient` usa una sola sessione per i quattro tool condivisi,
+con schemi di discovery congelati e output Pydantic. Il probe dedicato e
+`python -m thesis_agents.mcp.shared_probe`; esempio in
+`config/mcp.shared-stdio.example.json`. [Guida](integrazioni/mcp-strategic.md).
+La lista seguente descrive i requisiti implementati:
 
 - Aggiungere supporto stdio alla configurazione e al ciclo di vita del client,
   conservando i profili HTTP utilizzati dagli ingressi gia collaudati.
@@ -110,20 +173,38 @@ Serve quindi un adattamento del trasporto e del contratto.
 - Conservare audit delle chiamate, timeout, chiusura del processo e comportamento
   in caso di errore, senza sostituzione silenziosa del servizio reale con un mock.
 
-**Criterio di completamento:** un test del framework esegue una chiamata al bridge
-effettivo, ne valida l'output e dimostra che e stato usato il backend condiviso.
-Prima collaudo senza inferenza, poi orchestrazione CAMEL con modello programmato.
+**Criterio raggiunto:** collaudo framework -> bridge effettivo -> SaaS effettivo,
+con Fabric/autenticazione simulati, ranking REST/MCP coerente, riletture,
+tre esiti semantici e guasti tecnici rifiutati. CAMEL programmato collaudato
+con quattro backend MVP stdio. Il mapping degli artefatti MAS verso il contratto
+nativo resta ai punti successivi; il trasporto non lo sostituisce.
 
 ## 5. Identificare e integrare la pipeline generativa come agente
 
-Questa attivita puo iniziare mentre si allinea il backend. Nel codice esaminato,
-l'LLM estrae asset; annotazioni OWL e grafi vengono prodotti da trasformazioni
-deterministiche. Non e ancora identificato con certezza il modulo LLM specifico
-per annotazioni e argomenti indicato dal professore.
+Implementato il checkpoint autonomo SemanticPreparationAgent: contratti,
+binding espliciti MAS/KG, richiamo dei moduli originali portati su costa-thesis,
+OWL/ALN e richieste native per CVE. CLI e ruolo CAMEL verificati. Il profilo
+Strategic nativo consuma ora il checkpoint per ranking e riletture per CVE,
+con score originali. Validazione, selezione e DAG composto del comando principale
+sono ora implementati: [guida](integrazioni/strategic-selection-dag.md).
+[Guida e limiti](integrazioni/canonical-preparation.md). Qualsiasi integrazione
+nei due repository esterni deve restare su costa-thesis, come ribadito dall'utente.
 
-- Individuare repository, branch, entry point e versione del componente Bottalico.
-  Se non emerge dai sorgenti disponibili, chiedere al professore il riferimento
-  preciso; le altre integrazioni possono proseguire.
+Ispezione completata su working tree, branch e storia locale dei due repository:
+la pipeline e in `agent-based-cti-argumentation-pipeline/app/`.
+`ProductionExtractor.extract_chunk` invoca LangExtract per vendor/product/version;
+`owl_extension.py`, `argumentation_graph.py` e `tools/build_aln_projection.py`
+costruiscono deterministicamente asserzioni, grafi e profili semantici degli
+argomenti. La versione piu recente disponibile localmente e origin/main `090b684`,
+con differenze rispetto a main, principe-thesis e costa-thesis.
+Il vecchio agente Agno/Gemini trovato nella storia orchestrava ranking di grafi
+gia costruiti ed e stato rimosso. Non risulta un modulo LLM separato che generi
+direttamente argomenti BWAF. Il 3 novembre l'utente ha confermato che va utilizzata
+la pipeline ibrida disponibile: questo punto e deciso e non richiede altri chiarimenti.
+
+- Usare i componenti individuati e fissare la versione da riusare per ciascuno.
+  Preparare un porting selettivo: costa-thesis contiene estensioni Identity/Ubuntu
+  e correzioni MCP da conservare, non e un aggiornamento lineare a origin/main.
 - Definire un ruolo agente esplicito per l'invocazione della pipeline riutilizzata,
   senza riscriverne la generazione o duplicare l'estrazione gia svolta da Telemetry.
 - Concordare input: evidenza validata, rapporto CTI, contesto operativo e candidate,
@@ -144,6 +225,21 @@ un artefatto tracciabile consumato dal percorso strategico. Eventuali fixture
 servono ai test e non valgono come prova della generazione LLM reale.
 
 ## 6. Definire l'adapter verso il grafo canonico di argumentation
+
+**Consolidamento offline del 5 novembre completato:** significati, fonti, scale e
+aspettative indipendenti sono nel [contratto scientifico](tecnica/consolidamento-scientifico-grafo.md)
+e nel [catalogo dei casi](../config/scientific-graph-cases.v1.json). Corretti confronto
+asimmetrico degli score, gestione di dati mancanti, controlli dei cammini e parsing
+delle penalita nel percorso ExplainAffinity. Gli score nativi restano inalterati.
+Il criterio numerico su servizio reale descritto sotto rimane da soddisfare.
+
+L'ispezione ha dimostrato che le quattro candidate della demo hanno lo stesso
+profilo ALN asserito e che riassegnare ID puo cambiare l'anello. Dimostrare preferenze
+applicative richiederebbe profili distinti e relazioni giustificate da fonti.
+L'utente ha escluso questa estensione dal lavoro corrente: il limite va dichiarato,
+senza presentare i pareggi o lo spareggio per ID come superiorita di un'azione.
+Runtime e vincoli, pur tracciati e valutati nella policy, non sono ancora nodi
+autonomi del BWAF canonico.
 
 La costruzione deterministica dell'adapter e distinta dalla generazione degli
 argomenti. L'adapter traduce una rappresentazione in un'altra; non introduce
@@ -167,14 +263,26 @@ un algoritmo di ranking alternativo.
 - Provare anche le versioni con nodi e archi riordinati. Il riferimento non deve
   essere semplicemente il primo output restituito dal servizio.
 
+L'ispezione ha rilevato che graph_test_4_reordered.json mancava di due archi
+rispetto all'originale (41/43). Corretto su costa-thesis il 1 novembre (43/43),
+con backup della baseline originale. L'anello tra strategie ordinate per ID e
+ora qualificato come policy sperimentale, senza attribuirgli relazioni di dominio
+non osservate. Il costruttore SaaS legacy conserva la direzione CVE/strategia
+opposta e non e qualificato come baseline: il percorso canonico trasmette sempre
+il grafo esplicito. Nessuna nuova prova del ranking nativo reale eseguita.
+
 **Criterio di completamento:** lo stesso caso produce un grafo interpretabile e
 il ranking concordato tramite il servizio reale, con spiegazioni riconducibili
 agli input. L'ordine dei nodi e degli archi non modifica il risultato semantico.
 
-## 7. Completare la selezione strategica dopo il ranking
+## 7. Selezione strategica dopo il ranking: implementata
 
-La policy generale esiste gia: percorrere le candidate ordinate e selezionare la
-prima accettata. Occorre collegarla ai contratti condivisi senza perderne i vincoli.
+Il 3 novembre e stato completato il collegamento ai contratti condivisi: scelta
+della prima effectiveStatus=accepted per CVE, esiti distinti per prerequisiti,
+revisione e nessuna valida, errori tecnici bloccanti. Tutti i tentativi sono
+conservati e gli score non vengono modificati. Lo switch applicativo collega
+le fasi nel DAG composto. [Comandi e prove](integrazioni/strategic-selection-dag.md).
+I punti seguenti sono i criteri implementati, da riconfermare nel collaudo live:
 
 - Per ogni candidata esaminata, conservare ranking, validazione e motivazione.
 - Se la prima e incompatibile, valutare la successiva. Se richiede prerequisiti
@@ -192,11 +300,23 @@ prima accettata. Occorre collegarla ai contratti condivisi senza perderne i vinc
 respinge la prima e raccomanda una successiva, con motivazioni verificabili.
 In entrambi i casi l'azione rimane in dry-run.
 
-## 8. Completare la provenance condivisa e la verifica sul ledger
+## 8. Provenance condivisa implementata; verifica su rete reale da completare
 
-Il backend distingue gia decisione e provenance, ma la lettura attuale costruisce
-provenance dal record applicativo. Non prova da sola la registrazione on-chain
-della raccomandazione dopo la validazione semantica.
+Estensione autorizzata e implementata nei componenti condivisi esistenti dopo
+l'ispezione approfondita del 3 novembre (70 commit, 371 versioni uniche e KVContract
+storico). Nuovi tool `finalize_recommendation` e `get_finalization`, persistenza
+backend delle validazioni, metodi StoreRecommendation/ReadRecommendation nello
+stesso contratto argumentation, ricevuta Gateway e doppia rilettura. La PROV-O lega
+la scelta effettiva, ogni valutazione e gli otto artefatti originali; corretti
+attivita non osservate, graphId e JSON-LD. Nessun nuovo servizio autonomo.
+
+Il DAG completo include la quarta fase Strategic; il checkpoint finale distingue
+`shared_finalization=completed`, verifica riferita dal backend, deployment non
+verificato e azione mai eseguita. Cinque esiti, scelta alternativa, idempotenza,
+conflitti e riavvio effettivo del SaaS sono collaudati con Fabric/Tiny-ME simulati.
+[Contratti, comandi e limiti](integrazioni/strategic-finalization.md).
+
+I criteri seguenti sono implementati e restano da ripetere nel collaudo live:
 
 1. Verificare se esiste un'operazione condivisa per finalizzare la decisione con
    strategia raccomandata e tutti gli esiti di validazione.
@@ -220,6 +340,15 @@ coerente con la raccomandazione; e documentato quali dati sono on-chain e quali
 off-chain. Nessuna attivita PROV-O descrive come applicata una contromisura soltanto proposta.
 
 ## 9. Preparare il caso sperimentale controllato
+
+Il 5 novembre sono stati preparati il
+[protocollo dei quattro casi](../config/controlled-cases.v1.json) e la
+[guida di confronto con i mock](tecnica/casi-controllati.md). Verificati quattro
+run CLI mockup, quattro mapping di catture CTI e le fonti Java/SBOM/OTel negative
+archiviate. Il mock non supporta una valutazione negativa: per C2 il suo
+insufficient_evidence e distinto dal no_findings della cattura CTI. Restano da
+materializzare build vulnerabile e fonti coerenti C1/C4 e degradazione C3; i quattro
+run reali non sono pronti o eseguiti. Nessun nuovo backend o arricchimento semantico.
 
 Riutilizzare dove possibile l'applicazione locale gia presente. Scegliere il
 componente principale dopo aver verificato copertura CTI, disponibilita delle
@@ -312,26 +441,35 @@ chaincode di provenance separati come percorso principale.
 
 ## 13. Ordine operativo e chiarimenti circoscritti
 
-La sequenza consigliata e:
+Per chiudere senza ampliamenti, la sequenza operativa e:
 
-1. Consolidamento del porting e contratti, seguito dai binding backend/rete.
-2. Trasporto MCP stdio e prime chiamate dal framework.
-3. Identificazione della pipeline generativa, integrazione come agente e adapter
+1. Porting, contratti e trasporto MCP stdio completati e collaudati con Fabric simulato.
+2. Pipeline ibrida identificata: contratto/ruolo agente e adapter
    canonico; caso di ranking con risultato atteso.
-4. Ranking reale, validazione e selezione strategica.
-5. Provenance condivisa, commit e rilettura.
-6. Quattro scenari controllati end-to-end.
-7. Dashboard, esperimenti comparativi e relazione finale.
+3. Mapping degli artefatti MAS, ranking, validazione e selezione strategica.
+4. Finalizzazione/provenance e consolidamento scientifico offline completati;
+   preparare i quattro scenari con fixture e ingressi esistenti, dichiarandone i limiti.
+5. Riusare la dashboard esistente e preparare gli esperimenti senza nuove UI.
+6. Alla fine della progettazione: servizi disponibili, rete/ontologia/TLS reali,
+   collaudo end-to-end, commit/rilettura, esperimenti e relazione finale.
 
 Preparazione dei dati controllati e ricerca del componente generativo possono
 procedere durante il lavoro sui servizi. Occorre chiarire con il professore
-soltanto i riferimenti non ancora identificati: modulo generativo esatto,
-dashboard decisionale se diversa da Grafana e contratto condiviso di finalizzazione
-della raccomandazione qualora assente. Questi dubbi non bloccano i primi interventi.
+soltanto la dashboard decisionale se diversa da Grafana. La pipeline ibrida
+disponibile e confermata dall'utente. L'estensione dei componenti esistenti per la
+finalizzazione e stata autorizzata, implementata e collaudata con fixture.
 
-La prossima attivita concreta e dunque allineare i binding del backend condiviso,
-iniziando da chaincode, ontologia ed `ExplainAffinity`, e verificarli sulla rete
-esistente prima di una nuova prova LLM completa.
+Il raccordo checkpoint -> Strategic -> ranking/riletture native e implementato
+e collaudato con processo MCP stdio e SaaS simulato: [guida](integrazioni/strategic-native.md).
+Implementati anche binding IRI e contesto operativo nella validazione nativa:
+[guida](integrazioni/strategic-validation.md). Esiti Tiny-ME e policy SaaS rimangono
+distinti; vincoli non mappati richiedono revisione. Selezione su effectiveStatus,
+integrazione nel DAG e comando di switch sono implementati e collaudati con
+servizi sintetici: [guida](integrazioni/strategic-selection-dag.md). Completata anche
+la [finalizzazione condivisa](integrazioni/strategic-finalization.md). La prossima
+attivita concreta e predisporre i casi controllati e collegare la dashboard esistente.
+Il controllo di equivalenza dei cinque
+grafi e stato corretto. La verifica live dei servizi seguira a progettazione completata.
 
 Riferimenti: [porting verificato](porting-principe-costa.md),
 [resoconto](../resoconto.md), [proposta di tesi](riferimenti/proposta-agentic-cti.pdf).

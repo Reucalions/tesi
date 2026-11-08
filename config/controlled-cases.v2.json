@@ -1,0 +1,104 @@
+{
+  "protocol": "controlled-cases-v2",
+  "date": "2026-11-07",
+  "supersedes_for_current_runs": "config/controlled-cases.v1.json",
+  "scope": "Actual Logback builds and existing semantics; no new action profiles or mitigation execution",
+  "paths_relative_to": "repository_root",
+  "evidence_directory": "output/case-improvements-20261106",
+  "runner": "output/case-improvements-20261106/run_case.py",
+  "snapshot_manifest": "output/case-improvements-20261106/snapshot-manifest.json",
+  "native_readiness": "output/case-improvements-20261106/native-readiness.json",
+  "sources": {
+    "vulnerable": {
+      "directory": "output/case-improvements-20261106/sources/vulnerable",
+      "loaded_component": "logback-core",
+      "loaded_version": "1.5.24",
+      "loaded_jar_sha256": "9105af06119e6d41de8439a66c0f98918883e5d05e8064815ef83e5c33d746d3",
+      "files_sha256": {
+        "application.jar": "47290e8fa14e31cd10bfe7d40ad5257aec626531351c9c467b95633496f1dc6d",
+        "pom.xml": "c68c371b1c78efc67f3ae9b890da9ca5272a30a503fca868524035c71b312b4e",
+        "sbom.cdx.json": "adae46e43e1d468b7786b7dc9c132104e56f447b77e9be0dd1975e3534fcd6c4",
+        "otel.jsonl": "0f5a186d96171de4a20f9f9ac51fd46b3eb406b2b13277620ef03b189ae64802"
+      },
+      "collection_started_at": "2026-11-06T09:57:38.735074+00:00"
+    },
+    "negative": {
+      "directory": "output/case-improvements-20261106/sources/negative",
+      "loaded_component": "logback-core",
+      "loaded_version": "1.5.25",
+      "loaded_jar_sha256": "aeb86d749936a960a1ec897aa821fe611ab6b105f1170ad334ae5eadc4bd689c",
+      "files_sha256": {
+        "application.jar": "3da09ee625fb553006c992728d633ea0fc9ee8b2036de5d48efd62c3ee5a6a3a",
+        "pom.xml": "c68c371b1c78efc67f3ae9b890da9ca5272a30a503fca868524035c71b312b4e",
+        "sbom.cdx.json": "a9fc244368c53e59f45eb7c81a93a83eb8fc008a5b60839abdb2eb9e07b7f3d8",
+        "otel.jsonl": "7cb1e139649b5a1ab5d29b98c9ea35c22770b1aa321d64a3bc37f63f97c46f42"
+      },
+      "collection_started_at": "2026-11-06T09:57:42.423670+00:00"
+    }
+  },
+  "cases": [
+    {
+      "id": "C1",
+      "source": "vulnerable",
+      "controlled_change": "none",
+      "available_capabilities": [
+        "package_upgrade",
+        "maintenance_window"
+      ],
+      "expected": "conservative semantic outcome; finalize and read back if pipeline completes",
+      "results_reference": "output/case-improvements-20261106/report.md",
+      "action_execution": "not_performed"
+    },
+    {
+      "id": "C2",
+      "source": "negative",
+      "controlled_change": "Logback-core 1.5.25 build",
+      "available_capabilities": [
+        "package_upgrade",
+        "maintenance_window"
+      ],
+      "expected": "no_findings",
+      "results_reference": "output/case-improvements-20261106/report.md",
+      "action_execution": "not_performed"
+    },
+    {
+      "id": "C3",
+      "source": "vulnerable",
+      "controlled_change": "declared synthetic degradation of thesis.software.name only: logback-core -> logback",
+      "available_capabilities": [
+        "package_upgrade",
+        "maintenance_window"
+      ],
+      "expected": "insufficient_evidence",
+      "results_reference": "output/case-improvements-20261106/report.md",
+      "action_execution": "not_performed"
+    },
+    {
+      "id": "C4",
+      "source": "vulnerable",
+      "controlled_change": "remove maintenance_window only from operator capabilities",
+      "available_capabilities": [
+        "package_upgrade"
+      ],
+      "expected": "requires_prerequisites; maintenance must also fail separately",
+      "results_reference": "output/case-improvements-20261106/report.md",
+      "action_execution": "not_performed"
+    }
+  ],
+  "ranking_method": {
+    "one_candidate": "single_candidate_convention_v1",
+    "score": 1.0,
+    "native_bwaf_score": false,
+    "weights_computed": false,
+    "source_commit": "090b6844d95841e01046c60d18af049ceb03d9fd",
+    "source_function": "app/src/ledger.py::_single_strategy_outcome"
+  },
+  "semantic_expectation": {
+    "status": "requires_prerequisites",
+    "abductionPenalty": 38,
+    "contractionPenalty": 0,
+    "score": 62,
+    "accepted_recommendation_proven": false
+  },
+  "comparison": "The mock is not a numeric oracle for the real backend; C4 cannot demonstrate a fallback with one KG remedy."
+}

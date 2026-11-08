@@ -52,4 +52,4 @@ sono soggette ai controlli MVCC di Fabric. Il client non effettua retry
 automatici di transazioni dall'esito incerto.
 
 Configurazione gateway, limiti e collaudo:
-[integrazione nativa](../../docs/fabric-native-integration.md).
+[integrazione nativa](../../docs/archivio/fabric-native-integration.md).

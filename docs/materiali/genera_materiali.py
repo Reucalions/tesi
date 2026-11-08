@@ -261,7 +261,7 @@ def create_figure(font):
 
 
 def create_report(font):
-    source = (HERE.parent / "relazione-mockup.md").read_text()
+    source = (HERE.parent / "archivio" / "relazione-mockup.md").read_text()
     tokens = MarkdownIt("commonmark").enable("table").parse(source)
     assert tokens[0].type == "heading_open" and tokens[0].tag == "h1"
     title = tokens[1].content

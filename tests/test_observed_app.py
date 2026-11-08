@@ -76,6 +76,42 @@ def test_same_instance_version_and_jar_hash_are_linked(prepare_module, sources):
     assert "package_version" not in case.model_dump()  # versione ricavata dalla fonte
 
 
+@pytest.mark.parametrize("fault", [None, "different-component", "different-hash"])
+def test_logback_selection_keeps_observed_identity_and_requires_matching_inventory(
+    prepare_module, sources, fault
+):
+    export, inventory, start, end = sources
+    document = json.loads(inventory.read_text())
+    component = document["components"][0]
+    component.update(
+        group="ch.qos.logback",
+        name="logback-core",
+        version="1.5.24",
+        purl="pkg:maven/ch.qos.logback/logback-core@1.5.24?type=jar",
+    )
+    logs = json.loads(export.read_text())
+    for attribute in logs["resourceLogs"][0]["resource"]["attributes"]:
+        if attribute["key"] == "thesis.software.name":
+            attribute["value"]["stringValue"] = "logback-core"
+        elif attribute["key"] == "thesis.software.version":
+            attribute["value"]["stringValue"] = "1.5.24"
+    if fault == "different-component":
+        component["group"] = "unrelated.library"
+    elif fault == "different-hash":
+        component["hashes"][0]["content"] = "b" * 64
+    export.write_text(json.dumps(logs) + "\n")
+    inventory.write_text(json.dumps(document))
+    if fault:
+        with pytest.raises(ValueError):
+            prepare_module.inspect_sources(export, inventory, start, end, component="logback-core")
+    else:
+        case, binding, manifest = prepare_module.inspect_sources(
+            export, inventory, start, end, component="logback-core"
+        )
+        assert case.package_name == binding.runtime_package == "logback-core"
+        assert manifest["loaded_version"] == "1.5.24"
+
+
 @pytest.mark.parametrize("fault", ["jar", "version", "old", "instance", "empty"])
 def test_incoherent_or_stale_sources_fail(prepare_module, sources, fault):
     export, inventory, start, end = sources

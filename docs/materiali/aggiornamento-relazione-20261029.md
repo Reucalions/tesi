@@ -293,12 +293,12 @@ estensioni separate dal perimetro verificato.
 |---|---|
 | Mappa e percorso di studio | [stato-progetto.md](../stato-progetto.md) |
 | Architettura e profili | [architettura-implementata.md](../architettura-implementata.md) |
-| Fonti Apache | [apache-recorded-integration.md](../apache-recorded-integration.md) |
-| Assessment Ubuntu | [ubuntu-vulnerability-agent.md](../ubuntu-vulnerability-agent.md) |
-| Richieste Countermeasure | [ubuntu-countermeasure-agent.md](../ubuntu-countermeasure-agent.md) |
-| Ramo senza candidate | [apache-strategic-agent.md](../apache-strategic-agent.md) |
-| Prove Ollama | [apache-ollama-use-case.md](../apache-ollama-use-case.md) |
-| Collegamenti nativi | [fabric-native-integration.md](../fabric-native-integration.md) |
+| Fonti Apache | [apache-recorded-integration.md](../integrazioni/apache-recorded-integration.md) |
+| Assessment Ubuntu | [ubuntu-vulnerability-agent.md](../integrazioni/ubuntu-vulnerability-agent.md) |
+| Richieste Countermeasure | [ubuntu-countermeasure-agent.md](../integrazioni/ubuntu-countermeasure-agent.md) |
+| Ramo senza candidate | [apache-strategic-agent.md](../integrazioni/apache-strategic-agent.md) |
+| Prove Ollama | [apache-ollama-use-case.md](../esperimenti.md) |
+| Collegamenti nativi | [fabric-native-integration.md](../archivio/fabric-native-integration.md) |
 | Requisiti della tesi | [Proposta](../riferimenti/proposta-agentic-cti.pdf), sezioni 9.3, 14–17 |
 
 Gli identificativi sperimentali principali sono apache-ollama-20261018-r1,

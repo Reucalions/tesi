@@ -1,0 +1,330 @@
+{
+  "rank_remediations": [
+    {
+      "type": "object",
+      "properties": {
+        "cve_id": {
+          "type": "string",
+          "pattern": "^CVE-\\d{4}-\\d{4,}$",
+          "description": "Identificativo della vulnerabilit\u00e0 (es. CVE-2025-0160)"
+        },
+        "asset_context": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Contesto opzionale dell'asset impattato (vendor, prodotto, versione)"
+        },
+        "candidates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "ID univoco della soluzione candidata"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Nome della strategia o contromisura"
+              },
+              "description": {
+                "type": "string",
+                "description": "Descrizione testuale dell'azione difensiva"
+              },
+              "d3fend_technique": {
+                "type": "string",
+                "description": "IRI opzionale della tecnica MITRE D3FEND corrispondente"
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "description": "Elenco delle contromisure candidate da ordinare in graduatoria"
+        },
+        "graph": {
+          "type": "object",
+          "properties": {
+            "nodes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "type": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "type"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            },
+            "edges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "to": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "from",
+                  "to"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "nodes",
+            "edges"
+          ],
+          "additionalProperties": false,
+          "description": "Grafo di argomentazione precalcolato (opzionale)"
+        },
+        "knowledge_snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Snapshot di conoscenza richiesto"
+        },
+        "ontology_version": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Riferimento ontologico per l'assurance del backend"
+        }
+      },
+      "required": [
+        "cve_id",
+        "candidates"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    null
+  ],
+  "validate_countermeasure": [
+    {
+      "type": "object",
+      "properties": {
+        "asset_iri": {
+          "type": "string",
+          "description": "IRI dell'asset nell'ontologia di riferimento"
+        },
+        "countermeasure_iri": {
+          "type": "string",
+          "description": "IRI della contromisura da validare"
+        },
+        "ontology_id": {
+          "type": "string",
+          "description": "Identificativo opzionale dell'ontologia"
+        },
+        "operational_context": {
+          "type": "object",
+          "properties": {
+            "contract": {
+              "type": "string",
+              "const": "operational-context-v1"
+            },
+            "run_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "asset_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "cve_id": {
+              "type": "string",
+              "pattern": "^CVE-\\d{4}-\\d{4,}$"
+            },
+            "strategy_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ranking_decision_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ontology_individual": {
+              "type": "string",
+              "minLength": 1
+            },
+            "action": {
+              "type": "string",
+              "enum": [
+                "upgrade",
+                "isolate",
+                "block_deployment",
+                "monitor"
+              ]
+            },
+            "prerequisites": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 64
+            },
+            "constraints": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 64
+            },
+            "available_capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 64
+            },
+            "prohibited_actions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "upgrade",
+                  "isolate",
+                  "block_deployment",
+                  "monitor"
+                ]
+              },
+              "maxItems": 4
+            },
+            "constraint_mappings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "constraint": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "required_capabilities": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 1,
+                    "maxItems": 64
+                  }
+                },
+                "required": [
+                  "constraint",
+                  "required_capabilities"
+                ],
+                "additionalProperties": false
+              },
+              "maxItems": 64
+            },
+            "evidence_digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "candidates_digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "policy_source": {
+              "type": "string",
+              "minLength": 1
+            },
+            "policy_id": {
+              "type": "string",
+              "const": "operational-action-policy-v1"
+            },
+            "policy_digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "contract",
+            "run_id",
+            "asset_id",
+            "cve_id",
+            "strategy_id",
+            "ranking_decision_id",
+            "ontology_individual",
+            "action",
+            "prerequisites",
+            "constraints",
+            "available_capabilities",
+            "prohibited_actions",
+            "constraint_mappings",
+            "evidence_digest",
+            "candidates_digest",
+            "policy_source",
+            "policy_id",
+            "policy_digest"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "asset_iri",
+        "countermeasure_iri"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    null
+  ],
+  "get_decision": [
+    {
+      "type": "object",
+      "properties": {
+        "decision_id": {
+          "type": "string",
+          "description": "Identificativo univoco della decisione (es. DEC_CVE-2025-0160_...)"
+        }
+      },
+      "required": [
+        "decision_id"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    null
+  ],
+  "get_provenance": [
+    {
+      "type": "object",
+      "properties": {
+        "decision_id": {
+          "type": "string",
+          "description": "Identificativo univoco della decisione"
+        }
+      },
+      "required": [
+        "decision_id"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    null
+  ]
+}

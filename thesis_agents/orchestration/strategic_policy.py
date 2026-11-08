@@ -6,6 +6,7 @@ pubblicazioni riuscite: testo LLM ed errori dei tool non fanno avanzare lo stato
 
 from camel.terminators import ResponseTerminator
 
+from thesis_agents.agents.contracts import ROLE_INPUTS
 from thesis_agents.schemas import RankingResult, SemanticValidationReport
 
 
@@ -49,7 +50,7 @@ class StrategicToolPolicy(ResponseTerminator):
     def observe(self, name, result):
         if isinstance(result, dict):
             if name == "get_context":
-                required = {"runtime_evidence", "vulnerability_report", "candidate_strategies"}
+                required = set(ROLE_INPUTS["StrategicAgent"])
                 self.context_read = required <= result.get("artifacts", {}).keys()
             self.premature_responses = 0
 

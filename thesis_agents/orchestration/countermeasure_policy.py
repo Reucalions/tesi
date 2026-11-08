@@ -1,5 +1,6 @@
-"""Fasi di pubblicazione Ubuntu: un tool per volta, nessun output creato dalla policy."""
+"""Fasi di acquisizione/pubblicazione: un tool per volta, nessun output creato qui."""
 
+from thesis_agents.agents.contracts import ROLE_INPUTS
 from thesis_agents.orchestration.strategic_policy import StrategicToolPolicy
 
 
@@ -24,11 +25,26 @@ class CountermeasureToolPolicy(StrategicToolPolicy):
         if not isinstance(result, dict):
             return
         if name == "get_context":
-            required = {"runtime_evidence", "vulnerability_report"}
+            required = set(ROLE_INPUTS["CountermeasureAgent"])
             self.context_read = required <= result.get("artifacts", {}).keys()
         elif name in ("collect_countermeasure_context", "prepare_package_verification"):
             self.context_read = False
         self.premature_responses = 0
+
+    def instruction(self):
+        instruction = super().instruction()
+        if self.next_tool() == "publish_candidate_strategies":
+            context = self.session.get_context()
+            external = context.get("external_inputs", {})
+            if "package_verification" not in external:
+                instruction += (
+                    " Ubuntu package verification is not configured. Omit verification_requests; "
+                    "do not generate package verification requests from CTI or OSV."
+                )
+            report = context["artifacts"]["vulnerability_report"]
+            if not report["vulnerabilities"]:
+                instruction += ' Publish {"payload":{"strategies":[]}} as a real tool call.'
+        return instruction
 
     def is_terminated(self, messages):
         if self.next_tool() is None:

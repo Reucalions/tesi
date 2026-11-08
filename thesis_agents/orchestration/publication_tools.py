@@ -10,6 +10,7 @@ from camel.toolkits.function_tool import get_openai_tool_schema
 
 from thesis_agents.orchestration.artifacts import ArtifactSession
 from thesis_agents.schemas import CandidateStrategies, RuntimeEvidence, VulnerabilityReport
+from thesis_agents.schemas.countermeasure import NonPackageCandidateStrategies
 from thesis_agents.schemas.telemetry import OTelRuntimeEvidence, StaticRuntimeEvidence
 from thesis_agents.schemas.telemetry_source import TelemetryInput
 from thesis_agents.schemas.vulnerability import LegacyVulnerabilityReport, UbuntuVulnerabilityReport
@@ -90,6 +91,19 @@ class PublicationTools:
         """
         return self.publish_vulnerability_report(payload)
 
+    def publish_non_package_candidate_strategies(
+        self, payload: NonPackageCandidateStrategies
+    ) -> dict:
+        """Publish CTI candidates; Ubuntu verification requests are not available.
+
+        Args:
+            payload (NonPackageCandidateStrategies): Grounded strategies without package checks.
+
+        Returns:
+            dict: Validated CandidateStrategies saved by the session.
+        """
+        return self.publish_candidate_strategies(payload)
+
     def publish_ubuntu_vulnerability_report(self, payload: UbuntuVulnerabilityReport) -> dict:
         """Publish the exact Ubuntu report, preserving package verdicts and snapshot hashes.
 
@@ -102,6 +116,15 @@ class PublicationTools:
         return self.publish_vulnerability_report(payload)
 
     def resolve(self, name: str):
+        from thesis_agents.tools.cti_mcp import CTIVulnerabilityTool
+
+        if name == "publish_vulnerability_report" and isinstance(
+            self.session.vulnerability_tool, CTIVulnerabilityTool
+        ):
+            method = self.session.publish_acquired_vulnerability_report
+            schema = get_openai_tool_schema(method)
+            schema["function"]["name"] = name
+            return FunctionTool(method, openai_tool_schema=schema)
         # Solo le tre pubblicazioni richiedono un adapter. Gli altri tool restano
         # i metodi originali della medesima sessione, inclusa get_context.
         if name in (
@@ -122,6 +145,11 @@ class PublicationTools:
                     if isinstance(self.session.case, TelemetryInput)
                     else self.publish_static_runtime_evidence
                 )
+            if (
+                name == "publish_candidate_strategies"
+                and self.session.candidate_publication_schema() is NonPackageCandidateStrategies
+            ):
+                method = self.publish_non_package_candidate_strategies
             schema = get_openai_tool_schema(method)
             schema["function"]["name"] = name
             parameters = schema["function"]["parameters"]

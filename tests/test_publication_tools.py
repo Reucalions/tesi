@@ -43,6 +43,18 @@ def test_camel_publication_schema_requires_object(session, name):
     assert payload["additionalProperties"] is False
 
 
+def test_cti_candidate_tool_and_context_exclude_package_requests(session):
+    tool = PublicationTools(session).resolve("publish_candidate_strategies")
+    parameters = tool.get_openai_tool_schema()["function"]["parameters"]
+    payload = parameters["properties"]["payload"]
+    context = session.get_context()["schemas"]["candidate_strategies"]
+    assert payload["properties"]["verification_requests"]["maxItems"] == 0
+    assert context["properties"]["verification_requests"]["maxItems"] == 0
+    with pytest.raises(ValueError):
+        tool(payload={"strategies": [], "verification_requests": [{"kind": "ubuntu_status"}]})
+    assert not (session.output_dir / "candidate_strategies.json").exists()
+
+
 def test_structured_tool_rejects_serialized_json_and_preserves_facts(session):
     tool = PublicationTools(session).resolve("publish_runtime_evidence")
     evidence = fixture_evidence(session).model_dump(mode="json")

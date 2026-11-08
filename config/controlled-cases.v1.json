@@ -1,0 +1,155 @@
+{
+  "protocol": "controlled-cases-v1",
+  "date": "2026-11-05",
+  "scope": "Preparation using existing inputs, captured responses and source inspection; no new backend or semantic extension",
+  "real_execution_status": "not_executed",
+  "paths_relative_to": "repository_root",
+  "real_profile_template": "config/backends.real.example.json",
+  "comparison": "Compare decisions and invariants; mock scores, CVEs, IDs and statuses are not numeric oracles for the native backend",
+  "cti_reference": {
+    "dataset_id": "cve2owl_20260523_143950",
+    "dataset_sha256": "e3566009408385c7aea7901a9e6499132f0ae4bb07ccbd80d22e2171e5f7990c",
+    "positive_capture": "tests/data/cti/canonical-log4j-core.json",
+    "negative_capture": "output/observed-app-workforce-20261007-01/artifacts/cti_assessment.json",
+    "ambiguous_capture": "tests/data/cti/runtime-package.json",
+    "scope_note": "Historical captured responses, not current service availability or complete software safety"
+  },
+  "cases": [
+    {
+      "id": "C1",
+      "name": "vulnerable",
+      "change_from_baseline": "none",
+      "mockup_input": "thesis_agents/data/demo_01_nominal.json",
+      "mockup_expected": {
+        "lookup_status": "matched",
+        "decision_status": "selected",
+        "selected_strategy_id": "S_UPGRADE"
+      },
+      "captured_cti": "tests/data/cti/canonical-log4j-core.json",
+      "captured_cti_expected": {
+        "lookup_status": "matched",
+        "identity_status": "resolved",
+        "observed_product": "Apache Log4j Core",
+        "observed_version": "2.14.1",
+        "finding_cves": ["CVE-2025-68161", "CVE-2026-34477", "CVE-2026-34480"]
+      },
+      "real_target": {
+        "outcome": "recommended_if_at_least_one_candidate_is_effectively_accepted",
+        "selection": "first effectiveStatus=accepted in returned native ranking; no fixed strategy ID",
+        "shared_finalization": "completed with readback for each assessed CVE",
+        "action_execution": "not_performed"
+      },
+      "source_readiness": "positive CTI capture and mock input available; coherent vulnerable build/SBOM/SDK export still to materialize",
+      "remaining_preparation": [
+        "Reuse examples/observed-app in an isolated directory with the selected dependency version; preserve the current POM and archived sources",
+        "Verify actual loaded JAR, SBOM and OTel with existing inspect_sources",
+        "Bind all actual candidate/CVE pairs to existing KG and validation individuals; do not reuse illustrative example bindings without checking",
+        "Confirm actual capabilities as operator policy, not observed OTel facts"
+      ]
+    },
+    {
+      "id": "C2",
+      "name": "non_vulnerable_in_snapshot",
+      "change_from_baseline": "dependency version; software identity and workload retained for the eventual paired builds",
+      "mockup_input": "config/controlled-cases/input.non-vulnerable.mockup.json",
+      "mockup_expected": {
+        "lookup_status": "unsupported",
+        "decision_status": "insufficient_evidence",
+        "selected_strategy_id": null
+      },
+      "mockup_limitation": "The existing exact-match mock cannot establish a negative assessment; no backend extension is planned",
+      "archived_sources": "output/observed-app-sources-20261007-02",
+      "real_input": "output/observed-app-sources-20261007-02/input.json",
+      "source_manifest": "output/observed-app-sources-20261007-02/source_manifest.json",
+      "captured_cti": "output/observed-app-workforce-20261007-01/artifacts/cti_assessment.json",
+      "captured_cti_expected": {
+        "lookup_status": "no_findings",
+        "identity_status": "resolved",
+        "observed_product": "Apache Log4j Core",
+        "observed_version": "2.26.1",
+        "finding_cves": []
+      },
+      "real_target": {
+        "execution_status": "assessment_completed",
+        "outcome": "no_findings only with resolved identity and complete negative rule coverage",
+        "candidates": "empty",
+        "native_stages": "skipped as not applicable",
+        "shared_finalization": "not_applicable",
+        "action_execution": "not_performed"
+      },
+      "source_readiness": "archived real build, SBOM, SDK export and negative CTI capture available; reusing the archive is an explicitly recorded replay",
+      "remaining_preparation": [
+        "Use archived source timestamps and instance ID unchanged for a replay, or collect a new coherent build/run",
+        "Configure final real profile without replacing unknown digests or IRI with invented values",
+        "Keep any new unrelated findings separate from the historical snapshot expectation"
+      ]
+    },
+    {
+      "id": "C3",
+      "name": "insufficient_evidence",
+      "change_from_baseline": "insufficient software identity for CTI; do not simulate a service outage as a domain abstention",
+      "mockup_input": "thesis_agents/data/demo_04_unsupported_lookup.json",
+      "mockup_expected": {
+        "lookup_status": "unsupported",
+        "decision_status": "insufficient_evidence",
+        "selected_strategy_id": null
+      },
+      "captured_cti": "tests/data/cti/runtime-package.json",
+      "captured_cti_expected": {
+        "lookup_status": "ambiguous",
+        "identity_status": "ambiguous",
+        "observed_product": "log4j-core",
+        "observed_version": "2.14.1",
+        "finding_cves": []
+      },
+      "real_target": {
+        "execution_status": "assessment_completed",
+        "outcome": "insufficient_evidence",
+        "candidates": "empty",
+        "native_stages": "skipped as not applicable",
+        "shared_finalization": "not_applicable",
+        "action_execution": "not_performed"
+      },
+      "source_readiness": "existing mock and ambiguous CTI capture available; coherent degraded input for the final run still to materialize",
+      "remaining_preparation": [
+        "Record the exact identity degradation and retain the original source hashes",
+        "Use the exact observed label; no hidden alias correction or invention of version/CVE",
+        "Declare any modified telemetry copy as controlled synthetic degradation, not a fresh original SDK observation",
+        "Missing source files, missing mandatory attributes and timeouts are technical failures, not this expected outcome"
+      ]
+    },
+    {
+      "id": "C4",
+      "name": "vulnerable_with_operational_constraint",
+      "change_from_baseline": "remove maintenance_window from available_capabilities only",
+      "mockup_input": "thesis_agents/data/demo_02_no_maintenance.json",
+      "mockup_expected": {
+        "lookup_status": "matched",
+        "decision_status": "selected",
+        "selected_strategy_id": "S_ISOLATE"
+      },
+      "captured_cti": "tests/data/cti/canonical-log4j-core.json",
+      "captured_cti_expected": {
+        "lookup_status": "matched",
+        "identity_status": "resolved",
+        "observed_product": "Apache Log4j Core",
+        "observed_version": "2.14.1",
+        "finding_cves": ["CVE-2025-68161", "CVE-2026-34477", "CVE-2026-34480"]
+      },
+      "real_target": {
+        "upgrade_effectively_accepted": false,
+        "missing_capability": "maintenance_window",
+        "selection": "first alternative effectiveStatus=accepted if one exists; otherwise preserve the actual prerequisites/review/no-valid outcome",
+        "fallback_proof": "only if an earlier ranked candidate was actually not acceptable and a later one selected",
+        "shared_finalization": "completed with readback for each assessed CVE",
+        "action_execution": "not_performed"
+      },
+      "source_readiness": "same source readiness as C1; operational variation already executable with mocks",
+      "remaining_preparation": [
+        "Reuse exactly the C1 build, SBOM, OTel window, CTI and ontology snapshot",
+        "Change only capabilities in the input and validation profile, keeping them equal",
+        "Do not describe missing maintenance as a Tiny-ME incompatibility when the operational policy is the evaluator"
+      ]
+    }
+  ]
+}

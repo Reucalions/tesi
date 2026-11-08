@@ -14,7 +14,7 @@ OSV per il componente Maven associato all'asset. Non genera strategie.
 Eseguire dalla radice di `tesi` con il progetto installato. Il default interroga
 l'API OSV reale. La SBOM inclusa è un inventario **dimostrativo scritto a mano**,
 non il risultato di una scansione dell'applicazione o dei repository della tesi.
-La [demo con applicazione osservata](../../docs/observed-app-integration.md)
+La [demo con applicazione osservata](../../docs/integrazioni/observed-app-integration.md)
 fornisce invece una SBOM generata dalla build Maven, servita con
 `--sbom-kind provided` e confrontata con il JAR caricato a runtime.
 
@@ -26,4 +26,4 @@ fornisce invece una SBOM generata dalla build Maven, servita con
 
 Contratti in [supply_chain.py](../../thesis_agents/schemas/supply_chain.py).
 Fonti, comandi per CTI reale, vincoli e risultati nella
-[guida dell'integrazione](../../docs/sbom-osv-integration.md).
+[guida dell'integrazione](../../docs/integrazioni/sbom-osv-integration.md).

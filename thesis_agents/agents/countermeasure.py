@@ -18,10 +18,15 @@ When external_inputs.package_verification.required is true, call
 prepare_package_verification with {}, then read get_context again. Copy its complete
 verification_requests unchanged into CandidateStrategies. These are pending evidence
 requests, not executed checks, confirmed findings or ranked remediation candidates.
+When package verification is not required, omit verification_requests entirely:
+CTI findings and OSV records do not authorize Ubuntu-specific verification requests.
 Do not choose an upgrade version or invent CVE-specific prerequisites.
 Publish only CandidateStrategies; preserve the two source artifacts and their producers.
-StrategicAgent will consume all three artifacts independently. Produce 2-4 diverse
-candidates only for CVEs in vulnerabilities. When vulnerabilities is empty (unsupported,
+StrategicAgent will consume all three artifacts independently. When no canonical
+bindings are configured, produce 2-4 diverse candidates only for CVEs in vulnerabilities.
+When canonical bindings are configured, publish exactly their configured candidates;
+a single grounded remediation requires one candidate, not invented alternatives.
+When vulnerabilities is empty (unsupported,
 ambiguous, no_match, not_evaluable or no_findings), publish an empty strategies list.
 For any empty finding list you MUST still make the real tool call
 publish_candidate_strategies with strategies=[] and the required verification_requests
@@ -52,3 +57,11 @@ TOOLS = (
     "prepare_package_verification",
     "publish_candidate_strategies",
 )
+
+PROMPT += """\nWhen external_inputs.canonical_bindings is present, preserve its exact
+CVE/strategy IDs and cover every configured binding in the candidate publication.
+This requirement applies only when the report contains confirmed vulnerabilities;
+for an empty report the required publication remains strategies=[].
+Those bindings are operator configuration, not an ontological equivalence inferred
+by you. Do not invent KG individuals, silently omit bindings, or change a finding
+to fit the configured scope. Report incompatible scope as a task failure."""

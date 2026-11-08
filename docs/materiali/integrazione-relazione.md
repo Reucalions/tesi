@@ -208,7 +208,7 @@ La preparazione dell'applicazione osservata richiede JDK, Maven e le dipendenze 
   --output output/relazione-sources
 ```
 
-Il comando esegue build, workload e controlli di coerenza, quindi produce selettore, manifest e profilo dei backend. La directory deve essere nuova. Dopo l'avvio separato dei gateway OTel e SBOM e del servizio CTI, secondo `docs/observed-app-integration.md`, l'inferenza si esegue con:
+Il comando esegue build, workload e controlli di coerenza, quindi produce selettore, manifest e profilo dei backend. La directory deve essere nuova. Dopo l'avvio separato dei gateway OTel e SBOM e del servizio CTI, secondo `docs/integrazioni/observed-app-integration.md`, l'inferenza si esegue con:
 
 ```bash
 LLM_MODEL=tesi-qwen3:4b LLM_API_KEY=local \
@@ -224,7 +224,7 @@ CAMEL_LOG_DIR="$PWD/output/relazione-run/llm" \
 
 I valori valgono per il processo e non richiedono di riscrivere `.env`. Ollama deve avere il modello locale configurato con lo stesso contesto. Ogni run usa una destinazione distinta. Questi comandi descrivono una nuova esecuzione; i risultati della tabella precedente derivano dalle prove già conservate e non vengono rigenerati dalla stesura della relazione.
 
-La documentazione `docs/agent-tool-phases.md` identifica i run, i manifest, i comandi effettivi e gli audit ripetibili offline. Gli output includono input, artefatti di dominio, snapshot delle fonti, conversazioni e riepiloghi. Le directory `output/` sono evidenze locali escluse da Git e vanno incluse esplicitamente quando occorre consegnare i dati sperimentali.
+La documentazione `docs/tecnica/agent-tool-phases.md` identifica i run, i manifest, i comandi effettivi e gli audit ripetibili offline. Gli output includono input, artefatti di dominio, snapshot delle fonti, conversazioni e riepiloghi. Le directory `output/` sono evidenze locali escluse da Git e vanno incluse esplicitamente quando occorre consegnare i dati sperimentali.
 
 ## 18. Stato raggiunto e sviluppi successivi
 
@@ -263,7 +263,7 @@ Le specifiche seguenti definiscono i protocolli e i formati utilizzati. Le polic
 
 **[CAMEL-SDK]** CAMEL-AI. *CAMEL repository*, versione 0.2.90; codice dell'SDK utilizzato per agenti, cloni e ciclo dei tool. https://github.com/camel-ai/camel/tree/v0.2.90
 
-**[BASE-CTI]** sisinflab-swot. *agent-based-cti-argumentation-pipeline*, repository privato e copia locale sul branch `costa-thesis`. Baseline esaminata: commit `3b483624286262f2e0ac94b4b950b904a5dc2ad4`. Collegamento e aggiunte del servizio sono documentati in `docs/owl-cti-integration.md` e `docs/cti-workforce.md`.
+**[BASE-CTI]** sisinflab-swot. *agent-based-cti-argumentation-pipeline*, repository privato e copia locale sul branch `costa-thesis`. Baseline esaminata: commit `3b483624286262f2e0ac94b4b950b904a5dc2ad4`. Collegamento e aggiunte del servizio sono documentati in `docs/integrazioni/owl-cti-integration.md` e `docs/integrazioni/cti-workforce.md`.
 
 **[PROVO]** W3C. *PROV-O: The PROV Ontology*. Riferimento per il mapping previsto della provenienza. https://www.w3.org/TR/prov-o/
 
@@ -271,11 +271,11 @@ Le specifiche seguenti definiscono i protocolli e i formati utilizzati. Le polic
 
 | Ambito | Documentazione e sorgenti del progetto |
 |---|---|
-| Configurazione e MCP | `thesis_agents/backends.py`, `thesis_agents/mcp/`, `docs/mcp-strategic.md` |
-| Correlazione CTI | `thesis_agents/tools/cti_mcp.py`, `docs/cti-workforce.md` |
-| Acquisizione OTel | `thesis_agents/tools/telemetry_http.py`, `services/otel_gateway/`, `docs/opentelemetry-integration.md` |
-| SBOM e OSV | `thesis_agents/tools/sbom_http.py`, `services/sbom_gateway/`, `docs/sbom-osv-integration.md` |
-| Applicazione osservata | `examples/observed-app/`, `docs/observed-app-integration.md` |
+| Configurazione e MCP | `thesis_agents/backends.py`, `thesis_agents/mcp/`, `docs/integrazioni/mcp-strategic.md` |
+| Correlazione CTI | `thesis_agents/tools/cti_mcp.py`, `docs/integrazioni/cti-workforce.md` |
+| Acquisizione OTel | `thesis_agents/tools/telemetry_http.py`, `services/otel_gateway/`, `docs/integrazioni/opentelemetry-integration.md` |
+| SBOM e OSV | `thesis_agents/tools/sbom_http.py`, `services/sbom_gateway/`, `docs/integrazioni/sbom-osv-integration.md` |
+| Applicazione osservata | `examples/observed-app/`, `docs/integrazioni/observed-app-integration.md` |
 | Artefatti e ciclo CAMEL | `thesis_agents/orchestration/artifacts.py`, `chat_agent.py`, `strategic_policy.py`, `publication_tools.py` nella stessa directory |
-| Prove preliminari | `docs/observed-app-ollama.md`, `docs/ollama-contract-tests.md` |
-| Ripetizioni e audit aggiornati | `docs/agent-tool-phases.md`, con riferimenti ai manifest e alle evidenze locali |
+| Prove preliminari | `docs/esperimenti.md`, `docs/tecnica/ollama-contract-tests.md` |
+| Ripetizioni e audit aggiornati | `docs/tecnica/agent-tool-phases.md`, con riferimenti ai manifest e alle evidenze locali |

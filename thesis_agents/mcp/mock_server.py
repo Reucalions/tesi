@@ -30,13 +30,16 @@ def create_server(*, host: str = "127.0.0.1", port: int = 8001) -> FastMCP:
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Server MCP HTTP del lookup mock")
+    parser = argparse.ArgumentParser(description="Server MCP HTTP/stdio del lookup mock")
+    parser.add_argument(
+        "--transport", choices=("streamable-http", "stdio"), default="streamable-http"
+    )
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8001)
     args = parser.parse_args(argv)
     if not 1 <= args.port <= 65535:
         parser.error("La porta deve essere compresa fra 1 e 65535")
-    create_server(host=args.host, port=args.port).run(transport="streamable-http")
+    create_server(host=args.host, port=args.port).run(transport=args.transport)
 
 
 if __name__ == "__main__":

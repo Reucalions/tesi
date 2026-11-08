@@ -376,5 +376,42 @@
       "author": "{sisinflab-swot}",
       "note": "Repository privato; commit a3dab4a5def79dda356dd753aa34306e03ea346a"
     }
+  },
+  {
+    "id": "BWAF-FLPRS25",
+    "author": "Corrado Fasciano and Giuseppe Loseto and Agnese Pinto and Michele Ruta and Floriano Scioscia",
+    "title": "A propagation-based ranking semantics in Explainable Bipolar Weighted Argumentation",
+    "year": "2025",
+    "url": "https://doi.org/10.1016/j.engappai.2024.109767",
+    "scope": "Lette sezioni 4–5 del postprint autore (definizioni 4–9, algoritmi 1–2): relazioni orientate e pesi con segno, propagazione per cammini, nodi free/connected e score nativi. Riferimento per il contratto scientifico; non prova che libgraph.so locale implementi esattamente questa versione o questi parametri.",
+    "local_file": "",
+    "consulted": "2026-11-05",
+    "consultation_status": "PDF degli autori scaricato e testo verificato; metadata confermati da editore e IRIS Poliba",
+    "include_in_report": true,
+    "bib_type": "article",
+    "publication": "Engineering Applications of Artificial Intelligence, 142, 109767",
+    "citation_author": "C. Fasciano et al.",
+    "bib_fields": {
+      "journal": "Engineering Applications of Artificial Intelligence",
+      "volume": "142",
+      "pages": "109767",
+      "doi": "10.1016/j.engappai.2024.109767"
+    }
+  },
+  {
+    "id": "OWL-DIRECT",
+    "author": "W3C",
+    "title": "OWL 2 Web Ontology Language: Direct Semantics (Second Edition)",
+    "year": "2012",
+    "url": "https://www.w3.org/TR/owl2-direct-semantics/",
+    "scope": "Sezioni 2.2.3 e 2.3: quantificazione universale/esistenziale, disgiunzione e class assertions. Un universale non impone un filler; un conflitto esplicito di classi e una prova qualitativa, mentre assenza di clash sintattico non prova compatibilita.",
+    "local_file": "",
+    "consulted": "2026-11-05",
+    "consultation_status": "raccomandazione W3C consultata per il consolidamento scientifico",
+    "include_in_report": true,
+    "bib_type": "misc",
+    "publication": "W3C Recommendation, 11 December 2012",
+    "citation_author": "W3C",
+    "bib_fields": {}
   }
 ]

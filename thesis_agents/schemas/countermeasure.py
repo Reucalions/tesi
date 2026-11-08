@@ -50,6 +50,14 @@ class CandidateStrategies(Message):
         return self
 
 
+class NonPackageCandidateStrategies(CandidateStrategies):
+    """Publication view: package checks cannot be requested without Ubuntu evidence."""
+
+    verification_requests: list[VerificationRequest] = Field(
+        default_factory=list, max_length=0, exclude_if=lambda value: not value
+    )
+
+
 class DecisionContext(Message):
     # Contesto del singolo controllo semantico, non un nuovo artefatto sostitutivo.
     # La strategia viene passata al tool come argomento separato. Evidence e report

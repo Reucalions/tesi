@@ -14,6 +14,8 @@ import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.HexFormat;
 import java.util.UUID;
+import java.util.Properties;
+import java.util.jar.JarFile;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
@@ -22,7 +24,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 
 /**
- * Finite local workload: uses the actual Log4j implementation and emits OTel logs.
+ * Finite local workload: observes the selected loaded dependency and emits OTel logs.
  * No input version, exploit simulation, network listener or mitigation executor.
  */
 public final class ObservedApplication {
@@ -34,20 +36,49 @@ public final class ObservedApplication {
         }
         var context = (LoggerContext) LogManager.getContext(false);
         var log = context.getLogger(ObservedApplication.class.getName());
-        var loadedPackage = LoggerContext.class.getPackage();
+        String component = System.getProperty("thesis.observed.component", "log4j-core");
+        Class<?> observedClass = switch (component) {
+            case "log4j-core" -> LoggerContext.class;
+            case "logback-core" -> Class.forName("ch.qos.logback.core.ContextBase");
+            default -> throw new IllegalArgumentException("Unsupported observed component");
+        };
+        if (component.equals("logback-core")) {
+            // Instantiate the library actually on this build's runtime classpath.
+            observedClass.getConstructor().newInstance();
+        }
+        var loadedPackage = observedClass.getPackage();
         String title = loadedPackage.getImplementationTitle();
         String version = loadedPackage.getImplementationVersion();
         if (title == null || version == null) {
-            throw new IllegalStateException("Loaded Log4j JAR lacks implementation metadata");
+            throw new IllegalStateException("Loaded dependency lacks implementation metadata");
         }
-        Path jar = Path.of(LoggerContext.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        Path jar = Path.of(observedClass.getProtectionDomain().getCodeSource().getLocation().toURI());
+        String observedName = title;
+        if (component.equals("logback-core")) {
+            // Artifact identity comes from the loaded JAR, not from a CTI alias or input label.
+            try (var archive = new JarFile(jar.toFile())) {
+                var entry = archive.getJarEntry("META-INF/maven/ch.qos.logback/logback-core/pom.properties");
+                if (entry == null) throw new IllegalStateException("Missing loaded JAR Maven identity");
+                var properties = new Properties();
+                try (var stream = archive.getInputStream(entry)) { properties.load(stream); }
+                if (!"ch.qos.logback".equals(properties.getProperty("groupId"))
+                        || !component.equals(properties.getProperty("artifactId"))
+                        || !version.equals(properties.getProperty("version"))) {
+                    throw new IllegalStateException("Loaded Maven and implementation metadata differ");
+                }
+                observedName = properties.getProperty("artifactId");
+            }
+        }
         String sha256 = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(jar)));
         String instance = UUID.randomUUID().toString();
         var resource = Resource.create(Attributes.builder()
             .put("service.name", "thesis-observed-app")
             .put("service.instance.id", instance)
             .put("service.version", "1.0.0")
-            .put("thesis.software.name", title)
+            .put("thesis.software.name", observedName)
+            .put("thesis.software.manifest.title", title)
+            .put("thesis.software.name.origin", component.equals("logback-core")
+                ? "loaded-jar-maven-pom.properties" : "loaded-jar-implementation-title")
             .put("thesis.software.version", version)
             .put("thesis.software.jar.sha256", sha256)
             .put("thesis.workload.kind", "local-demonstration")
@@ -95,6 +126,6 @@ public final class ObservedApplication {
             handler.close();
             LogManager.shutdown();
         }
-        System.out.println("Observed " + title + " " + version + "; instance=" + instance);
+        System.out.println("Observed " + observedName + " " + version + "; manifest=" + title + "; instance=" + instance);
     }
 }

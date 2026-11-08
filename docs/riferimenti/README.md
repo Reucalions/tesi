@@ -7,11 +7,11 @@ I riferimenti sono identificati con gli stessi codici usati nella relazione.
 
 ```bash
 python3 docs/riferimenti/aggiorna_fonti.py
-/tmp/tesi-materiali-venv/bin/python docs/materiali/genera_materiali.py
+# Non rigenerare i Word modificati manualmente con genera_materiali.py.
 ```
 
-Il primo comando aggiorna questo catalogo, il BibTeX e la bibliografia Markdown;
-il secondo rigenera i materiali. Non vengono effettuate inferenze o chiamate di rete.
+Il comando aggiorna questo catalogo, il BibTeX e la bibliografia Markdown.
+I Word manuali sono preservati. Non vengono effettuate inferenze o chiamate di rete.
 
 ## [TESI] Toward Explainable Agentic Cyber Threat Intelligence: Semantic Smart Contracts, Argumentation Ranking and Runtime Observability
 
@@ -234,3 +234,23 @@ Fonte: https://github.com/sisinflab-swot/semantic-cti-ledger-argumentation/tree/
 **Ambito:** Repository privato; copia locale letta nella revisione bibliografica. Commit a3dab4a5def79dda356dd753aa34306e03ea346a. Non eseguito né integrato nel mockup. File e hash in baseline-locali.json.
 
 **Consultazione:** 2026-09-17; consultato ora in sola lettura; non fonte originaria attestata della formula mock.
+
+## [BWAF-FLPRS25] A propagation-based ranking semantics in Explainable Bipolar Weighted Argumentation
+
+**[BWAF-FLPRS25]** Corrado Fasciano and Giuseppe Loseto and Agnese Pinto and Michele Ruta and Floriano Scioscia. *A propagation-based ranking semantics in Explainable Bipolar Weighted Argumentation*. 2025.
+
+Fonte: https://doi.org/10.1016/j.engappai.2024.109767
+
+**Ambito:** Lette sezioni 4–5 del postprint autore (definizioni 4–9, algoritmi 1–2): relazioni orientate e pesi con segno, propagazione per cammini, nodi free/connected e score nativi. Riferimento per il contratto scientifico; non prova che libgraph.so locale implementi esattamente questa versione o questi parametri.
+
+**Consultazione:** 2026-11-05; PDF degli autori scaricato e testo verificato; metadata confermati da editore e IRIS Poliba.
+
+## [OWL-DIRECT] OWL 2 Web Ontology Language: Direct Semantics (Second Edition)
+
+**[OWL-DIRECT]** W3C. *OWL 2 Web Ontology Language: Direct Semantics (Second Edition)*. 2012.
+
+Fonte: https://www.w3.org/TR/owl2-direct-semantics/
+
+**Ambito:** Sezioni 2.2.3 e 2.3: quantificazione universale/esistenziale, disgiunzione e class assertions. Un universale non impone un filler; un conflitto esplicito di classi e una prova qualitativa, mentre assenza di clash sintattico non prova compatibilita.
+
+**Consultazione:** 2026-11-05; raccomandazione W3C consultata per il consolidamento scientifico.

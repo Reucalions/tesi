@@ -1,0 +1,154 @@
+{
+  "contract": "real-execution-v1",
+  "sources": {
+    "telemetry": {
+      "transport": "http",
+      "url": "http://127.0.0.1:8004/v1/observations",
+      "source_id": "REPLACE_WITH_TELEMETRY_SOURCE_ID",
+      "acquisition": "recorded"
+    },
+    "vulnerability": {
+      "transport": "mcp",
+      "url": "http://127.0.0.1:8003/mcp",
+      "expected_kind": "real",
+      "timeout_seconds": 60
+    },
+    "vulnerability_adapter": "cve2owl-v1",
+    "cti_dataset_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "countermeasure_input": {
+      "transport": "http",
+      "url": "http://127.0.0.1:8005/v1/countermeasure-context",
+      "expected_kind": "live",
+      "source_id": "REPLACE_WITH_SBOM_SOURCE_ID",
+      "sbom_kind": "provided",
+      "sbom_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  },
+  "preparation": {
+    "contract": "bottalico-preparation-process-v1",
+    "repository": "/Users/reucalion/Desktop/agent-based-cti-argumentation-pipeline",
+    "python": "/Users/reucalion/tesi/.venv/bin/python",
+    "source_ontology": "/Users/reucalion/Desktop/agent-based-cti-argumentation-pipeline/app/data/cve2owl_20260523_143950.owl",
+    "source_ontology_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "generator_manifest_sha256": "84d03335cb79787c114429b291a67957d22e896e9355d3c3abbb18fc43eb376e",
+    "knowledge_snapshot_id": "urn:cti:snapshot:cve2owl:v1.0.0",
+    "timeout_seconds": 600
+  },
+  "preparation_scope": {
+    "assessments": {
+      "results": [
+        {
+          "asset": {
+            "product": "log4j-core",
+            "version": "2.14.1",
+            "vendor": "apache",
+            "asset_type": null
+          },
+          "matches": [
+            {
+              "confidence": "high",
+              "affected_entries": [
+                {
+                  "cve_id": "CVE-2021-44228",
+                  "affected_iri": "CVE-2021-44228_Containers_Cna_Affected",
+                  "vulnerability_status": "vulnerable",
+                  "version_rules": [
+                    {
+                      "evaluated": true,
+                      "matched_asset_version": true,
+                      "vulnerability_status": "vulnerable",
+                      "version_iri": "CVE-2021-44228_Containers_Cna_Version"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "bindings": [
+      {
+        "cve_id": "CVE-2021-44228",
+        "strategy_id": "S_UPGRADE",
+        "ontology_individual": "CVE-2021-44228_Containers_Cna_Solutions_0"
+      },
+      {
+        "cve_id": "CVE-2021-44228",
+        "strategy_id": "S_ISOLATE",
+        "ontology_individual": "CVE-2021-44228_Containers_Cna_Solutions_1"
+      },
+      {
+        "cve_id": "CVE-2021-44228",
+        "strategy_id": "S_BLOCK",
+        "ontology_individual": "CVE-2021-44228_Containers_Cna_Solutions_2"
+      },
+      {
+        "cve_id": "CVE-2021-44228",
+        "strategy_id": "S_MONITOR",
+        "ontology_individual": "CVE-2021-44228_Containers_Cna_Solutions_3"
+      }
+    ]
+  },
+  "shared": {
+    "version": 1,
+    "contract": "shared-saas-v1",
+    "server_name": "mcp-semantic-cti-saas",
+    "connection": {
+      "transport": "mcp-stdio",
+      "command": "node",
+      "args": [
+        "/Users/reucalion/Desktop/agent-based-cti-argumentation-pipeline/mcp-fablo-server/build/index.js"
+      ],
+      "cwd": "/Users/reucalion/Desktop/agent-based-cti-argumentation-pipeline/mcp-fablo-server",
+      "env_from": {
+        "FABLO_REST_URL": "FABLO_REST_URL",
+        "FABLO_USER": "FABLO_USER",
+        "FABLO_PASSWORD": "FABLO_PASSWORD"
+      },
+      "expected_kind": "real",
+      "timeout_seconds": 180
+    }
+  },
+  "ranking": {
+    "contract": "shared-strategic-ranking-v1",
+    "tenant_id": "REPLACE_WITH_TENANT_ID",
+    "knowledge_snapshot_id": "urn:cti:snapshot:cve2owl:v1.0.0",
+    "knowledge_snapshot_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "ontology_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "validation": {
+    "ontology_key": "REPLACE_WITH_SEMANTIC_ONTOLOGY_KEY",
+    "asset_iri": "urn:example:REPLACE_WITH_ASSET_IRI",
+    "bindings": [
+      {
+        "cve_id": "CVE-2021-44228",
+        "strategy_id": "S_UPGRADE",
+        "ontology_individual": "CVE-2021-44228_Containers_Cna_Solutions_0",
+        "countermeasure_iri": "urn:example:REPLACE_WITH_IRI_S_UPGRADE"
+      },
+      {
+        "cve_id": "CVE-2021-44228",
+        "strategy_id": "S_ISOLATE",
+        "ontology_individual": "CVE-2021-44228_Containers_Cna_Solutions_1",
+        "countermeasure_iri": "urn:example:REPLACE_WITH_IRI_S_ISOLATE"
+      },
+      {
+        "cve_id": "CVE-2021-44228",
+        "strategy_id": "S_BLOCK",
+        "ontology_individual": "CVE-2021-44228_Containers_Cna_Solutions_2",
+        "countermeasure_iri": "urn:example:REPLACE_WITH_IRI_S_BLOCK"
+      },
+      {
+        "cve_id": "CVE-2021-44228",
+        "strategy_id": "S_MONITOR",
+        "ontology_individual": "CVE-2021-44228_Containers_Cna_Solutions_3",
+        "countermeasure_iri": "urn:example:REPLACE_WITH_IRI_S_MONITOR"
+      }
+    ],
+    "available_capabilities": [],
+    "prohibited_actions": [],
+    "constraint_mappings": [],
+    "policy_source": "Explicit operator configuration; replace IRIs and confirm operational facts"
+  }
+}

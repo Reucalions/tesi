@@ -4,7 +4,7 @@ Per pianificare il lavoro dopo il porting del 30 ottobre, leggere prima
 [prossime azioni](prossime-azioni.md) e
 [porting dei servizi condivisi](porting-principe-costa.md).
 
-Revisione: **29 ottobre 2026**. Per studiare prima le responsabilità e i risultati,
+Revisione: **5 novembre 2026**. Per studiare prima le responsabilità e i risultati,
 iniziare da [stato del progetto](stato-progetto.md) e
 [architettura aggiornata](architettura-implementata.md). La mappa seguente include
 ora assessment Ubuntu, richieste di verifica, PROV-O e gateway Fabric. Il loro
@@ -20,6 +20,13 @@ I file Python contengono commenti in italiano su responsabilità, input/output, 
 4. `orchestration/workforce.py` e `agents/`: come CAMEL assegna i task e i tre produttori convergono nello StrategicAgent.
 5. `backends.py` e `tools/`: selezione dei servizi, adapter remoti e backend mock.
 6. `tests/`: esempi eseguibili di casi ammessi, errori e controlli del DAG.
+
+Per il nuovo percorso completo, leggere anche
+[selezione, DAG e switch](integrazioni/strategic-selection-dag.md):
+`execution_profiles.py` e `execution_runtime.py` configurano e collegano le fasi;
+`orchestration/native_dag.py` ne protegge le dipendenze;
+`strategic/selection_contracts.py`, `selection_session.py` e `selection_agent.py`
+definiscono esiti per CVE, integrita dei checkpoint e pubblicazione CAMEL.
 
 ## Avvio, configurazione e dimostrazione
 
@@ -64,6 +71,7 @@ non costruisce o pubblica gli artefatti mancanti.
 
 | File | Responsabilità |
 |---|---|
+| [contracts.py](../thesis_agents/agents/contracts.py) | Registro dei quattro ruoli: task, input/output, produttori e dipendenze CAMEL derivate; condiviso con handler e policy. |
 | [telemetry.py](../thesis_agents/agents/telemetry.py) | Normalizzare i fatti osservati e pubblicare solo `RuntimeEvidence`. |
 | [vulnerability.py](../thesis_agents/agents/vulnerability.py) | Usare l'osservazione software per il lookup e pubblicare un rapporto separato, preservando i finding restituiti. |
 | [countermeasure.py](../thesis_agents/agents/countermeasure.py) | Generare alternative da evidence e report, senza decidere ranking o validità semantica. |
@@ -113,16 +121,31 @@ La dependency injection avviene nella sessione e in `connect_backends`, prima
 della Workforce. Senza profilo rimangono input statico e tool mock; gli ingressi
 remoti sono espliciti. I processi degli agenti conoscono i contratti pubblici,
 non importano gli algoritmi dei repository backend. Dettagli in
-[architettura](architecture.md) e [piano MCP](mcp-integration-plan.md).
+[architettura](tecnica/architecture.md) e [piano MCP](prossime-azioni.md).
 
-La [prova Apache/Ollama](apache-ollama-use-case.md) è il riferimento più recente:
-fallimento r1, correzione delle fasi e r2 completato con due retry. Il
-[gateway Fabric nativo](fabric-native-integration.md) è il successivo incremento
-software, con collaudo on-chain ancora aperto. La
-[prova Ollama dei tre ingressi](observed-app-ollama.md) resta il riferimento per
-inferenza effettiva, tempi, dati consegnati agli agenti e criticità recuperate.
+Il [registro degli esperimenti](esperimenti.md) raccoglie le prove Apache/Ollama
+e dell'applicazione Java, compresi fallimenti e recuperi. Il
+[gateway Fabric sperimentale](archivio/fabric-native-integration.md) rimane
+nel codice per confronto e test. Il [profilo Strategic nativo](integrazioni/strategic-native.md)
+collega ora il checkpoint canonico al bridge MCP condiviso per ranking e riletture.
+`strategic/session.py` verifica gli input e pubblica il checkpoint; `strategic/agent.py`
+espone le fasi al ruolo CAMEL e `strategic/contracts.py` mantiene gli score nativi.
+`strategic/validation_session.py` consuma ora il ranking e invoca la validazione
+con IRI e contesto operativo; `mcp/operational_contracts.py` definisce policy e
+controlli del wire. [Guida](integrazioni/strategic-validation.md).
+Selezione e finalizzazione sono collegate nel DAG principale; la
+[guida alla finalizzazione](integrazioni/strategic-finalization.md) descrive i controlli.
 L'audit di `demo_audit.py` nel suo insieme resta specifico della matrice mock;
 il run remoto conserva un audit dedicato, senza assumere risultati mock del lookup.
+
+Per il [consolidamento scientifico](tecnica/consolidamento-scientifico-grafo.md),
+leggere `config/scientific-graph-cases.v1.json` e
+`tests/test_scientific_semantics.py`: fissano baseline e aspettative qualitative,
+senza sostituire il motore nativo. `mcp/shared_contracts.py` controlla anche la
+coerenza score/penalita di ExplainAffinity v1. Nei sorgenti esterni su costa-thesis,
+`chaincode-argumentation/client/tests.go` verifica permutazioni, pesi e cammini;
+`chaincode/reasoning_values.go` distingue output numerico malformato da esito
+semantico nel percorso ExplainAffinity. Il ranking numerico reale resta da collaudare.
 
 ## Test
 
@@ -140,7 +163,7 @@ il run remoto conserva un audit dedicato, senza assumere risultati mock del look
 | [test_evidence_strategic.py](../tests/test_evidence_strategic.py) | Export RDF, astensione e rilettura dell'archivio su file. |
 | [test_fabric_gateway.py](../tests/test_fabric_gateway.py) | Nove tool MCP con Fablo simulato e adapter di provenienza nella Workforce; non esegue BWAF/Tiny-ME/Fabric reali. |
 
-Per il backend nativo leggere anche
+Per approfondire il backend Fabric sperimentale leggere anche
 [fabric_contracts.py](../thesis_agents/mcp/fabric_contracts.py),
 [fabric_server.py](../services/strategic_gateway/fabric_server.py),
 [fabric.py](../services/strategic_gateway/fabric.py),
@@ -165,9 +188,20 @@ Alcuni test alterano deliberatamente `_artifacts`: è una simulazione di stato i
 | [.env.example](../.env.example) | Configurazione d'esempio per modello, credenziale, endpoint e timeout. |
 | [.gitignore](../.gitignore) | Esclusione da Git di credenziali locali, ambiente, cache, output e file generati. |
 | [README.md](../README.md) | Istruzioni per installare, eseguire e verificare il prototipo. |
-| [architecture.md](architecture.md) | Contratti architetturali, DAG, limiti del mock e futuri punti di integrazione. |
+| [architecture.md](tecnica/architecture.md) | Contratti architetturali, DAG, limiti del mock e futuri punti di integrazione. |
 | [data/README.md](../thesis_agents/data/README.md) | Spiegazione campo per campo del JSON, che non può contenere commenti inline. |
 | [reading-guide.md](reading-guide.md) | Questa mappa, che collega la documentazione ai commenti nei sorgenti. |
-| [relazione-mockup.md](relazione-mockup.md) | Prima relazione complessiva: motivazioni, architettura, agenti/LLM, comandi, attività, risultati e integrazioni future. |
+| [relazione-mockup.md](archivio/relazione-mockup.md) | Prima relazione complessiva: motivazioni, architettura, agenti/LLM, comandi, attività, risultati e integrazioni future. |
 
 Le cartelle `.venv`, `.git`, le cache e gli output generati non sono sorgenti da annotare: gli output si interpretano attraverso i modelli e la documentazione del progetto.
+
+
+## Finalizzazione condivisa (5 novembre 2026)
+
+Leggere [contratti e flusso](integrazioni/strategic-finalization.md), poi
+`thesis_agents/mcp/finalization_contracts.py`, `strategic/finalization_session.py`,
+`strategic/finalization_agent.py` e `orchestration/native_dag.py`. Il client opt-in
+aggiunge due tool ai quattro precedenti. Nei due repository esterni, esclusivamente
+costa-thesis, l'estensione modifica SaaSServiceAdapter/ProvenanceService/NetworkPool,
+il bridge MCP e l'ArgumentationContract esistente. I test distinguono ricevute
+simulate e verifica live, ancora da svolgere.

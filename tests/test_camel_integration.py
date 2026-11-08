@@ -108,6 +108,13 @@ class ScriptedToolModel(StubModel):
                         {"payload": self.session._lookup.model_dump(mode="json")},
                     )
                 )
+                publication = next(
+                    tool
+                    for tool in tools
+                    if tool["function"]["name"] == "publish_vulnerability_report"
+                )
+                if not publication["function"]["parameters"].get("properties"):
+                    script[-1] = ("publish_vulnerability_report", {})
         elif "publish_candidate_strategies" in tool_names or (
             "You are CountermeasureAgent." in str(messages[0].get("content", ""))
         ):

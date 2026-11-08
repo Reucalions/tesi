@@ -8,7 +8,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from thesis_agents.mcp.settings import MCPSettings
+from thesis_agents.mcp.settings import MCPConnectionSettings, MCPSettings, MCPStdioSettings
 from thesis_agents.telemetry.settings import StaticSource, TelemetryHTTPSettings
 from thesis_agents.tools.sbom_http import NoSupplyChainSource, SupplyChainHTTPSettings
 
@@ -18,7 +18,7 @@ class LocalBackend(BaseModel):
     transport: Literal["local-mock"] = "local-mock"
 
 
-Backend = Annotated[LocalBackend | MCPSettings, Field(discriminator="transport")]
+Backend = Annotated[LocalBackend | MCPSettings | MCPStdioSettings, Field(discriminator="transport")]
 
 
 class FabricProvenanceBinding(BaseModel):
@@ -51,7 +51,7 @@ class BackendSettings(BaseModel):
     def compatible_cti(self):
         if self.provenance_adapter == "fabric-native-v1":
             if (
-                not isinstance(self.provenance, MCPSettings)
+                not isinstance(self.provenance, MCPConnectionSettings)
                 or self.provenance.expected_kind != "real"
                 or self.fabric_provenance is None
             ):
@@ -62,7 +62,7 @@ class BackendSettings(BaseModel):
             raise ValueError("Fabric provenance binding requires the native adapter")
         if self.strategic_adapter == "empty-evidence-v1":
             if not all(
-                isinstance(value, MCPSettings) and value.expected_kind == "real"
+                isinstance(value, MCPConnectionSettings) and value.expected_kind == "real"
                 for value in (self.ranking, self.provenance)
             ):
                 raise ValueError(
@@ -71,15 +71,15 @@ class BackendSettings(BaseModel):
             if not isinstance(self.semantic, LocalBackend):
                 raise ValueError("Evidence gate does not execute semantic validation")
         if isinstance(self.telemetry, TelemetryHTTPSettings) and isinstance(
-            self.semantic, MCPSettings
+            self.semantic, MCPConnectionSettings
         ):
             raise ValueError(
                 "OpenTelemetry requires local semantic validation until a new MCP contract"
             )
         if self.vulnerability_adapter in ("cve2owl-v1", "ubuntu-package-v1"):
-            if not isinstance(self.vulnerability, MCPSettings):
+            if not isinstance(self.vulnerability, MCPConnectionSettings):
                 raise ValueError(f"{self.vulnerability_adapter} richiede un endpoint MCP")
-            if isinstance(self.semantic, MCPSettings):
+            if isinstance(self.semantic, MCPConnectionSettings):
                 raise ValueError(
                     "Il contratto semantic-validation-v1 non rappresenta il nuovo report CTI; "
                     "usare semantic local-mock in questo incremento"
@@ -103,11 +103,11 @@ class BackendSettings(BaseModel):
         # I profili del primo incremento usavano una stringa per i tre tool strategici.
         return {"transport": "local-mock"} if value == "local-mock" else value
 
-    def remote_backends(self) -> dict[str, MCPSettings]:
+    def remote_backends(self) -> dict[str, MCPConnectionSettings]:
         return {
             name: value
             for name in ("vulnerability", "ranking", "semantic", "provenance")
-            if isinstance(value := getattr(self, name), MCPSettings)
+            if isinstance(value := getattr(self, name), MCPConnectionSettings)
         }
 
     @classmethod
@@ -219,6 +219,7 @@ def connect_backends(session, settings: BackendSettings | None):
                     config,
                     contracts=contracts,
                     audit=lambda event, role=name: audit({**event, "backend_role": role}),
+                    stderr_path=session.output_dir / f"mcp-{name}.stderr.log",
                 )
             )
             if fabric_store:

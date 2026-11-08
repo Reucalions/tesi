@@ -11,8 +11,8 @@ def main():
     bibliography = [
         "## Bibliografia e fonti consultate",
         "",
-        "Riferimenti verificati nella revisione del 17 settembre 2026. Le fonti teoriche",
-        "aggiunte in questa fase non sono attribuite retroattivamente allo sviluppo.",
+        "Date e ambiti delle consultazioni sono registrati per ciascuna fonte. Le fonti teoriche",
+        "aggiunte nelle revisioni successive non sono attribuite retroattivamente allo sviluppo.",
         "Ambito e parti consultate sono registrati in `docs/riferimenti/fonti.json`.",
         "Le fonti grafiche sono [POLIBA] e [PT-SANS]; il logo proviene dal sito",
         "dell'Ateneo, con URL e hash in `docs/materiali/assets/sources.json`.",
@@ -29,11 +29,11 @@ def main():
         "",
         "```bash",
         "python3 docs/riferimenti/aggiorna_fonti.py",
-        "/tmp/tesi-materiali-venv/bin/python docs/materiali/genera_materiali.py",
+        "# Non rigenerare i Word modificati manualmente con genera_materiali.py.",
         "```",
         "",
-        "Il primo comando aggiorna questo catalogo, il BibTeX e la bibliografia Markdown;",
-        "il secondo rigenera i materiali. Non vengono effettuate inferenze o chiamate di rete.",
+        "Il comando aggiorna questo catalogo, il BibTeX e la bibliografia Markdown.",
+        "I Word manuali sono preservati. Non vengono effettuate inferenze o chiamate di rete.",
         "",
     ]
     bib = []
@@ -80,7 +80,7 @@ def main():
         bib.append("@misc{" + r["id"] + ",\n" + ",\n".join(entries) + "\n}\n")
     (HERE / "README.md").write_text("\n".join(catalog))
     (HERE / "bibliografia.bib").write_text("\n".join(bib))
-    report = HERE.parent / "relazione-mockup.md"
+    report = HERE.parent / "archivio" / "relazione-mockup.md"
     body = report.read_text().split("\n## Bibliografia e fonti consultate", 1)[0].rstrip()
     report.write_text(body + "\n\n" + "\n".join(bibliography))
 

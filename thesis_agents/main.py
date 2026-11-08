@@ -28,6 +28,11 @@ def main(argv: list[str] | None = None) -> int:
     # mode decide se usare un LLM; workflow decide come CAMEL organizza i task.
     # --workflow ha effetto solo quando viene effettivamente avviata la Workforce.
     parser.add_argument("--mode", choices=("camel", "fixtures"), default="camel")
+    parser.add_argument(
+        "--backend-mode",
+        choices=("mockup", "real"),
+        help="Switch dei backend della stessa applicazione; indipendente da --mode e dai branch",
+    )
     parser.add_argument("--workflow", choices=("pipeline", "auto"), default="pipeline")
     parser.add_argument(
         "--backends", type=Path, help="Profilo JSON dei backend; default mock locali"
@@ -63,7 +68,38 @@ def main(argv: list[str] | None = None) -> int:
         # Legge solo .env nella directory corrente, senza cercare nei genitori.
         # override=False preserva eventuali variabili già impostate nella shell.
         load_dotenv(Path.cwd() / ".env", override=False)
+        if args.backend_mode == "real":
+            from thesis_agents.execution_profiles import RealExecutionProfile
+            from thesis_agents.execution_runtime import run_real
+
+            if args.mode != "camel":
+                raise ValueError("backend-mode=real requires mode=camel; fixtures uses mock data")
+            if not args.backends or not args.input:
+                raise ValueError("backend-mode=real requires --backends and --input")
+            profile = RealExecutionProfile.load(args.backends)
+            case = TelemetryInput.model_validate_json(args.input.read_bytes())
+            settings = ModelSettings.from_env()
+            stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+            output = args.output or Path("output") / f"{stamp}-{uuid4().hex[:8]}"
+            result = run_real(
+                profile,
+                case,
+                output,
+                settings.create_backend,
+                workflow=args.workflow,
+                model=settings.model,
+            )
+            print(f"Backend: real | Modalità: camel | Output: {output.resolve()}")
+            print(
+                f"Esito: {result['status']}; raccomandazione: {result['recommendation']}; "
+                f"finalizzazione condivisa: {result['shared_finalization']}"
+            )
+            return 0
         backends = BackendSettings.load(args.backends) if args.backends else None
+        if args.backend_mode == "mockup":
+            from thesis_agents.execution_profiles import require_mockup
+
+            require_mockup(backends)
         telemetry_http = backends and isinstance(backends.telemetry, TelemetryHTTPSettings)
         if telemetry_http and not args.input:
             raise ValueError("Il profilo OpenTelemetry richiede --input con selettore e finestra")
@@ -99,6 +135,15 @@ def main(argv: list[str] | None = None) -> int:
         session = ArtifactSession(
             case, output, mode=args.mode, model=settings.model if settings else None
         )
+        backend_mode = args.backend_mode or ("configured" if args.backends else "mockup")
+        execution = {
+            "backend_mode": backend_mode,
+            "inference_mode": args.mode,
+            "workflow": args.workflow,
+            "run_id": session.run_id,
+        }
+        (output / "execution.json").write_text(json.dumps(execution, indent=2) + "\n")
+        print(f"Backend: {backend_mode}", flush=True)
         print(f"Modalità: {args.mode} | Output: {output.resolve()}", flush=True)
         # Gli import differiti caricano l'orchestrazione CAMEL solo quando serve.
         # Una stampa con flush rende subito visibile dove finiranno gli artefatti.

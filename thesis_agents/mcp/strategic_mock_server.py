@@ -126,7 +126,10 @@ def create_server(*, data_dir: Path, host: str = "127.0.0.1", port: int = 8002) 
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Server MCP HTTP dei tool strategici mock")
+    parser = argparse.ArgumentParser(description="Server MCP HTTP/stdio dei tool strategici mock")
+    parser.add_argument(
+        "--transport", choices=("streamable-http", "stdio"), default="streamable-http"
+    )
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8002)
     parser.add_argument("--data-dir", type=Path, default=Path("output/mcp-mock-store"))
@@ -134,7 +137,7 @@ def main(argv=None):
     if not 1 <= args.port <= 65535:
         parser.error("La porta deve essere compresa fra 1 e 65535")
     create_server(host=args.host, port=args.port, data_dir=args.data_dir).run(
-        transport="streamable-http"
+        transport=args.transport
     )
 
 

@@ -26,7 +26,7 @@ def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def inspect_sources(export, sbom, started_at, finished_at):
+def inspect_sources(export, sbom, started_at, finished_at, *, component="log4j-core"):
     """Verifica identità singola, freschezza e hash del JAR riportato dall'app."""
     observations = []
     for line in export.read_text(encoding="utf-8").splitlines():
@@ -57,13 +57,14 @@ def inspect_sources(export, sbom, started_at, finished_at):
         raise ValueError("Expected observations of exactly one application instance/JAR")
     service, instance, title, version, jar_hash = observations[0]
     document = json.loads(sbom.read_text(encoding="utf-8"))
+    group = {"log4j-core": "org.apache.logging.log4j", "logback-core": "ch.qos.logback"}[component]
     matches = [
         c
         for c in document.get("components", [])
-        if (c.get("group"), c.get("name")) == ("org.apache.logging.log4j", "log4j-core")
+        if (c.get("group"), c.get("name")) == (group, component)
     ]
     if len(matches) != 1:
-        raise ValueError("Build SBOM must contain exactly one Log4j Core component")
+        raise ValueError("Build SBOM must contain exactly one selected dependency component")
     component = matches[0]
     hashes = [h["content"] for h in component.get("hashes", []) if h["alg"] == "SHA-256"]
     if hashes != [jar_hash]:
@@ -101,10 +102,20 @@ def inspect_sources(export, sbom, started_at, finished_at):
     )
 
 
-def prepare(output, *, skip_build=False):
+def prepare(output, *, skip_build=False, component="log4j-core", dependency_version=None):
+    if component not in ("log4j-core", "logback-core"):
+        raise ValueError("Unsupported observed dependency")
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=False)
     build_command = ["mvn", "-B", "-ntp", "package"]
+    if component == "logback-core":
+        build_command.append("-Plogback")
+    if dependency_version is not None:
+        allowed = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-_"
+        if not dependency_version or any(c not in allowed for c in dependency_version):
+            raise ValueError("Invalid dependency version")
+        property_name = "logback.version" if component == "logback-core" else "log4j.version"
+        build_command.append(f"-D{property_name}={dependency_version}")
     if not skip_build:
         with (output / "build.log").open("x") as log:
             subprocess.run(
@@ -130,6 +141,7 @@ def prepare(output, *, skip_build=False):
     )
     command = [
         "java",
+        f"-Dthesis.observed.component={component}",
         "-cp",
         classpath,
         "it.poliba.thesis.ObservedApplication",
@@ -142,8 +154,10 @@ def prepare(output, *, skip_build=False):
         )
     finished = datetime.now(UTC)
     case, binding, observed = inspect_sources(
-        output / "otel.jsonl", output / "sbom.cdx.json", started, finished
+        output / "otel.jsonl", output / "sbom.cdx.json", started, finished, component=component
     )
+    if dependency_version is not None and observed["loaded_version"] != dependency_version:
+        raise ValueError("Loaded dependency version differs from requested build version")
     profile = json.loads((ROOT / "config/backends.cti-real.json").read_text())
     profile["telemetry"] = {
         "transport": "http",
@@ -167,6 +181,8 @@ def prepare(output, *, skip_build=False):
         "sbom_origin": "cyclonedx-maven-plugin:2.9.3",
         "telemetry_origin": "opentelemetry-java-sdk:1.66.0",
         "build_executed": not skip_build,
+        "observed_component": component,
+        "requested_dependency_version": dependency_version,
         "build_command": build_command,
         "application_command": command,
         "started_at": started.isoformat(),
@@ -198,13 +214,23 @@ def prepare(output, *, skip_build=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--component", choices=("log4j-core", "logback-core"), default="log4j-core")
+    parser.add_argument(
+        "--dependency-version", help="Build override, verified against the loaded JAR"
+    )
     parser.add_argument(
         "--skip-build",
         action="store_true",
         help="Riusa la build locale; ricrea sempre osservazioni e istanza",
     )
     args = parser.parse_args()
-    print(f"Sorgenti verificate: {prepare(args.output, skip_build=args.skip_build)}")
+    output = prepare(
+        args.output,
+        skip_build=args.skip_build,
+        component=args.component,
+        dependency_version=args.dependency_version,
+    )
+    print(f"Sorgenti verificate: {output}")
 
 
 if __name__ == "__main__":

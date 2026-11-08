@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "vulnerability": {
+    "transport": "mcp-stdio",
+    "command": ".venv/bin/python",
+    "args": [
+      "-m",
+      "thesis_agents.mcp.mock_server",
+      "--transport",
+      "stdio"
+    ],
+    "expected_kind": "mock",
+    "timeout_seconds": 15
+  },
+  "ranking": {
+    "transport": "mcp-stdio",
+    "command": ".venv/bin/python",
+    "args": [
+      "-m",
+      "thesis_agents.mcp.strategic_mock_server",
+      "--transport",
+      "stdio",
+      "--data-dir",
+      "output/mcp-stdio-mock-store"
+    ],
+    "expected_kind": "mock",
+    "timeout_seconds": 15
+  },
+  "semantic": {
+    "transport": "mcp-stdio",
+    "command": ".venv/bin/python",
+    "args": [
+      "-m",
+      "thesis_agents.mcp.strategic_mock_server",
+      "--transport",
+      "stdio",
+      "--data-dir",
+      "output/mcp-stdio-mock-store"
+    ],
+    "expected_kind": "mock",
+    "timeout_seconds": 15
+  },
+  "provenance": {
+    "transport": "mcp-stdio",
+    "command": ".venv/bin/python",
+    "args": [
+      "-m",
+      "thesis_agents.mcp.strategic_mock_server",
+      "--transport",
+      "stdio",
+      "--data-dir",
+      "output/mcp-stdio-mock-store"
+    ],
+    "expected_kind": "mock",
+    "timeout_seconds": 15
+  }
+}

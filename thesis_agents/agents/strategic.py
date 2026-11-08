@@ -38,8 +38,9 @@ Invoke build_argumentation_graph,
 then rank_graph. The tool projects the estimates into a graph; the ranking tool alone
 computes scores. Call validate_countermeasure in EXACT ranking order until the first
 accepted strategy. If rejected, try the next. If every candidate is rejected, select null.
-An empty ranking also requires null. Call publish_final_decision with the accepted ID
-and a grounded explanation, then record_provenance. You must preserve the tool ranking
+An empty or partial ranking for nonempty candidates is a backend failure: report failure,
+never convert it into an abstention or invent scores. Call publish_final_decision with the
+accepted ID and a grounded explanation, then record_provenance. You must preserve the tool ranking
 and validation outcomes. Never calculate scores yourself or override a rejected result.
 IMPORTANT: validate_countermeasure only checks a candidate. Even if its result says
 accepted, it has NOT saved final_decision or provenance. After validation you MUST make

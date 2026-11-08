@@ -1,0 +1,10 @@
+{
+  "contract": "bottalico-preparation-process-v1",
+  "repository": "/Users/reucalion/Desktop/agent-based-cti-argumentation-pipeline",
+  "python": "/Users/reucalion/tesi/.venv/bin/python",
+  "source_ontology": "/Users/reucalion/Desktop/agent-based-cti-argumentation-pipeline/app/data/cve2owl_20260523_143950.owl",
+  "source_ontology_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "generator_manifest_sha256": "84d03335cb79787c114429b291a67957d22e896e9355d3c3abbb18fc43eb376e",
+  "knowledge_snapshot_id": "urn:cti:snapshot:cve2owl:v1.0.0",
+  "timeout_seconds": 600
+}

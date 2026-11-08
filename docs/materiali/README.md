@@ -1,5 +1,11 @@
 # Materiali per l'incontro con il docente
 
+Il percorso di studio corrente e nell'[indice della documentazione](../README.md).
+La pulizia del repository ha aggiornato i collegamenti nei sorgenti Markdown,
+senza rigenerare Word, PDF, slide o figure. Il manifest del 29 ottobre descrive
+gli export e i sorgenti al momento della loro generazione; i nuovi collegamenti
+Markdown non sono una nuova versione degli export.
+
 ## Versione aggiornata per lo studio — 29 ottobre 2026
 
 Il punto di ingresso corrente è [stato del progetto](../stato-progetto.md).
@@ -66,7 +72,7 @@ confronto strutturale sono conservati localmente in
 | [presentazione.pptx](presentazione.pptx) | 10 slide principali + 2 appendici, testo e diagramma modificabili, note del relatore |
 | [relazione.pdf](relazione.pdf) | Export storico della relazione sul mockup, non aggiornato alle integrazioni |
 | [relazione.docx](relazione.docx) | Base manuale con capitoli 1–18, conservata senza modifiche in questa revisione |
-| [relazione sorgente](../relazione-mockup.md) | Sorgente della versione mockup; non contiene le revisioni manuali successive |
+| [relazione sorgente](../archivio/relazione-mockup.md) | Sorgente della versione mockup; non contiene le revisioni manuali successive |
 | [copione-slide.md](copione-slide.md) | Note da esporre e tempi di ciascuna slide |
 | [demo-guida.md](demo-guida.md) | Comandi, file da mostrare, gestione del live e domande probabili |
 | [demo-evidenze.html](demo-evidenze.html) | Visualizzatore offline e interattivo di quattro run registrati |
@@ -98,7 +104,7 @@ Non vanno presentati come risultati di una nuova esecuzione fatta durante l'inco
 ## Modifica e rigenerazione dei materiali storici
 
 Puoi modificare direttamente PowerPoint e Word. Per una rigenerazione coerente,
-modifica invece `slides.json` e `../relazione-mockup.md`; il generatore sovrascrive
+modifica invece `slides.json` e `../archivio/relazione-mockup.md`; il generatore sovrascrive
 gli export, quindi conserva separatamente eventuali modifiche manuali ai binari.
 I dati del frontespizio della relazione sono in `frontespizio.json`.
 Le fonti bibliografiche sono in `../riferimenti/fonti.json`; il comando

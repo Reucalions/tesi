@@ -10,7 +10,7 @@ from thesis_agents.backends import BackendSettings
 from thesis_agents.mcp.client import MCPClient
 from thesis_agents.mcp.contracts import ProvenanceRequest, RankingRequest, SemanticRequest
 from thesis_agents.mcp.cti_client import cti_contracts
-from thesis_agents.mcp.settings import MCPSettings
+from thesis_agents.mcp.settings import MCPConnectionSettings
 from thesis_agents.schemas import SoftwareObservation
 from thesis_agents.tools.cti_mcp import CTIVulnerabilityTool
 from thesis_agents.tools.strategic_mcp import (
@@ -65,7 +65,7 @@ def main(argv=None) -> int:
             print(json.dumps({"checked": checked, "mcp_events": events}, indent=2))
             return 0
         settings = getattr(profile, args.service)
-        if not isinstance(settings, MCPSettings):
+        if not isinstance(settings, MCPConnectionSettings):
             raise ValueError(f"Il probe richiede un backend {args.service} MCP")
         request = None
         if args.service != "vulnerability":

@@ -1,8 +1,18 @@
-# Architettura implementata al 29 ottobre 2026
+# Architettura del progetto
 
-Questa è la mappa corrente dei componenti, aggiornata rispetto al mockup.
+Aggiornamento del percorso principale: il [porting condiviso](porting-principe-costa.md)
+ha reso disponibili bridge MCP e backend SaaS sui branch esterni costa-thesis.
+Il collegamento al framework comprende ranking, validazione, selezione e finalizzazione
+condivisa per CVE, con switch applicativo `--backend-mode mockup|real` e DAG composto.
+La [guida aggiornata del percorso completo](integrazioni/strategic-selection-dag.md)
+descrive dipendenze, contratti, comandi e limiti; la [finalizzazione condivisa](integrazioni/strategic-finalization.md)
+verifica commit e rilettura tramite backend, collaudati con servizi simulati. Le figure del 29 ottobre
+conservano lo stato precedente; per le priorita correnti leggere
+[prossime azioni](prossime-azioni.md).
+
+La mappa distingue il percorso collaudato e i collegamenti condivisi da completare.
 La precedente figura del solo profilo strategico mock è conservata in
-[architettura-profilo-mock.md](architettura-profilo-mock.md).
+[architettura-profilo-mock.md](archivio/architettura-profilo-mock.md).
 La [guida allo stato del progetto](stato-progetto.md) raccoglie confronto,
 risultati e ordine di studio.
 
@@ -90,45 +100,48 @@ Il contratto restituisce `not_evaluable`, che la sessione traduce in
 `insufficient_evidence`. Le quattro richieste interessano 58 CVE uniche e
 restano fuori da strategie e ranking. Il run non seleziona né esegue azioni.
 Il servizio semantico non viene chiamato, anche se il profilo conserva un
-backend locale per compatibilità. Dettagli: [prova Ollama](apache-ollama-use-case.md).
+backend locale per compatibilità. Dettagli: [prova Ollama](esperimenti.md).
 
-## Nuovo collegamento Fabric: implementato e da collaudare
+## Percorso strategico condiviso e profilo nativo
 
 ```mermaid
 flowchart TB
-    S["StrategicAgent"] -. "Mapping delle candidate aperto" .-> M["Grafo e individui ontologici nativi"]
-    M -.-> GW["Gateway MCP nativo · 9 tool implementati"]
-    P["ProvenanceRecord"] --> AD["FabricProvenanceTool<br/>Adapter Workforce implementato"]
-    AD --> GW
-    GW -. "Rete da rendere disponibile" .-> F["Fablo REST"]
-    F -.-> BW["Argumentation chaincode<br/>StoreGraph / RankGraph / Get"]
-    F -.-> TM["Tiny-ME chaincode<br/>AnalyzeOntology / ReadReasonerResult"]
-    F -.-> PC["Chaincode PROV-O dedicato<br/>StoreProvenance / GetProvenance"]
-    BW -.-> L["Hyperledger Fabric"]
-    TM -.-> L
-    PC -.-> L
+    P["Checkpoint canonico Bottalico"] --> S["StrategicAgent · profilo nativo"]
+    S --> |"Ranking per CVE e riletture"| MCP["MCP condiviso · stdio<br/>19 tool disponibili"]
+    MCP --> SAAS["Backend SaaS condiviso<br/>Contratti di dominio"]
+    SAAS -. "Binding e collaudo reale aperti" .-> BW["Argumentation esistente"]
+    SAAS -.-> TM["Servizio semantico Tiny-ME"]
+    BW --> L["Rete Hyperledger Fabric esistente"]
+    TM --> L
+    SAAS --> DP["Decisioni e provenance applicative"]
+    DP -. "Finalizzazione e registrazione da verificare" .-> L
 ```
 
-I nove tool implementati coprono grafo, ranking, recupero dei risultati,
-abduzione/bonus/contrazione Tiny-ME e provenienza. Gateway e adapter sono
-verificati con Fablo HTTP simulato, MCP effettivo e stub Fabric; il chaincode
-PROV-O è compilato anche per Linux amd64. Nessuna ricevuta on-chain è stata
-generata nelle prove documentate. L'ultima verifica della disponibilità di rete
-è del 18 ottobre: Docker e Fablo sulle porte 8800/8801 non erano raggiungibili.
+Bridge MCP e backend SaaS sono stati importati nei due repository esterni su
+`costa-thesis`: compilazione, discovery e 66 test del backend sono passati.
+I test simulano Fabric. Il framework usa ora il client condiviso dal profilo
+Strategic nativo sul checkpoint canonico: ranking e due riletture per CVE,
+score originali, binding MAS/KG e pin di tenant/snapshot/ontologia.
+[Contratto e limiti](integrazioni/strategic-native.md).
 
-Il formato nativo `nodes(id,type)` / `edges(from,to)` non rappresenta direttamente
-segno e pesi del grafo MVP. Non viene quindi applicata una conversione implicita.
-Gli score nativi sono conservati senza normalizzazione a `[0,1]`.
-La coerenza di un'ontologia Tiny-ME non equivale all'accettazione di una strategia.
-Il tool nativo `analyze_ontology` non è ancora il validatore di dominio delle
-candidate nella Workforce.
+I tool principali sono `rank_remediations`, `validate_countermeasure`,
+`get_decision` e `get_provenance`. Lo Strategic usa contratti di dominio;
+la configurazione Fabric rimane nel backend. Il mapping canonico e implementato;
+Il [profilo di validazione](integrazioni/strategic-validation.md) invia ora IRI e
+contesto operativo, con esiti Tiny-ME e policy SaaS separati. Restano selezione
+e inserimento nel DAG principale.
+I binding configurabili dei chaincode e `ExplainAffinity` sono stati corretti il
+31 ottobre e collaudati con Fabric simulato. Deployment, ontologia e TLS reali
+richiedono ancora verifica.
 
-L'adapter Fabric della provenienza verifica canale, chaincode, documento,
-hash e ID della transazione, poi effettua una nuova lettura MCP. La ricevuta
-prevista dichiara `peer_readback_verified`, con `block_commit_verified=false`:
-rilettura dal peer e verifica indipendente del commit sono livelli distinti.
-Questa logica è collaudata con servizi simulati, non ancora sul deployment reale.
-Dettagli: [integrazione nativa Fabric](fabric-native-integration.md).
+La lettura della provenance applicativa non dimostra da sola il commit della
+raccomandazione finale sul ledger. Finalizzazione, ricevuta e rilettura devono
+essere collaudate. Le azioni rimangono raccomandazioni in dry-run.
+
+Il precedente [gateway Fabric sperimentale](archivio/fabric-native-integration.md)
+e il chaincode PROV-O dedicato rimangono conservati per confronto, con i relativi
+test; non sono il percorso principale di integrazione. Dettagli del trasferimento
+nel [porting verificato](porting-principe-costa.md).
 
 ## Differenze rispetto al mockup e lavoro aperto
 
@@ -138,12 +151,12 @@ Sono cambiati soprattutto ingressi, contratti, controllo delle pubblicazioni e
 provenienza. Restano quattro agenti e lo stesso DAG. I backend mock sono ancora
 disponibili per i confronti storici e per i rami non sostituiti.
 
-Restano da completare rete e deployment Fabric, probe nativo effettivo, mapping
-ontologico e una prova con candidate non vuote e validazione reale. Seguono
-il caso controllato con fonti coerenti e la valutazione comparativa. Sono
-proposte, non funzionalità già realizzate: scelta di piani di verifica,
-raccolta continua, attuazione delle mitigazioni e feedback dell'azione.
+Restano collegamento MCP condiviso, integrazione del componente generativo,
+adapter canonico, ranking/validazione reali e provenance con commit e rilettura.
+Seguono quattro scenari controllati, dashboard ed esperimenti, secondo la
+[roadmap](prossime-azioni.md). Raccolta continua e applicazione automatica delle
+contromisure non sono requisiti della dimostrazione finale in dry-run.
 
 Riferimenti per studiare: [stato del progetto](stato-progetto.md),
-[guida al codice](reading-guide.md), [contratti](architecture.md),
+[guida al codice](reading-guide.md), [contratti](tecnica/architecture.md),
 [report aggiornato](materiali/aggiornamento-relazione-20261029.md).
