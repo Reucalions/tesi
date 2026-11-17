@@ -1,0 +1,1837 @@
+{
+  "source": "/Users/reucalion/Downloads/cve2owl_20260523_143950.owl",
+  "sha256": "0ffa87d0ff610cd7860dc3cae4bd84e65ab223569ba19ef2f4240fba6da59350",
+  "size_bytes": 5062301486,
+  "selected_cves": [
+    "CVE-2026-1225",
+    "CVE-2025-68161",
+    "CVE-2026-34477"
+  ],
+  "selection": "single-line class/object/data property assertions containing target CVE identifiers; not a complete CVE record",
+  "axioms": [
+    {
+      "line": 40270419,
+      "axiom": "DataPropertyAssertion(:hasDataType :CVE-2025-68161 \"CVE_RECORD\")"
+    },
+    {
+      "line": 40270420,
+      "axiom": "DataPropertyAssertion(:hasDataVersion :CVE-2025-68161 \"5.2\")"
+    },
+    {
+      "line": 40270421,
+      "axiom": "DataPropertyAssertion(:hasCveId :CVE-2025-68161_CveMetadata \"CVE-2025-68161\")"
+    },
+    {
+      "line": 40270422,
+      "axiom": "DataPropertyAssertion(:hasAssignerOrgId :CVE-2025-68161_CveMetadata \"f0158376-9dc2-43b6-827c-5f631a4d8d09\")"
+    },
+    {
+      "line": 40270423,
+      "axiom": "DataPropertyAssertion(:hasState :CVE-2025-68161_CveMetadata \"PUBLISHED\")"
+    },
+    {
+      "line": 40270424,
+      "axiom": "DataPropertyAssertion(:hasAssignerShortName :CVE-2025-68161_CveMetadata \"apache\")"
+    },
+    {
+      "line": 40270425,
+      "axiom": "DataPropertyAssertion(:hasDateReserved :CVE-2025-68161_CveMetadata \"2025-12-16T11:30:53.875Z\")"
+    },
+    {
+      "line": 40270426,
+      "axiom": "DataPropertyAssertion(:hasDatePublished :CVE-2025-68161_CveMetadata \"2025-12-18T20:47:49.123Z\")"
+    },
+    {
+      "line": 40270427,
+      "axiom": "DataPropertyAssertion(:hasDateUpdated :CVE-2025-68161_CveMetadata \"2026-04-10T16:18:50.424Z\")"
+    },
+    {
+      "line": 40270428,
+      "axiom": "ObjectPropertyAssertion(:hasCveMetadata :CVE-2025-68161 :CVE-2025-68161_CveMetadata)"
+    },
+    {
+      "line": 40270429,
+      "axiom": "DataPropertyAssertion(:hasCollectionURL :CVE-2025-68161_Containers_Cna_Affected \"https://repo.maven.apache.org/maven2\")"
+    },
+    {
+      "line": 40270430,
+      "axiom": "DataPropertyAssertion(:hasCpes :CVE-2025-68161_Containers_Cna_Affected \"cpe:2.3:a:apache:log4j:*:*:*:*:*:*:*:*\")"
+    },
+    {
+      "line": 40270431,
+      "axiom": "DataPropertyAssertion(:hasDefaultStatus :CVE-2025-68161_Containers_Cna_Affected \"unaffected\")"
+    },
+    {
+      "line": 40270432,
+      "axiom": "DataPropertyAssertion(:hasPackageName :CVE-2025-68161_Containers_Cna_Affected \"org.apache.logging.log4j:log4j-core\")"
+    },
+    {
+      "line": 40270433,
+      "axiom": "DataPropertyAssertion(:hasPackageURL :CVE-2025-68161_Containers_Cna_Affected \"pkg:maven/org.apache.logging.log4j/log4j-core\")"
+    },
+    {
+      "line": 40270434,
+      "axiom": "DataPropertyAssertion(:hasProduct :CVE-2025-68161_Containers_Cna_Affected \"Apache Log4j Core\")"
+    },
+    {
+      "line": 40270435,
+      "axiom": "DataPropertyAssertion(:hasVendor :CVE-2025-68161_Containers_Cna_Affected \"Apache Software Foundation\")"
+    },
+    {
+      "line": 40270436,
+      "axiom": "DataPropertyAssertion(:hasLessThan :CVE-2025-68161_Containers_Cna_Affected_Versions_0 \"2.25.3\")"
+    },
+    {
+      "line": 40270437,
+      "axiom": "DataPropertyAssertion(:hasStatus :CVE-2025-68161_Containers_Cna_Affected_Versions_0 \"affected\")"
+    },
+    {
+      "line": 40270438,
+      "axiom": "DataPropertyAssertion(:hasVersion :CVE-2025-68161_Containers_Cna_Affected_Versions_0 \"2.0-beta9\")"
+    },
+    {
+      "line": 40270439,
+      "axiom": "DataPropertyAssertion(:hasVersionType :CVE-2025-68161_Containers_Cna_Affected_Versions_0 \"maven\")"
+    },
+    {
+      "line": 40270440,
+      "axiom": "ObjectPropertyAssertion(:hasVersions :CVE-2025-68161_Containers_Cna_Affected :CVE-2025-68161_Containers_Cna_Affected_Versions_0)"
+    },
+    {
+      "line": 40270441,
+      "axiom": "DataPropertyAssertion(:hasLessThanOrEqual :CVE-2025-68161_Containers_Cna_Affected_Versions_1 \"3.0.0-beta3\")"
+    },
+    {
+      "line": 40270442,
+      "axiom": "DataPropertyAssertion(:hasStatus :CVE-2025-68161_Containers_Cna_Affected_Versions_1 \"affected\")"
+    },
+    {
+      "line": 40270443,
+      "axiom": "DataPropertyAssertion(:hasVersion :CVE-2025-68161_Containers_Cna_Affected_Versions_1 \"3.0.0-alpha1\")"
+    },
+    {
+      "line": 40270444,
+      "axiom": "DataPropertyAssertion(:hasVersionType :CVE-2025-68161_Containers_Cna_Affected_Versions_1 \"maven\")"
+    },
+    {
+      "line": 40270445,
+      "axiom": "ObjectPropertyAssertion(:hasVersions :CVE-2025-68161_Containers_Cna_Affected :CVE-2025-68161_Containers_Cna_Affected_Versions_1)"
+    },
+    {
+      "line": 40270446,
+      "axiom": "ObjectPropertyAssertion(:hasAffected :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_Affected)"
+    },
+    {
+      "line": 40270447,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2025-68161_Containers_Cna_Credits \"en\")"
+    },
+    {
+      "line": 40270448,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2025-68161_Containers_Cna_Credits \"finder\")"
+    },
+    {
+      "line": 40270449,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2025-68161_Containers_Cna_Credits \"Samuli Leinonen\")"
+    },
+    {
+      "line": 40270450,
+      "axiom": "ObjectPropertyAssertion(:hasCredits :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_Credits)"
+    },
+    {
+      "line": 40270451,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2025-68161_Containers_Cna_Descriptions \"en\")"
+    },
+    {
+      "line": 40270452,
+      "axiom": "DataPropertyAssertion(:hasBase64 :CVE-2025-68161_Containers_Cna_Descriptions_SupportingMedia \"false\"^^xsd:boolean)"
+    },
+    {
+      "line": 40270453,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2025-68161_Containers_Cna_Descriptions_SupportingMedia \"text/html\")"
+    },
+    {
+      "line": 40270454,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2025-68161_Containers_Cna_Descriptions_SupportingMedia \"<p>The Socket Appender in Apache Log4j Core versions <code>2.0-beta9</code> through <code>2.25.2</code> does not perform TLS hostname verification of the peer certificate, even when the <a target=\\\"_blank\\\" rel=\\\"nofollow\\\" href=\\\"https://logging.apache.org/log4j/2.x/manual/appenders/network.html#SslConfiguration-attr-verifyHostName\\\">verifyHostName</a> configuration attribute or the <a target=\\\"_blank\\\" rel=\\\"nofollow\\\" href=\\\"https://logging.apache.org/log4j/2.x/manual/systemproperties.html#log4j2.sslVerifyHostName\\\">log4j2.sslVerifyHostName</a> system property is set to <code>true</code>.</p><p>This issue may allow a man-in-the-middle attacker to intercept or redirect log traffic under the following conditions:</p><ul><li>The attacker is able to intercept or redirect network traffic between the client and the log receiver.</li><li>The attacker can present a server certificate issued by a certification authority trusted by the Socket Appender’s configured <strong>trust store</strong> (or by the default Java trust store if no custom trust store is configured).</li></ul><p>Users are advised to upgrade to Apache Log4j Core version <code>2.25.3</code>, which addresses this issue.</p><p>As an alternative mitigation, the Socket Appender may be configured to use a private or restricted trust root to limit the set of trusted certificates.</p>\")"
+    },
+    {
+      "line": 40270455,
+      "axiom": "ObjectPropertyAssertion(:hasSupportingMedia :CVE-2025-68161_Containers_Cna_Descriptions :CVE-2025-68161_Containers_Cna_Descriptions_SupportingMedia)"
+    },
+    {
+      "line": 40270456,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2025-68161_Containers_Cna_Descriptions \"The Socket Appender in Apache Log4j Core versions 2.0-beta9 through 2.25.2 does not perform TLS hostname verification of the peer certificate, even when the  verifyHostName https://logging.apache.org/log4j/2.x/manual/appenders/network.html#SslConfiguration-attr-verifyHostName  configuration attribute or the  log4j2.sslVerifyHostName https://logging.apache.org/log4j/2.x/manual/systemproperties.html#log4j2.sslVerifyHostName  system property is set to true."
+    },
+    {
+      "line": 40270467,
+      "axiom": "ObjectPropertyAssertion(:hasDescriptions :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_Descriptions)"
+    },
+    {
+      "line": 40270468,
+      "axiom": "DataPropertyAssertion(:hasText :CVE-2025-68161_Containers_Cna_Metrics_0_Other_Content \"moderate\")"
+    },
+    {
+      "line": 40270469,
+      "axiom": "ObjectPropertyAssertion(:hasContent :CVE-2025-68161_Containers_Cna_Metrics_0_Other :CVE-2025-68161_Containers_Cna_Metrics_0_Other_Content)"
+    },
+    {
+      "line": 40270470,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2025-68161_Containers_Cna_Metrics_0_Other \"Textual description of severity\")"
+    },
+    {
+      "line": 40270471,
+      "axiom": "ObjectPropertyAssertion(:hasOther :CVE-2025-68161_Containers_Cna_Metrics_0 :CVE-2025-68161_Containers_Cna_Metrics_0_Other)"
+    },
+    {
+      "line": 40270472,
+      "axiom": "ObjectPropertyAssertion(:hasMetrics :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_Metrics_0)"
+    },
+    {
+      "line": 40270473,
+      "axiom": "ObjectPropertyAssertion(:hasAutomatable :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :AutomatableNotDefined)"
+    },
+    {
+      "line": 40270474,
+      "axiom": "ObjectPropertyAssertion(:hasRecovery :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :RecoveryNotDefined)"
+    },
+    {
+      "line": 40270475,
+      "axiom": "ObjectPropertyAssertion(:hasSafety :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :SafetyNotDefined)"
+    },
+    {
+      "line": 40270476,
+      "axiom": "ObjectPropertyAssertion(:hasAttackComplexity :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :AttackComplexityHigh)"
+    },
+    {
+      "line": 40270477,
+      "axiom": "ObjectPropertyAssertion(:hasAttackRequirements :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :AttackRequirementsNone)"
+    },
+    {
+      "line": 40270478,
+      "axiom": "ObjectPropertyAssertion(:hasAttackVector :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :AttackVectorNetwork)"
+    },
+    {
+      "line": 40270479,
+      "axiom": "DataPropertyAssertion(:hasBaseScore :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 \"6.3\"^^xsd:decimal)"
+    },
+    {
+      "line": 40270480,
+      "axiom": "ObjectPropertyAssertion(:hasBaseSeverity :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :SeverityMedium)"
+    },
+    {
+      "line": 40270481,
+      "axiom": "ObjectPropertyAssertion(:hasPrivilegesRequired :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :PrivilegesRequiredNone)"
+    },
+    {
+      "line": 40270482,
+      "axiom": "ObjectPropertyAssertion(:hasProviderUrgency :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :ProviderUrgencyNotDefined)"
+    },
+    {
+      "line": 40270483,
+      "axiom": "ObjectPropertyAssertion(:hasSubAvailabilityImpact :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :SubCiaNone)"
+    },
+    {
+      "line": 40270484,
+      "axiom": "ObjectPropertyAssertion(:hasSubConfidentialityImpact :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :SubCiaNone)"
+    },
+    {
+      "line": 40270485,
+      "axiom": "ObjectPropertyAssertion(:hasSubIntegrityImpact :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :SubCiaLow)"
+    },
+    {
+      "line": 40270486,
+      "axiom": "ObjectPropertyAssertion(:hasUserInteraction :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :UserInteractionNone)"
+    },
+    {
+      "line": 40270487,
+      "axiom": "ObjectPropertyAssertion(:hasValueDensity :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :ValueDensityNotDefined)"
+    },
+    {
+      "line": 40270488,
+      "axiom": "DataPropertyAssertion(:hasVectorString :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 \"CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:L/SA:N\")"
+    },
+    {
+      "line": 40270489,
+      "axiom": "DataPropertyAssertion(:hasVersion :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 \"4.0\")"
+    },
+    {
+      "line": 40270490,
+      "axiom": "ObjectPropertyAssertion(:hasVulnAvailabilityImpact :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :VulnCiaNone)"
+    },
+    {
+      "line": 40270491,
+      "axiom": "ObjectPropertyAssertion(:hasVulnConfidentialityImpact :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :VulnCiaLow)"
+    },
+    {
+      "line": 40270492,
+      "axiom": "ObjectPropertyAssertion(:hasVulnIntegrityImpact :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :VulnCiaNone)"
+    },
+    {
+      "line": 40270493,
+      "axiom": "ObjectPropertyAssertion(:hasVulnerabilityResponseEffort :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40 :VulnerabilityResponseEffortNotDefined)"
+    },
+    {
+      "line": 40270494,
+      "axiom": "ObjectPropertyAssertion(:hasCvssV40 :CVE-2025-68161_Containers_Cna_Metrics_1 :CVE-2025-68161_Containers_Cna_Metrics_1_CvssV40)"
+    },
+    {
+      "line": 40270495,
+      "axiom": "DataPropertyAssertion(:hasFormat :CVE-2025-68161_Containers_Cna_Metrics_1 \"CVSS\")"
+    },
+    {
+      "line": 40270496,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2025-68161_Containers_Cna_Metrics_1_Scenarios \"en\")"
+    },
+    {
+      "line": 40270497,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2025-68161_Containers_Cna_Metrics_1_Scenarios \"GENERAL\")"
+    },
+    {
+      "line": 40270498,
+      "axiom": "ObjectPropertyAssertion(:hasScenarios :CVE-2025-68161_Containers_Cna_Metrics_1 :CVE-2025-68161_Containers_Cna_Metrics_1_Scenarios)"
+    },
+    {
+      "line": 40270499,
+      "axiom": "ObjectPropertyAssertion(:hasMetrics :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_Metrics_1)"
+    },
+    {
+      "line": 40270500,
+      "axiom": "DataPropertyAssertion(:hasCweId :CVE-2025-68161_Containers_Cna_ProblemTypes_Descriptions \"CWE-297\")"
+    },
+    {
+      "line": 40270501,
+      "axiom": "DataPropertyAssertion(:hasDescription :CVE-2025-68161_Containers_Cna_ProblemTypes_Descriptions \"CWE-297 Improper Validation of Certificate with Host Mismatch\")"
+    },
+    {
+      "line": 40270502,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2025-68161_Containers_Cna_ProblemTypes_Descriptions \"en\")"
+    },
+    {
+      "line": 40270503,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2025-68161_Containers_Cna_ProblemTypes_Descriptions \"CWE\")"
+    },
+    {
+      "line": 40270504,
+      "axiom": "ObjectPropertyAssertion(:hasDescriptions :CVE-2025-68161_Containers_Cna_ProblemTypes :CVE-2025-68161_Containers_Cna_ProblemTypes_Descriptions)"
+    },
+    {
+      "line": 40270505,
+      "axiom": "ObjectPropertyAssertion(:hasProblemTypes :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_ProblemTypes)"
+    },
+    {
+      "line": 40270506,
+      "axiom": "DataPropertyAssertion(:hasOrgId :CVE-2025-68161_Containers_Cna_ProviderMetadata \"f0158376-9dc2-43b6-827c-5f631a4d8d09\")"
+    },
+    {
+      "line": 40270507,
+      "axiom": "DataPropertyAssertion(:hasShortName :CVE-2025-68161_Containers_Cna_ProviderMetadata \"apache\")"
+    },
+    {
+      "line": 40270508,
+      "axiom": "DataPropertyAssertion(:hasDateUpdated :CVE-2025-68161_Containers_Cna_ProviderMetadata \"2026-04-10T16:18:50.424Z\")"
+    },
+    {
+      "line": 40270509,
+      "axiom": "ObjectPropertyAssertion(:hasProviderMetadata :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_ProviderMetadata)"
+    },
+    {
+      "line": 40270510,
+      "axiom": "DataPropertyAssertion(:hasTags :CVE-2025-68161_Containers_Cna_References_0 \"patch\")"
+    },
+    {
+      "line": 40270511,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2025-68161_Containers_Cna_References_0 \"https://github.com/apache/logging-log4j2/pull/4002\")"
+    },
+    {
+      "line": 40270512,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_References_0)"
+    },
+    {
+      "line": 40270513,
+      "axiom": "DataPropertyAssertion(:hasTags :CVE-2025-68161_Containers_Cna_References_1 \"vendor-advisory\")"
+    },
+    {
+      "line": 40270514,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2025-68161_Containers_Cna_References_1 \"https://logging.apache.org/security.html#CVE-2025-68161\")"
+    },
+    {
+      "line": 40270515,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_References_1)"
+    },
+    {
+      "line": 40270516,
+      "axiom": "DataPropertyAssertion(:hasTags :CVE-2025-68161_Containers_Cna_References_2 \"vendor-advisory\")"
+    },
+    {
+      "line": 40270517,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2025-68161_Containers_Cna_References_2 \"https://logging.apache.org/cyclonedx/vdr.xml\")"
+    },
+    {
+      "line": 40270518,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_References_2)"
+    },
+    {
+      "line": 40270519,
+      "axiom": "DataPropertyAssertion(:hasTags :CVE-2025-68161_Containers_Cna_References_3 \"related\")"
+    },
+    {
+      "line": 40270520,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2025-68161_Containers_Cna_References_3 \"https://logging.apache.org/log4j/2.x/manual/systemproperties.html#log4j2.sslVerifyHostName\")"
+    },
+    {
+      "line": 40270521,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_References_3)"
+    },
+    {
+      "line": 40270522,
+      "axiom": "DataPropertyAssertion(:hasTags :CVE-2025-68161_Containers_Cna_References_4 \"related\")"
+    },
+    {
+      "line": 40270523,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2025-68161_Containers_Cna_References_4 \"https://logging.apache.org/log4j/2.x/manual/appenders/network.html#SslConfiguration-attr-verifyHostName\")"
+    },
+    {
+      "line": 40270524,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_References_4)"
+    },
+    {
+      "line": 40270525,
+      "axiom": "DataPropertyAssertion(:hasTags :CVE-2025-68161_Containers_Cna_References_5 \"vendor-advisory\")"
+    },
+    {
+      "line": 40270526,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2025-68161_Containers_Cna_References_5 \"https://lists.apache.org/thread/xr33kyxq3sl67lwb61ggvm1fzc8k7dvx\")"
+    },
+    {
+      "line": 40270527,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_References_5)"
+    },
+    {
+      "line": 40270528,
+      "axiom": "DataPropertyAssertion(:hasDiscovery :CVE-2025-68161_Containers_Cna_Source \"EXTERNAL\")"
+    },
+    {
+      "line": 40270529,
+      "axiom": "ObjectPropertyAssertion(:hasSource :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_Source)"
+    },
+    {
+      "line": 40270530,
+      "axiom": "DataPropertyAssertion(:hasTitle :CVE-2025-68161_Containers_Cna \"Apache Log4j Core: Missing TLS hostname verification in Socket appender\")"
+    },
+    {
+      "line": 40270531,
+      "axiom": "DataPropertyAssertion(:hasEngine :CVE-2025-68161_Containers_Cna_XGenerator \"Vulnogram 0.2.0\")"
+    },
+    {
+      "line": 40270532,
+      "axiom": "ObjectPropertyAssertion(:hasXGenerator :CVE-2025-68161_Containers_Cna :CVE-2025-68161_Containers_Cna_XGenerator)"
+    },
+    {
+      "line": 40270533,
+      "axiom": "ObjectPropertyAssertion(:hasCna :CVE-2025-68161_Containers :CVE-2025-68161_Containers_Cna)"
+    },
+    {
+      "line": 40270534,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2025-68161_Containers_Adp_0_Metrics_Other \"ssvc\")"
+    },
+    {
+      "line": 40270535,
+      "axiom": "DataPropertyAssertion(:hasTimestamp :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content \"2025-12-18T21:34:24.735166Z\")"
+    },
+    {
+      "line": 40270536,
+      "axiom": "DataPropertyAssertion(:hasId :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content \"CVE-2025-68161\")"
+    },
+    {
+      "line": 40270537,
+      "axiom": "DataPropertyAssertion(:hasExploitation :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content_Options_0 \"none\")"
+    },
+    {
+      "line": 40270538,
+      "axiom": "ObjectPropertyAssertion(:hasOptions :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content_Options_0)"
+    },
+    {
+      "line": 40270539,
+      "axiom": "ObjectPropertyAssertion(:hasAutomatable :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content_Options_1 :AutomatableNo)"
+    },
+    {
+      "line": 40270540,
+      "axiom": "ObjectPropertyAssertion(:hasOptions :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content_Options_1)"
+    },
+    {
+      "line": 40270541,
+      "axiom": "DataPropertyAssertion(:hasTechnicalImpact :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content_Options_2 \"partial\")"
+    },
+    {
+      "line": 40270542,
+      "axiom": "ObjectPropertyAssertion(:hasOptions :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content_Options_2)"
+    },
+    {
+      "line": 40270543,
+      "axiom": "DataPropertyAssertion(:hasRole :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content \"CISA Coordinator\")"
+    },
+    {
+      "line": 40270544,
+      "axiom": "DataPropertyAssertion(:hasVersion :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content \"2.0.3\")"
+    },
+    {
+      "line": 40270545,
+      "axiom": "ObjectPropertyAssertion(:hasContent :CVE-2025-68161_Containers_Adp_0_Metrics_Other :CVE-2025-68161_Containers_Adp_0_Metrics_Other_Content)"
+    },
+    {
+      "line": 40270546,
+      "axiom": "ObjectPropertyAssertion(:hasOther :CVE-2025-68161_Containers_Adp_0_Metrics :CVE-2025-68161_Containers_Adp_0_Metrics_Other)"
+    },
+    {
+      "line": 40270547,
+      "axiom": "ObjectPropertyAssertion(:hasMetrics :CVE-2025-68161_Containers_Adp_0 :CVE-2025-68161_Containers_Adp_0_Metrics)"
+    },
+    {
+      "line": 40270548,
+      "axiom": "DataPropertyAssertion(:hasTitle :CVE-2025-68161_Containers_Adp_0 \"CISA ADP Vulnrichment\")"
+    },
+    {
+      "line": 40270549,
+      "axiom": "DataPropertyAssertion(:hasOrgId :CVE-2025-68161_Containers_Adp_0_ProviderMetadata \"134c704f-9b21-4f2e-91b3-4a467353bcc0\")"
+    },
+    {
+      "line": 40270550,
+      "axiom": "DataPropertyAssertion(:hasShortName :CVE-2025-68161_Containers_Adp_0_ProviderMetadata \"CISA-ADP\")"
+    },
+    {
+      "line": 40270551,
+      "axiom": "DataPropertyAssertion(:hasDateUpdated :CVE-2025-68161_Containers_Adp_0_ProviderMetadata \"2025-12-18T21:46:19.782Z\")"
+    },
+    {
+      "line": 40270552,
+      "axiom": "ObjectPropertyAssertion(:hasProviderMetadata :CVE-2025-68161_Containers_Adp_0 :CVE-2025-68161_Containers_Adp_0_ProviderMetadata)"
+    },
+    {
+      "line": 40270553,
+      "axiom": "ObjectPropertyAssertion(:hasAdp :CVE-2025-68161_Containers :CVE-2025-68161_Containers_Adp_0)"
+    },
+    {
+      "line": 40270554,
+      "axiom": "DataPropertyAssertion(:hasTitle :CVE-2025-68161_Containers_Adp_1 \"CVE Program Container\")"
+    },
+    {
+      "line": 40270555,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2025-68161_Containers_Adp_1_References_0 \"http://www.openwall.com/lists/oss-security/2025/12/18/1\")"
+    },
+    {
+      "line": 40270556,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2025-68161_Containers_Adp_1 :CVE-2025-68161_Containers_Adp_1_References_0)"
+    },
+    {
+      "line": 40270557,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2025-68161_Containers_Adp_1_References_1 \"https://lists.debian.org/debian-lts-announce/2026/01/msg00015.html\")"
+    },
+    {
+      "line": 40270558,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2025-68161_Containers_Adp_1 :CVE-2025-68161_Containers_Adp_1_References_1)"
+    },
+    {
+      "line": 40270559,
+      "axiom": "DataPropertyAssertion(:hasOrgId :CVE-2025-68161_Containers_Adp_1_ProviderMetadata \"af854a3a-2127-422b-91ae-364da2661108\")"
+    },
+    {
+      "line": 40270560,
+      "axiom": "DataPropertyAssertion(:hasShortName :CVE-2025-68161_Containers_Adp_1_ProviderMetadata \"CVE\")"
+    },
+    {
+      "line": 40270561,
+      "axiom": "DataPropertyAssertion(:hasDateUpdated :CVE-2025-68161_Containers_Adp_1_ProviderMetadata \"2026-01-20T00:13:44.911Z\")"
+    },
+    {
+      "line": 40270562,
+      "axiom": "ObjectPropertyAssertion(:hasProviderMetadata :CVE-2025-68161_Containers_Adp_1 :CVE-2025-68161_Containers_Adp_1_ProviderMetadata)"
+    },
+    {
+      "line": 40270563,
+      "axiom": "ObjectPropertyAssertion(:hasAdp :CVE-2025-68161_Containers :CVE-2025-68161_Containers_Adp_1)"
+    },
+    {
+      "line": 40270564,
+      "axiom": "ObjectPropertyAssertion(:hasContainers :CVE-2025-68161 :CVE-2025-68161_Containers)"
+    },
+    {
+      "line": 40270565,
+      "axiom": "ClassAssertion(:CveRecord :CVE-2025-68161)"
+    },
+    {
+      "line": 40985179,
+      "axiom": "DataPropertyAssertion(:hasDataType :CVE-2026-1225 \"CVE_RECORD\")"
+    },
+    {
+      "line": 40985180,
+      "axiom": "DataPropertyAssertion(:hasDataVersion :CVE-2026-1225 \"5.2\")"
+    },
+    {
+      "line": 40985181,
+      "axiom": "DataPropertyAssertion(:hasCveId :CVE-2026-1225_CveMetadata \"CVE-2026-1225\")"
+    },
+    {
+      "line": 40985182,
+      "axiom": "DataPropertyAssertion(:hasAssignerOrgId :CVE-2026-1225_CveMetadata \"455daabc-a392-441d-aa46-37d35189897c\")"
+    },
+    {
+      "line": 40985183,
+      "axiom": "DataPropertyAssertion(:hasState :CVE-2026-1225_CveMetadata \"PUBLISHED\")"
+    },
+    {
+      "line": 40985184,
+      "axiom": "DataPropertyAssertion(:hasAssignerShortName :CVE-2026-1225_CveMetadata \"NCSC.ch\")"
+    },
+    {
+      "line": 40985185,
+      "axiom": "DataPropertyAssertion(:hasDateReserved :CVE-2026-1225_CveMetadata \"2026-01-20T12:29:25.357Z\")"
+    },
+    {
+      "line": 40985186,
+      "axiom": "DataPropertyAssertion(:hasDatePublished :CVE-2026-1225_CveMetadata \"2026-01-22T09:24:14.634Z\")"
+    },
+    {
+      "line": 40985187,
+      "axiom": "DataPropertyAssertion(:hasDateUpdated :CVE-2026-1225_CveMetadata \"2026-01-22T14:14:17.842Z\")"
+    },
+    {
+      "line": 40985188,
+      "axiom": "ObjectPropertyAssertion(:hasCveMetadata :CVE-2026-1225 :CVE-2026-1225_CveMetadata)"
+    },
+    {
+      "line": 40985189,
+      "axiom": "DataPropertyAssertion(:hasDefaultStatus :CVE-2026-1225_Containers_Cna_Affected \"unknown\")"
+    },
+    {
+      "line": 40985190,
+      "axiom": "DataPropertyAssertion(:hasModules :CVE-2026-1225_Containers_Cna_Affected \"logback-core\")"
+    },
+    {
+      "line": 40985191,
+      "axiom": "DataPropertyAssertion(:hasModules :CVE-2026-1225_Containers_Cna_Affected \"logback-classic\")"
+    },
+    {
+      "line": 40985192,
+      "axiom": "DataPropertyAssertion(:hasPlatforms :CVE-2026-1225_Containers_Cna_Affected \"Java\")"
+    },
+    {
+      "line": 40985193,
+      "axiom": "DataPropertyAssertion(:hasProduct :CVE-2026-1225_Containers_Cna_Affected \"Logback-core\")"
+    },
+    {
+      "line": 40985194,
+      "axiom": "DataPropertyAssertion(:hasVendor :CVE-2026-1225_Containers_Cna_Affected \"QOS.CH Sarl\")"
+    },
+    {
+      "line": 40985195,
+      "axiom": "DataPropertyAssertion(:hasLessThanOrEqual :CVE-2026-1225_Containers_Cna_Affected_Versions_0 \"1.5.24\")"
+    },
+    {
+      "line": 40985196,
+      "axiom": "DataPropertyAssertion(:hasStatus :CVE-2026-1225_Containers_Cna_Affected_Versions_0 \"affected\")"
+    },
+    {
+      "line": 40985197,
+      "axiom": "DataPropertyAssertion(:hasVersion :CVE-2026-1225_Containers_Cna_Affected_Versions_0 \"0.9.20\")"
+    },
+    {
+      "line": 40985198,
+      "axiom": "DataPropertyAssertion(:hasVersionType :CVE-2026-1225_Containers_Cna_Affected_Versions_0 \"maven\")"
+    },
+    {
+      "line": 40985199,
+      "axiom": "ObjectPropertyAssertion(:hasVersions :CVE-2026-1225_Containers_Cna_Affected :CVE-2026-1225_Containers_Cna_Affected_Versions_0)"
+    },
+    {
+      "line": 40985200,
+      "axiom": "DataPropertyAssertion(:hasStatus :CVE-2026-1225_Containers_Cna_Affected_Versions_1 \"unaffected\")"
+    },
+    {
+      "line": 40985201,
+      "axiom": "DataPropertyAssertion(:hasVersion :CVE-2026-1225_Containers_Cna_Affected_Versions_1 \"1.5.25\")"
+    },
+    {
+      "line": 40985202,
+      "axiom": "ObjectPropertyAssertion(:hasVersions :CVE-2026-1225_Containers_Cna_Affected :CVE-2026-1225_Containers_Cna_Affected_Versions_1)"
+    },
+    {
+      "line": 40985203,
+      "axiom": "ObjectPropertyAssertion(:hasAffected :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_Affected)"
+    },
+    {
+      "line": 40985204,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-1225_Containers_Cna_Credits_0 \"en\")"
+    },
+    {
+      "line": 40985205,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-1225_Containers_Cna_Credits_0 \"finder\")"
+    },
+    {
+      "line": 40985206,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-1225_Containers_Cna_Credits_0 \"https://www.code-intelligence.com/\")"
+    },
+    {
+      "line": 40985207,
+      "axiom": "ObjectPropertyAssertion(:hasCredits :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_Credits_0)"
+    },
+    {
+      "line": 40985208,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-1225_Containers_Cna_Credits_1 \"en\")"
+    },
+    {
+      "line": 40985209,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-1225_Containers_Cna_Credits_1 \"finder\")"
+    },
+    {
+      "line": 40985210,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-1225_Containers_Cna_Credits_1 \"Google Fuzz\")"
+    },
+    {
+      "line": 40985211,
+      "axiom": "ObjectPropertyAssertion(:hasCredits :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_Credits_1)"
+    },
+    {
+      "line": 40985212,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-1225_Containers_Cna_Descriptions \"en\")"
+    },
+    {
+      "line": 40985213,
+      "axiom": "DataPropertyAssertion(:hasBase64 :CVE-2026-1225_Containers_Cna_Descriptions_SupportingMedia \"false\"^^xsd:boolean)"
+    },
+    {
+      "line": 40985214,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-1225_Containers_Cna_Descriptions_SupportingMedia \"text/html\")"
+    },
+    {
+      "line": 40985215,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-1225_Containers_Cna_Descriptions_SupportingMedia \"<div>ACE vulnerability in configuration file processing  by QOS.CH logback-core up to and including version 1.5.24 in Java applications, allows an attacker to instantiate classes already present on the class path by compromising an existing logback configuration file.</div><div><br></div><div>The instantiation of a potentially malicious Java class requires that said class is present on the user's class-path. In addition, the attacker must  have write access to a "
+    },
+    {
+      "line": 40985217,
+      "axiom": "ObjectPropertyAssertion(:hasSupportingMedia :CVE-2026-1225_Containers_Cna_Descriptions :CVE-2026-1225_Containers_Cna_Descriptions_SupportingMedia)"
+    },
+    {
+      "line": 40985218,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-1225_Containers_Cna_Descriptions \"ACE vulnerability in configuration file processing  by QOS.CH logback-core up to and including version 1.5.24 in Java applications, allows an attacker to instantiate classes already present on the class path by compromising an existing logback configuration file."
+    },
+    {
+      "line": 40985225,
+      "axiom": "ObjectPropertyAssertion(:hasDescriptions :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_Descriptions)"
+    },
+    {
+      "line": 40985226,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-1225_Containers_Cna_Exploits \"en\")"
+    },
+    {
+      "line": 40985227,
+      "axiom": "DataPropertyAssertion(:hasBase64 :CVE-2026-1225_Containers_Cna_Exploits_SupportingMedia \"false\"^^xsd:boolean)"
+    },
+    {
+      "line": 40985228,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-1225_Containers_Cna_Exploits_SupportingMedia \"text/html\")"
+    },
+    {
+      "line": 40985229,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-1225_Containers_Cna_Exploits_SupportingMedia \"No known exploitation<br>\")"
+    },
+    {
+      "line": 40985230,
+      "axiom": "ObjectPropertyAssertion(:hasSupportingMedia :CVE-2026-1225_Containers_Cna_Exploits :CVE-2026-1225_Containers_Cna_Exploits_SupportingMedia)"
+    },
+    {
+      "line": 40985231,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-1225_Containers_Cna_Exploits \"No known exploitation\")"
+    },
+    {
+      "line": 40985232,
+      "axiom": "ObjectPropertyAssertion(:hasExploits :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_Exploits)"
+    },
+    {
+      "line": 40985233,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-1225_Containers_Cna_Impacts_0_Descriptions \"en\")"
+    },
+    {
+      "line": 40985234,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-1225_Containers_Cna_Impacts_0_Descriptions \"Arbitrary code execution on previously compromised system\")"
+    },
+    {
+      "line": 40985235,
+      "axiom": "ObjectPropertyAssertion(:hasDescriptions :CVE-2026-1225_Containers_Cna_Impacts_0 :CVE-2026-1225_Containers_Cna_Impacts_0_Descriptions)"
+    },
+    {
+      "line": 40985236,
+      "axiom": "ObjectPropertyAssertion(:hasImpacts :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_Impacts_0)"
+    },
+    {
+      "line": 40985237,
+      "axiom": "DataPropertyAssertion(:hasCapecId :CVE-2026-1225_Containers_Cna_Impacts_1 \"CAPEC-242\")"
+    },
+    {
+      "line": 40985238,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-1225_Containers_Cna_Impacts_1_Descriptions \"en\")"
+    },
+    {
+      "line": 40985239,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-1225_Containers_Cna_Impacts_1_Descriptions \"CAPEC-242 Code Injection\")"
+    },
+    {
+      "line": 40985240,
+      "axiom": "ObjectPropertyAssertion(:hasDescriptions :CVE-2026-1225_Containers_Cna_Impacts_1 :CVE-2026-1225_Containers_Cna_Impacts_1_Descriptions)"
+    },
+    {
+      "line": 40985241,
+      "axiom": "ObjectPropertyAssertion(:hasImpacts :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_Impacts_1)"
+    },
+    {
+      "line": 40985242,
+      "axiom": "ObjectPropertyAssertion(:hasAutomatable :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :AutomatableNo)"
+    },
+    {
+      "line": 40985243,
+      "axiom": "ObjectPropertyAssertion(:hasRecovery :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :RecoveryNotDefined)"
+    },
+    {
+      "line": 40985244,
+      "axiom": "ObjectPropertyAssertion(:hasSafety :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :SafetyNegligible)"
+    },
+    {
+      "line": 40985245,
+      "axiom": "ObjectPropertyAssertion(:hasAttackComplexity :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :AttackComplexityHigh)"
+    },
+    {
+      "line": 40985246,
+      "axiom": "ObjectPropertyAssertion(:hasAttackRequirements :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :AttackRequirementsPresent)"
+    },
+    {
+      "line": 40985247,
+      "axiom": "ObjectPropertyAssertion(:hasAttackVector :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :AttackVectorLocal)"
+    },
+    {
+      "line": 40985248,
+      "axiom": "DataPropertyAssertion(:hasBaseScore :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 \"1.8\"^^xsd:decimal)"
+    },
+    {
+      "line": 40985249,
+      "axiom": "ObjectPropertyAssertion(:hasBaseSeverity :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :SeverityLow)"
+    },
+    {
+      "line": 40985250,
+      "axiom": "ObjectPropertyAssertion(:hasExploitMaturity :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :ExploitMaturityNotDefined)"
+    },
+    {
+      "line": 40985251,
+      "axiom": "ObjectPropertyAssertion(:hasPrivilegesRequired :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :PrivilegesRequiredHigh)"
+    },
+    {
+      "line": 40985252,
+      "axiom": "ObjectPropertyAssertion(:hasProviderUrgency :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :ProviderUrgencyGreen)"
+    },
+    {
+      "line": 40985253,
+      "axiom": "ObjectPropertyAssertion(:hasSubAvailabilityImpact :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :SubCiaLow)"
+    },
+    {
+      "line": 40985254,
+      "axiom": "ObjectPropertyAssertion(:hasSubConfidentialityImpact :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :SubCiaLow)"
+    },
+    {
+      "line": 40985255,
+      "axiom": "ObjectPropertyAssertion(:hasSubIntegrityImpact :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :SubCiaLow)"
+    },
+    {
+      "line": 40985256,
+      "axiom": "ObjectPropertyAssertion(:hasUserInteraction :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :UserInteractionNone)"
+    },
+    {
+      "line": 40985257,
+      "axiom": "ObjectPropertyAssertion(:hasValueDensity :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :ValueDensityNotDefined)"
+    },
+    {
+      "line": 40985258,
+      "axiom": "DataPropertyAssertion(:hasVectorString :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 \"CVSS:4.0/AV:L/AC:H/AT:P/PR:H/UI:N/VC:L/VI:L/VA:L/SC:L/SI:L/SA:L/S:N/AU:N/RE:M/U:Green\")"
+    },
+    {
+      "line": 40985259,
+      "axiom": "DataPropertyAssertion(:hasVersion :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 \"4.0\")"
+    },
+    {
+      "line": 40985260,
+      "axiom": "ObjectPropertyAssertion(:hasVulnAvailabilityImpact :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :VulnCiaLow)"
+    },
+    {
+      "line": 40985261,
+      "axiom": "ObjectPropertyAssertion(:hasVulnConfidentialityImpact :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :VulnCiaLow)"
+    },
+    {
+      "line": 40985262,
+      "axiom": "ObjectPropertyAssertion(:hasVulnIntegrityImpact :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :VulnCiaLow)"
+    },
+    {
+      "line": 40985263,
+      "axiom": "ObjectPropertyAssertion(:hasVulnerabilityResponseEffort :CVE-2026-1225_Containers_Cna_Metrics_CvssV40 :VulnerabilityResponseEffortModerate)"
+    },
+    {
+      "line": 40985264,
+      "axiom": "ObjectPropertyAssertion(:hasCvssV40 :CVE-2026-1225_Containers_Cna_Metrics :CVE-2026-1225_Containers_Cna_Metrics_CvssV40)"
+    },
+    {
+      "line": 40985265,
+      "axiom": "DataPropertyAssertion(:hasFormat :CVE-2026-1225_Containers_Cna_Metrics \"CVSS\")"
+    },
+    {
+      "line": 40985266,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-1225_Containers_Cna_Metrics_Scenarios \"en\")"
+    },
+    {
+      "line": 40985267,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-1225_Containers_Cna_Metrics_Scenarios \"GENERAL\")"
+    },
+    {
+      "line": 40985268,
+      "axiom": "ObjectPropertyAssertion(:hasScenarios :CVE-2026-1225_Containers_Cna_Metrics :CVE-2026-1225_Containers_Cna_Metrics_Scenarios)"
+    },
+    {
+      "line": 40985269,
+      "axiom": "ObjectPropertyAssertion(:hasMetrics :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_Metrics)"
+    },
+    {
+      "line": 40985270,
+      "axiom": "DataPropertyAssertion(:hasCweId :CVE-2026-1225_Containers_Cna_ProblemTypes_Descriptions \"CWE-20\")"
+    },
+    {
+      "line": 40985271,
+      "axiom": "DataPropertyAssertion(:hasDescription :CVE-2026-1225_Containers_Cna_ProblemTypes_Descriptions \"CWE-20 Improper Input Validation\")"
+    },
+    {
+      "line": 40985272,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-1225_Containers_Cna_ProblemTypes_Descriptions \"en\")"
+    },
+    {
+      "line": 40985273,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-1225_Containers_Cna_ProblemTypes_Descriptions \"CWE\")"
+    },
+    {
+      "line": 40985274,
+      "axiom": "ObjectPropertyAssertion(:hasDescriptions :CVE-2026-1225_Containers_Cna_ProblemTypes :CVE-2026-1225_Containers_Cna_ProblemTypes_Descriptions)"
+    },
+    {
+      "line": 40985275,
+      "axiom": "ObjectPropertyAssertion(:hasProblemTypes :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_ProblemTypes)"
+    },
+    {
+      "line": 40985276,
+      "axiom": "DataPropertyAssertion(:hasOrgId :CVE-2026-1225_Containers_Cna_ProviderMetadata \"455daabc-a392-441d-aa46-37d35189897c\")"
+    },
+    {
+      "line": 40985277,
+      "axiom": "DataPropertyAssertion(:hasShortName :CVE-2026-1225_Containers_Cna_ProviderMetadata \"NCSC.ch\")"
+    },
+    {
+      "line": 40985278,
+      "axiom": "DataPropertyAssertion(:hasDateUpdated :CVE-2026-1225_Containers_Cna_ProviderMetadata \"2026-01-22T12:10:39.562Z\")"
+    },
+    {
+      "line": 40985279,
+      "axiom": "ObjectPropertyAssertion(:hasProviderMetadata :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_ProviderMetadata)"
+    },
+    {
+      "line": 40985280,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2026-1225_Containers_Cna_References \"https://logback.qos.ch/news.html#1.5.25\")"
+    },
+    {
+      "line": 40985281,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_References)"
+    },
+    {
+      "line": 40985282,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-1225_Containers_Cna_Solutions \"en\")"
+    },
+    {
+      "line": 40985283,
+      "axiom": "DataPropertyAssertion(:hasBase64 :CVE-2026-1225_Containers_Cna_Solutions_SupportingMedia \"false\"^^xsd:boolean)"
+    },
+    {
+      "line": 40985284,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-1225_Containers_Cna_Solutions_SupportingMedia \"text/html\")"
+    },
+    {
+      "line": 40985285,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-1225_Containers_Cna_Solutions_SupportingMedia \"Update to logback version 1.5.25 or later. <br>\")"
+    },
+    {
+      "line": 40985286,
+      "axiom": "ObjectPropertyAssertion(:hasSupportingMedia :CVE-2026-1225_Containers_Cna_Solutions :CVE-2026-1225_Containers_Cna_Solutions_SupportingMedia)"
+    },
+    {
+      "line": 40985287,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-1225_Containers_Cna_Solutions \"Update to logback version 1.5.25 or later.\")"
+    },
+    {
+      "line": 40985288,
+      "axiom": "ObjectPropertyAssertion(:hasSolutions :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_Solutions)"
+    },
+    {
+      "line": 40985289,
+      "axiom": "DataPropertyAssertion(:hasDiscovery :CVE-2026-1225_Containers_Cna_Source \"UNKNOWN\")"
+    },
+    {
+      "line": 40985290,
+      "axiom": "ObjectPropertyAssertion(:hasSource :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_Source)"
+    },
+    {
+      "line": 40985291,
+      "axiom": "DataPropertyAssertion(:hasTitle :CVE-2026-1225_Containers_Cna \"Malicious logback.xml configuration file allows instantiation of arbitrary classes\")"
+    },
+    {
+      "line": 40985292,
+      "axiom": "DataPropertyAssertion(:hasEngine :CVE-2026-1225_Containers_Cna_XGenerator \"Vulnogram 0.2.0\")"
+    },
+    {
+      "line": 40985293,
+      "axiom": "ObjectPropertyAssertion(:hasXGenerator :CVE-2026-1225_Containers_Cna :CVE-2026-1225_Containers_Cna_XGenerator)"
+    },
+    {
+      "line": 40985294,
+      "axiom": "ObjectPropertyAssertion(:hasCna :CVE-2026-1225_Containers :CVE-2026-1225_Containers_Cna)"
+    },
+    {
+      "line": 40985295,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-1225_Containers_Adp_Metrics_Other \"ssvc\")"
+    },
+    {
+      "line": 40985296,
+      "axiom": "DataPropertyAssertion(:hasTimestamp :CVE-2026-1225_Containers_Adp_Metrics_Other_Content \"2026-01-22T14:14:09.436515Z\")"
+    },
+    {
+      "line": 40985297,
+      "axiom": "DataPropertyAssertion(:hasId :CVE-2026-1225_Containers_Adp_Metrics_Other_Content \"CVE-2026-1225\")"
+    },
+    {
+      "line": 40985298,
+      "axiom": "DataPropertyAssertion(:hasExploitation :CVE-2026-1225_Containers_Adp_Metrics_Other_Content_Options_0 \"none\")"
+    },
+    {
+      "line": 40985299,
+      "axiom": "ObjectPropertyAssertion(:hasOptions :CVE-2026-1225_Containers_Adp_Metrics_Other_Content :CVE-2026-1225_Containers_Adp_Metrics_Other_Content_Options_0)"
+    },
+    {
+      "line": 40985300,
+      "axiom": "ObjectPropertyAssertion(:hasAutomatable :CVE-2026-1225_Containers_Adp_Metrics_Other_Content_Options_1 :AutomatableNo)"
+    },
+    {
+      "line": 40985301,
+      "axiom": "ObjectPropertyAssertion(:hasOptions :CVE-2026-1225_Containers_Adp_Metrics_Other_Content :CVE-2026-1225_Containers_Adp_Metrics_Other_Content_Options_1)"
+    },
+    {
+      "line": 40985302,
+      "axiom": "DataPropertyAssertion(:hasTechnicalImpact :CVE-2026-1225_Containers_Adp_Metrics_Other_Content_Options_2 \"partial\")"
+    },
+    {
+      "line": 40985303,
+      "axiom": "ObjectPropertyAssertion(:hasOptions :CVE-2026-1225_Containers_Adp_Metrics_Other_Content :CVE-2026-1225_Containers_Adp_Metrics_Other_Content_Options_2)"
+    },
+    {
+      "line": 40985304,
+      "axiom": "DataPropertyAssertion(:hasRole :CVE-2026-1225_Containers_Adp_Metrics_Other_Content \"CISA Coordinator\")"
+    },
+    {
+      "line": 40985305,
+      "axiom": "DataPropertyAssertion(:hasVersion :CVE-2026-1225_Containers_Adp_Metrics_Other_Content \"2.0.3\")"
+    },
+    {
+      "line": 40985306,
+      "axiom": "ObjectPropertyAssertion(:hasContent :CVE-2026-1225_Containers_Adp_Metrics_Other :CVE-2026-1225_Containers_Adp_Metrics_Other_Content)"
+    },
+    {
+      "line": 40985307,
+      "axiom": "ObjectPropertyAssertion(:hasOther :CVE-2026-1225_Containers_Adp_Metrics :CVE-2026-1225_Containers_Adp_Metrics_Other)"
+    },
+    {
+      "line": 40985308,
+      "axiom": "ObjectPropertyAssertion(:hasMetrics :CVE-2026-1225_Containers_Adp :CVE-2026-1225_Containers_Adp_Metrics)"
+    },
+    {
+      "line": 40985309,
+      "axiom": "DataPropertyAssertion(:hasTitle :CVE-2026-1225_Containers_Adp \"CISA ADP Vulnrichment\")"
+    },
+    {
+      "line": 40985310,
+      "axiom": "DataPropertyAssertion(:hasOrgId :CVE-2026-1225_Containers_Adp_ProviderMetadata \"134c704f-9b21-4f2e-91b3-4a467353bcc0\")"
+    },
+    {
+      "line": 40985311,
+      "axiom": "DataPropertyAssertion(:hasShortName :CVE-2026-1225_Containers_Adp_ProviderMetadata \"CISA-ADP\")"
+    },
+    {
+      "line": 40985312,
+      "axiom": "DataPropertyAssertion(:hasDateUpdated :CVE-2026-1225_Containers_Adp_ProviderMetadata \"2026-01-22T14:14:17.842Z\")"
+    },
+    {
+      "line": 40985313,
+      "axiom": "ObjectPropertyAssertion(:hasProviderMetadata :CVE-2026-1225_Containers_Adp :CVE-2026-1225_Containers_Adp_ProviderMetadata)"
+    },
+    {
+      "line": 40985314,
+      "axiom": "ObjectPropertyAssertion(:hasAdp :CVE-2026-1225_Containers :CVE-2026-1225_Containers_Adp)"
+    },
+    {
+      "line": 40985315,
+      "axiom": "ObjectPropertyAssertion(:hasContainers :CVE-2026-1225 :CVE-2026-1225_Containers)"
+    },
+    {
+      "line": 40985316,
+      "axiom": "ClassAssertion(:CveRecord :CVE-2026-1225)"
+    },
+    {
+      "line": 42226134,
+      "axiom": "DataPropertyAssertion(:hasDataType :CVE-2026-34477 \"CVE_RECORD\")"
+    },
+    {
+      "line": 42226135,
+      "axiom": "DataPropertyAssertion(:hasDataVersion :CVE-2026-34477 \"5.2\")"
+    },
+    {
+      "line": 42226136,
+      "axiom": "DataPropertyAssertion(:hasCveId :CVE-2026-34477_CveMetadata \"CVE-2026-34477\")"
+    },
+    {
+      "line": 42226137,
+      "axiom": "DataPropertyAssertion(:hasAssignerOrgId :CVE-2026-34477_CveMetadata \"f0158376-9dc2-43b6-827c-5f631a4d8d09\")"
+    },
+    {
+      "line": 42226138,
+      "axiom": "DataPropertyAssertion(:hasState :CVE-2026-34477_CveMetadata \"PUBLISHED\")"
+    },
+    {
+      "line": 42226139,
+      "axiom": "DataPropertyAssertion(:hasAssignerShortName :CVE-2026-34477_CveMetadata \"apache\")"
+    },
+    {
+      "line": 42226140,
+      "axiom": "DataPropertyAssertion(:hasDateReserved :CVE-2026-34477_CveMetadata \"2026-03-28T11:26:04.052Z\")"
+    },
+    {
+      "line": 42226141,
+      "axiom": "DataPropertyAssertion(:hasDatePublished :CVE-2026-34477_CveMetadata \"2026-04-10T15:36:19.740Z\")"
+    },
+    {
+      "line": 42226142,
+      "axiom": "DataPropertyAssertion(:hasDateUpdated :CVE-2026-34477_CveMetadata \"2026-04-10T17:38:57.154Z\")"
+    },
+    {
+      "line": 42226143,
+      "axiom": "ObjectPropertyAssertion(:hasCveMetadata :CVE-2026-34477 :CVE-2026-34477_CveMetadata)"
+    },
+    {
+      "line": 42226144,
+      "axiom": "DataPropertyAssertion(:hasCollectionURL :CVE-2026-34477_Containers_Cna_Affected \"https://repo.maven.apache.org/maven2\")"
+    },
+    {
+      "line": 42226145,
+      "axiom": "DataPropertyAssertion(:hasCpes :CVE-2026-34477_Containers_Cna_Affected \"cpe:2.3:a:apache:log4j:*:*:*:*:*:*:*:*\")"
+    },
+    {
+      "line": 42226146,
+      "axiom": "DataPropertyAssertion(:hasDefaultStatus :CVE-2026-34477_Containers_Cna_Affected \"unaffected\")"
+    },
+    {
+      "line": 42226147,
+      "axiom": "DataPropertyAssertion(:hasPackageName :CVE-2026-34477_Containers_Cna_Affected \"org.apache.logging.log4j:log4j-core\")"
+    },
+    {
+      "line": 42226148,
+      "axiom": "DataPropertyAssertion(:hasPackageURL :CVE-2026-34477_Containers_Cna_Affected \"pkg:maven/org.apache.logging.log4j/log4j-core\")"
+    },
+    {
+      "line": 42226149,
+      "axiom": "DataPropertyAssertion(:hasProduct :CVE-2026-34477_Containers_Cna_Affected \"Apache Log4j Core\")"
+    },
+    {
+      "line": 42226150,
+      "axiom": "DataPropertyAssertion(:hasVendor :CVE-2026-34477_Containers_Cna_Affected \"Apache Software Foundation\")"
+    },
+    {
+      "line": 42226151,
+      "axiom": "DataPropertyAssertion(:hasLessThan :CVE-2026-34477_Containers_Cna_Affected_Versions_0 \"2.25.4\")"
+    },
+    {
+      "line": 42226152,
+      "axiom": "DataPropertyAssertion(:hasStatus :CVE-2026-34477_Containers_Cna_Affected_Versions_0 \"affected\")"
+    },
+    {
+      "line": 42226153,
+      "axiom": "DataPropertyAssertion(:hasVersion :CVE-2026-34477_Containers_Cna_Affected_Versions_0 \"2.12.0\")"
+    },
+    {
+      "line": 42226154,
+      "axiom": "DataPropertyAssertion(:hasVersionType :CVE-2026-34477_Containers_Cna_Affected_Versions_0 \"maven\")"
+    },
+    {
+      "line": 42226155,
+      "axiom": "ObjectPropertyAssertion(:hasVersions :CVE-2026-34477_Containers_Cna_Affected :CVE-2026-34477_Containers_Cna_Affected_Versions_0)"
+    },
+    {
+      "line": 42226156,
+      "axiom": "DataPropertyAssertion(:hasLessThanOrEqual :CVE-2026-34477_Containers_Cna_Affected_Versions_1 \"3.0.0-beta3\")"
+    },
+    {
+      "line": 42226157,
+      "axiom": "DataPropertyAssertion(:hasStatus :CVE-2026-34477_Containers_Cna_Affected_Versions_1 \"affected\")"
+    },
+    {
+      "line": 42226158,
+      "axiom": "DataPropertyAssertion(:hasVersion :CVE-2026-34477_Containers_Cna_Affected_Versions_1 \"3.0.0-alpha1\")"
+    },
+    {
+      "line": 42226159,
+      "axiom": "DataPropertyAssertion(:hasVersionType :CVE-2026-34477_Containers_Cna_Affected_Versions_1 \"maven\")"
+    },
+    {
+      "line": 42226160,
+      "axiom": "ObjectPropertyAssertion(:hasVersions :CVE-2026-34477_Containers_Cna_Affected :CVE-2026-34477_Containers_Cna_Affected_Versions_1)"
+    },
+    {
+      "line": 42226161,
+      "axiom": "ObjectPropertyAssertion(:hasAffected :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Affected)"
+    },
+    {
+      "line": 42226162,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Credits_0 \"en\")"
+    },
+    {
+      "line": 42226163,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-34477_Containers_Cna_Credits_0 \"finder\")"
+    },
+    {
+      "line": 42226164,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Credits_0 \"Samuli Leinonen (original reporter)\")"
+    },
+    {
+      "line": 42226165,
+      "axiom": "ObjectPropertyAssertion(:hasCredits :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Credits_0)"
+    },
+    {
+      "line": 42226166,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Credits_1 \"en\")"
+    },
+    {
+      "line": 42226167,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-34477_Containers_Cna_Credits_1 \"finder\")"
+    },
+    {
+      "line": 42226168,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Credits_1 \"Naresh Kandula (independently)\")"
+    },
+    {
+      "line": 42226169,
+      "axiom": "ObjectPropertyAssertion(:hasCredits :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Credits_1)"
+    },
+    {
+      "line": 42226170,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Credits_2 \"en\")"
+    },
+    {
+      "line": 42226171,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-34477_Containers_Cna_Credits_2 \"finder\")"
+    },
+    {
+      "line": 42226172,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Credits_2 \"Vitaly Simonovich (independently)\")"
+    },
+    {
+      "line": 42226173,
+      "axiom": "ObjectPropertyAssertion(:hasCredits :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Credits_2)"
+    },
+    {
+      "line": 42226174,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Credits_3 \"en\")"
+    },
+    {
+      "line": 42226175,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-34477_Containers_Cna_Credits_3 \"finder\")"
+    },
+    {
+      "line": 42226176,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Credits_3 \"Raijuna (independently)\")"
+    },
+    {
+      "line": 42226177,
+      "axiom": "ObjectPropertyAssertion(:hasCredits :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Credits_3)"
+    },
+    {
+      "line": 42226178,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Credits_4 \"en\")"
+    },
+    {
+      "line": 42226179,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-34477_Containers_Cna_Credits_4 \"finder\")"
+    },
+    {
+      "line": 42226180,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Credits_4 \"Danish Siddiqui (djvirus, independently)\")"
+    },
+    {
+      "line": 42226181,
+      "axiom": "ObjectPropertyAssertion(:hasCredits :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Credits_4)"
+    },
+    {
+      "line": 42226182,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Credits_5 \"en\")"
+    },
+    {
+      "line": 42226183,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-34477_Containers_Cna_Credits_5 \"finder\")"
+    },
+    {
+      "line": 42226184,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Credits_5 \"Markus Magnuson (independently)\")"
+    },
+    {
+      "line": 42226185,
+      "axiom": "ObjectPropertyAssertion(:hasCredits :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Credits_5)"
+    },
+    {
+      "line": 42226186,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Credits_6 \"en\")"
+    },
+    {
+      "line": 42226187,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-34477_Containers_Cna_Credits_6 \"finder\")"
+    },
+    {
+      "line": 42226188,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Credits_6 \"Haruki Oyama (Waseda University, independently)\")"
+    },
+    {
+      "line": 42226189,
+      "axiom": "ObjectPropertyAssertion(:hasCredits :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Credits_6)"
+    },
+    {
+      "line": 42226190,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Descriptions \"en\")"
+    },
+    {
+      "line": 42226191,
+      "axiom": "DataPropertyAssertion(:hasBase64 :CVE-2026-34477_Containers_Cna_Descriptions_SupportingMedia \"false\"^^xsd:boolean)"
+    },
+    {
+      "line": 42226192,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-34477_Containers_Cna_Descriptions_SupportingMedia \"text/html\")"
+    },
+    {
+      "line": 42226193,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Descriptions_SupportingMedia \"<p>The fix for <a target=\\\"_blank\\\" rel=\\\"nofollow\\\" href=\\\"https://logging.apache.org/security.html#CVE-2025-68161\\\">CVE-2025-68161</a> was incomplete: it addressed hostname verification only when enabled via the <a target=\\\"_blank\\\" rel=\\\"nofollow\\\" href=\\\"https://logging.apache.org/log4j/2.x/manual/systemproperties.html#log4j2.sslVerifyHostName\\\"><code>log4j2.sslVerifyHostName</code></a> system property, but not when configured through the <code><a target=\\\"_blank\\\" rel=\\\"nofollow\\\" href=\\\"https://logging.apache.org/log4j/2.x/manual/appenders/network.html#SslConfiguration-attr-verifyHostName\\\">verifyHostName</a></code> attribute of the <code>&lt;Ssl&gt;</code> element.</p><p>Although the <code>verifyHostName</code> configuration attribute was introduced in Log4j Core 2.12.0, it was silently ignored in all versions through 2.25.3, leaving TLS connections vulnerable to interception regardless of the configured value.</p><p>A network-based attacker may be able to perform a man-in-the-middle attack when <strong>all</strong> of the following conditions are met:</p><ol><li>An SMTP, Socket, or Syslog appender is in use.</li><li>TLS is configured via a nested <code>&lt;Ssl&gt;</code> element.</li><li>The attacker can present a certificate issued by a CA trusted by the appender's configured trust store, or by the default Java trust store if none is configured.</li></ol><p>This issue does not affect users of the HTTP appender, which uses a separate <code><a target=\\\"_blank\\\" rel=\\\"nofollow\\\" href=\\\"https://logging.apache.org/log4j/2.x/manual/appenders/network.html#HttpAppender-attr-verifyHostName\\\">verifyHostname</a></code> attribute that was not subject to this bug and verifies host names by default.</p><p>Users are advised to upgrade to Apache Log4j Core 2.25.4, which corrects this issue.</p>\")"
+    },
+    {
+      "line": 42226194,
+      "axiom": "ObjectPropertyAssertion(:hasSupportingMedia :CVE-2026-34477_Containers_Cna_Descriptions :CVE-2026-34477_Containers_Cna_Descriptions_SupportingMedia)"
+    },
+    {
+      "line": 42226195,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Descriptions \"The fix for  CVE-2025-68161 https://logging.apache.org/security.html#CVE-2025-68161  was incomplete: it addressed hostname verification only when enabled via the  log4j2.sslVerifyHostName https://logging.apache.org/log4j/2.x/manual/systemproperties.html#log4j2.sslVerifyHostName  system property, but not when configured through the  verifyHostName https://logging.apache.org/log4j/2.x/manual/appenders/network.html#SslConfiguration-attr-verifyHostName  attribute of the <Ssl> element."
+    },
+    {
+      "line": 42226207,
+      "axiom": "ObjectPropertyAssertion(:hasDescriptions :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Descriptions)"
+    },
+    {
+      "line": 42226208,
+      "axiom": "ObjectPropertyAssertion(:hasAutomatable :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :AutomatableNotDefined)"
+    },
+    {
+      "line": 42226209,
+      "axiom": "ObjectPropertyAssertion(:hasRecovery :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :RecoveryNotDefined)"
+    },
+    {
+      "line": 42226210,
+      "axiom": "ObjectPropertyAssertion(:hasSafety :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :SafetyNotDefined)"
+    },
+    {
+      "line": 42226211,
+      "axiom": "ObjectPropertyAssertion(:hasAttackComplexity :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :AttackComplexityHigh)"
+    },
+    {
+      "line": 42226212,
+      "axiom": "ObjectPropertyAssertion(:hasAttackRequirements :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :AttackRequirementsNone)"
+    },
+    {
+      "line": 42226213,
+      "axiom": "ObjectPropertyAssertion(:hasAttackVector :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :AttackVectorNetwork)"
+    },
+    {
+      "line": 42226214,
+      "axiom": "DataPropertyAssertion(:hasBaseScore :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 \"6.3\"^^xsd:decimal)"
+    },
+    {
+      "line": 42226215,
+      "axiom": "ObjectPropertyAssertion(:hasBaseSeverity :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :SeverityMedium)"
+    },
+    {
+      "line": 42226216,
+      "axiom": "ObjectPropertyAssertion(:hasPrivilegesRequired :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :PrivilegesRequiredNone)"
+    },
+    {
+      "line": 42226217,
+      "axiom": "ObjectPropertyAssertion(:hasProviderUrgency :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :ProviderUrgencyNotDefined)"
+    },
+    {
+      "line": 42226218,
+      "axiom": "ObjectPropertyAssertion(:hasSubAvailabilityImpact :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :SubCiaNone)"
+    },
+    {
+      "line": 42226219,
+      "axiom": "ObjectPropertyAssertion(:hasSubConfidentialityImpact :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :SubCiaNone)"
+    },
+    {
+      "line": 42226220,
+      "axiom": "ObjectPropertyAssertion(:hasSubIntegrityImpact :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :SubCiaLow)"
+    },
+    {
+      "line": 42226221,
+      "axiom": "ObjectPropertyAssertion(:hasUserInteraction :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :UserInteractionNone)"
+    },
+    {
+      "line": 42226222,
+      "axiom": "ObjectPropertyAssertion(:hasValueDensity :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :ValueDensityNotDefined)"
+    },
+    {
+      "line": 42226223,
+      "axiom": "DataPropertyAssertion(:hasVectorString :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 \"CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:L/SA:N\")"
+    },
+    {
+      "line": 42226224,
+      "axiom": "DataPropertyAssertion(:hasVersion :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 \"4.0\")"
+    },
+    {
+      "line": 42226225,
+      "axiom": "ObjectPropertyAssertion(:hasVulnAvailabilityImpact :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :VulnCiaNone)"
+    },
+    {
+      "line": 42226226,
+      "axiom": "ObjectPropertyAssertion(:hasVulnConfidentialityImpact :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :VulnCiaLow)"
+    },
+    {
+      "line": 42226227,
+      "axiom": "ObjectPropertyAssertion(:hasVulnIntegrityImpact :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :VulnCiaNone)"
+    },
+    {
+      "line": 42226228,
+      "axiom": "ObjectPropertyAssertion(:hasVulnerabilityResponseEffort :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40 :VulnerabilityResponseEffortNotDefined)"
+    },
+    {
+      "line": 42226229,
+      "axiom": "ObjectPropertyAssertion(:hasCvssV40 :CVE-2026-34477_Containers_Cna_Metrics_0 :CVE-2026-34477_Containers_Cna_Metrics_0_CvssV40)"
+    },
+    {
+      "line": 42226230,
+      "axiom": "DataPropertyAssertion(:hasFormat :CVE-2026-34477_Containers_Cna_Metrics_0 \"CVSS\")"
+    },
+    {
+      "line": 42226231,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Metrics_0_Scenarios \"en\")"
+    },
+    {
+      "line": 42226232,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Metrics_0_Scenarios \"GENERAL\")"
+    },
+    {
+      "line": 42226233,
+      "axiom": "ObjectPropertyAssertion(:hasScenarios :CVE-2026-34477_Containers_Cna_Metrics_0 :CVE-2026-34477_Containers_Cna_Metrics_0_Scenarios)"
+    },
+    {
+      "line": 42226234,
+      "axiom": "ObjectPropertyAssertion(:hasMetrics :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Metrics_0)"
+    },
+    {
+      "line": 42226235,
+      "axiom": "DataPropertyAssertion(:hasText :CVE-2026-34477_Containers_Cna_Metrics_1_Other_Content \"moderate\")"
+    },
+    {
+      "line": 42226236,
+      "axiom": "ObjectPropertyAssertion(:hasContent :CVE-2026-34477_Containers_Cna_Metrics_1_Other :CVE-2026-34477_Containers_Cna_Metrics_1_Other_Content)"
+    },
+    {
+      "line": 42226237,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-34477_Containers_Cna_Metrics_1_Other \"Textual description of severity\")"
+    },
+    {
+      "line": 42226238,
+      "axiom": "ObjectPropertyAssertion(:hasOther :CVE-2026-34477_Containers_Cna_Metrics_1 :CVE-2026-34477_Containers_Cna_Metrics_1_Other)"
+    },
+    {
+      "line": 42226239,
+      "axiom": "ObjectPropertyAssertion(:hasMetrics :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Metrics_1)"
+    },
+    {
+      "line": 42226240,
+      "axiom": "DataPropertyAssertion(:hasCweId :CVE-2026-34477_Containers_Cna_ProblemTypes_Descriptions \"CWE-297\")"
+    },
+    {
+      "line": 42226241,
+      "axiom": "DataPropertyAssertion(:hasDescription :CVE-2026-34477_Containers_Cna_ProblemTypes_Descriptions \"CWE-297 Improper Validation of Certificate with Host Mismatch\")"
+    },
+    {
+      "line": 42226242,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_ProblemTypes_Descriptions \"en\")"
+    },
+    {
+      "line": 42226243,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-34477_Containers_Cna_ProblemTypes_Descriptions \"CWE\")"
+    },
+    {
+      "line": 42226244,
+      "axiom": "ObjectPropertyAssertion(:hasDescriptions :CVE-2026-34477_Containers_Cna_ProblemTypes :CVE-2026-34477_Containers_Cna_ProblemTypes_Descriptions)"
+    },
+    {
+      "line": 42226245,
+      "axiom": "ObjectPropertyAssertion(:hasProblemTypes :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_ProblemTypes)"
+    },
+    {
+      "line": 42226246,
+      "axiom": "DataPropertyAssertion(:hasOrgId :CVE-2026-34477_Containers_Cna_ProviderMetadata \"f0158376-9dc2-43b6-827c-5f631a4d8d09\")"
+    },
+    {
+      "line": 42226247,
+      "axiom": "DataPropertyAssertion(:hasShortName :CVE-2026-34477_Containers_Cna_ProviderMetadata \"apache\")"
+    },
+    {
+      "line": 42226248,
+      "axiom": "DataPropertyAssertion(:hasDateUpdated :CVE-2026-34477_Containers_Cna_ProviderMetadata \"2026-04-10T15:36:19.740Z\")"
+    },
+    {
+      "line": 42226249,
+      "axiom": "ObjectPropertyAssertion(:hasProviderMetadata :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_ProviderMetadata)"
+    },
+    {
+      "line": 42226250,
+      "axiom": "DataPropertyAssertion(:hasTags :CVE-2026-34477_Containers_Cna_References_0 \"patch\")"
+    },
+    {
+      "line": 42226251,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2026-34477_Containers_Cna_References_0 \"https://github.com/apache/logging-log4j2/pull/4075\")"
+    },
+    {
+      "line": 42226252,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_References_0)"
+    },
+    {
+      "line": 42226253,
+      "axiom": "DataPropertyAssertion(:hasTags :CVE-2026-34477_Containers_Cna_References_1 \"vendor-advisory\")"
+    },
+    {
+      "line": 42226254,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2026-34477_Containers_Cna_References_1 \"https://logging.apache.org/security.html#CVE-2026-34477\")"
+    },
+    {
+      "line": 42226255,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_References_1)"
+    },
+    {
+      "line": 42226256,
+      "axiom": "DataPropertyAssertion(:hasTags :CVE-2026-34477_Containers_Cna_References_2 \"vendor-advisory\")"
+    },
+    {
+      "line": 42226257,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2026-34477_Containers_Cna_References_2 \"https://logging.apache.org/cyclonedx/vdr.xml\")"
+    },
+    {
+      "line": 42226258,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_References_2)"
+    },
+    {
+      "line": 42226259,
+      "axiom": "DataPropertyAssertion(:hasTags :CVE-2026-34477_Containers_Cna_References_3 \"related\")"
+    },
+    {
+      "line": 42226260,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2026-34477_Containers_Cna_References_3 \"https://logging.apache.org/log4j/2.x/manual/appenders/network.html#SslConfiguration-attr-verifyHostName\")"
+    },
+    {
+      "line": 42226261,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_References_3)"
+    },
+    {
+      "line": 42226262,
+      "axiom": "DataPropertyAssertion(:hasTags :CVE-2026-34477_Containers_Cna_References_4 \"vendor-advisory\")"
+    },
+    {
+      "line": 42226263,
+      "axiom": "DataPropertyAssertion(:hasUrl :CVE-2026-34477_Containers_Cna_References_4 \"https://lists.apache.org/thread/lkx8cl46t2bvkcwfcb2pd43ygc097lq4\")"
+    },
+    {
+      "line": 42226264,
+      "axiom": "ObjectPropertyAssertion(:hasReferences :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_References_4)"
+    },
+    {
+      "line": 42226265,
+      "axiom": "DataPropertyAssertion(:hasDiscovery :CVE-2026-34477_Containers_Cna_Source \"EXTERNAL\")"
+    },
+    {
+      "line": 42226266,
+      "axiom": "ObjectPropertyAssertion(:hasSource :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Source)"
+    },
+    {
+      "line": 42226267,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Timeline_0 \"en\")"
+    },
+    {
+      "line": 42226268,
+      "axiom": "DataPropertyAssertion(:hasTime :CVE-2026-34477_Containers_Cna_Timeline_0 \"2025-12-20T19:05:00.000Z\")"
+    },
+    {
+      "line": 42226269,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Timeline_0 \"Vulnerability reported by Samuli Leinonen\")"
+    },
+    {
+      "line": 42226270,
+      "axiom": "ObjectPropertyAssertion(:hasTimeline :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Timeline_0)"
+    },
+    {
+      "line": 42226271,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Timeline_1 \"en\")"
+    },
+    {
+      "line": 42226272,
+      "axiom": "DataPropertyAssertion(:hasTime :CVE-2026-34477_Containers_Cna_Timeline_1 \"2025-12-30T22:57:00.000Z\")"
+    },
+    {
+      "line": 42226273,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Timeline_1 \"Candidate patch shared internally by Piotr P. Karwasz\")"
+    },
+    {
+      "line": 42226274,
+      "axiom": "ObjectPropertyAssertion(:hasTimeline :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Timeline_1)"
+    },
+    {
+      "line": 42226275,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Timeline_2 \"en\")"
+    },
+    {
+      "line": 42226276,
+      "axiom": "DataPropertyAssertion(:hasTime :CVE-2026-34477_Containers_Cna_Timeline_2 \"2026-02-25T19:35:00.000Z\")"
+    },
+    {
+      "line": 42226277,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Timeline_2 \"Independent report received from Naresh Kandula\")"
+    },
+    {
+      "line": 42226278,
+      "axiom": "ObjectPropertyAssertion(:hasTimeline :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Timeline_2)"
+    },
+    {
+      "line": 42226279,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Timeline_3 \"en\")"
+    },
+    {
+      "line": 42226280,
+      "axiom": "DataPropertyAssertion(:hasTime :CVE-2026-34477_Containers_Cna_Timeline_3 \"2026-03-01T23:01:00.000Z\")"
+    },
+    {
+      "line": 42226281,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Timeline_3 \"Independent report received from Vitaly Simonovich\")"
+    },
+    {
+      "line": 42226282,
+      "axiom": "ObjectPropertyAssertion(:hasTimeline :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Timeline_3)"
+    },
+    {
+      "line": 42226283,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Timeline_4 \"en\")"
+    },
+    {
+      "line": 42226284,
+      "axiom": "DataPropertyAssertion(:hasTime :CVE-2026-34477_Containers_Cna_Timeline_4 \"2026-03-02T06:31:00.000Z\")"
+    },
+    {
+      "line": 42226285,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Timeline_4 \"Independent report received from Raijuna\")"
+    },
+    {
+      "line": 42226286,
+      "axiom": "ObjectPropertyAssertion(:hasTimeline :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Timeline_4)"
+    },
+    {
+      "line": 42226287,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Timeline_5 \"en\")"
+    },
+    {
+      "line": 42226288,
+      "axiom": "DataPropertyAssertion(:hasTime :CVE-2026-34477_Containers_Cna_Timeline_5 \"2026-03-08T18:17:00.000Z\")"
+    },
+    {
+      "line": 42226289,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Timeline_5 \"Independent report received from Danish Siddiqui\")"
+    },
+    {
+      "line": 42226290,
+      "axiom": "ObjectPropertyAssertion(:hasTimeline :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Timeline_5)"
+    },
+    {
+      "line": 42226291,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Timeline_6 \"en\")"
+    },
+    {
+      "line": 42226292,
+      "axiom": "DataPropertyAssertion(:hasTime :CVE-2026-34477_Containers_Cna_Timeline_6 \"2026-03-19T09:46:00.000Z\")"
+    },
+    {
+      "line": 42226293,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Timeline_6 \"Independent report received from Markus Magnuson\")"
+    },
+    {
+      "line": 42226294,
+      "axiom": "ObjectPropertyAssertion(:hasTimeline :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Timeline_6)"
+    },
+    {
+      "line": 42226295,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Timeline_7 \"en\")"
+    },
+    {
+      "line": 42226296,
+      "axiom": "DataPropertyAssertion(:hasTime :CVE-2026-34477_Containers_Cna_Timeline_7 \"2026-03-21T11:13:00.000Z\")"
+    },
+    {
+      "line": 42226297,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Timeline_7 \"Independent report received from Haruki Oyama\")"
+    },
+    {
+      "line": 42226298,
+      "axiom": "ObjectPropertyAssertion(:hasTimeline :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Timeline_7)"
+    },
+    {
+      "line": 42226299,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Timeline_8 \"en\")"
+    },
+    {
+      "line": 42226300,
+      "axiom": "DataPropertyAssertion(:hasTime :CVE-2026-34477_Containers_Cna_Timeline_8 \"2026-03-24T19:46:00.000Z\")"
+    },
+    {
+      "line": 42226301,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Timeline_8 \"Fix shared publicly by Piotr P. Karwasz as pull request #4075\")"
+    },
+    {
+      "line": 42226302,
+      "axiom": "ObjectPropertyAssertion(:hasTimeline :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Timeline_8)"
+    },
+    {
+      "line": 42226303,
+      "axiom": "DataPropertyAssertion(:hasLang :CVE-2026-34477_Containers_Cna_Timeline_9 \"en\")"
+    },
+    {
+      "line": 42226304,
+      "axiom": "DataPropertyAssertion(:hasTime :CVE-2026-34477_Containers_Cna_Timeline_9 \"2026-03-28T11:19:00.000Z\")"
+    },
+    {
+      "line": 42226305,
+      "axiom": "DataPropertyAssertion(:hasValue :CVE-2026-34477_Containers_Cna_Timeline_9 \"Log4j 2.25.4 released\")"
+    },
+    {
+      "line": 42226306,
+      "axiom": "ObjectPropertyAssertion(:hasTimeline :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_Timeline_9)"
+    },
+    {
+      "line": 42226307,
+      "axiom": "DataPropertyAssertion(:hasTitle :CVE-2026-34477_Containers_Cna \"Apache Log4j Core: verifyHostName attribute silently ignored in TLS configuration, allowing hostname verification bypass\")"
+    },
+    {
+      "line": 42226308,
+      "axiom": "DataPropertyAssertion(:hasEngine :CVE-2026-34477_Containers_Cna_XGenerator \"Vulnogram 0.2.0\")"
+    },
+    {
+      "line": 42226309,
+      "axiom": "ObjectPropertyAssertion(:hasXGenerator :CVE-2026-34477_Containers_Cna :CVE-2026-34477_Containers_Cna_XGenerator)"
+    },
+    {
+      "line": 42226310,
+      "axiom": "ObjectPropertyAssertion(:hasCna :CVE-2026-34477_Containers :CVE-2026-34477_Containers_Cna)"
+    },
+    {
+      "line": 42226311,
+      "axiom": "DataPropertyAssertion(:hasType :CVE-2026-34477_Containers_Adp_Metrics_Other \"ssvc\")"
+    },
+    {
+      "line": 42226312,
+      "axiom": "DataPropertyAssertion(:hasTimestamp :CVE-2026-34477_Containers_Adp_Metrics_Other_Content \"2026-04-10T17:36:46.652477Z\")"
+    },
+    {
+      "line": 42226313,
+      "axiom": "DataPropertyAssertion(:hasId :CVE-2026-34477_Containers_Adp_Metrics_Other_Content \"CVE-2026-34477\")"
+    },
+    {
+      "line": 42226314,
+      "axiom": "DataPropertyAssertion(:hasExploitation :CVE-2026-34477_Containers_Adp_Metrics_Other_Content_Options_0 \"none\")"
+    },
+    {
+      "line": 42226315,
+      "axiom": "ObjectPropertyAssertion(:hasOptions :CVE-2026-34477_Containers_Adp_Metrics_Other_Content :CVE-2026-34477_Containers_Adp_Metrics_Other_Content_Options_0)"
+    },
+    {
+      "line": 42226316,
+      "axiom": "ObjectPropertyAssertion(:hasAutomatable :CVE-2026-34477_Containers_Adp_Metrics_Other_Content_Options_1 :AutomatableNo)"
+    },
+    {
+      "line": 42226317,
+      "axiom": "ObjectPropertyAssertion(:hasOptions :CVE-2026-34477_Containers_Adp_Metrics_Other_Content :CVE-2026-34477_Containers_Adp_Metrics_Other_Content_Options_1)"
+    },
+    {
+      "line": 42226318,
+      "axiom": "DataPropertyAssertion(:hasTechnicalImpact :CVE-2026-34477_Containers_Adp_Metrics_Other_Content_Options_2 \"partial\")"
+    },
+    {
+      "line": 42226319,
+      "axiom": "ObjectPropertyAssertion(:hasOptions :CVE-2026-34477_Containers_Adp_Metrics_Other_Content :CVE-2026-34477_Containers_Adp_Metrics_Other_Content_Options_2)"
+    },
+    {
+      "line": 42226320,
+      "axiom": "DataPropertyAssertion(:hasRole :CVE-2026-34477_Containers_Adp_Metrics_Other_Content \"CISA Coordinator\")"
+    },
+    {
+      "line": 42226321,
+      "axiom": "DataPropertyAssertion(:hasVersion :CVE-2026-34477_Containers_Adp_Metrics_Other_Content \"2.0.3\")"
+    },
+    {
+      "line": 42226322,
+      "axiom": "ObjectPropertyAssertion(:hasContent :CVE-2026-34477_Containers_Adp_Metrics_Other :CVE-2026-34477_Containers_Adp_Metrics_Other_Content)"
+    },
+    {
+      "line": 42226323,
+      "axiom": "ObjectPropertyAssertion(:hasOther :CVE-2026-34477_Containers_Adp_Metrics :CVE-2026-34477_Containers_Adp_Metrics_Other)"
+    },
+    {
+      "line": 42226324,
+      "axiom": "ObjectPropertyAssertion(:hasMetrics :CVE-2026-34477_Containers_Adp :CVE-2026-34477_Containers_Adp_Metrics)"
+    },
+    {
+      "line": 42226325,
+      "axiom": "DataPropertyAssertion(:hasTitle :CVE-2026-34477_Containers_Adp \"CISA ADP Vulnrichment\")"
+    },
+    {
+      "line": 42226326,
+      "axiom": "DataPropertyAssertion(:hasOrgId :CVE-2026-34477_Containers_Adp_ProviderMetadata \"134c704f-9b21-4f2e-91b3-4a467353bcc0\")"
+    },
+    {
+      "line": 42226327,
+      "axiom": "DataPropertyAssertion(:hasShortName :CVE-2026-34477_Containers_Adp_ProviderMetadata \"CISA-ADP\")"
+    },
+    {
+      "line": 42226328,
+      "axiom": "DataPropertyAssertion(:hasDateUpdated :CVE-2026-34477_Containers_Adp_ProviderMetadata \"2026-04-10T17:38:57.154Z\")"
+    },
+    {
+      "line": 42226329,
+      "axiom": "ObjectPropertyAssertion(:hasProviderMetadata :CVE-2026-34477_Containers_Adp :CVE-2026-34477_Containers_Adp_ProviderMetadata)"
+    },
+    {
+      "line": 42226330,
+      "axiom": "ObjectPropertyAssertion(:hasAdp :CVE-2026-34477_Containers :CVE-2026-34477_Containers_Adp)"
+    },
+    {
+      "line": 42226331,
+      "axiom": "ObjectPropertyAssertion(:hasContainers :CVE-2026-34477 :CVE-2026-34477_Containers)"
+    },
+    {
+      "line": 42226332,
+      "axiom": "ClassAssertion(:CveRecord :CVE-2026-34477)"
+    }
+  ]
+}

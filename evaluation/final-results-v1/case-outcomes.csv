@@ -1,0 +1,5 @@
+case,seconds,status,outcomes,finalization,action_execution,source
+C1-r2,1274.172,dry_run_completed,"{""CVE-2026-1225"": ""requires_prerequisites""}",completed,not_performed,output/case-improvements-20261106/cases/C1-r2/summary.json
+C2-r1,298.132,assessment_completed,"{""assessment"": ""no_findings""}",not_applicable,not_performed,output/case-improvements-20261106/cases/C2-r1/summary.json
+C3-r1,296.697,assessment_completed,"{""assessment"": ""insufficient_evidence""}",not_applicable,not_performed,output/case-improvements-20261106/cases/C3-r1/summary.json
+C4-r3,1224.254,dry_run_completed,"{""CVE-2026-1225"": ""requires_prerequisites""}",completed,not_performed,output/case-improvements-20261106/cases/C4-r3/summary.json

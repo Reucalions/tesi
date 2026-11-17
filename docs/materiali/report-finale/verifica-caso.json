@@ -1,0 +1,11 @@
+{
+  "case": "C1",
+  "source_files_sha256_verified": 15,
+  "same_complete_run": true,
+  "displayed_owl_assertions_verified": 3,
+  "displayed_aln_rows_verified": 5,
+  "source_digests_verified": 8,
+  "displayed_prov_relations_verified": 3,
+  "native_and_operational_results_verified": true,
+  "ledger_readback_matches": true
+}

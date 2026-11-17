@@ -1,0 +1,403 @@
+[
+  {
+    "id": "E01",
+    "section": "15.1",
+    "name": "Precisione estrazione",
+    "status": "parziale",
+    "evidence": [
+      "component_metrics"
+    ],
+    "available": "TP 7, FP 1, FN 3: precisione 0.875 su 12 documenti.",
+    "gap": "Riferimento assistito e verificato sulle fonti; revisione umana indipendente assente.",
+    "next": "Riportare la natura assistita del campione; nessuna nuova annotazione."
+  },
+  {
+    "id": "E02",
+    "section": "15.1",
+    "name": "Recall estrazione",
+    "status": "parziale",
+    "evidence": [
+      "component_metrics"
+    ],
+    "available": "Recall 7/10 = 0.7; quattro export SDK e otto derivati controllati.",
+    "gap": "Campione piccolo non rappresentativo; riferimento non umano indipendente.",
+    "next": "Conservare denominatori e separare originali/derivati."
+  },
+  {
+    "id": "E03",
+    "section": "15.1",
+    "name": "F1 estrazione",
+    "status": "parziale",
+    "evidence": [
+      "component_metrics"
+    ],
+    "available": "F1 micro entita 14/18 = 0.777778.",
+    "gap": "Misura del componente deterministico, non accuratezza degli agenti LLM.",
+    "next": "Non aggregare le tre prove worker nel corpus di estrazione."
+  },
+  {
+    "id": "E04",
+    "section": "15.1",
+    "name": "Accuratezza matching prodotto",
+    "status": "parziale",
+    "evidence": [
+      "component_metrics"
+    ],
+    "available": "Identita prodotto 13/16 = 0.8125; diretti 12/13, policy 1/3.",
+    "gap": "Riferimento assistito; ambiguita e astensioni incluse secondo protocollo.",
+    "next": "Citare campione e matrice di errore, senza generalizzazione."
+  },
+  {
+    "id": "E05",
+    "section": "15.1",
+    "name": "Accuratezza classificazione versioni",
+    "status": "parziale",
+    "evidence": [
+      "component_metrics"
+    ],
+    "available": "Versioni tre classi 10/13 = 0.769231; binaria 7/8 = 0.875.",
+    "gap": "Denominatori diversi; non usare solo la binaria come risultato complessivo.",
+    "next": "Conservare confusion matrix e casi non eleggibili."
+  },
+  {
+    "id": "E06",
+    "section": "15.1",
+    "name": "Categorie di errore e casi rappresentativi",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "component_metrics",
+      "final_cases"
+    ],
+    "available": "Errori tecnici 0 nel campione componenti; fallimenti launcher e ambiguita archiviati.",
+    "gap": "Zero errori tecnici non implica zero errori semantici o LLM.",
+    "next": "Mantenere fallimenti precedenti nel resoconto."
+  },
+  {
+    "id": "R01",
+    "section": "15.2",
+    "name": "Determinismo con nodi/archi riordinati",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "corrected_benchmark"
+    ],
+    "available": "45/45 confronti score/pesi identici, 30 ripetizioni e 15 permutazioni.",
+    "gap": "Explanation completa identica in 6/15 coppie; core non certificato contro oracle numerico.",
+    "next": "Distinguere invarianza score da scelta dei cammini."
+  },
+  {
+    "id": "R02",
+    "section": "15.2",
+    "name": "Persistenza grafi e risultati sul ledger",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "corrected_benchmark",
+      "final_readbacks"
+    ],
+    "available": "30 riletture ranking e cinque nuove riletture finalizzazioni identiche.",
+    "gap": "Metadati locali SaaS separati dallo stato Fabric; nessun test di disaster recovery.",
+    "next": "Conservare backup e digest originali."
+  },
+  {
+    "id": "R03",
+    "section": "15.2",
+    "name": "Stabilita del vincitore tra ripetizioni",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "corrected_benchmark"
+    ],
+    "available": "Insiemi dei massimi stabili nelle repliche dei cinque grafi.",
+    "gap": "Pareggi entro tolleranza; score prossimi a 1 non probabilita.",
+    "next": "Non forzare un vincitore unico nei grafi con pareggi."
+  },
+  {
+    "id": "R04",
+    "section": "15.2",
+    "name": "Sensibilita ai pesi di nodi e archi",
+    "status": "parziale",
+    "evidence": [
+      "native_comparisons"
+    ],
+    "available": "15 prove: quattro interventi sugli archi e baseline, tre repliche; score cambiano, vincitore stabile.",
+    "gap": "Parametri iniziali dei nodi non esposti; intervento da harness esistente SDK, non API online.",
+    "next": "Dichiarare sensibilita degli archi sul solo grafo baseline 1."
+  },
+  {
+    "id": "R05",
+    "section": "15.2",
+    "name": "Comportamento al crescere del grafo",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "corrected_benchmark"
+    ],
+    "available": "6/8/12/24/40 nodi, 11/20/21/43/75 archi, sei osservazioni MCP per dimensione.",
+    "gap": "Cinque grafi non isolano la sola dimensione e non provano scalabilita generale.",
+    "next": "Riportare distribuzioni per grafo, senza fit asintotico."
+  },
+  {
+    "id": "R06",
+    "section": "15.2",
+    "name": "Qualita delle spiegazioni del ranking",
+    "status": "parziale",
+    "evidence": [
+      "corrected_benchmark"
+    ],
+    "available": "60/60 cammini con destinazione e prodotto validi dopo adattamento; output nativo conservato.",
+    "gap": "12 against con prodotto positivo; 156/186 occorrenze senza cammini; scelta sensibile all ordine.",
+    "next": "Non interpretare against come segno o spiegazione esaustiva."
+  },
+  {
+    "id": "S01",
+    "section": "15.3",
+    "name": "Graduatoria prima e decisione dopo validazione",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "final_cases",
+      "runtime_comparisons"
+    ],
+    "available": "C1/C4 e replay: proposta rango 1, poi requires_prerequisites e selected nullo.",
+    "gap": "Score 1 convenzionale a candidata singola; non ordinamento BWAF multicandidata.",
+    "next": "Mostrare proposta, semantica, policy ed esito distinti."
+  },
+  {
+    "id": "S02",
+    "section": "15.3",
+    "name": "Prima candidata accettata",
+    "status": "parziale",
+    "evidence": [
+      "semantic_diagnostics",
+      "final_cases"
+    ],
+    "available": "Controllo reale baseline 2: prima AI accettata semanticamente.",
+    "gap": "Accettazione per riflessivita resource=request; nessuna accettazione applicativa C1/C4.",
+    "next": "Presentare controllo del componente, non fattibilita di una mitigazione."
+  },
+  {
+    "id": "S03",
+    "section": "15.3",
+    "name": "Candidata condizionata",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "final_cases",
+      "runtime_comparisons"
+    ],
+    "available": "C1 e C4 completi fino a finalizzazione: abduzione 38 e decisione condizionata.",
+    "gap": "Policy e capacita testuali non equivalgono alla semantica del rimedio.",
+    "next": "Non trasformare condizionata in accepted."
+  },
+  {
+    "id": "S04",
+    "section": "15.3",
+    "name": "Candidata rifiutata e fallback",
+    "status": "parziale",
+    "evidence": [
+      "semantic_diagnostics",
+      "final_cases"
+    ],
+    "available": "Baseline 1: Automated rifiutata, Blockchain e ZeroTrust condizionate, AI accettata.",
+    "gap": "Traversal semantico di valutazione; nessun fallback applicativo del MAS con contesto operativo.",
+    "next": "Conservare esplicito il limite di una sola candidata applicativa."
+  },
+  {
+    "id": "S05",
+    "section": "15.3",
+    "name": "Spiegazione di abduzione",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "semantic_diagnostics",
+      "final_cases"
+    ],
+    "available": "Abduzione reale Logback: ipotesi non vuota, penalita 38 in tre repliche.",
+    "gap": "Differenze di classi contestuali non sono automaticamente capacita operative mancanti.",
+    "next": "Riportare ipotesi originale e interpretazione limitata."
+  },
+  {
+    "id": "S06",
+    "section": "15.3",
+    "name": "Spiegazione Bonus",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "semantic_diagnostics"
+    ],
+    "available": "AnalyzeOntology: Bonus Surplus ObservedSoftwareAsset, Incentive 1 in tre repliche reali.",
+    "gap": "Diagnostica low-level; ExplainAffinity applicativo mantiene bonusEvaluated=false.",
+    "next": "Non attribuire Bonus alla raccomandazione C1/C4."
+  },
+  {
+    "id": "S07",
+    "section": "15.3",
+    "name": "Spiegazione di contrazione",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "semantic_diagnostics"
+    ],
+    "available": "Clash esplicito baseline: contrazione invocata, Give up e Keep, penalita 2 in tre repliche.",
+    "gap": "C1 compatibile non invoca contrazione; zero restituito non e misura di quel ramo.",
+    "next": "Separare diagnostica baseline da percorso applicativo."
+  },
+  {
+    "id": "P01",
+    "section": "15.4",
+    "name": "Latenza ingestione telemetria",
+    "status": "parziale",
+    "evidence": [
+      "worker_timing",
+      "launchers"
+    ],
+    "available": "Tre timer collect_telemetry HTTP su export SDK gia raccolto.",
+    "gap": "Non misura acquisizione originale SDK o tempo evento-decisione.",
+    "next": "Etichettare replay/gateway e riportare n=3."
+  },
+  {
+    "id": "P02",
+    "section": "15.4",
+    "name": "Latenza estrazione asset",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "worker_timing"
+    ],
+    "available": "Tre step isolati TelemetryAgent reale: 71.0861, 56.6689, 57.3705 s.",
+    "gap": "Esclude manager e altri worker; non coincide con timer della sola estrazione deterministica.",
+    "next": "Riportare modello, confine e primo caricamento incluso."
+  },
+  {
+    "id": "P03",
+    "section": "15.4",
+    "name": "Latenza matching vulnerabilita",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "launchers",
+      "runtime_comparisons"
+    ],
+    "available": "Timer assess_software nei launcher e confronto inventario, stesso tool CTI reale.",
+    "gap": "Chiamata MCP aggregata, non intero VulnerabilityAgent.",
+    "next": "Mantenere serie distinte per protocollo e input."
+  },
+  {
+    "id": "P04",
+    "section": "15.4",
+    "name": "Latenza generazione OWL",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "runtime_comparisons"
+    ],
+    "available": "Due timer observed_asset_owl e due aln_projection nel generatore esistente.",
+    "gap": "Una osservazione per braccio, wrapper incluso; non generalizzare ad altre ontologie.",
+    "next": "Separare OWL osservato da proiezione ALN."
+  },
+  {
+    "id": "P05",
+    "section": "15.4",
+    "name": "Latenza costruzione grafo",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "runtime_comparisons"
+    ],
+    "available": "graph_build_and_kg_lookup: 8.54296 e 9.51791 s.",
+    "gap": "Include lookup KG e costruzione, non costo puro della topologia.",
+    "next": "Non sommare con preparazione aggregata sovrapposta."
+  },
+  {
+    "id": "P06",
+    "section": "15.4",
+    "name": "Latenza memorizzazione grafo",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "corrected_benchmark",
+      "native_comparisons"
+    ],
+    "available": "30 StoreGraph MCP e 30 StoreGraph in memoria su input equivalenti.",
+    "gap": "Confini di trasporto/stato differenti; non puro costo scrittura ledger.",
+    "next": "Riportare n=6 per grafo nel confronto."
+  },
+  {
+    "id": "P07",
+    "section": "15.4",
+    "name": "Latenza ranking",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "corrected_benchmark",
+      "native_comparisons"
+    ],
+    "available": "30 RankGraph MCP, 30 stesso contratto in memoria; 15 ComputeRank isolati per interventi archi.",
+    "gap": "Tempi funzione diversi dai tempi di dominio; non mischiare la convenzione singola C1.",
+    "next": "Tenere coorti e timer distinti."
+  },
+  {
+    "id": "P08",
+    "section": "15.4",
+    "name": "Latenza validazione semantica",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "runtime_comparisons",
+      "semantic_diagnostics",
+      "launchers"
+    ],
+    "available": "validate_countermeasure MCP e AnalyzeOntology REST temporizzati.",
+    "gap": "Non tempo puro del reasoner: include client, peer e policy applicabile.",
+    "next": "Riportare chiamate e confini, non tempo residuo dedotto."
+  },
+  {
+    "id": "P09",
+    "section": "15.4",
+    "name": "Latenza registrazione provenance",
+    "status": "parziale",
+    "evidence": [
+      "runtime_comparisons",
+      "final_readbacks"
+    ],
+    "available": "Due nuove finalizzazioni reali con commit/rilettura e timer aggregato; C1/C4 preservati.",
+    "gap": "Costo di sola scrittura PROV-O non isolato dalla decisione atomica.",
+    "next": "Usare finalize_recommendation come misura aggregata."
+  },
+  {
+    "id": "P10",
+    "section": "15.4",
+    "name": "Durata end-to-end",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "final_cases",
+      "launchers"
+    ],
+    "available": "C1-r2 1274.172, C2-r1 298.132, C3-r1 296.697, C4-r3 1224.254 s.",
+    "gap": "Un launcher primario per caso; input replay, teardown incluso; nessuna popolazione di E2E.",
+    "next": "Non mediare casi con percorsi diversi o riprese separate."
+  },
+  {
+    "id": "P11",
+    "section": "15.4",
+    "name": "Overhead blockchain on-chain/off-chain",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "native_comparisons",
+      "commit_estimate"
+    ],
+    "available": "30 confronti stesso core/output; 15 coppie REST RankGraph invoke/evaluate con stato controllato.",
+    "gap": "Differenza include percorsi client/stato/endorsement/commit, non puro consenso.",
+    "next": "Differenze firmate per coppia; n=6 e n=3 per grafo, nessun p95."
+  },
+  {
+    "id": "A01",
+    "section": "15.5",
+    "name": "Con e senza evidenza runtime",
+    "status": "parziale",
+    "evidence": [
+      "runtime_comparisons"
+    ],
+    "available": "Coppia replay con inventario/CTI fissi, grafo OWL ALN identici; confronto sorgenti 1 osservato su 14 dichiarati.",
+    "gap": "Nessuna ablation dell intero CAMEL; modalita reale richiede OTel; mancata osservazione non prova assenza.",
+    "next": "Riportare entrambi i confronti e non chiamare copertura CTI accuratezza."
+  },
+  {
+    "id": "A02",
+    "section": "15.5",
+    "name": "Prima e dopo validazione semantica",
+    "status": "disponibile_circoscritta",
+    "evidence": [
+      "runtime_comparisons",
+      "final_cases"
+    ],
+    "available": "Confronto sugli stessi artefatti: proposta S_UPGRADE rango 1, semantica condizionata, policy review, selected nullo.",
+    "gap": "Confronto descrittivo prima/dopo; non due workflow con validazione disabilitata.",
+    "next": "Nessuna disattivazione delle guardie per simulare successo."
+  }
+]

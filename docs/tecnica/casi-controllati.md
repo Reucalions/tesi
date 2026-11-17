@@ -1,5 +1,34 @@
 # Quattro casi controllati per la chiusura
 
+## C4-r3: collaudo integrale riuscito il 12 novembre 2026
+
+C4-r3 ha completato in un unico launcher tutti gli otto nodi del DAG originale,
+fino a finalizzazione e rilettura: exit code 0, `dry_run_completed`, blocco 28,
+validation_code=0. Il timeout LLM e 600 s; durata osservata 1224,254 s.
+Nessuna ripresa manuale: gli eventuali retry sono quelli interni CAMEL.
+[Report, DAG e verifiche](../../output/c4-collaudo-20261112-r2/report.md).
+
+Esito `requires_prerequisites`, nessuna candidata selezionata. La policy segnala
+maintenance_window e il prerequisito letterale `package_upgrade capability`,
+distinto dal `package_upgrade` disponibile. Tiny-ME conserva abduzione 38 e
+score 62. Nessun fallback dimostrato o modifica semantica per ottenere accettazione.
+C1/C4 sono ora collaudati fino alla finalizzazione; C2/C3 conservano gli esiti
+conclusi nei rispettivi percorsi di assessment. Gli stati sotto sono storici.
+
+## C4: ripresa conclusa il 12 novembre 2026
+
+C4-r2 conserva sette nodi completati nel launcher e l'ultimo fallito per timeout
+Ollama dopo il commit. La finalizzazione e stata conclusa in una ripresa CAMEL
+separata, con timeout 600 s e exit code 0; lo stesso commit nel blocco 25 e stato
+riletto e confrontato integralmente via MCP. Il DAG originale non e stato riscritto:
+questo esito non attesta un unico launcher C4 end-to-end riuscito.
+
+Il caso dimostra `maintenance_window` mancante con `package_upgrade` disponibile;
+esito `requires_prerequisites`, nessuna candidata selezionata, nessun fallback.
+Tiny-ME conserva abduzione 38 e score 62; la semantica resta limitata come concordato.
+[Report, verifiche e artefatti](../../output/c4-collaudo-20261112-r1/report.md).
+Gli stati successivi sono storici; C1/C2/C3 restano quelli gia verificati.
+
 ## Chiusura C1 verificata: 7 novembre 2026
 
 C1-r2 ha completato il launcher reale CAMEL/Ollama e tutti gli otto nodi del DAG

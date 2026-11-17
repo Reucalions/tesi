@@ -1,5 +1,15 @@
 # Materiali per l'incontro con il docente
 
+## Report accademico completo
+
+Disponibile il [nuovo report completo](report-finale/README.md):
+[PDF di 29 pagine](report-finale/report.pdf) e
+[Word modificabile](report-finale/report.docx), con PT Sans,
+frontespizio per il prof. Saverio Ieva e l'insegnamento Information Systems Design
+and Big Data. Comprende mockup, architettura completa, risultati, metriche,
+limiti e sviluppi futuri; il caso C1 è illustrato attraverso gli assiomi OWL,
+i profili ALN e la risposta del reasoner. I documenti manuali restano conservati.
+
 Il percorso di studio corrente e nell'[indice della documentazione](../README.md).
 La pulizia del repository ha aggiornato i collegamenti nei sorgenti Markdown,
 senza rigenerare Word, PDF, slide o figure. Il manifest del 29 ottobre descrive

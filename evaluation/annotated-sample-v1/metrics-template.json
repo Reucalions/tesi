@@ -1,0 +1,12 @@
+{
+  "status": "not_measured_pending_review_and_predictions",
+  "values": {
+    "precision": null,
+    "recall": null,
+    "f1": null,
+    "document_exact_match_accuracy": null,
+    "product_matching_accuracy": null,
+    "version_accuracy_3class": null,
+    "version_accuracy_binary": null
+  }
+}

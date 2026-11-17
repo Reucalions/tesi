@@ -1,0 +1,577 @@
+{
+  "contract": "independent-annotation-sample-v2",
+  "reference_date": "2026-11-12",
+  "status": "source_verified_assistant_review_frozen",
+  "annotation_author": "assistant_source_based_draft",
+  "human_review_completed": false,
+  "predictions_collected": false,
+  "blind_holdout": false,
+  "design_used_previous_diagnostics": true,
+  "scope": "Piccolo campione controllato delle due famiglie software gia usate nel prototipo; indipendenza delle etichette dagli output del sistema, non indipendenza degli autori o rappresentativita statistica.",
+  "extraction": [
+    {
+      "id": "E01",
+      "input": "inputs/E01.otel.jsonl",
+      "source": "logback_vulnerable",
+      "transformation": "none",
+      "kind": "original_sdk",
+      "expected_entities": [
+        {
+          "product": "logback-core",
+          "version": "1.5.24",
+          "vendor": null
+        }
+      ],
+      "rationale": "Identita esplicita della dipendenza caricata; vendor non dichiarato nell'export.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "E02",
+      "input": "inputs/E02.otel.jsonl",
+      "source": "logback_negative",
+      "transformation": "none",
+      "kind": "original_sdk",
+      "expected_entities": [
+        {
+          "product": "logback-core",
+          "version": "1.5.25",
+          "vendor": null
+        }
+      ],
+      "rationale": "Seconda build realmente osservata; non usare la versione predefinita del POM come osservazione.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "E03",
+      "input": "inputs/E03.otel.jsonl",
+      "source": "log4j_vulnerable",
+      "transformation": "none",
+      "kind": "original_sdk",
+      "expected_entities": [
+        {
+          "product": "Apache Log4j Core",
+          "version": "2.14.1",
+          "vendor": null
+        }
+      ],
+      "rationale": "Nome e versione espliciti nel primo caso Java; nessun vendor inferito dal nome Apache.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "E04",
+      "input": "inputs/E04.otel.jsonl",
+      "source": "log4j_negative",
+      "transformation": "none",
+      "kind": "original_sdk",
+      "expected_entities": [
+        {
+          "product": "Apache Log4j Core",
+          "version": "2.26.1",
+          "vendor": null
+        }
+      ],
+      "rationale": "Build negativa originale; etichetta di estrazione indipendente dalla valutazione CTI.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "E05",
+      "input": "inputs/E05.otel.jsonl",
+      "source": "logback_vulnerable",
+      "transformation": "add_explicit_vendor",
+      "kind": "controlled_synthetic_derivative",
+      "expected_entities": [
+        {
+          "product": "logback-core",
+          "version": "1.5.24",
+          "vendor": "QOS.CH Sarl"
+        }
+      ],
+      "rationale": "Vendor aggiunto esplicitamente per valutare il campo; non e una nuova osservazione reale.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "E06",
+      "input": "inputs/E06.otel.jsonl",
+      "source": "logback_vulnerable",
+      "transformation": "remove_version",
+      "kind": "controlled_synthetic_derivative",
+      "expected_entities": [
+        {
+          "product": "logback-core",
+          "version": null,
+          "vendor": null
+        }
+      ],
+      "rationale": "Non recuperare la versione da build, hash del JAR, input del launcher o conoscenza precedente; segnalare identita parziale.",
+      "review_status": "verified_under_declared_policy",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "E07",
+      "input": "inputs/E07.otel.jsonl",
+      "source": "logback_vulnerable",
+      "transformation": "orphan_version_only",
+      "kind": "controlled_synthetic_derivative",
+      "expected_entities": [],
+      "rationale": "Una versione senza identita di prodotto non giustifica un'entita software osservata.",
+      "review_status": "verified_under_declared_policy",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "E08",
+      "input": "inputs/E08.otel.jsonl",
+      "source": "logback_vulnerable",
+      "transformation": "remove_software_attributes",
+      "kind": "controlled_synthetic_derivative",
+      "expected_entities": [],
+      "rationale": "Log applicativo e service.version descrivono il servizio, non una dipendenza identificata.",
+      "review_status": "verified_under_declared_policy",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "E09",
+      "input": "inputs/E09.otel.jsonl",
+      "source": "logback_vulnerable",
+      "transformation": "planned_dependency_only",
+      "kind": "controlled_synthetic_derivative",
+      "expected_entities": [],
+      "rationale": "Il body dichiara una configurazione pianificata, non una libreria caricata; evitare falsi positivi runtime.",
+      "review_status": "verified_under_declared_policy",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "E10",
+      "input": "inputs/E10.otel.jsonl",
+      "source": "logback_vulnerable+log4j_vulnerable",
+      "transformation": "bundle_two_original_records",
+      "kind": "controlled_synthetic_derivative",
+      "expected_entities": [
+        {
+          "product": "logback-core",
+          "version": "1.5.24",
+          "vendor": null
+        },
+        {
+          "product": "Apache Log4j Core",
+          "version": "2.14.1",
+          "vendor": null
+        }
+      ],
+      "rationale": "Due record originali di istanze e tempi diversi riuniti artificialmente; non e un servizio multi-dipendenza osservato simultaneamente.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "E11",
+      "input": "inputs/E11.otel.jsonl",
+      "source": "logback_vulnerable",
+      "transformation": "degrade_product_name",
+      "kind": "controlled_synthetic_derivative",
+      "expected_entities": [
+        {
+          "product": "logback",
+          "version": "1.5.24",
+          "vendor": null
+        }
+      ],
+      "rationale": "Estrarre il nome effettivamente dichiarato senza completarlo in logback-core; il matching dell'identita e una fase separata.",
+      "review_status": "verified_under_declared_policy",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "E12",
+      "input": "inputs/E12.otel.jsonl",
+      "source": "logback_vulnerable",
+      "transformation": "non_string_version",
+      "kind": "controlled_synthetic_derivative",
+      "expected_entities": [
+        {
+          "product": "logback-core",
+          "version": null,
+          "vendor": null
+        }
+      ],
+      "rationale": "intValue non rappresenta la versione stringa attesa; non trasformare il numero in una versione plausibile.",
+      "review_status": "verified_under_declared_policy",
+      "reviewer_type": "assistant_same_author_source_review"
+    }
+  ],
+  "identity_references": [
+    {
+      "id": "P-LOGBACK-CORE",
+      "vendor": "QOS.CH Sarl",
+      "product": "Logback-core",
+      "package_name": null,
+      "source_product_id": 552657,
+      "source_cve": "CVE-2026-1225"
+    },
+    {
+      "id": "P-LOG4J-CORE",
+      "vendor": "Apache Software Foundation",
+      "product": "Apache Log4j Core",
+      "package_name": "org.apache.logging.log4j:log4j-core",
+      "source_product_id": 542283,
+      "source_cve": "CVE-2025-68161"
+    },
+    {
+      "id": "P-LOGBACK-GENERIC-SARL",
+      "vendor": "QOS.CH Sarl",
+      "product": "logback",
+      "package_name": null
+    },
+    {
+      "id": "P-LOGBACK-GENERIC-CH",
+      "vendor": "QOS.ch",
+      "product": "logback",
+      "package_name": null
+    }
+  ],
+  "matching_and_versions": [
+    {
+      "id": "C01",
+      "query": {
+        "product": "Logback-core",
+        "vendor": "QOS.CH Sarl",
+        "version": "1.5.24"
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOGBACK-CORE"
+      ],
+      "cve_id": "CVE-2026-1225",
+      "version_label": "vulnerable",
+      "source_product_id": 552657,
+      "source_rule_ids": [
+        1052835
+      ],
+      "rationale": "Estremo superiore incluso della regola affected: 0.9.20 <= versione <= 1.5.24.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C02",
+      "query": {
+        "product": "logback-core",
+        "vendor": "QOS.CH Sarl",
+        "version": "1.5.25"
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOGBACK-CORE"
+      ],
+      "cve_id": "CVE-2026-1225",
+      "version_label": "not_vulnerable",
+      "source_product_id": 552657,
+      "source_rule_ids": [
+        1052836
+      ],
+      "rationale": "La versione 1.5.25 ha una regola esplicita unaffected; minuscole del nome ammesse dalla policy di identita del campione.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C03",
+      "query": {
+        "product": "Logback-core",
+        "vendor": "QOS.CH Sarl",
+        "version": "0.9.20"
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOGBACK-CORE"
+      ],
+      "cve_id": "CVE-2026-1225",
+      "version_label": "vulnerable",
+      "source_product_id": 552657,
+      "source_rule_ids": [
+        1052835
+      ],
+      "rationale": "Estremo inferiore incluso della regola affected.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C04",
+      "query": {
+        "product": "Logback-core",
+        "vendor": "QOS.CH Sarl",
+        "version": "0.9.19"
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOGBACK-CORE"
+      ],
+      "cve_id": "CVE-2026-1225",
+      "version_label": "unknown",
+      "source_product_id": 552657,
+      "source_rule_ids": [
+        1052835,
+        1052836
+      ],
+      "rationale": "Fuori dalle due regole esplicite, defaultStatus=unknown. L'assenza di copertura non dimostra unaffected.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C05",
+      "query": {
+        "product": "Logback-core",
+        "vendor": "QOS.CH Sarl",
+        "version": "1.5.26"
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOGBACK-CORE"
+      ],
+      "cve_id": "CVE-2026-1225",
+      "version_label": "unknown",
+      "source_product_id": 552657,
+      "source_rule_ids": [
+        1052835,
+        1052836
+      ],
+      "rationale": "Lo snapshot dichiara unaffected la sola 1.5.25 e default unknown; non estendere automaticamente la correzione a ogni versione futura.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C06",
+      "query": {
+        "product": "Logback-core",
+        "vendor": "QOS.CH Sarl",
+        "version": null
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOGBACK-CORE"
+      ],
+      "cve_id": "CVE-2026-1225",
+      "version_label": "unknown",
+      "source_product_id": 552657,
+      "source_rule_ids": [
+        1052835,
+        1052836
+      ],
+      "rationale": "Identita nota, versione assente: giudizio di versione non determinabile.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C07",
+      "query": {
+        "product": "Logback-core",
+        "vendor": "QOS.CH Sarl",
+        "version": "unknown"
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOGBACK-CORE"
+      ],
+      "cve_id": "CVE-2026-1225",
+      "version_label": "unknown",
+      "source_product_id": 552657,
+      "source_rule_ids": [
+        1052835,
+        1052836
+      ],
+      "rationale": "Il literal unknown non e una versione confrontabile; non assegnare un negativo.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C08",
+      "query": {
+        "product": "logback",
+        "vendor": null,
+        "version": "1.5.24"
+      },
+      "identity_status": "ambiguous",
+      "identity_refs": [
+        "P-LOGBACK-GENERIC-SARL",
+        "P-LOGBACK-GENERIC-CH"
+      ],
+      "cve_id": null,
+      "version_label": "not_evaluable",
+      "source_product_id": null,
+      "source_rule_ids": [],
+      "rationale": "Due identita letterali distinte nel KG e nessun vendor; non assumere un alias fra QOS.ch e QOS.CH Sarl o completare il prodotto in Logback-core. Ambiguita delle identita letterali sotto la policy chiusa, non prova di organizzazioni diverse.",
+      "review_status": "verified_under_declared_policy",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C09",
+      "query": {
+        "product": "Apache Log4j Core",
+        "vendor": "Apache Software Foundation",
+        "version": "2.25.2"
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOG4J-CORE"
+      ],
+      "cve_id": "CVE-2025-68161",
+      "version_label": "vulnerable",
+      "source_product_id": 542283,
+      "source_rule_ids": [
+        1033125
+      ],
+      "rationale": "Versione stabile all'interno della regola affected con limite superiore esclusivo 2.25.3.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C10",
+      "query": {
+        "product": "Apache Log4j Core",
+        "vendor": "Apache Software Foundation",
+        "version": "2.25.3"
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOG4J-CORE"
+      ],
+      "cve_id": "CVE-2025-68161",
+      "version_label": "not_vulnerable",
+      "source_product_id": 542283,
+      "source_rule_ids": [
+        1033125,
+        1033126
+      ],
+      "rationale": "Estremo superiore escluso; fuori anche dall'intervallo 3.x; defaultStatus=unaffected.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C11",
+      "query": {
+        "product": "log4j-core",
+        "vendor": "Apache Software Foundation",
+        "version": "2.14.1"
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOG4J-CORE"
+      ],
+      "cve_id": "CVE-2025-68161",
+      "version_label": "vulnerable",
+      "source_product_id": 542283,
+      "source_rule_ids": [
+        1033125
+      ],
+      "rationale": "Alias del nome artefatto ammesso solo perche documentato nella coordinata package_name della riga sorgente; versione nell'intervallo affected.",
+      "review_status": "verified_under_declared_policy",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C12",
+      "query": {
+        "product": "Apache Log4j Core",
+        "vendor": "Apache Software Foundation",
+        "version": "2.25.4"
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOG4J-CORE"
+      ],
+      "cve_id": "CVE-2026-34477",
+      "version_label": "not_vulnerable",
+      "source_product_id": 572766,
+      "source_rule_ids": [
+        1108903,
+        1108904
+      ],
+      "rationale": "Limite superiore esclusivo 2.25.4; fuori dall'intervallo 3.x; defaultStatus=unaffected.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C13",
+      "query": {
+        "product": "Apache Log4j Core",
+        "vendor": "Apache Software Foundation",
+        "version": "2.12.0"
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOG4J-CORE"
+      ],
+      "cve_id": "CVE-2026-34477",
+      "version_label": "vulnerable",
+      "source_product_id": 572766,
+      "source_rule_ids": [
+        1108903
+      ],
+      "rationale": "Estremo inferiore incluso della regola 2.12.0 <= versione < 2.25.4.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C14",
+      "query": {
+        "product": "Apache Log4j Core",
+        "vendor": "Apache Software Foundation",
+        "version": null
+      },
+      "identity_status": "matched",
+      "identity_refs": [
+        "P-LOG4J-CORE"
+      ],
+      "cve_id": "CVE-2025-68161",
+      "version_label": "unknown",
+      "source_product_id": 542283,
+      "source_rule_ids": [
+        1033125,
+        1033126
+      ],
+      "rationale": "Default unaffected non sostituisce una versione mancante: non e possibile decidere a quale regola appartenga.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C15",
+      "query": {
+        "product": "thesis-unlisted-component-9f73",
+        "vendor": null,
+        "version": "1.0.0"
+      },
+      "identity_status": "not_found",
+      "identity_refs": [],
+      "cve_id": null,
+      "version_label": "not_evaluable",
+      "source_product_id": null,
+      "source_rule_ids": [],
+      "rationale": "Nome sintetico senza identita esatta nel database fissato; nessuna traduzione verso software noto o garanzia globale di assenza di CVE.",
+      "review_status": "verified_against_source",
+      "reviewer_type": "assistant_same_author_source_review"
+    },
+    {
+      "id": "C16",
+      "query": {
+        "product": "Logback-core",
+        "vendor": "Thesis Example Vendor",
+        "version": "1.5.24"
+      },
+      "identity_status": "not_found",
+      "identity_refs": [],
+      "cve_id": null,
+      "version_label": "not_evaluable",
+      "source_product_id": null,
+      "source_rule_ids": [],
+      "rationale": "Vendor esplicito sintetico incompatibile con l'identita sorgente; non ignorarlo per forzare una corrispondenza. not_found indica nessuna identita accettabile sotto il vendor dichiarato; il prodotto esiste nel KG.",
+      "review_status": "verified_under_declared_policy",
+      "reviewer_type": "assistant_same_author_source_review"
+    }
+  ],
+  "technical_review_completed": true,
+  "reviewer_type": "assistant_same_author_source_review",
+  "evaluation_ready_for_controlled_assisted_study": true,
+  "source_revision": "annotated-sample-v1",
+  "source_manifest_sha256": "d553a98743da4d36a68f35b26269569aa77a0d5cf195101b4d694836115799af",
+  "matching_status_semantics": "Resolved identity under the declared benchmark policy; not a direct comparison with the raw backend matching.status field.",
+  "technical_error_scoring": "Technical errors, missing/invalid responses and wrong identities are incorrect, including on gold unknown; record these errors separately."
+}

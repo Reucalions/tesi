@@ -1,0 +1,21 @@
+{
+  "image": "sha256:23f024e551f5ddd697c50ca84caf62b35be666ba0096afb4af759a9a142f701d",
+  "running": true,
+  "ontology_env": [
+    "ARGUMENTATION_ONTOLOGY_PATH=/chaincode/onto/controlled-logback.owl"
+  ],
+  "network": [
+    "fablo_network_202611052222_basic"
+  ],
+  "sha256": "272f2780a2b83b019bd24e39680805355232244989e65f49b516597f8311ff92  /chaincode/bin/chaincode\n56182283f2c96444868d5a522adb468f27118f14710f16837242b666c3e78221  /chaincode/graph/lib/libgraph.so\n83b4f9629816003ed30eeab4b541d35450a4f39cf4efe317879ac019884e9ee9  /chaincode/onto/controlled-logback.owl\n",
+  "running_containers": [
+    "ccaas_peer0.org1.example.com_my-channel_argumentation_1.0",
+    "ccaas_peer0.org1.example.com_my-channel_user-registry_1.0",
+    "peer0.org1.example.com",
+    "cli.org1.example.com",
+    "orderer0.orderergroup1.orderer.example.com",
+    "cli.orderer.example.com",
+    "ca.org1.example.com",
+    "ca.orderer.example.com"
+  ]
+}

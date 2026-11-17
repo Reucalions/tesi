@@ -1,0 +1,2468 @@
+{
+  "contract": "final-evaluation-results-v1",
+  "date": "2026-11-13",
+  "component_metrics": {
+    "reference_date": "2026-11-12",
+    "scope": "Existing component benchmark, assisted source-reviewed reference; not a full agent or Fabric run.",
+    "human_reference_review": false,
+    "llm_used": false,
+    "extraction": {
+      "overall": {
+        "documents": 12,
+        "technical_errors": 0,
+        "entities": {
+          "tp": 7,
+          "fp": 1,
+          "fn": 3,
+          "precision": 0.875,
+          "recall": 0.7,
+          "f1": 0.7777777777777778
+        },
+        "fields": {
+          "tp": 16,
+          "fp": 0,
+          "fn": 3,
+          "precision": 1.0,
+          "recall": 0.8421052631578947,
+          "f1": 0.9142857142857143
+        },
+        "document_exact_match_correct": 9,
+        "document_exact_match_accuracy": 0.75
+      },
+      "original_sdk": {
+        "documents": 4,
+        "technical_errors": 0,
+        "entities": {
+          "tp": 4,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "fields": {
+          "tp": 8,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "document_exact_match_correct": 4,
+        "document_exact_match_accuracy": 1.0
+      },
+      "controlled_derivatives": {
+        "documents": 8,
+        "technical_errors": 0,
+        "entities": {
+          "tp": 3,
+          "fp": 1,
+          "fn": 3,
+          "precision": 0.75,
+          "recall": 0.5,
+          "f1": 0.6
+        },
+        "fields": {
+          "tp": 8,
+          "fp": 0,
+          "fn": 3,
+          "precision": 1.0,
+          "recall": 0.7272727272727273,
+          "f1": 0.8421052631578947
+        },
+        "document_exact_match_correct": 5,
+        "document_exact_match_accuracy": 0.625
+      },
+      "cases": [
+        {
+          "id": "E01",
+          "kind": "original_sdk",
+          "status": "ok",
+          "reference_entities": 1,
+          "predicted_entities": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "document_correct": true,
+          "field_counts": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        {
+          "id": "E02",
+          "kind": "original_sdk",
+          "status": "ok",
+          "reference_entities": 1,
+          "predicted_entities": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "document_correct": true,
+          "field_counts": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        {
+          "id": "E03",
+          "kind": "original_sdk",
+          "status": "ok",
+          "reference_entities": 1,
+          "predicted_entities": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "document_correct": true,
+          "field_counts": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        {
+          "id": "E04",
+          "kind": "original_sdk",
+          "status": "ok",
+          "reference_entities": 1,
+          "predicted_entities": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "document_correct": true,
+          "field_counts": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        {
+          "id": "E05",
+          "kind": "controlled_synthetic_derivative",
+          "status": "ok",
+          "reference_entities": 1,
+          "predicted_entities": 1,
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "document_correct": false,
+          "field_counts": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1
+          }
+        },
+        {
+          "id": "E06",
+          "kind": "controlled_synthetic_derivative",
+          "status": "ok",
+          "reference_entities": 1,
+          "predicted_entities": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "document_correct": false,
+          "field_counts": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1
+          }
+        },
+        {
+          "id": "E07",
+          "kind": "controlled_synthetic_derivative",
+          "status": "ok",
+          "reference_entities": 0,
+          "predicted_entities": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "document_correct": true,
+          "field_counts": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        {
+          "id": "E08",
+          "kind": "controlled_synthetic_derivative",
+          "status": "ok",
+          "reference_entities": 0,
+          "predicted_entities": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "document_correct": true,
+          "field_counts": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        {
+          "id": "E09",
+          "kind": "controlled_synthetic_derivative",
+          "status": "ok",
+          "reference_entities": 0,
+          "predicted_entities": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "document_correct": true,
+          "field_counts": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        {
+          "id": "E10",
+          "kind": "controlled_synthetic_derivative",
+          "status": "ok",
+          "reference_entities": 2,
+          "predicted_entities": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "document_correct": true,
+          "field_counts": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        {
+          "id": "E11",
+          "kind": "controlled_synthetic_derivative",
+          "status": "ok",
+          "reference_entities": 1,
+          "predicted_entities": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "document_correct": true,
+          "field_counts": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        {
+          "id": "E12",
+          "kind": "controlled_synthetic_derivative",
+          "status": "ok",
+          "reference_entities": 1,
+          "predicted_entities": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "document_correct": false,
+          "field_counts": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1
+          }
+        }
+      ]
+    },
+    "cti": {
+      "identity": {
+        "correct": 13,
+        "denominator": 16,
+        "accuracy": 0.8125
+      },
+      "identity_direct_cases": {
+        "correct": 12,
+        "denominator": 13,
+        "accuracy": 0.9230769230769231
+      },
+      "identity_policy_cases": {
+        "correct": 1,
+        "denominator": 3,
+        "accuracy": 0.3333333333333333
+      },
+      "version_3class": {
+        "correct": 10,
+        "denominator": 13,
+        "accuracy": 0.7692307692307693
+      },
+      "version_binary": {
+        "correct": 7,
+        "denominator": 8,
+        "accuracy": 0.875
+      },
+      "technical_errors": 0,
+      "version_confusion": [
+        {
+          "expected": "not_vulnerable",
+          "predicted": "not_vulnerable",
+          "count": 3
+        },
+        {
+          "expected": "unknown",
+          "predicted": "not_vulnerable",
+          "count": 2
+        },
+        {
+          "expected": "unknown",
+          "predicted": "unknown",
+          "count": 3
+        },
+        {
+          "expected": "vulnerable",
+          "predicted": "identity_unresolved",
+          "count": 1
+        },
+        {
+          "expected": "vulnerable",
+          "predicted": "vulnerable",
+          "count": 4
+        }
+      ],
+      "cases": [
+        {
+          "id": "C01",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "matched",
+          "expected_version": "vulnerable",
+          "version_eligible": true,
+          "binary_eligible": true,
+          "predicted_identity_status": "matched",
+          "identity_correct": true,
+          "predicted_version": "vulnerable",
+          "version_correct": true,
+          "raw_version_statuses": [
+            "vulnerable"
+          ],
+          "resolved_identity": [
+            "qos.ch sarl",
+            "logback-core"
+          ]
+        },
+        {
+          "id": "C02",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "matched",
+          "expected_version": "not_vulnerable",
+          "version_eligible": true,
+          "binary_eligible": true,
+          "predicted_identity_status": "matched",
+          "identity_correct": true,
+          "predicted_version": "not_vulnerable",
+          "version_correct": true,
+          "raw_version_statuses": [
+            "not_vulnerable"
+          ],
+          "resolved_identity": [
+            "qos.ch sarl",
+            "logback-core"
+          ]
+        },
+        {
+          "id": "C03",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "matched",
+          "expected_version": "vulnerable",
+          "version_eligible": true,
+          "binary_eligible": true,
+          "predicted_identity_status": "matched",
+          "identity_correct": true,
+          "predicted_version": "vulnerable",
+          "version_correct": true,
+          "raw_version_statuses": [
+            "vulnerable"
+          ],
+          "resolved_identity": [
+            "qos.ch sarl",
+            "logback-core"
+          ]
+        },
+        {
+          "id": "C04",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "matched",
+          "expected_version": "unknown",
+          "version_eligible": true,
+          "binary_eligible": false,
+          "predicted_identity_status": "matched",
+          "identity_correct": true,
+          "predicted_version": "not_vulnerable",
+          "version_correct": false,
+          "raw_version_statuses": [
+            "not_vulnerable"
+          ],
+          "resolved_identity": [
+            "qos.ch sarl",
+            "logback-core"
+          ]
+        },
+        {
+          "id": "C05",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "matched",
+          "expected_version": "unknown",
+          "version_eligible": true,
+          "binary_eligible": false,
+          "predicted_identity_status": "matched",
+          "identity_correct": true,
+          "predicted_version": "not_vulnerable",
+          "version_correct": false,
+          "raw_version_statuses": [
+            "not_vulnerable"
+          ],
+          "resolved_identity": [
+            "qos.ch sarl",
+            "logback-core"
+          ]
+        },
+        {
+          "id": "C06",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "matched",
+          "expected_version": "unknown",
+          "version_eligible": true,
+          "binary_eligible": false,
+          "predicted_identity_status": "matched",
+          "identity_correct": true,
+          "predicted_version": "unknown",
+          "version_correct": true,
+          "raw_version_statuses": [
+            "not_evaluable"
+          ],
+          "resolved_identity": [
+            "qos.ch sarl",
+            "logback-core"
+          ]
+        },
+        {
+          "id": "C07",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "matched",
+          "expected_version": "unknown",
+          "version_eligible": true,
+          "binary_eligible": false,
+          "predicted_identity_status": "matched",
+          "identity_correct": true,
+          "predicted_version": "unknown",
+          "version_correct": true,
+          "raw_version_statuses": [
+            "not_evaluable"
+          ],
+          "resolved_identity": [
+            "qos.ch sarl",
+            "logback-core"
+          ]
+        },
+        {
+          "id": "C08",
+          "status": "ok",
+          "policy_case": true,
+          "expected_identity_status": "ambiguous",
+          "expected_version": "not_evaluable",
+          "version_eligible": false,
+          "binary_eligible": false,
+          "predicted_identity_status": "ambiguous",
+          "identity_correct": true,
+          "predicted_version": "identity_unresolved",
+          "version_correct": false,
+          "raw_version_statuses": [],
+          "resolved_identity": null
+        },
+        {
+          "id": "C09",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "matched",
+          "expected_version": "vulnerable",
+          "version_eligible": true,
+          "binary_eligible": true,
+          "predicted_identity_status": "matched",
+          "identity_correct": true,
+          "predicted_version": "vulnerable",
+          "version_correct": true,
+          "raw_version_statuses": [
+            "vulnerable"
+          ],
+          "resolved_identity": [
+            "apache software foundation",
+            "apache log4j core"
+          ]
+        },
+        {
+          "id": "C10",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "matched",
+          "expected_version": "not_vulnerable",
+          "version_eligible": true,
+          "binary_eligible": true,
+          "predicted_identity_status": "matched",
+          "identity_correct": true,
+          "predicted_version": "not_vulnerable",
+          "version_correct": true,
+          "raw_version_statuses": [
+            "not_vulnerable"
+          ],
+          "resolved_identity": [
+            "apache software foundation",
+            "apache log4j core"
+          ]
+        },
+        {
+          "id": "C11",
+          "status": "ok",
+          "policy_case": true,
+          "expected_identity_status": "matched",
+          "expected_version": "vulnerable",
+          "version_eligible": true,
+          "binary_eligible": true,
+          "predicted_identity_status": "ambiguous",
+          "identity_correct": false,
+          "predicted_version": "identity_unresolved",
+          "version_correct": false,
+          "raw_version_statuses": [],
+          "resolved_identity": null
+        },
+        {
+          "id": "C12",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "matched",
+          "expected_version": "not_vulnerable",
+          "version_eligible": true,
+          "binary_eligible": true,
+          "predicted_identity_status": "matched",
+          "identity_correct": true,
+          "predicted_version": "not_vulnerable",
+          "version_correct": true,
+          "raw_version_statuses": [
+            "not_vulnerable"
+          ],
+          "resolved_identity": [
+            "apache software foundation",
+            "apache log4j core"
+          ]
+        },
+        {
+          "id": "C13",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "matched",
+          "expected_version": "vulnerable",
+          "version_eligible": true,
+          "binary_eligible": true,
+          "predicted_identity_status": "matched",
+          "identity_correct": true,
+          "predicted_version": "vulnerable",
+          "version_correct": true,
+          "raw_version_statuses": [
+            "vulnerable"
+          ],
+          "resolved_identity": [
+            "apache software foundation",
+            "apache log4j core"
+          ]
+        },
+        {
+          "id": "C14",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "matched",
+          "expected_version": "unknown",
+          "version_eligible": true,
+          "binary_eligible": false,
+          "predicted_identity_status": "matched",
+          "identity_correct": true,
+          "predicted_version": "unknown",
+          "version_correct": true,
+          "raw_version_statuses": [
+            "not_evaluable"
+          ],
+          "resolved_identity": [
+            "apache software foundation",
+            "apache log4j core"
+          ]
+        },
+        {
+          "id": "C15",
+          "status": "ok",
+          "policy_case": false,
+          "expected_identity_status": "not_found",
+          "expected_version": "not_evaluable",
+          "version_eligible": false,
+          "binary_eligible": false,
+          "predicted_identity_status": "ambiguous",
+          "identity_correct": false,
+          "predicted_version": "identity_unresolved",
+          "version_correct": false,
+          "raw_version_statuses": [],
+          "resolved_identity": null
+        },
+        {
+          "id": "C16",
+          "status": "ok",
+          "policy_case": true,
+          "expected_identity_status": "not_found",
+          "expected_version": "not_evaluable",
+          "version_eligible": false,
+          "binary_eligible": false,
+          "predicted_identity_status": "ambiguous",
+          "identity_correct": false,
+          "predicted_version": "identity_unresolved",
+          "version_correct": false,
+          "raw_version_statuses": [],
+          "resolved_identity": null
+        }
+      ]
+    }
+  },
+  "corrected_native_benchmark": {
+    "protocol_sha256": "4217c2a265b24fcf90f76ddaabfe269acaaccfc0eb79f45074b6bf76bf51231a",
+    "planned": 30,
+    "completed": 30,
+    "cases": [
+      {
+        "case": "baseline-1",
+        "nodes": 6,
+        "edges": 11,
+        "completed": 6,
+        "candidate_count": 4,
+        "winner_sets": [
+          [
+            "AutomatedCountermeasure"
+          ]
+        ],
+        "comparisons": {
+          "permutation": 3,
+          "repeat": 6
+        },
+        "score_comparisons_passed": 9,
+        "winner_comparisons_passed": 9,
+        "max_absolute_score_delta": 0.0,
+        "latencies": {
+          "store_graph": {
+            "n": 6,
+            "min_seconds": 0.06683737505227327,
+            "median_seconds": 0.07401718746405095,
+            "max_seconds": 0.3605374579783529,
+            "sample_stdev_seconds": 0.1179442841889516
+          },
+          "rank_graph": {
+            "n": 6,
+            "min_seconds": 0.10868916695471853,
+            "median_seconds": 0.11547299951780587,
+            "max_seconds": 0.19051666697487235,
+            "sample_stdev_seconds": 0.03141168638717675
+          },
+          "get_graph": {
+            "n": 6,
+            "min_seconds": 0.0064479580614715815,
+            "median_seconds": 0.00758004147792235,
+            "max_seconds": 0.01122975000180304,
+            "sample_stdev_seconds": 0.0017517527154677919
+          },
+          "get_rank_result": {
+            "n": 6,
+            "min_seconds": 0.005352457985281944,
+            "median_seconds": 0.007401520968414843,
+            "max_seconds": 0.008229249971918762,
+            "sample_stdev_seconds": 0.0011735599963708624
+          },
+          "get_annotated_graph": {
+            "n": 6,
+            "min_seconds": 0.005423750029876828,
+            "median_seconds": 0.006090958486311138,
+            "max_seconds": 0.01570858305785805,
+            "sample_stdev_seconds": 0.003946618324833243
+          },
+          "five_call_sum": {
+            "n": 6,
+            "min_seconds": 0.19364349904935807,
+            "median_seconds": 0.21535335393855348,
+            "max_seconds": 0.5713227918604389,
+            "sample_stdev_seconds": 0.14807982452824356
+          }
+        }
+      },
+      {
+        "case": "baseline-2",
+        "nodes": 8,
+        "edges": 20,
+        "completed": 6,
+        "candidate_count": 5,
+        "winner_sets": [
+          [
+            "AIBasedCountermeasure"
+          ]
+        ],
+        "comparisons": {
+          "permutation": 3,
+          "repeat": 6
+        },
+        "score_comparisons_passed": 9,
+        "winner_comparisons_passed": 9,
+        "max_absolute_score_delta": 0.0,
+        "latencies": {
+          "store_graph": {
+            "n": 6,
+            "min_seconds": 0.06785454193595797,
+            "median_seconds": 0.07075700000859797,
+            "max_seconds": 0.07938654196914285,
+            "sample_stdev_seconds": 0.0049151049961544055
+          },
+          "rank_graph": {
+            "n": 6,
+            "min_seconds": 0.14049691695254296,
+            "median_seconds": 0.14506172947585583,
+            "max_seconds": 0.15494000003673136,
+            "sample_stdev_seconds": 0.005070414556799846
+          },
+          "get_graph": {
+            "n": 6,
+            "min_seconds": 0.006812584004364908,
+            "median_seconds": 0.007190542004536837,
+            "max_seconds": 0.007510583964176476,
+            "sample_stdev_seconds": 0.0002828102683184875
+          },
+          "get_rank_result": {
+            "n": 6,
+            "min_seconds": 0.006053292076103389,
+            "median_seconds": 0.0072221875307150185,
+            "max_seconds": 0.008572833030484617,
+            "sample_stdev_seconds": 0.0008197826690527623
+          },
+          "get_annotated_graph": {
+            "n": 6,
+            "min_seconds": 0.005667041055858135,
+            "median_seconds": 0.006644583016168326,
+            "max_seconds": 0.007184416987001896,
+            "sample_stdev_seconds": 0.0006844295161566982
+          },
+          "five_call_sum": {
+            "n": 6,
+            "min_seconds": 0.22891141811851412,
+            "median_seconds": 0.2392258554464206,
+            "max_seconds": 0.2474410010036081,
+            "sample_stdev_seconds": 0.0073182962904762994
+          }
+        }
+      },
+      {
+        "case": "baseline-3",
+        "nodes": 12,
+        "edges": 21,
+        "completed": 6,
+        "candidate_count": 6,
+        "winner_sets": [
+          [
+            "AutomatedCountermeasure",
+            "BlockchainCountermeasure"
+          ]
+        ],
+        "comparisons": {
+          "permutation": 3,
+          "repeat": 6
+        },
+        "score_comparisons_passed": 9,
+        "winner_comparisons_passed": 9,
+        "max_absolute_score_delta": 0.0,
+        "latencies": {
+          "store_graph": {
+            "n": 6,
+            "min_seconds": 0.07076412497553974,
+            "median_seconds": 0.07586206251289696,
+            "max_seconds": 0.08255629194900393,
+            "sample_stdev_seconds": 0.00550331885959952
+          },
+          "rank_graph": {
+            "n": 6,
+            "min_seconds": 0.12414858292322606,
+            "median_seconds": 0.13158708304399624,
+            "max_seconds": 0.13929179101251066,
+            "sample_stdev_seconds": 0.005577115431975532
+          },
+          "get_graph": {
+            "n": 6,
+            "min_seconds": 0.007290458073839545,
+            "median_seconds": 0.0076346040004864335,
+            "max_seconds": 0.008755375049076974,
+            "sample_stdev_seconds": 0.0005661522988930028
+          },
+          "get_rank_result": {
+            "n": 6,
+            "min_seconds": 0.005752832978032529,
+            "median_seconds": 0.007579770521260798,
+            "max_seconds": 0.009011500049382448,
+            "sample_stdev_seconds": 0.0010991001400384812
+          },
+          "get_annotated_graph": {
+            "n": 6,
+            "min_seconds": 0.004179875017143786,
+            "median_seconds": 0.007139104476664215,
+            "max_seconds": 0.00905629200860858,
+            "sample_stdev_seconds": 0.0016227378392839318
+          },
+          "five_call_sum": {
+            "n": 6,
+            "min_seconds": 0.2179464161163196,
+            "median_seconds": 0.2276205203961581,
+            "max_seconds": 0.24693291704170406,
+            "sample_stdev_seconds": 0.010779087063589283
+          }
+        }
+      },
+      {
+        "case": "baseline-4",
+        "nodes": 24,
+        "edges": 43,
+        "completed": 6,
+        "candidate_count": 8,
+        "winner_sets": [
+          [
+            "AutomatedCountermeasure",
+            "BlockchainCountermeasure",
+            "SCADADefense",
+            "ZeroTrustCountermeasure"
+          ]
+        ],
+        "comparisons": {
+          "permutation": 3,
+          "repeat": 6
+        },
+        "score_comparisons_passed": 9,
+        "winner_comparisons_passed": 9,
+        "max_absolute_score_delta": 0.0,
+        "latencies": {
+          "store_graph": {
+            "n": 6,
+            "min_seconds": 0.07008491700980812,
+            "median_seconds": 0.0744691879954189,
+            "max_seconds": 0.09215879207476974,
+            "sample_stdev_seconds": 0.008030439762493558
+          },
+          "rank_graph": {
+            "n": 6,
+            "min_seconds": 0.16562104201875627,
+            "median_seconds": 0.18354818754596636,
+            "max_seconds": 0.1950744999339804,
+            "sample_stdev_seconds": 0.011504152238754627
+          },
+          "get_graph": {
+            "n": 6,
+            "min_seconds": 0.005945749930106103,
+            "median_seconds": 0.007474521000403911,
+            "max_seconds": 0.009538167039863765,
+            "sample_stdev_seconds": 0.0013025872553733583
+          },
+          "get_rank_result": {
+            "n": 6,
+            "min_seconds": 0.004480167059227824,
+            "median_seconds": 0.006162270496133715,
+            "max_seconds": 0.011207125033251941,
+            "sample_stdev_seconds": 0.0023978852040566923
+          },
+          "get_annotated_graph": {
+            "n": 6,
+            "min_seconds": 0.0036899170372635126,
+            "median_seconds": 0.005613063054624945,
+            "max_seconds": 0.008071666001342237,
+            "sample_stdev_seconds": 0.0015538123916228033
+          },
+          "five_call_sum": {
+            "n": 6,
+            "min_seconds": 0.25942741811741143,
+            "median_seconds": 0.2818837510421872,
+            "max_seconds": 0.2893731249496341,
+            "sample_stdev_seconds": 0.01078802517087878
+          }
+        }
+      },
+      {
+        "case": "baseline-5",
+        "nodes": 40,
+        "edges": 75,
+        "completed": 6,
+        "candidate_count": 8,
+        "winner_sets": [
+          [
+            "AutomatedCountermeasure",
+            "BlockchainCountermeasure",
+            "PhishingCountermeasure",
+            "SCADADefense",
+            "SmartContractCountermeasure",
+            "ZeroTrustCountermeasure"
+          ]
+        ],
+        "comparisons": {
+          "permutation": 3,
+          "repeat": 6
+        },
+        "score_comparisons_passed": 9,
+        "winner_comparisons_passed": 9,
+        "max_absolute_score_delta": 0.0,
+        "latencies": {
+          "store_graph": {
+            "n": 6,
+            "min_seconds": 0.07058208400849253,
+            "median_seconds": 0.07285722898086533,
+            "max_seconds": 0.07800249999854714,
+            "sample_stdev_seconds": 0.002948732982492506
+          },
+          "rank_graph": {
+            "n": 6,
+            "min_seconds": 0.271430250024423,
+            "median_seconds": 0.29005606251303107,
+            "max_seconds": 0.31049674993846565,
+            "sample_stdev_seconds": 0.01936953857055639
+          },
+          "get_graph": {
+            "n": 6,
+            "min_seconds": 0.007675000000745058,
+            "median_seconds": 0.008047917042858899,
+            "max_seconds": 0.010128209018148482,
+            "sample_stdev_seconds": 0.0010623348473784945
+          },
+          "get_rank_result": {
+            "n": 6,
+            "min_seconds": 0.007035417016595602,
+            "median_seconds": 0.007218208455014974,
+            "max_seconds": 0.00869554199744016,
+            "sample_stdev_seconds": 0.0006268003422150665
+          },
+          "get_annotated_graph": {
+            "n": 6,
+            "min_seconds": 0.005920834024436772,
+            "median_seconds": 0.007241687446366996,
+            "max_seconds": 0.009138374938629568,
+            "sample_stdev_seconds": 0.0010432679276875562
+          },
+          "five_call_sum": {
+            "n": 6,
+            "min_seconds": 0.36773754307068884,
+            "median_seconds": 0.3890870845061727,
+            "max_seconds": 0.406827500090003,
+            "sample_stdev_seconds": 0.01776592453856259
+          }
+        }
+      }
+    ],
+    "repeat_comparisons": 30,
+    "permutation_comparisons": 15,
+    "all_scores_within_tolerance": true,
+    "all_winner_sets_equal": true,
+    "independent_readback_equal": 30,
+    "paths_checked": 60,
+    "invalid_path_products": 0,
+    "sign_interpretation_disagreements": 12,
+    "candidates_without_paths": 156,
+    "numeric_oracle": null,
+    "weight_sensitivity": "not_evaluated",
+    "offchain_onchain_overhead": "not_measured",
+    "pure_native_compute_latency": "not_isolated"
+  },
+  "weight_sensitivity": [
+    {
+      "variant": "baseline",
+      "repetitions": 3,
+      "changes": [],
+      "max_absolute_score_delta": 0.0,
+      "winner": "AutomatedCountermeasure",
+      "repeat_outputs_identical": true
+    },
+    {
+      "variant": "attack-half",
+      "repetitions": 3,
+      "changes": [
+        {
+          "after": -0.08577441424131393,
+          "before": -0.17154882848262787,
+          "source": 3,
+          "target": 0
+        }
+      ],
+      "max_absolute_score_delta": 0.00932466983795166,
+      "winner": "AutomatedCountermeasure",
+      "repeat_outputs_identical": true
+    },
+    {
+      "variant": "attack-stronger",
+      "repetitions": 3,
+      "changes": [
+        {
+          "after": -0.2573232352733612,
+          "before": -0.17154882848262787,
+          "source": 3,
+          "target": 0
+        }
+      ],
+      "max_absolute_score_delta": 0.01137697696685791,
+      "winner": "AutomatedCountermeasure",
+      "repeat_outputs_identical": true
+    },
+    {
+      "variant": "support-half",
+      "repetitions": 3,
+      "changes": [
+        {
+          "after": 0.4597107470035553,
+          "before": 0.9194214940071106,
+          "source": 5,
+          "target": 3
+        }
+      ],
+      "max_absolute_score_delta": 0.005605340003967285,
+      "winner": "AutomatedCountermeasure",
+      "repeat_outputs_identical": true
+    },
+    {
+      "variant": "support-stronger",
+      "repetitions": 3,
+      "changes": [
+        {
+          "after": 0.965392529964447,
+          "before": 0.9194214940071106,
+          "source": 5,
+          "target": 3
+        }
+      ],
+      "max_absolute_score_delta": 0.00016248226165771484,
+      "winner": "AutomatedCountermeasure",
+      "repeat_outputs_identical": true
+    }
+  ],
+  "native_semantic_diagnostics": [
+    {
+      "case": "logback-abduction-bonus",
+      "repetition": 1,
+      "abductionResult": "Hypothesis: (AddressesCWE_20 ⊓ AffectedContext ⊓ AffectedFeature ⊓ CVEContextFeature ⊓ ContextFeature ⊓ ForCVE_CVE_2026_1225 ⊓ MitigationStrategy ⊓ ProductFeature ⊓ RankingArgument ⊓ Solutions ⊓ TargetsProduct_Logback_core ⊓ TargetsVendor_QOS_CH_Sarl ⊓ VendorFeature ⊓ WeaknessFeature ⊓ ≥1hasAttackComplexity ⊓ ≥1hasAttackRequirements ⊓ ≥1hasAttackVector ⊓ ≥1hasBaseSeverity ⊓ ≥1hasPrivilegesRequired ⊓ ≥1hasSubAvailabilityImpact ⊓ ≥1hasSubConfidentialityImpact ⊓ ≥1hasSubIntegrityImpact ⊓ ≥1hasUserInteraction ⊓ ≥1hasVulnAvailabilityImpact ⊓ ≥1hasVulnConfidentialityImpact ⊓ ≥1hasVulnIntegrityImpact ⊓ ∀hasAttackComplexity.AttackComplexityHigh ⊓ ∀hasAttackRequirements.AttackRequirementsPresent ⊓ ∀hasAttackVector.AttackVectorLocal ⊓ ∀hasBaseSeverity.SeverityLow ⊓ ∀hasPrivilegesRequired.PrivilegesRequiredHigh ⊓ ∀hasSubAvailabilityImpact.SubCiaLow ⊓ ∀hasSubConfidentialityImpact.SubCiaLow ⊓ ∀hasSubIntegrityImpact.SubCiaLow ⊓ ∀hasUserInteraction.UserInteractionNone ⊓ ∀hasVulnAvailabilityImpact.VulnCiaLow ⊓ ∀hasVulnConfidentialityImpact.VulnCiaLow ⊓ ∀hasVulnIntegrityImpact.VulnCiaLow)\nPenalty: 38.00\n",
+      "bonusResult": "Surplus: ObservedSoftwareAsset\nIncentive: 1.00\n",
+      "contractionResult": ""
+    },
+    {
+      "case": "baseline-direct-clash",
+      "repetition": 1,
+      "abductionResult": "",
+      "bonusResult": "",
+      "contractionResult": "Keep: (Countermeasure ⊓ CourseOfAction ⊓ ¬ComplianceRequirement ⊓ ¬CyberThreat ⊓ ¬MalwareBehavior ⊓ ¬ThreatActor ⊓ ¬ThreatCampaign ⊓ ≥1mitigates ⊓ ∀hasAttackVector.(AttackVectorNetwork ⊓ ¬AttackVectorAdjacentNetwork ⊓ ¬AttackVectorLocal ⊓ ¬AttackVectorPhysical) ⊓ ∀hasConfidentialityImpact.(CIAImpactHigh ⊓ ¬CIAImpactLow ⊓ ¬CIAImpactNone) ⊓ ∀hasIntegrityImpact.(CIAImpactHigh ⊓ ¬CIAImpactLow ⊓ ¬CIAImpactNone) ⊓ ∀hasSeverity.(SeverityHigh ⊓ ¬SeverityCritical ⊓ ¬SeverityLow ⊓ ¬SeverityMedium ⊓ ¬SeverityNone) ⊓ ∀hasUserInteraction.(UserInteractionNone ⊓ ¬UserInteractionRequired))\nGive up: (AIBasedCountermeasure ⊓ ¬AutomatedCountermeasure)\nPenalty: 2.00\n"
+    },
+    {
+      "case": "logback-abduction-bonus",
+      "repetition": 2,
+      "abductionResult": "Hypothesis: (AddressesCWE_20 ⊓ AffectedContext ⊓ AffectedFeature ⊓ CVEContextFeature ⊓ ContextFeature ⊓ ForCVE_CVE_2026_1225 ⊓ MitigationStrategy ⊓ ProductFeature ⊓ RankingArgument ⊓ Solutions ⊓ TargetsProduct_Logback_core ⊓ TargetsVendor_QOS_CH_Sarl ⊓ VendorFeature ⊓ WeaknessFeature ⊓ ≥1hasAttackComplexity ⊓ ≥1hasAttackRequirements ⊓ ≥1hasAttackVector ⊓ ≥1hasBaseSeverity ⊓ ≥1hasPrivilegesRequired ⊓ ≥1hasSubAvailabilityImpact ⊓ ≥1hasSubConfidentialityImpact ⊓ ≥1hasSubIntegrityImpact ⊓ ≥1hasUserInteraction ⊓ ≥1hasVulnAvailabilityImpact ⊓ ≥1hasVulnConfidentialityImpact ⊓ ≥1hasVulnIntegrityImpact ⊓ ∀hasAttackComplexity.AttackComplexityHigh ⊓ ∀hasAttackRequirements.AttackRequirementsPresent ⊓ ∀hasAttackVector.AttackVectorLocal ⊓ ∀hasBaseSeverity.SeverityLow ⊓ ∀hasPrivilegesRequired.PrivilegesRequiredHigh ⊓ ∀hasSubAvailabilityImpact.SubCiaLow ⊓ ∀hasSubConfidentialityImpact.SubCiaLow ⊓ ∀hasSubIntegrityImpact.SubCiaLow ⊓ ∀hasUserInteraction.UserInteractionNone ⊓ ∀hasVulnAvailabilityImpact.VulnCiaLow ⊓ ∀hasVulnConfidentialityImpact.VulnCiaLow ⊓ ∀hasVulnIntegrityImpact.VulnCiaLow)\nPenalty: 38.00\n",
+      "bonusResult": "Surplus: ObservedSoftwareAsset\nIncentive: 1.00\n",
+      "contractionResult": ""
+    },
+    {
+      "case": "baseline-direct-clash",
+      "repetition": 2,
+      "abductionResult": "",
+      "bonusResult": "",
+      "contractionResult": "Keep: (Countermeasure ⊓ CourseOfAction ⊓ ¬ComplianceRequirement ⊓ ¬CyberThreat ⊓ ¬MalwareBehavior ⊓ ¬ThreatActor ⊓ ¬ThreatCampaign ⊓ ≥1mitigates ⊓ ∀hasAttackVector.(AttackVectorNetwork ⊓ ¬AttackVectorAdjacentNetwork ⊓ ¬AttackVectorLocal ⊓ ¬AttackVectorPhysical) ⊓ ∀hasConfidentialityImpact.(CIAImpactHigh ⊓ ¬CIAImpactLow ⊓ ¬CIAImpactNone) ⊓ ∀hasIntegrityImpact.(CIAImpactHigh ⊓ ¬CIAImpactLow ⊓ ¬CIAImpactNone) ⊓ ∀hasSeverity.(SeverityHigh ⊓ ¬SeverityCritical ⊓ ¬SeverityLow ⊓ ¬SeverityMedium ⊓ ¬SeverityNone) ⊓ ∀hasUserInteraction.(UserInteractionNone ⊓ ¬UserInteractionRequired))\nGive up: (AIBasedCountermeasure ⊓ ¬AutomatedCountermeasure)\nPenalty: 2.00\n"
+    },
+    {
+      "case": "logback-abduction-bonus",
+      "repetition": 3,
+      "abductionResult": "Hypothesis: (AddressesCWE_20 ⊓ AffectedContext ⊓ AffectedFeature ⊓ CVEContextFeature ⊓ ContextFeature ⊓ ForCVE_CVE_2026_1225 ⊓ MitigationStrategy ⊓ ProductFeature ⊓ RankingArgument ⊓ Solutions ⊓ TargetsProduct_Logback_core ⊓ TargetsVendor_QOS_CH_Sarl ⊓ VendorFeature ⊓ WeaknessFeature ⊓ ≥1hasAttackComplexity ⊓ ≥1hasAttackRequirements ⊓ ≥1hasAttackVector ⊓ ≥1hasBaseSeverity ⊓ ≥1hasPrivilegesRequired ⊓ ≥1hasSubAvailabilityImpact ⊓ ≥1hasSubConfidentialityImpact ⊓ ≥1hasSubIntegrityImpact ⊓ ≥1hasUserInteraction ⊓ ≥1hasVulnAvailabilityImpact ⊓ ≥1hasVulnConfidentialityImpact ⊓ ≥1hasVulnIntegrityImpact ⊓ ∀hasAttackComplexity.AttackComplexityHigh ⊓ ∀hasAttackRequirements.AttackRequirementsPresent ⊓ ∀hasAttackVector.AttackVectorLocal ⊓ ∀hasBaseSeverity.SeverityLow ⊓ ∀hasPrivilegesRequired.PrivilegesRequiredHigh ⊓ ∀hasSubAvailabilityImpact.SubCiaLow ⊓ ∀hasSubConfidentialityImpact.SubCiaLow ⊓ ∀hasSubIntegrityImpact.SubCiaLow ⊓ ∀hasUserInteraction.UserInteractionNone ⊓ ∀hasVulnAvailabilityImpact.VulnCiaLow ⊓ ∀hasVulnConfidentialityImpact.VulnCiaLow ⊓ ∀hasVulnIntegrityImpact.VulnCiaLow)\nPenalty: 38.00\n",
+      "bonusResult": "Surplus: ObservedSoftwareAsset\nIncentive: 1.00\n",
+      "contractionResult": ""
+    },
+    {
+      "case": "baseline-direct-clash",
+      "repetition": 3,
+      "abductionResult": "",
+      "bonusResult": "",
+      "contractionResult": "Keep: (Countermeasure ⊓ CourseOfAction ⊓ ¬ComplianceRequirement ⊓ ¬CyberThreat ⊓ ¬MalwareBehavior ⊓ ¬ThreatActor ⊓ ¬ThreatCampaign ⊓ ≥1mitigates ⊓ ∀hasAttackVector.(AttackVectorNetwork ⊓ ¬AttackVectorAdjacentNetwork ⊓ ¬AttackVectorLocal ⊓ ¬AttackVectorPhysical) ⊓ ∀hasConfidentialityImpact.(CIAImpactHigh ⊓ ¬CIAImpactLow ⊓ ¬CIAImpactNone) ⊓ ∀hasIntegrityImpact.(CIAImpactHigh ⊓ ¬CIAImpactLow ⊓ ¬CIAImpactNone) ⊓ ∀hasSeverity.(SeverityHigh ⊓ ¬SeverityCritical ⊓ ¬SeverityLow ⊓ ¬SeverityMedium ⊓ ¬SeverityNone) ⊓ ∀hasUserInteraction.(UserInteractionNone ⊓ ¬UserInteractionRequired))\nGive up: (AIBasedCountermeasure ⊓ ¬AutomatedCountermeasure)\nPenalty: 2.00\n"
+    }
+  ],
+  "baseline_semantic_controls": [
+    {
+      "case": "baseline-2-original-r1",
+      "native_graph_key": "benchmark-native-native-explanation-benchmark-20261113-r1-baseline-2-original-r1-e14667ed4d",
+      "ordered_ranking": [
+        {
+          "name": "AIBasedCountermeasure",
+          "score": 0.9999175071716309,
+          "explanation": {
+            "against": [
+              {
+                "path": [
+                  6,
+                  0,
+                  2,
+                  4
+                ],
+                "strengthProduct": -0.1381143033504486
+              }
+            ],
+            "favor": [
+              {
+                "path": [
+                  7,
+                  4
+                ],
+                "strengthProduct": 0.8989899158477783
+              }
+            ]
+          }
+        },
+        {
+          "name": "PhishingCountermeasure",
+          "score": 0.999732494354248
+        },
+        {
+          "name": "SmartContractCountermeasure",
+          "score": 0.9991985559463501
+        },
+        {
+          "name": "RansomwareDefense",
+          "score": 0.9951494932174683
+        },
+        {
+          "name": "SCADADefense",
+          "score": 0.9873901605606079
+        }
+      ],
+      "semantic_attempts": [
+        {
+          "candidate": "AIBasedCountermeasure",
+          "score": 0.9999175071716309,
+          "semantic_status": "accepted",
+          "native": {
+            "topPenalty": 0,
+            "abductionPenalty": 0,
+            "contractionPenalty": 0,
+            "giveUp": "",
+            "keep": "",
+            "hypothesis": "Hypothesis: Thing\nPenalty: 0.00\n",
+            "score": 100,
+            "resourceIRI": "http://www.example.org/threats/ontology#AIBasedCountermeasure"
+          }
+        }
+      ],
+      "first_semantic_accepted": "AIBasedCountermeasure",
+      "application_acceptance_claimed": false
+    },
+    {
+      "case": "baseline-1-original-r1",
+      "native_graph_key": "benchmark-native-native-explanation-benchmark-20261113-r1-baseline-1-original-r1-e14667ed4d",
+      "ordered_ranking": [
+        {
+          "name": "AutomatedCountermeasure",
+          "score": 0.9997320175170898,
+          "explanation": {
+            "against": [
+              {
+                "path": [
+                  5,
+                  2,
+                  1,
+                  3
+                ],
+                "strengthProduct": 0.5496419072151184
+              }
+            ],
+            "favor": [
+              {
+                "path": [
+                  5,
+                  3
+                ],
+                "strengthProduct": 0.9194214940071106
+              }
+            ]
+          }
+        },
+        {
+          "name": "BlockchainCountermeasure",
+          "score": 0.9990934133529663
+        },
+        {
+          "name": "ZeroTrustCountermeasure",
+          "score": 0.9982389211654663
+        },
+        {
+          "name": "AIBasedCountermeasure",
+          "score": 0.949647068977356
+        }
+      ],
+      "semantic_attempts": [
+        {
+          "candidate": "AutomatedCountermeasure",
+          "score": 0.9997320175170898,
+          "semantic_status": "rejected",
+          "native": {
+            "topPenalty": 0,
+            "abductionPenalty": 0,
+            "contractionPenalty": 2,
+            "giveUp": "Keep: (Countermeasure ⊓ CourseOfAction ⊓ ¬ComplianceRequirement ⊓ ¬CyberThreat ⊓ ¬MalwareBehavior ⊓ ¬ThreatActor ⊓ ¬ThreatCampaign ⊓ ≥1hasOpenC2Command ⊓ ≥1mitigates ⊓ ∀hasAttackComplexity.(AttackComplexityLow ⊓ ¬AttackComplexityHigh) ⊓ ∀hasAttackVector.(AttackVectorNetwork ⊓ ¬AttackVectorAdjacentNetwork ⊓ ¬AttackVectorLocal ⊓ ¬AttackVectorPhysical) ⊓ ∀hasAvailabilityImpact.(CIAImpactHigh ⊓ ¬CIAImpactLow ⊓ ¬CIAImpactNone) ⊓ ∀hasUserInteraction.(UserInteractionNone ⊓ ¬UserInteractionRequired))\nGive up: (AutomatedCountermeasure ⊓ ¬AIBasedCountermeasure)\nPenalty: 2.00\n",
+            "keep": "",
+            "hypothesis": "",
+            "score": 98,
+            "resourceIRI": "http://www.example.org/threats/ontology#AIBasedCountermeasure"
+          }
+        },
+        {
+          "candidate": "BlockchainCountermeasure",
+          "score": 0.9990934133529663,
+          "semantic_status": "requires_prerequisites",
+          "native": {
+            "topPenalty": 0,
+            "abductionPenalty": 4,
+            "contractionPenalty": 0,
+            "giveUp": "",
+            "keep": "",
+            "hypothesis": "Hypothesis: (BlockchainCountermeasure ⊓ ≥1hasContractAddress ⊓ ∀hasScope.(ScopeUnchanged ⊓ ¬ScopeChanged))\nPenalty: 4.00\n",
+            "score": 96,
+            "resourceIRI": "http://www.example.org/threats/ontology#AIBasedCountermeasure"
+          }
+        },
+        {
+          "candidate": "ZeroTrustCountermeasure",
+          "score": 0.9982389211654663,
+          "semantic_status": "requires_prerequisites",
+          "native": {
+            "topPenalty": 0,
+            "abductionPenalty": 5,
+            "contractionPenalty": 0,
+            "giveUp": "",
+            "keep": "",
+            "hypothesis": "Hypothesis: (ZeroTrustCountermeasure ⊓ ≥1hasZeroTrustPolicy ⊓ ∀hasPrivilegesRequired.(PrivilegesRequiredNone ⊓ ¬PrivilegesRequiredHigh ⊓ ¬PrivilegesRequiredLow))\nPenalty: 5.00\n",
+            "score": 95,
+            "resourceIRI": "http://www.example.org/threats/ontology#AIBasedCountermeasure"
+          }
+        },
+        {
+          "candidate": "AIBasedCountermeasure",
+          "score": 0.949647068977356,
+          "semantic_status": "accepted",
+          "native": {
+            "topPenalty": 0,
+            "abductionPenalty": 0,
+            "contractionPenalty": 0,
+            "giveUp": "",
+            "keep": "",
+            "hypothesis": "Hypothesis: Thing\nPenalty: 0.00\n",
+            "score": 100,
+            "resourceIRI": "http://www.example.org/threats/ontology#AIBasedCountermeasure"
+          }
+        }
+      ],
+      "first_semantic_accepted": "AIBasedCountermeasure",
+      "application_acceptance_claimed": false
+    }
+  ],
+  "runtime_comparison": {
+    "protocol": {
+      "date": "2026-11-13",
+      "arms": {
+        "with-runtime": {
+          "run_id": "eval-runtime-with-runtime-d903fed4e3d4",
+          "runtime_digest": "8a9183025f511e960062b8f1efca7f790656899e993ba3755146e98de268ce90",
+          "report_digest": "9dcb0b226a57d1de84e2c4c374c18ba6c3928a08ce84a92fcce3ff977e2c140f",
+          "candidates_digest": "f4a65632a8fa8ba17fac0bc620db8afdb7068169821fd96fd1adf8e95bcc61aa",
+          "timing_wrapper_sha256": "cb87f4780a31189000293b0998d06902db276543eadaf7dc21755081875e8ef4"
+        },
+        "without-runtime": {
+          "run_id": "eval-runtime-without-runtime-972491173221",
+          "runtime_digest": "0c444b61802091ee07b5dd1c7a22634d603627c0ac3fecc64196e098c90b844c",
+          "report_digest": "9dcb0b226a57d1de84e2c4c374c18ba6c3928a08ce84a92fcce3ff977e2c140f",
+          "candidates_digest": "f4a65632a8fa8ba17fac0bc620db8afdb7068169821fd96fd1adf8e95bcc61aa",
+          "timing_wrapper_sha256": "72c9a61f2f2e5facaa67fe4dce20893ee3b21652eb4d9c6bb0ce671e41225037"
+        }
+      },
+      "fixed_inventory": "6a561fc5130d10cf43d692564701fd3d5b0c8b848d83afb87485cbd650efe901",
+      "fixed_cti": "34a1a87bd4367342819f4d41e90b36b711c8c430b987c43ea0b4ba8f442a478e",
+      "fixed_candidate_profile": "f4a65632a8fa8ba17fac0bc620db8afdb7068169821fd96fd1adf8e95bcc61aa",
+      "scope": "Controlled replay from the artifact boundary through existing canonical generator, real MCP ranking/validation, existing selection and real finalization; no LLM agents rerun and no claim of full CAMEL ablation.",
+      "runtime_intervention": "Remove telemetry reference/context/observations; retain exactly the same SBOM inventory, CTI report, candidates and operator policy.",
+      "repetitions_per_arm": 1,
+      "before_after_validation": "Compare rank-first proposal, native semantic status, operational status and actual post-validation recommendation. Ranking proposal is not an accepted or executed action.",
+      "generator_timing": "Thin wrappers around the three unchanged upstream functions; preserve installed file hashes, outputs and input validation. Extra function-call/clock overhead included.",
+      "product_changes": false
+    },
+    "generated_graph_owl_aln_equal": true,
+    "before_after_validation": [
+      {
+        "arm": "with-runtime",
+        "ranking_proposal": "S_UPGRADE",
+        "ranking_score": 1.0,
+        "score_method": "single_candidate_convention_v1",
+        "semantic": "requires_prerequisites",
+        "operational": "requires_review",
+        "final_outcome": "requires_prerequisites",
+        "selected": null,
+        "block": "153"
+      },
+      {
+        "arm": "without-runtime",
+        "ranking_proposal": "S_UPGRADE",
+        "ranking_score": 1.0,
+        "score_method": "single_candidate_convention_v1",
+        "semantic": "requires_prerequisites",
+        "operational": "requires_review",
+        "final_outcome": "requires_prerequisites",
+        "selected": null,
+        "block": "157"
+      }
+    ],
+    "inventory_lookup_statuses": {
+      "with-runtime": {
+        "matched": 1
+      },
+      "without-runtime": {
+        "ambiguous": 12,
+        "no_findings": 1,
+        "matched": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "case": "C1-r2",
+      "seconds": 1274.172,
+      "status": "dry_run_completed",
+      "outcomes": {
+        "CVE-2026-1225": "requires_prerequisites"
+      },
+      "finalization": "completed",
+      "action_execution": "not_performed",
+      "source": "output/case-improvements-20261106/cases/C1-r2/summary.json"
+    },
+    {
+      "case": "C2-r1",
+      "seconds": 298.132,
+      "status": "assessment_completed",
+      "outcomes": {
+        "assessment": "no_findings"
+      },
+      "finalization": "not_applicable",
+      "action_execution": "not_performed",
+      "source": "output/case-improvements-20261106/cases/C2-r1/summary.json"
+    },
+    {
+      "case": "C3-r1",
+      "seconds": 296.697,
+      "status": "assessment_completed",
+      "outcomes": {
+        "assessment": "insufficient_evidence"
+      },
+      "finalization": "not_applicable",
+      "action_execution": "not_performed",
+      "source": "output/case-improvements-20261106/cases/C3-r1/summary.json"
+    },
+    {
+      "case": "C4-r3",
+      "seconds": 1224.254,
+      "status": "dry_run_completed",
+      "outcomes": {
+        "CVE-2026-1225": "requires_prerequisites"
+      },
+      "finalization": "completed",
+      "action_execution": "not_performed",
+      "source": "output/case-improvements-20261106/cases/C4-r3/summary.json"
+    }
+  ],
+  "fresh_readbacks": {
+    "C1": {
+      "record_provenance_receipt_identical": true,
+      "transaction_id": "179598a2c1c0934f70420fa4a037138abbcf0e180ea2977eadb4b9acea113ca7",
+      "block_number": "22",
+      "source": "/Users/reucalion/tesi/output/case-improvements-20261106/runs/C1-r2/finalization/native_strategic_finalization.json",
+      "source_sha256": "8162425c9f1fbc69c40632104d5723977c30f0f5c4723c2e8c809c0a2174da2c"
+    },
+    "C4-r2": {
+      "record_provenance_receipt_identical": true,
+      "transaction_id": "b5db2d62657d1c3d4931b51ef7efa254c12da1a8e594ff213ffaec782ef42639",
+      "block_number": "25",
+      "source": "/Users/reucalion/tesi/output/c4-collaudo-20261112-r1/continuation-r1/finalization/native_strategic_finalization.json",
+      "source_sha256": "f1c36b1189045a97bda0e746b8b088ac3de974848581ed7d7771723e4ce8e854"
+    },
+    "C4-r3": {
+      "record_provenance_receipt_identical": true,
+      "transaction_id": "220b4df9cc71cbd8b85fd005a06b42443650016073f200a892342196c80c725c",
+      "block_number": "28",
+      "source": "/Users/reucalion/tesi/output/case-improvements-20261106/runs/C4-r3/finalization/native_strategic_finalization.json",
+      "source_sha256": "71769fbcbfdb15602f56561bb3b7b5cf37511a1094a05392dca3e66db11c8388"
+    },
+    "with-runtime": {
+      "record_provenance_receipt_identical": true,
+      "transaction_id": "3b18211c76d7eb8e9fad370310da4b79c5c399fb20c71c8842c084c5b1d36c55",
+      "block_number": "153",
+      "source": "/Users/reucalion/tesi/output/final-evaluation-20261113-r1/ablation-r2/with-runtime/finalization/native_strategic_finalization.json",
+      "source_sha256": "1f32368ea9bc4ece004160e75cfb780f42c596e5eb4163bca1ac760524938e77"
+    },
+    "without-runtime": {
+      "record_provenance_receipt_identical": true,
+      "transaction_id": "aa819545942e01d6c2d73c7b5c51c7ae8d266596ffc9ecb8837523c8b44b47fe",
+      "block_number": "157",
+      "source": "/Users/reucalion/tesi/output/final-evaluation-20261113-r1/ablation-r2/without-runtime/finalization/native_strategic_finalization.json",
+      "source_sha256": "f4ac5a28a0a11e870a81543cc5d08f7542a76254478574c45373d747bf9a1f82"
+    }
+  },
+  "statistics": [
+    {
+      "cohort": "artifact-replay-with-runtime",
+      "metric": "downstream_elapsed",
+      "boundary": "Generator through finalization; no upstream LLM workers",
+      "n": 1,
+      "min": 205.54407345794607,
+      "median": 205.54407345794607,
+      "max": 205.54407345794607,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-with-runtime",
+      "metric": "finalize_recommendation",
+      "boundary": "Aggregate domain MCP call; finalization includes decision and PROV-O",
+      "n": 1,
+      "min": 0.116351,
+      "median": 0.116351,
+      "max": 0.116351,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-with-runtime",
+      "metric": "get_decision",
+      "boundary": "Aggregate domain MCP call; finalization includes decision and PROV-O",
+      "n": 1,
+      "min": 0.004163,
+      "median": 0.004163,
+      "max": 0.004163,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-with-runtime",
+      "metric": "get_finalization",
+      "boundary": "Aggregate domain MCP call; finalization includes decision and PROV-O",
+      "n": 1,
+      "min": 0.015823,
+      "median": 0.015823,
+      "max": 0.015823,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-with-runtime",
+      "metric": "get_provenance",
+      "boundary": "Aggregate domain MCP call; finalization includes decision and PROV-O",
+      "n": 1,
+      "min": 0.003881,
+      "median": 0.003881,
+      "max": 0.003881,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-with-runtime",
+      "metric": "rank_remediations",
+      "boundary": "Aggregate domain MCP call; finalization includes decision and PROV-O",
+      "n": 1,
+      "min": 0.375213,
+      "median": 0.375213,
+      "max": 0.375213,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-with-runtime",
+      "metric": "validate_countermeasure",
+      "boundary": "Aggregate domain MCP call; finalization includes decision and PROV-O",
+      "n": 1,
+      "min": 0.018692,
+      "median": 0.018692,
+      "max": 0.018692,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-without-runtime",
+      "metric": "downstream_elapsed",
+      "boundary": "Generator through finalization; no upstream LLM workers",
+      "n": 1,
+      "min": 209.07983029203024,
+      "median": 209.07983029203024,
+      "max": 209.07983029203024,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-without-runtime",
+      "metric": "finalize_recommendation",
+      "boundary": "Aggregate domain MCP call; finalization includes decision and PROV-O",
+      "n": 1,
+      "min": 0.128077,
+      "median": 0.128077,
+      "max": 0.128077,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-without-runtime",
+      "metric": "get_decision",
+      "boundary": "Aggregate domain MCP call; finalization includes decision and PROV-O",
+      "n": 1,
+      "min": 0.00557,
+      "median": 0.00557,
+      "max": 0.00557,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-without-runtime",
+      "metric": "get_finalization",
+      "boundary": "Aggregate domain MCP call; finalization includes decision and PROV-O",
+      "n": 1,
+      "min": 0.017766,
+      "median": 0.017766,
+      "max": 0.017766,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-without-runtime",
+      "metric": "get_provenance",
+      "boundary": "Aggregate domain MCP call; finalization includes decision and PROV-O",
+      "n": 1,
+      "min": 0.004644,
+      "median": 0.004644,
+      "max": 0.004644,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-without-runtime",
+      "metric": "rank_remediations",
+      "boundary": "Aggregate domain MCP call; finalization includes decision and PROV-O",
+      "n": 1,
+      "min": 0.363173,
+      "median": 0.363173,
+      "max": 0.363173,
+      "sample_sd": null
+    },
+    {
+      "cohort": "artifact-replay-without-runtime",
+      "metric": "validate_countermeasure",
+      "boundary": "Aggregate domain MCP call; finalization includes decision and PROV-O",
+      "n": 1,
+      "min": 0.019473,
+      "median": 0.019473,
+      "max": 0.019473,
+      "sample_sd": null
+    },
+    {
+      "cohort": "baseline-direct-clash",
+      "metric": "AnalyzeOntology",
+      "boundary": "REST evaluate of transient existing ontology; includes transport/reasoner",
+      "n": 3,
+      "min": 0.04830904200207442,
+      "median": 0.05414483300410211,
+      "max": 0.06957774993497878,
+      "sample_sd": 0.010989307824349662
+    },
+    {
+      "cohort": "full-launcher-C1-r2",
+      "metric": "assess_software",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.11206,
+      "median": 0.11206,
+      "max": 0.11206,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C1-r2",
+      "metric": "collect_supply_chain",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.556913,
+      "median": 0.556913,
+      "max": 0.556913,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C1-r2",
+      "metric": "collect_telemetry",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.034799,
+      "median": 0.034799,
+      "max": 0.034799,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C1-r2",
+      "metric": "end_to_end",
+      "boundary": "Real CAMEL runner including teardown; archived SDK replay",
+      "n": 1,
+      "min": 1274.172,
+      "median": 1274.172,
+      "max": 1274.172,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C1-r2",
+      "metric": "finalize_recommendation",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.693981,
+      "median": 0.693981,
+      "max": 0.693981,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C1-r2",
+      "metric": "get_decision",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.024109,
+      "median": 0.024109,
+      "max": 0.024109,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C1-r2",
+      "metric": "get_finalization",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.132239,
+      "median": 0.132239,
+      "max": 0.132239,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C1-r2",
+      "metric": "get_provenance",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.024214,
+      "median": 0.024214,
+      "max": 0.024214,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C1-r2",
+      "metric": "prepare_argumentation",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 191.2890886659734,
+      "median": 191.2890886659734,
+      "max": 191.2890886659734,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C1-r2",
+      "metric": "rank_remediations",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.744415,
+      "median": 0.744415,
+      "max": 0.744415,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C1-r2",
+      "metric": "validate_countermeasure",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.302031,
+      "median": 0.302031,
+      "max": 0.302031,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C2-r1",
+      "metric": "assess_software",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.283373,
+      "median": 0.283373,
+      "max": 0.283373,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C2-r1",
+      "metric": "collect_supply_chain",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.561388,
+      "median": 0.561388,
+      "max": 0.561388,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C2-r1",
+      "metric": "collect_telemetry",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.036253,
+      "median": 0.036253,
+      "max": 0.036253,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C2-r1",
+      "metric": "end_to_end",
+      "boundary": "Real CAMEL runner including teardown; archived SDK replay",
+      "n": 1,
+      "min": 298.132,
+      "median": 298.132,
+      "max": 298.132,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C3-r1",
+      "metric": "assess_software",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 1.050447,
+      "median": 1.050447,
+      "max": 1.050447,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C3-r1",
+      "metric": "collect_supply_chain",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.614909,
+      "median": 0.614909,
+      "max": 0.614909,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C3-r1",
+      "metric": "collect_telemetry",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.022099,
+      "median": 0.022099,
+      "max": 0.022099,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C3-r1",
+      "metric": "end_to_end",
+      "boundary": "Real CAMEL runner including teardown; archived SDK replay",
+      "n": 1,
+      "min": 296.697,
+      "median": 296.697,
+      "max": 296.697,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C4-r3",
+      "metric": "assess_software",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.16613,
+      "median": 0.16613,
+      "max": 0.16613,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C4-r3",
+      "metric": "collect_supply_chain",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.494271,
+      "median": 0.494271,
+      "max": 0.494271,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C4-r3",
+      "metric": "collect_telemetry",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.023258,
+      "median": 0.023258,
+      "max": 0.023258,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C4-r3",
+      "metric": "end_to_end",
+      "boundary": "Real CAMEL runner including teardown; archived SDK replay",
+      "n": 1,
+      "min": 1224.254,
+      "median": 1224.254,
+      "max": 1224.254,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C4-r3",
+      "metric": "finalize_recommendation",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.677643,
+      "median": 0.677643,
+      "max": 0.677643,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C4-r3",
+      "metric": "get_decision",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.012174,
+      "median": 0.012174,
+      "max": 0.012174,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C4-r3",
+      "metric": "get_finalization",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.084434,
+      "median": 0.084434,
+      "max": 0.084434,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C4-r3",
+      "metric": "get_provenance",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.017767,
+      "median": 0.017767,
+      "max": 0.017767,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C4-r3",
+      "metric": "prepare_argumentation",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 195.24054912501015,
+      "median": 195.24054912501015,
+      "max": 195.24054912501015,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C4-r3",
+      "metric": "rank_remediations",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 1.256849,
+      "median": 1.256849,
+      "max": 1.256849,
+      "sample_sd": null
+    },
+    {
+      "cohort": "full-launcher-C4-r3",
+      "metric": "validate_countermeasure",
+      "boundary": "Recorded domain/gateway call; overlapping events must not be summed",
+      "n": 1,
+      "min": 0.260106,
+      "median": 0.260106,
+      "max": 0.260106,
+      "sample_sd": null
+    },
+    {
+      "cohort": "generator-with-runtime",
+      "metric": "aln_projection",
+      "boundary": "Existing function plus thin timer wrapper; graph phase includes KG lookup",
+      "n": 1,
+      "min": 102.02687104092911,
+      "median": 102.02687104092911,
+      "max": 102.02687104092911,
+      "sample_sd": null
+    },
+    {
+      "cohort": "generator-with-runtime",
+      "metric": "graph_build_and_kg_lookup",
+      "boundary": "Existing function plus thin timer wrapper; graph phase includes KG lookup",
+      "n": 1,
+      "min": 8.54296212492045,
+      "median": 8.54296212492045,
+      "max": 8.54296212492045,
+      "sample_sd": null
+    },
+    {
+      "cohort": "generator-with-runtime",
+      "metric": "observed_asset_owl",
+      "boundary": "Existing function plus thin timer wrapper; graph phase includes KG lookup",
+      "n": 1,
+      "min": 0.00032187497708946466,
+      "median": 0.00032187497708946466,
+      "max": 0.00032187497708946466,
+      "sample_sd": null
+    },
+    {
+      "cohort": "generator-without-runtime",
+      "metric": "aln_projection",
+      "boundary": "Existing function plus thin timer wrapper; graph phase includes KG lookup",
+      "n": 1,
+      "min": 105.4986573329661,
+      "median": 105.4986573329661,
+      "max": 105.4986573329661,
+      "sample_sd": null
+    },
+    {
+      "cohort": "generator-without-runtime",
+      "metric": "graph_build_and_kg_lookup",
+      "boundary": "Existing function plus thin timer wrapper; graph phase includes KG lookup",
+      "n": 1,
+      "min": 9.517913875053637,
+      "median": 9.517913875053637,
+      "max": 9.517913875053637,
+      "sample_sd": null
+    },
+    {
+      "cohort": "generator-without-runtime",
+      "metric": "observed_asset_owl",
+      "boundary": "Existing function plus thin timer wrapper; graph phase includes KG lookup",
+      "n": 1,
+      "min": 0.0004136249190196395,
+      "median": 0.0004136249190196395,
+      "max": 0.0004136249190196395,
+      "sample_sd": null
+    },
+    {
+      "cohort": "isolated-telemetry-worker",
+      "metric": "collect_telemetry",
+      "boundary": "HTTP replay gateway only; original SDK acquisition excluded",
+      "n": 3,
+      "min": 0.019959,
+      "median": 0.027668,
+      "max": 0.135874,
+      "sample_sd": 0.06481287724673238
+    },
+    {
+      "cohort": "isolated-telemetry-worker",
+      "metric": "worker_step",
+      "boundary": "Production worker step, real model/tools/publication; managers excluded; first load retained",
+      "n": 3,
+      "min": 56.668928166036494,
+      "median": 57.370528333005495,
+      "max": 71.08605770894792,
+      "sample_sd": 8.128772079407401
+    },
+    {
+      "cohort": "logback-abduction-bonus",
+      "metric": "AnalyzeOntology",
+      "boundary": "REST evaluate of transient existing ontology; includes transport/reasoner",
+      "n": 3,
+      "min": 0.006861457950435579,
+      "median": 0.0070415419759228826,
+      "max": 0.07399924995843321,
+      "sample_sd": 0.03871014122990794
+    },
+    {
+      "cohort": "offchain-baseline-1",
+      "metric": "rank_graph",
+      "boundary": "Same Go/native contract; in-memory state; excludes client/Fabric",
+      "n": 6,
+      "min": 0.032085458,
+      "median": 0.032637166499999995,
+      "max": 0.108770625,
+      "sample_sd": 0.030540369041553442
+    },
+    {
+      "cohort": "offchain-baseline-1",
+      "metric": "store_graph",
+      "boundary": "Same Go/native contract; in-memory state; excludes client/Fabric",
+      "n": 6,
+      "min": 2.6791e-05,
+      "median": 3.2312e-05,
+      "max": 0.000963709,
+      "sample_sd": 0.00038074601198734395
+    },
+    {
+      "cohort": "offchain-baseline-2",
+      "metric": "rank_graph",
+      "boundary": "Same Go/native contract; in-memory state; excludes client/Fabric",
+      "n": 6,
+      "min": 0.0575255,
+      "median": 0.061767541499999995,
+      "max": 0.072658875,
+      "sample_sd": 0.00534543706778224
+    },
+    {
+      "cohort": "offchain-baseline-2",
+      "metric": "store_graph",
+      "boundary": "Same Go/native contract; in-memory state; excludes client/Fabric",
+      "n": 6,
+      "min": 3.8459e-05,
+      "median": 4.2104e-05,
+      "max": 4.8958e-05,
+      "sample_sd": 3.6601326433159046e-06
+    },
+    {
+      "cohort": "offchain-baseline-3",
+      "metric": "rank_graph",
+      "boundary": "Same Go/native contract; in-memory state; excludes client/Fabric",
+      "n": 6,
+      "min": 0.043920209,
+      "median": 0.0454454585,
+      "max": 0.061064375,
+      "sample_sd": 0.007453316178355871
+    },
+    {
+      "cohort": "offchain-baseline-3",
+      "metric": "store_graph",
+      "boundary": "Same Go/native contract; in-memory state; excludes client/Fabric",
+      "n": 6,
+      "min": 4.4875e-05,
+      "median": 4.5896e-05,
+      "max": 0.000883084,
+      "sample_sd": 0.00034109980353536805
+    },
+    {
+      "cohort": "offchain-baseline-4",
+      "metric": "rank_graph",
+      "boundary": "Same Go/native contract; in-memory state; excludes client/Fabric",
+      "n": 6,
+      "min": 0.089522708,
+      "median": 0.0925659795,
+      "max": 0.09968075,
+      "sample_sd": 0.00437285327752882
+    },
+    {
+      "cohort": "offchain-baseline-4",
+      "metric": "store_graph",
+      "boundary": "Same Go/native contract; in-memory state; excludes client/Fabric",
+      "n": 6,
+      "min": 9.0917e-05,
+      "median": 9.6229e-05,
+      "max": 0.00025975,
+      "sample_sd": 6.68769042903951e-05
+    },
+    {
+      "cohort": "offchain-baseline-5",
+      "metric": "rank_graph",
+      "boundary": "Same Go/native contract; in-memory state; excludes client/Fabric",
+      "n": 6,
+      "min": 0.177391292,
+      "median": 0.1963024585,
+      "max": 0.206669375,
+      "sample_sd": 0.013156620252242877
+    },
+    {
+      "cohort": "offchain-baseline-5",
+      "metric": "store_graph",
+      "boundary": "Same Go/native contract; in-memory state; excludes client/Fabric",
+      "n": 6,
+      "min": 0.000142417,
+      "median": 0.000163458,
+      "max": 0.00039725,
+      "sample_sd": 9.814622763815224e-05
+    },
+    {
+      "cohort": "onchain-baseline-1",
+      "metric": "rank_graph",
+      "boundary": "MCP call including client, transport, Fabric and contract",
+      "n": 6,
+      "min": 0.10868916695471853,
+      "median": 0.11547299951780587,
+      "max": 0.19051666697487235,
+      "sample_sd": 0.03141168638717675
+    },
+    {
+      "cohort": "onchain-baseline-1",
+      "metric": "store_graph",
+      "boundary": "MCP call including client, transport, Fabric and contract",
+      "n": 6,
+      "min": 0.06683737505227327,
+      "median": 0.07401718746405095,
+      "max": 0.3605374579783529,
+      "sample_sd": 0.1179442841889516
+    },
+    {
+      "cohort": "onchain-baseline-2",
+      "metric": "rank_graph",
+      "boundary": "MCP call including client, transport, Fabric and contract",
+      "n": 6,
+      "min": 0.14049691695254296,
+      "median": 0.14506172947585583,
+      "max": 0.15494000003673136,
+      "sample_sd": 0.005070414556799846
+    },
+    {
+      "cohort": "onchain-baseline-2",
+      "metric": "store_graph",
+      "boundary": "MCP call including client, transport, Fabric and contract",
+      "n": 6,
+      "min": 0.06785454193595797,
+      "median": 0.07075700000859797,
+      "max": 0.07938654196914285,
+      "sample_sd": 0.0049151049961544055
+    },
+    {
+      "cohort": "onchain-baseline-3",
+      "metric": "rank_graph",
+      "boundary": "MCP call including client, transport, Fabric and contract",
+      "n": 6,
+      "min": 0.12414858292322606,
+      "median": 0.13158708304399624,
+      "max": 0.13929179101251066,
+      "sample_sd": 0.005577115431975532
+    },
+    {
+      "cohort": "onchain-baseline-3",
+      "metric": "store_graph",
+      "boundary": "MCP call including client, transport, Fabric and contract",
+      "n": 6,
+      "min": 0.07076412497553974,
+      "median": 0.07586206251289696,
+      "max": 0.08255629194900393,
+      "sample_sd": 0.00550331885959952
+    },
+    {
+      "cohort": "onchain-baseline-4",
+      "metric": "rank_graph",
+      "boundary": "MCP call including client, transport, Fabric and contract",
+      "n": 6,
+      "min": 0.16562104201875627,
+      "median": 0.18354818754596636,
+      "max": 0.1950744999339804,
+      "sample_sd": 0.011504152238754627
+    },
+    {
+      "cohort": "onchain-baseline-4",
+      "metric": "store_graph",
+      "boundary": "MCP call including client, transport, Fabric and contract",
+      "n": 6,
+      "min": 0.07008491700980812,
+      "median": 0.0744691879954189,
+      "max": 0.09215879207476974,
+      "sample_sd": 0.008030439762493558
+    },
+    {
+      "cohort": "onchain-baseline-5",
+      "metric": "rank_graph",
+      "boundary": "MCP call including client, transport, Fabric and contract",
+      "n": 6,
+      "min": 0.271430250024423,
+      "median": 0.29005606251303107,
+      "max": 0.31049674993846565,
+      "sample_sd": 0.01936953857055639
+    },
+    {
+      "cohort": "onchain-baseline-5",
+      "metric": "store_graph",
+      "boundary": "MCP call including client, transport, Fabric and contract",
+      "n": 6,
+      "min": 0.07058208400849253,
+      "median": 0.07285722898086533,
+      "max": 0.07800249999854714,
+      "sample_sd": 0.002948732982492506
+    },
+    {
+      "cohort": "rest-baseline-1",
+      "metric": "invoke",
+      "boundary": "Same REST client and RankGraph; evaluate vs endorse/submit/commit",
+      "n": 3,
+      "min": 0.11163941700942814,
+      "median": 0.11476608295924962,
+      "max": 0.11479499994311482,
+      "sample_sd": 0.0018135866767772393
+    },
+    {
+      "cohort": "rest-baseline-1",
+      "metric": "query",
+      "boundary": "Same REST client and RankGraph; evaluate vs endorse/submit/commit",
+      "n": 3,
+      "min": 0.042653625016100705,
+      "median": 0.045855000033043325,
+      "max": 0.11256649997085333,
+      "sample_sd": 0.039472528654728986
+    },
+    {
+      "cohort": "rest-baseline-2",
+      "metric": "invoke",
+      "boundary": "Same REST client and RankGraph; evaluate vs endorse/submit/commit",
+      "n": 3,
+      "min": 0.13791675004176795,
+      "median": 0.13814862503204495,
+      "max": 0.1445818330394104,
+      "sample_sd": 0.0037829279366343046
+    },
+    {
+      "cohort": "rest-baseline-2",
+      "metric": "query",
+      "boundary": "Same REST client and RankGraph; evaluate vs endorse/submit/commit",
+      "n": 3,
+      "min": 0.07355529104825109,
+      "median": 0.07395970798097551,
+      "max": 0.07633783388882875,
+      "sample_sd": 0.0015034172490655555
+    },
+    {
+      "cohort": "rest-baseline-3",
+      "metric": "invoke",
+      "boundary": "Same REST client and RankGraph; evaluate vs endorse/submit/commit",
+      "n": 3,
+      "min": 0.11659233295358717,
+      "median": 0.12135137489531189,
+      "max": 0.13048862491268665,
+      "sample_sd": 0.007062161476201208
+    },
+    {
+      "cohort": "rest-baseline-3",
+      "metric": "query",
+      "boundary": "Same REST client and RankGraph; evaluate vs endorse/submit/commit",
+      "n": 3,
+      "min": 0.053626167005859315,
+      "median": 0.05590345896780491,
+      "max": 0.06002404203172773,
+      "sample_sd": 0.003242891413365044
+    },
+    {
+      "cohort": "rest-baseline-4",
+      "metric": "invoke",
+      "boundary": "Same REST client and RankGraph; evaluate vs endorse/submit/commit",
+      "n": 3,
+      "min": 0.1731538330204785,
+      "median": 0.17451062495820224,
+      "max": 0.17566145793534815,
+      "sample_sd": 0.0012552213362082005
+    },
+    {
+      "cohort": "rest-baseline-4",
+      "metric": "query",
+      "boundary": "Same REST client and RankGraph; evaluate vs endorse/submit/commit",
+      "n": 3,
+      "min": 0.10271649993956089,
+      "median": 0.10932533408049494,
+      "max": 0.1115503340261057,
+      "sample_sd": 0.004594633429864026
+    },
+    {
+      "cohort": "rest-baseline-5",
+      "metric": "invoke",
+      "boundary": "Same REST client and RankGraph; evaluate vs endorse/submit/commit",
+      "n": 3,
+      "min": 0.26749516697600484,
+      "median": 0.2772629999089986,
+      "max": 0.2804598330985755,
+      "sample_sd": 0.006754169950465028
+    },
+    {
+      "cohort": "rest-baseline-5",
+      "metric": "query",
+      "boundary": "Same REST client and RankGraph; evaluate vs endorse/submit/commit",
+      "n": 3,
+      "min": 0.2054670830257237,
+      "median": 0.20695695898029953,
+      "max": 0.20797037496231496,
+      "sample_sd": 0.0012591804763701416
+    },
+    {
+      "cohort": "weight-attack-half",
+      "metric": "compute_rank",
+      "boundary": "Native ComputeRank including logging; excludes ontology/graph load",
+      "n": 3,
+      "min": 0.02727175,
+      "median": 0.029300208,
+      "max": 0.039882083,
+      "sample_sd": 0.0067714008735794825
+    },
+    {
+      "cohort": "weight-attack-stronger",
+      "metric": "compute_rank",
+      "boundary": "Native ComputeRank including logging; excludes ontology/graph load",
+      "n": 3,
+      "min": 0.031244959,
+      "median": 0.031724958,
+      "max": 0.036170542,
+      "sample_sd": 0.0027158480575732395
+    },
+    {
+      "cohort": "weight-baseline",
+      "metric": "compute_rank",
+      "boundary": "Native ComputeRank including logging; excludes ontology/graph load",
+      "n": 3,
+      "min": 0.029122875,
+      "median": 0.032873375,
+      "max": 0.043154375,
+      "sample_sd": 0.007264619782434132
+    },
+    {
+      "cohort": "weight-support-half",
+      "metric": "compute_rank",
+      "boundary": "Native ComputeRank including logging; excludes ontology/graph load",
+      "n": 3,
+      "min": 0.031761375,
+      "median": 0.037339,
+      "max": 0.040001083,
+      "sample_sd": 0.004204944994978688
+    },
+    {
+      "cohort": "weight-support-stronger",
+      "metric": "compute_rank",
+      "boundary": "Native ComputeRank including logging; excludes ontology/graph load",
+      "n": 3,
+      "min": 0.032341208,
+      "median": 0.033259917,
+      "max": 0.0360395,
+      "sample_sd": 0.001925593916944155
+    }
+  ],
+  "paired_statistics": [
+    {
+      "cohort": "offchain-vs-mcp",
+      "case": "baseline-1",
+      "metric": "rank_graph",
+      "n": 6,
+      "min": 0.07023095805469584,
+      "median": 0.08018545851765416,
+      "max": 0.08634316600413192,
+      "sample_sd": 0.005474349994434306
+    },
+    {
+      "cohort": "offchain-vs-mcp",
+      "case": "baseline-1",
+      "metric": "store_graph",
+      "n": 6,
+      "min": 0.06680566705227327,
+      "median": 0.07398247946405095,
+      "max": 0.3595737489783529,
+      "sample_sd": 0.11756374738223095
+    },
+    {
+      "cohort": "rest-invoke-minus-evaluate",
+      "case": "baseline-1",
+      "metric": "RankGraph",
+      "n": 3,
+      "min": 0.002199582988396287,
+      "median": 0.06893999991007149,
+      "max": 0.06898579199332744,
+      "sample_sd": 0.038545823511426554
+    },
+    {
+      "cohort": "offchain-vs-mcp",
+      "case": "baseline-2",
+      "metric": "rank_graph",
+      "n": 6,
+      "min": 0.08017012499658448,
+      "median": 0.08256925005007534,
+      "max": 0.08816637501911073,
+      "sample_sd": 0.002716550498292245
+    },
+    {
+      "cohort": "offchain-vs-mcp",
+      "case": "baseline-2",
+      "metric": "store_graph",
+      "n": 6,
+      "min": 0.06781141693595796,
+      "median": 0.07071489600859798,
+      "max": 0.07934691696914285,
+      "sample_sd": 0.004917760637573743
+    },
+    {
+      "cohort": "rest-invoke-minus-evaluate",
+      "case": "baseline-2",
+      "metric": "RankGraph",
+      "n": 3,
+      "min": 0.06395704206079245,
+      "median": 0.06459333398379385,
+      "max": 0.06824399915058166,
+      "sample_sd": 0.002313375047449384
+    },
+    {
+      "cohort": "offchain-vs-mcp",
+      "case": "baseline-3",
+      "metric": "rank_graph",
+      "n": 6,
+      "min": 0.06851433308895677,
+      "median": 0.08383077101688302,
+      "max": 0.09490774901251066,
+      "sample_sd": 0.009022410966742523
+    },
+    {
+      "cohort": "offchain-vs-mcp",
+      "case": "baseline-3",
+      "metric": "store_graph",
+      "n": 6,
+      "min": 0.07070824997553975,
+      "median": 0.07539808301289695,
+      "max": 0.08251016694900394,
+      "sample_sd": 0.005408244683491396
+    },
+    {
+      "cohort": "rest-invoke-minus-evaluate",
+      "case": "baseline-3",
+      "metric": "RankGraph",
+      "n": 3,
+      "min": 0.060688873985782266,
+      "median": 0.06132733286358416,
+      "max": 0.07686245790682733,
+      "sample_sd": 0.009159080709865052
+    },
+    {
+      "cohort": "offchain-vs-mcp",
+      "case": "baseline-4",
+      "metric": "rank_graph",
+      "n": 6,
+      "min": 0.07580900001875628,
+      "median": 0.08745337454596636,
+      "max": 0.1055517919339804,
+      "sample_sd": 0.010241965022024487
+    },
+    {
+      "cohort": "offchain-vs-mcp",
+      "case": "baseline-4",
+      "metric": "store_graph",
+      "n": 6,
+      "min": 0.06998995900980812,
+      "median": 0.0743699794954189,
+      "max": 0.09189904207476973,
+      "sample_sd": 0.007966182598972502
+    },
+    {
+      "cohort": "rest-invoke-minus-evaluate",
+      "case": "baseline-4",
+      "metric": "RankGraph",
+      "n": 3,
+      "min": 0.06382849893998355,
+      "median": 0.06411112390924245,
+      "max": 0.07179412501864135,
+      "sample_sd": 0.004519579289883567
+    },
+    {
+      "cohort": "offchain-vs-mcp",
+      "case": "baseline-5",
+      "metric": "rank_graph",
+      "n": 6,
+      "min": 0.080973125024423,
+      "median": 0.09925693800438626,
+      "max": 0.10834895793846566,
+      "sample_sd": 0.009371885910032178
+    },
+    {
+      "cohort": "offchain-vs-mcp",
+      "case": "baseline-5",
+      "metric": "store_graph",
+      "n": 6,
+      "min": 0.07041412600849253,
+      "median": 0.07271152048086532,
+      "max": 0.07760524999854714,
+      "sample_sd": 0.0028761274645895565
+    },
+    {
+      "cohort": "rest-invoke-minus-evaluate",
+      "case": "baseline-5",
+      "metric": "RankGraph",
+      "n": 3,
+      "min": 0.06202808395028114,
+      "median": 0.06929262494668365,
+      "max": 0.07350287411827594,
+      "sample_sd": 0.005804747530754694
+    }
+  ],
+  "evidence_inventory_files": 3293,
+  "unmatched_patterns": [],
+  "limitations": [
+    "Assisted reference, no independent human review",
+    "No real application accepted candidate/fallback",
+    "No node-prior weight API",
+    "Baseline reflexivity controls are not mitigation applicability",
+    "No complete CAMEL runtime ablation; fixed artifact replay only",
+    "No pure consensus isolation",
+    "No real-time event-to-decision latency or actuation",
+    "Small samples; no population/significance claim"
+  ]
+}

@@ -1,0 +1,16 @@
+{"id": "C01", "software": {"product": "Logback-core", "vendor": "QOS.CH Sarl", "version": "1.5.24"}, "evidence_id": "annotated-v1:C01"}
+{"id": "C02", "software": {"product": "logback-core", "vendor": "QOS.CH Sarl", "version": "1.5.25"}, "evidence_id": "annotated-v1:C02"}
+{"id": "C03", "software": {"product": "Logback-core", "vendor": "QOS.CH Sarl", "version": "0.9.20"}, "evidence_id": "annotated-v1:C03"}
+{"id": "C04", "software": {"product": "Logback-core", "vendor": "QOS.CH Sarl", "version": "0.9.19"}, "evidence_id": "annotated-v1:C04"}
+{"id": "C05", "software": {"product": "Logback-core", "vendor": "QOS.CH Sarl", "version": "1.5.26"}, "evidence_id": "annotated-v1:C05"}
+{"id": "C06", "software": {"product": "Logback-core", "vendor": "QOS.CH Sarl", "version": null}, "evidence_id": "annotated-v1:C06"}
+{"id": "C07", "software": {"product": "Logback-core", "vendor": "QOS.CH Sarl", "version": "unknown"}, "evidence_id": "annotated-v1:C07"}
+{"id": "C08", "software": {"product": "logback", "vendor": null, "version": "1.5.24"}, "evidence_id": "annotated-v1:C08"}
+{"id": "C09", "software": {"product": "Apache Log4j Core", "vendor": "Apache Software Foundation", "version": "2.25.2"}, "evidence_id": "annotated-v1:C09"}
+{"id": "C10", "software": {"product": "Apache Log4j Core", "vendor": "Apache Software Foundation", "version": "2.25.3"}, "evidence_id": "annotated-v1:C10"}
+{"id": "C11", "software": {"product": "log4j-core", "vendor": "Apache Software Foundation", "version": "2.14.1"}, "evidence_id": "annotated-v1:C11"}
+{"id": "C12", "software": {"product": "Apache Log4j Core", "vendor": "Apache Software Foundation", "version": "2.25.4"}, "evidence_id": "annotated-v1:C12"}
+{"id": "C13", "software": {"product": "Apache Log4j Core", "vendor": "Apache Software Foundation", "version": "2.12.0"}, "evidence_id": "annotated-v1:C13"}
+{"id": "C14", "software": {"product": "Apache Log4j Core", "vendor": "Apache Software Foundation", "version": null}, "evidence_id": "annotated-v1:C14"}
+{"id": "C15", "software": {"product": "thesis-unlisted-component-9f73", "vendor": null, "version": "1.0.0"}, "evidence_id": "annotated-v1:C15"}
+{"id": "C16", "software": {"product": "Logback-core", "vendor": "Thesis Example Vendor", "version": "1.5.24"}, "evidence_id": "annotated-v1:C16"}

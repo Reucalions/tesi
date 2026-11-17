@@ -1,5 +1,37 @@
 # Primo collaudo reale: Fabric, MCP e casi controllati
 
+## C4-r3 completato in un'unica esecuzione: 12 novembre 2026
+
+Il nuovo launcher real/camel/pipeline ha concluso tutti gli otto nodi del DAG
+con exit code 0, finalizzazione `completed` e rilettura del ledger. Timeout
+LLM 600 s; durata 1224,254 s. Nessuna ripresa da altri run: i recuperi automatici
+interni CAMEL restano visibili nel log e il DAG e quello originale completato.
+
+Commit distinto nel blocco 28, validation_code=0; record/provenance/ricevuta
+identici nelle verifiche successive MCP, grafo coerente con il canonico e rinnovo
+credenziali passato. Metadati SaaS originali salvati, archivi e vecchi commit invariati.
+Esito `requires_prerequisites`: nessuna selezione o esecuzione di contromisure.
+Manutenzione mancante e prerequisito testuale non riconciliato restano nel risultato.
+[Report e audit C4-r3](../../output/c4-collaudo-20261112-r2/report.md).
+Le sezioni sotto conservano la storia dei tentativi e della ripresa C4-r2.
+
+## C4: ripresa verificata il 12 novembre 2026
+
+Il launcher C4-r2 ha completato sette nodi e il commit, poi e fallito nell'ultimo
+nodo per timeout Ollama. La ripresa CAMEL dell'ultima fase e terminata con exit
+code 0 e `shared_finalization=completed`, con timeout LLM 600 s. Il record e
+quello originale nel blocco 25: nessuna nuova decisione o sostituzione del commit.
+
+Passati rilettura MCP indipendente, confronto integrale di record/provenance/
+ricevuta, controllo del grafo e rinnovo credenziali dopo un rifiuto controllato.
+Salvati tre metadati SaaS reali e verificata l'integrita degli archivi precedenti.
+Esito `requires_prerequisites`, manutenzione mancante, nessuna strategia selezionata.
+
+Non e un launcher integrale riuscito: il DAG originale resta failed; la copertura
+degli otto nodi tra launcher e ripresa e dichiarata separatamente nel
+[report corrente](../../output/c4-collaudo-20261112-r1/report.md).
+Le sezioni datate sotto conservano gli esiti precedenti.
+
 ## Chiusura C1 verificata: 7 novembre 2026
 
 C1-r2 ha completato il launcher reale CAMEL/Ollama e tutti gli otto nodi del DAG

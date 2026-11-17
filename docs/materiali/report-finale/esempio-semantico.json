@@ -1,0 +1,1144 @@
+{
+  "case": "C1",
+  "run_id": "run-1a08bfac6b924622aa6f64947360aaa2",
+  "dag_nodes": {
+    "telemetry": {
+      "role": "TelemetryAgent",
+      "inputs": [],
+      "outputs": [
+        "runtime_evidence"
+      ],
+      "dependencies": [],
+      "status": "completed"
+    },
+    "vulnerability": {
+      "role": "VulnerabilityAgent",
+      "inputs": [
+        "runtime_evidence"
+      ],
+      "outputs": [
+        "vulnerability_report"
+      ],
+      "dependencies": [
+        "telemetry"
+      ],
+      "status": "completed"
+    },
+    "countermeasure": {
+      "role": "CountermeasureAgent",
+      "inputs": [
+        "runtime_evidence",
+        "vulnerability_report"
+      ],
+      "outputs": [
+        "candidate_strategies"
+      ],
+      "dependencies": [
+        "telemetry",
+        "vulnerability"
+      ],
+      "status": "completed"
+    },
+    "semantic_preparation": {
+      "role": "SemanticPreparationAgent",
+      "inputs": [
+        "runtime_evidence",
+        "vulnerability_report",
+        "candidate_strategies"
+      ],
+      "outputs": [
+        "canonical_preparation"
+      ],
+      "dependencies": [
+        "telemetry",
+        "vulnerability",
+        "countermeasure"
+      ],
+      "status": "completed"
+    },
+    "strategic_native_ranking": {
+      "role": "StrategicAgent",
+      "inputs": [
+        "runtime_evidence",
+        "vulnerability_report",
+        "candidate_strategies",
+        "canonical_preparation"
+      ],
+      "outputs": [
+        "native_strategic_ranking"
+      ],
+      "dependencies": [
+        "telemetry",
+        "vulnerability",
+        "countermeasure",
+        "semantic_preparation"
+      ],
+      "status": "completed"
+    },
+    "strategic_native_validation": {
+      "role": "StrategicAgent",
+      "inputs": [
+        "runtime_evidence",
+        "vulnerability_report",
+        "candidate_strategies",
+        "canonical_preparation",
+        "native_strategic_ranking",
+        "operational_profile"
+      ],
+      "outputs": [
+        "native_strategic_validation"
+      ],
+      "dependencies": [
+        "telemetry",
+        "vulnerability",
+        "countermeasure",
+        "semantic_preparation",
+        "strategic_native_ranking"
+      ],
+      "status": "completed"
+    },
+    "strategic_native_selection": {
+      "role": "StrategicAgent",
+      "inputs": [
+        "runtime_evidence",
+        "vulnerability_report",
+        "candidate_strategies",
+        "canonical_preparation",
+        "native_strategic_ranking",
+        "native_strategic_validation",
+        "operational_profile"
+      ],
+      "outputs": [
+        "native_strategic_recommendation"
+      ],
+      "dependencies": [
+        "telemetry",
+        "vulnerability",
+        "countermeasure",
+        "semantic_preparation",
+        "strategic_native_ranking",
+        "strategic_native_validation"
+      ],
+      "status": "completed"
+    },
+    "strategic_native_finalization": {
+      "role": "StrategicAgent",
+      "inputs": [
+        "runtime_evidence",
+        "vulnerability_report",
+        "candidate_strategies",
+        "canonical_preparation",
+        "native_strategic_ranking",
+        "native_strategic_validation",
+        "validation_profile",
+        "native_strategic_recommendation"
+      ],
+      "outputs": [
+        "native_strategic_finalization"
+      ],
+      "dependencies": [
+        "telemetry",
+        "vulnerability",
+        "countermeasure",
+        "semantic_preparation",
+        "strategic_native_ranking",
+        "strategic_native_validation",
+        "strategic_native_selection"
+      ],
+      "status": "completed"
+    }
+  },
+  "execution": {
+    "backend_mode": "real",
+    "inference_mode": "camel",
+    "status": "dry_run_completed",
+    "workflow": "pipeline",
+    "completed_stages": [
+      "sources",
+      "preparation",
+      "ranking",
+      "validation",
+      "recommendation",
+      "finalization"
+    ],
+    "recommendation": "published",
+    "shared_finalization": "completed",
+    "deployment_verified": false,
+    "action_execution": "not_performed",
+    "run_id": "run-1a08bfac6b924622aa6f64947360aaa2",
+    "finalization_file": "finalization/native_strategic_finalization.json",
+    "verification_scope": "backend_reported_commit_and_readback",
+    "outcomes_by_cve": {
+      "CVE-2026-1225": "requires_prerequisites"
+    },
+    "recommendation_file": "recommendation/native_strategic_recommendation.json"
+  },
+  "observed_software": {
+    "package": "logback-core",
+    "version": "1.5.24",
+    "evidence_id": "otel:8f7a0e4133bad0b6b769f092"
+  },
+  "otel_observations": 5,
+  "unobserved_flags": {
+    "endpoint_exposed": null,
+    "deserialization_observed": null
+  },
+  "identity": {
+    "canonical_id": "qos ch sarl::logback core",
+    "product": "Logback-core",
+    "vendor": "QOS.CH Sarl",
+    "confidence": "high",
+    "score": 0.75
+  },
+  "vulnerability": {
+    "cve_id": "CVE-2026-1225",
+    "package": "logback-core",
+    "observed_version": "1.5.24",
+    "cvss": null,
+    "cwe": [],
+    "confidence": null,
+    "evidence_ids": [
+      "otel:8f7a0e4133bad0b6b769f092"
+    ],
+    "source": "cve2owl-symbolic-v1; dataset=cve2owl_20260523_143950; sha256=e3566009408385c7aea7901a9e6499132f0ae4bb07ccbd80d22e2171e5f7990c"
+  },
+  "version_rules": [
+    {
+      "affected_version_id": 1052835,
+      "json_path": "containers.cna.affected[0].versions[0]",
+      "version_iri": "CVE-2026-1225_Containers_Cna_Affected_Versions_0",
+      "version": "0.9.20",
+      "status": "affected",
+      "version_type": "maven",
+      "less_than": null,
+      "less_than_or_equal": "1.5.24",
+      "changes": [],
+      "evaluated": true,
+      "matched_asset_version": true,
+      "vulnerability_status": "vulnerable",
+      "reason": "asset version 1.5.24 matches affected rule: 0.9.20 <= asset <= 1.5.24"
+    },
+    {
+      "affected_version_id": 1052836,
+      "json_path": "containers.cna.affected[0].versions[1]",
+      "version_iri": "CVE-2026-1225_Containers_Cna_Affected_Versions_1",
+      "version": "1.5.25",
+      "status": "unaffected",
+      "version_type": null,
+      "less_than": null,
+      "less_than_or_equal": null,
+      "changes": [],
+      "evaluated": true,
+      "matched_asset_version": false,
+      "vulnerability_status": "not_vulnerable",
+      "reason": "asset version 1.5.24 is outside rule: asset equals exact version 1.5.25"
+    }
+  ],
+  "sbom_component": {
+    "bom_ref": "pkg:maven/ch.qos.logback/logback-core@1.5.24?type=jar",
+    "group": "ch.qos.logback",
+    "name": "logback-core",
+    "version": "1.5.24",
+    "purl": "pkg:maven/ch.qos.logback/logback-core@1.5.24?type=jar"
+  },
+  "osv_advisories": [
+    {
+      "id": "GHSA-qqpg-mvqg-649v",
+      "matched_cves": [
+        "CVE-2026-1225"
+      ],
+      "ranges": [
+        {
+          "type": "ECOSYSTEM",
+          "repo": null,
+          "events": [
+            {
+              "introduced": "0",
+              "fixed": null,
+              "last_affected": null,
+              "limit": null
+            },
+            {
+              "introduced": null,
+              "fixed": "1.5.25",
+              "last_affected": null,
+              "limit": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "id": "S_UPGRADE",
+      "action": "upgrade",
+      "description": "Upgrade logback-core from version 1.5.24 to 1.5.25 to address CVE-2026-1225.",
+      "addressed_vulnerabilities": [
+        "CVE-2026-1225"
+      ],
+      "security_benefit": 0.9,
+      "operational_impact": 0.3,
+      "prerequisites": [
+        "maintenance_window",
+        "package_upgrade"
+      ],
+      "constraints": [
+        "Upgrade must be performed during a maintenance window."
+      ],
+      "rationale": "CVE-2026-1225 is a known vulnerability in logback-core version 1.5.24 that has been fixed in version 1.5.25. Upgrading resolves the vulnerability."
+    }
+  ],
+  "alias_namespace": "https://swot.sisinflab.poliba.it/cve#",
+  "aliases": {
+    "a": "https://swot.sisinflab.poliba.it/cve#ObservedSoftwareAsset_5a806d8f72e6",
+    "p": "https://swot.sisinflab.poliba.it/cve#CVE-2026-1225_Containers_Cna_Affected",
+    "v": "https://swot.sisinflab.poliba.it/cve#CVE-2026-1225_Containers_Cna_Affected_Versions_0",
+    "c": "https://swot.sisinflab.poliba.it/cve#CVE-2026-1225",
+    "r": "https://swot.sisinflab.poliba.it/cve#CVE-2026-1225_Containers_Cna_Solutions"
+  },
+  "observed_owl": "Declaration(Class(:ObservedSoftwareAsset))\nAnnotationAssertion(<http://www.w3.org/2000/01/rdf-schema#comment> :ObservedSoftwareAsset \"Observed software assets generated by the CTI pipeline and linked to existing cve2owl affected package individuals.\")\nDeclaration(ObjectProperty(:hasAffectedPackage))\nAnnotationAssertion(<http://www.w3.org/2000/01/rdf-schema#comment> :hasAffectedPackage \"Links an observed software asset to an existing cve2owl Affected individual.\")\nDeclaration(ObjectProperty(:hasAffectedVersionStatement))\nAnnotationAssertion(<http://www.w3.org/2000/01/rdf-schema#comment> :hasAffectedVersionStatement \"Links an observed software asset to an existing cve2owl affected version statement individual.\")\nDeclaration(NamedIndividual(:ObservedSoftwareAsset_5a806d8f72e6))\nClassAssertion(:ObservedSoftwareAsset :ObservedSoftwareAsset_5a806d8f72e6)\nAnnotationAssertion(<http://www.w3.org/2000/01/rdf-schema#comment> :ObservedSoftwareAsset_5a806d8f72e6 \"Observed software asset generated by the CTI pipeline from vulnerability_assessments.json.\")\nObjectPropertyAssertion(:hasAffectedPackage :ObservedSoftwareAsset_5a806d8f72e6 :CVE-2026-1225_Containers_Cna_Affected)\nObjectPropertyAssertion(:hasAffectedVersionStatement :ObservedSoftwareAsset_5a806d8f72e6 :CVE-2026-1225_Containers_Cna_Affected_Versions_0)\n",
+  "aln": "Prefix(:=<https://swot.sisinflab.poliba.it/cve#>)\nPrefix(owl:=<http://www.w3.org/2002/07/owl#>)\n\nOntology(<https://swot.sisinflab.poliba.it/cve/aln-projection>\nDeclaration(Class(:AddressesCWE_20))\nDeclaration(Class(:AffectedContext))\nDeclaration(Class(:AffectedFeature))\nDeclaration(Class(:AttackComplexityHigh))\nDeclaration(Class(:AttackComplexityValue))\nDeclaration(Class(:AttackRequirementsPresent))\nDeclaration(Class(:AttackRequirementsValue))\nDeclaration(Class(:AttackVectorLocal))\nDeclaration(Class(:AttackVectorValue))\nDeclaration(Class(:CVEContextFeature))\nDeclaration(Class(:ContextFeature))\nDeclaration(Class(:ForCVE_CVE_2026_1225))\nDeclaration(Class(:MitigationStrategy))\nDeclaration(Class(:PackageFeature))\nDeclaration(Class(:PrivilegesRequiredHigh))\nDeclaration(Class(:PrivilegesRequiredValue))\nDeclaration(Class(:ProductFeature))\nDeclaration(Class(:RankingArgument))\nDeclaration(Class(:SeverityLow))\nDeclaration(Class(:SeverityValue))\nDeclaration(Class(:Solutions))\nDeclaration(Class(:SubCiaLow))\nDeclaration(Class(:SubCiaValue))\nDeclaration(Class(:TargetsProduct_Logback_core))\nDeclaration(Class(:TargetsVendor_QOS_CH_Sarl))\nDeclaration(Class(:UserInteractionNone))\nDeclaration(Class(:UserInteractionValue))\nDeclaration(Class(:VendorFeature))\nDeclaration(Class(:VulnCiaLow))\nDeclaration(Class(:VulnCiaValue))\nDeclaration(Class(:VulnerabilityArgument))\nDeclaration(Class(:WeaknessFeature))\nDeclaration(Class(:Workarounds))\nDeclaration(ObjectProperty(:hasAttackComplexity))\nDeclaration(ObjectProperty(:hasAttackRequirements))\nDeclaration(ObjectProperty(:hasAttackVector))\nDeclaration(ObjectProperty(:hasBaseSeverity))\nDeclaration(ObjectProperty(:hasPrivilegesRequired))\nDeclaration(ObjectProperty(:hasSubAvailabilityImpact))\nDeclaration(ObjectProperty(:hasSubConfidentialityImpact))\nDeclaration(ObjectProperty(:hasSubIntegrityImpact))\nDeclaration(ObjectProperty(:hasUserInteraction))\nDeclaration(ObjectProperty(:hasVulnAvailabilityImpact))\nDeclaration(ObjectProperty(:hasVulnConfidentialityImpact))\nDeclaration(ObjectProperty(:hasVulnIntegrityImpact))\nDeclaration(NamedIndividual(:CVE-2026-1225))\nDeclaration(NamedIndividual(:CVE-2026-1225_Containers_Cna_Solutions))\nSubClassOf(:VulnerabilityArgument :RankingArgument)\nSubClassOf(:MitigationStrategy :RankingArgument)\nSubClassOf(:Solutions :MitigationStrategy)\nSubClassOf(:Workarounds :MitigationStrategy)\nSubClassOf(:CVEContextFeature :ContextFeature)\nSubClassOf(:ProductFeature :ContextFeature)\nSubClassOf(:PackageFeature :ContextFeature)\nSubClassOf(:VendorFeature :ContextFeature)\nSubClassOf(:WeaknessFeature :ContextFeature)\nSubClassOf(:AffectedFeature :ContextFeature)\nSubClassOf(:AffectedContext :AffectedFeature)\nSubClassOf(:AddressesCWE_20 :WeaknessFeature)\nSubClassOf(:ForCVE_CVE_2026_1225 :CVEContextFeature)\nSubClassOf(:TargetsProduct_Logback_core :ProductFeature)\nSubClassOf(:TargetsVendor_QOS_CH_Sarl :VendorFeature)\nObjectPropertyRange(:hasAttackComplexity :AttackComplexityValue)\nObjectPropertyRange(:hasAttackRequirements :AttackRequirementsValue)\nObjectPropertyRange(:hasAttackVector :AttackVectorValue)\nObjectPropertyRange(:hasBaseSeverity :SeverityValue)\nObjectPropertyRange(:hasPrivilegesRequired :PrivilegesRequiredValue)\nObjectPropertyRange(:hasSubAvailabilityImpact :SubCiaValue)\nObjectPropertyRange(:hasSubConfidentialityImpact :SubCiaValue)\nObjectPropertyRange(:hasSubIntegrityImpact :SubCiaValue)\nObjectPropertyRange(:hasUserInteraction :UserInteractionValue)\nObjectPropertyRange(:hasVulnAvailabilityImpact :VulnCiaValue)\nObjectPropertyRange(:hasVulnConfidentialityImpact :VulnCiaValue)\nObjectPropertyRange(:hasVulnIntegrityImpact :VulnCiaValue)\nSubClassOf(:AttackComplexityHigh :AttackComplexityValue)\nSubClassOf(:AttackRequirementsPresent :AttackRequirementsValue)\nSubClassOf(:AttackVectorLocal :AttackVectorValue)\nSubClassOf(:PrivilegesRequiredHigh :PrivilegesRequiredValue)\nSubClassOf(:SeverityLow :SeverityValue)\nSubClassOf(:SubCiaLow :SubCiaValue)\nSubClassOf(:UserInteractionNone :UserInteractionValue)\nSubClassOf(:VulnCiaLow :VulnCiaValue)\nClassAssertion(\n    ObjectIntersectionOf(\n            :Solutions\n            :AddressesCWE_20\n            :AffectedContext\n            :ForCVE_CVE_2026_1225\n            :TargetsProduct_Logback_core\n            :TargetsVendor_QOS_CH_Sarl\n            ObjectSomeValuesFrom(:hasAttackComplexity owl:Thing)\n            ObjectAllValuesFrom(:hasAttackComplexity :AttackComplexityHigh)\n            ObjectSomeValuesFrom(:hasAttackRequirements owl:Thing)\n            ObjectAllValuesFrom(:hasAttackRequirements :AttackRequirementsPresent)\n            ObjectSomeValuesFrom(:hasAttackVector owl:Thing)\n            ObjectAllValuesFrom(:hasAttackVector :AttackVectorLocal)\n            ObjectSomeValuesFrom(:hasBaseSeverity owl:Thing)\n            ObjectAllValuesFrom(:hasBaseSeverity :SeverityLow)\n            ObjectSomeValuesFrom(:hasPrivilegesRequired owl:Thing)\n            ObjectAllValuesFrom(:hasPrivilegesRequired :PrivilegesRequiredHigh)\n            ObjectSomeValuesFrom(:hasSubAvailabilityImpact owl:Thing)\n            ObjectAllValuesFrom(:hasSubAvailabilityImpact :SubCiaLow)\n            ObjectSomeValuesFrom(:hasSubConfidentialityImpact owl:Thing)\n            ObjectAllValuesFrom(:hasSubConfidentialityImpact :SubCiaLow)\n            ObjectSomeValuesFrom(:hasSubIntegrityImpact owl:Thing)\n            ObjectAllValuesFrom(:hasSubIntegrityImpact :SubCiaLow)\n            ObjectSomeValuesFrom(:hasUserInteraction owl:Thing)\n            ObjectAllValuesFrom(:hasUserInteraction :UserInteractionNone)\n            ObjectSomeValuesFrom(:hasVulnAvailabilityImpact owl:Thing)\n            ObjectAllValuesFrom(:hasVulnAvailabilityImpact :VulnCiaLow)\n            ObjectSomeValuesFrom(:hasVulnConfidentialityImpact owl:Thing)\n            ObjectAllValuesFrom(:hasVulnConfidentialityImpact :VulnCiaLow)\n            ObjectSomeValuesFrom(:hasVulnIntegrityImpact owl:Thing)\n            ObjectAllValuesFrom(:hasVulnIntegrityImpact :VulnCiaLow)\n    )\n    :CVE-2026-1225_Containers_Cna_Solutions\n)\nClassAssertion(\n    ObjectIntersectionOf(\n            :VulnerabilityArgument\n            :AddressesCWE_20\n            :AffectedContext\n            :ForCVE_CVE_2026_1225\n            :TargetsProduct_Logback_core\n            :TargetsVendor_QOS_CH_Sarl\n            ObjectSomeValuesFrom(:hasAttackComplexity owl:Thing)\n            ObjectAllValuesFrom(:hasAttackComplexity :AttackComplexityHigh)\n            ObjectSomeValuesFrom(:hasAttackRequirements owl:Thing)\n            ObjectAllValuesFrom(:hasAttackRequirements :AttackRequirementsPresent)\n            ObjectSomeValuesFrom(:hasAttackVector owl:Thing)\n            ObjectAllValuesFrom(:hasAttackVector :AttackVectorLocal)\n            ObjectSomeValuesFrom(:hasBaseSeverity owl:Thing)\n            ObjectAllValuesFrom(:hasBaseSeverity :SeverityLow)\n            ObjectSomeValuesFrom(:hasPrivilegesRequired owl:Thing)\n            ObjectAllValuesFrom(:hasPrivilegesRequired :PrivilegesRequiredHigh)\n            ObjectSomeValuesFrom(:hasSubAvailabilityImpact owl:Thing)\n            ObjectAllValuesFrom(:hasSubAvailabilityImpact :SubCiaLow)\n            ObjectSomeValuesFrom(:hasSubConfidentialityImpact owl:Thing)\n            ObjectAllValuesFrom(:hasSubConfidentialityImpact :SubCiaLow)\n            ObjectSomeValuesFrom(:hasSubIntegrityImpact owl:Thing)\n            ObjectAllValuesFrom(:hasSubIntegrityImpact :SubCiaLow)\n            ObjectSomeValuesFrom(:hasUserInteraction owl:Thing)\n            ObjectAllValuesFrom(:hasUserInteraction :UserInteractionNone)\n            ObjectSomeValuesFrom(:hasVulnAvailabilityImpact owl:Thing)\n            ObjectAllValuesFrom(:hasVulnAvailabilityImpact :VulnCiaLow)\n            ObjectSomeValuesFrom(:hasVulnConfidentialityImpact owl:Thing)\n            ObjectAllValuesFrom(:hasVulnConfidentialityImpact :VulnCiaLow)\n            ObjectSomeValuesFrom(:hasVulnIntegrityImpact owl:Thing)\n            ObjectAllValuesFrom(:hasVulnIntegrityImpact :VulnCiaLow)\n    )\n    :CVE-2026-1225\n)\n)\n",
+  "bindings": [
+    {
+      "cve_id": "CVE-2026-1225",
+      "strategy_id": "S_UPGRADE",
+      "ontology_individual": "CVE-2026-1225_Containers_Cna_Solutions"
+    }
+  ],
+  "graphs": [
+    {
+      "cve_id": "CVE-2026-1225",
+      "topology": "bottalico-directed-ring-v1",
+      "ranking_request": {
+        "cve_id": "CVE-2026-1225",
+        "candidates": [
+          {
+            "id": "CVE-2026-1225_Containers_Cna_Solutions",
+            "name": "CVE-2026-1225_Containers_Cna_Solutions",
+            "description": null,
+            "d3fend_technique": null
+          }
+        ],
+        "asset_context": null,
+        "graph": {
+          "nodes": [
+            {
+              "id": "CVE-2026-1225_Containers_Cna_Solutions",
+              "type": "strategy"
+            },
+            {
+              "id": "CVE-2026-1225",
+              "type": "vulnerability"
+            }
+          ],
+          "edges": [
+            {
+              "from": "CVE-2026-1225",
+              "to": "CVE-2026-1225_Containers_Cna_Solutions"
+            }
+          ]
+        },
+        "knowledge_snapshot_id": "urn:cti:snapshot:controlled-logback:20261106:83b4f9629816",
+        "ontology_version": "/Users/reucalion/tesi/output/case-improvements-20261106/semantics/deployed_ontology.owl"
+      },
+      "edge_sources": [
+        {
+          "from": "CVE-2026-1225",
+          "to": "CVE-2026-1225_Containers_Cna_Solutions",
+          "origin": "kg_remediation",
+          "polarity": "deferred_to_shared_reasoner"
+        }
+      ]
+    }
+  ],
+  "ranked": [
+    {
+      "rank": 1,
+      "id": "CVE-2026-1225_Containers_Cna_Solutions",
+      "name": "CVE-2026-1225_Containers_Cna_Solutions",
+      "score": 1.0,
+      "d3fendTechnique": null,
+      "explanation": {
+        "method": "single_candidate_convention_v1",
+        "source": "bottalico:090b6844d95841e01046c60d18af049ceb03d9fd:app/src/ledger.py::_single_strategy_outcome",
+        "against": null,
+        "favor": null
+      }
+    }
+  ],
+  "native": {
+    "resourceIRI": "https://swot.sisinflab.poliba.it/cve#ObservedSoftwareAsset_5a806d8f72e6",
+    "score": 62.0,
+    "topPenalty": 0.0,
+    "abductionPenalty": 38.0,
+    "contractionPenalty": 0.0,
+    "hypothesis": "Hypothesis: (AddressesCWE_20 ⊓ AffectedContext ⊓ AffectedFeature ⊓ CVEContextFeature ⊓ ContextFeature ⊓ ForCVE_CVE_2026_1225 ⊓ MitigationStrategy ⊓ ProductFeature ⊓ RankingArgument ⊓ Solutions ⊓ TargetsProduct_Logback_core ⊓ TargetsVendor_QOS_CH_Sarl ⊓ VendorFeature ⊓ WeaknessFeature ⊓ ≥1hasAttackComplexity ⊓ ≥1hasAttackRequirements ⊓ ≥1hasAttackVector ⊓ ≥1hasBaseSeverity ⊓ ≥1hasPrivilegesRequired ⊓ ≥1hasSubAvailabilityImpact ⊓ ≥1hasSubConfidentialityImpact ⊓ ≥1hasSubIntegrityImpact ⊓ ≥1hasUserInteraction ⊓ ≥1hasVulnAvailabilityImpact ⊓ ≥1hasVulnConfidentialityImpact ⊓ ≥1hasVulnIntegrityImpact ⊓ ∀hasAttackComplexity.AttackComplexityHigh ⊓ ∀hasAttackRequirements.AttackRequirementsPresent ⊓ ∀hasAttackVector.AttackVectorLocal ⊓ ∀hasBaseSeverity.SeverityLow ⊓ ∀hasPrivilegesRequired.PrivilegesRequiredHigh ⊓ ∀hasSubAvailabilityImpact.SubCiaLow ⊓ ∀hasSubConfidentialityImpact.SubCiaLow ⊓ ∀hasSubIntegrityImpact.SubCiaLow ⊓ ∀hasUserInteraction.UserInteractionNone ⊓ ∀hasVulnAvailabilityImpact.VulnCiaLow ⊓ ∀hasVulnConfidentialityImpact.VulnCiaLow ⊓ ∀hasVulnIntegrityImpact.VulnCiaLow)\nPenalty: 38.00\n",
+    "giveUp": "",
+    "keep": ""
+  },
+  "semantic_status": "requires_prerequisites",
+  "affinity": 0.62,
+  "bonus_evaluated": false,
+  "operational_context": {
+    "contract": "operational-context-v1",
+    "run_id": "run-1a08bfac6b924622aa6f64947360aaa2",
+    "asset_id": "thesis-observed-app",
+    "cve_id": "CVE-2026-1225",
+    "strategy_id": "S_UPGRADE",
+    "ranking_decision_id": "DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+    "ontology_individual": "CVE-2026-1225_Containers_Cna_Solutions",
+    "action": "upgrade",
+    "prerequisites": [
+      "maintenance_window",
+      "package_upgrade"
+    ],
+    "constraints": [
+      "Upgrade must be performed during a maintenance window."
+    ],
+    "available_capabilities": [
+      "package_upgrade",
+      "maintenance_window"
+    ],
+    "prohibited_actions": [],
+    "constraint_mappings": [],
+    "evidence_digest": "sha256:dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc",
+    "candidates_digest": "sha256:f4a65632a8fa8ba17fac0bc620db8afdb7068169821fd96fd1adf8e95bcc61aa",
+    "policy_source": "Controlled operator policy assumption; no mitigation actuators executed. Semantic resource is the existing generated observed-software individual, without added action profiles.",
+    "policy_id": "operational-action-policy-v1",
+    "policy_digest": "sha256:230d299b1f7732d6cf76aeceb14659482f5c32873aecd8e4d32262713dc5c423"
+  },
+  "operational_result": {
+    "contract": "operational-assessment-v1",
+    "context_digest": "sha256:6617255520797991d7ea250c95fe0a13807ada2c6ab003809cbc3c6e04a01040",
+    "policy_id": "operational-action-policy-v1",
+    "policy_digest": "sha256:230d299b1f7732d6cf76aeceb14659482f5c32873aecd8e4d32262713dc5c423",
+    "status": "requires_review",
+    "required_capabilities": [
+      "maintenance_window",
+      "package_upgrade"
+    ],
+    "missing_capabilities": [],
+    "prohibited_action": false,
+    "unassessed_constraints": [
+      "Upgrade must be performed during a maintenance window."
+    ],
+    "evaluator": "saas_operational_policy"
+  },
+  "effective_status": "requires_prerequisites",
+  "recommendation": {
+    "cve_id": "CVE-2026-1225",
+    "ranking_decision_id": "DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+    "outcome": "requires_prerequisites",
+    "selected_strategy_id": null,
+    "candidates": [
+      {
+        "ranking": {
+          "rank": 1,
+          "id": "CVE-2026-1225_Containers_Cna_Solutions",
+          "name": "CVE-2026-1225_Containers_Cna_Solutions",
+          "score": 1.0,
+          "d3fendTechnique": null,
+          "explanation": {
+            "method": "single_candidate_convention_v1",
+            "source": "bottalico:090b6844d95841e01046c60d18af049ceb03d9fd:app/src/ledger.py::_single_strategy_outcome",
+            "against": null,
+            "favor": null
+          }
+        },
+        "validation": {
+          "cve_id": "CVE-2026-1225",
+          "strategy_id": "S_UPGRADE",
+          "ontology_individual": "CVE-2026-1225_Containers_Cna_Solutions",
+          "ranking_decision_id": "DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+          "request": {
+            "asset_iri": "https://swot.sisinflab.poliba.it/cve#ObservedSoftwareAsset_5a806d8f72e6",
+            "countermeasure_iri": "https://swot.sisinflab.poliba.it/cve#CVE-2026-1225_Containers_Cna_Solutions",
+            "ontology_id": "controlled-logback-83b4f9629816003e",
+            "operational_context": {
+              "contract": "operational-context-v1",
+              "run_id": "run-1a08bfac6b924622aa6f64947360aaa2",
+              "asset_id": "thesis-observed-app",
+              "cve_id": "CVE-2026-1225",
+              "strategy_id": "S_UPGRADE",
+              "ranking_decision_id": "DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+              "ontology_individual": "CVE-2026-1225_Containers_Cna_Solutions",
+              "action": "upgrade",
+              "prerequisites": [
+                "maintenance_window",
+                "package_upgrade"
+              ],
+              "constraints": [
+                "Upgrade must be performed during a maintenance window."
+              ],
+              "available_capabilities": [
+                "package_upgrade",
+                "maintenance_window"
+              ],
+              "prohibited_actions": [],
+              "constraint_mappings": [],
+              "evidence_digest": "sha256:dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc",
+              "candidates_digest": "sha256:f4a65632a8fa8ba17fac0bc620db8afdb7068169821fd96fd1adf8e95bcc61aa",
+              "policy_source": "Controlled operator policy assumption; no mitigation actuators executed. Semantic resource is the existing generated observed-software individual, without added action profiles.",
+              "policy_id": "operational-action-policy-v1",
+              "policy_digest": "sha256:230d299b1f7732d6cf76aeceb14659482f5c32873aecd8e4d32262713dc5c423"
+            }
+          },
+          "response": {
+            "valid": false,
+            "status": "requires_prerequisites",
+            "affinityScore": 0.62,
+            "conflictPenalty": 0.0,
+            "missingFeatures": [
+              "Hypothesis: (AddressesCWE_20 ⊓ AffectedContext ⊓ AffectedFeature ⊓ CVEContextFeature ⊓ ContextFeature ⊓ ForCVE_CVE_2026_1225 ⊓ MitigationStrategy ⊓ ProductFeature ⊓ RankingArgument ⊓ Solutions ⊓ TargetsProduct_Logback_core ⊓ TargetsVendor_QOS_CH_Sarl ⊓ VendorFeature ⊓ WeaknessFeature ⊓ ≥1hasAttackComplexity ⊓ ≥1hasAttackRequirements ⊓ ≥1hasAttackVector ⊓ ≥1hasBaseSeverity ⊓ ≥1hasPrivilegesRequired ⊓ ≥1hasSubAvailabilityImpact ⊓ ≥1hasSubConfidentialityImpact ⊓ ≥1hasSubIntegrityImpact ⊓ ≥1hasUserInteraction ⊓ ≥1hasVulnAvailabilityImpact ⊓ ≥1hasVulnConfidentialityImpact ⊓ ≥1hasVulnIntegrityImpact ⊓ ∀hasAttackComplexity.AttackComplexityHigh ⊓ ∀hasAttackRequirements.AttackRequirementsPresent ⊓ ∀hasAttackVector.AttackVectorLocal ⊓ ∀hasBaseSeverity.SeverityLow ⊓ ∀hasPrivilegesRequired.PrivilegesRequiredHigh ⊓ ∀hasSubAvailabilityImpact.SubCiaLow ⊓ ∀hasSubConfidentialityImpact.SubCiaLow ⊓ ∀hasSubIntegrityImpact.SubCiaLow ⊓ ∀hasUserInteraction.UserInteractionNone ⊓ ∀hasVulnAvailabilityImpact.VulnCiaLow ⊓ ∀hasVulnConfidentialityImpact.VulnCiaLow ⊓ ∀hasVulnIntegrityImpact.VulnCiaLow)\nPenalty: 38.00\n"
+            ],
+            "bonusFeatures": [],
+            "bonusEvaluated": false,
+            "explanation": "{\"topPenalty\":0,\"abductionPenalty\":38,\"contractionPenalty\":0,\"giveUp\":\"\",\"keep\":\"\",\"hypothesis\":\"Hypothesis: (AddressesCWE_20 ⊓ AffectedContext ⊓ AffectedFeature ⊓ CVEContextFeature ⊓ ContextFeature ⊓ ForCVE_CVE_2026_1225 ⊓ MitigationStrategy ⊓ ProductFeature ⊓ RankingArgument ⊓ Solutions ⊓ TargetsProduct_Logback_core ⊓ TargetsVendor_QOS_CH_Sarl ⊓ VendorFeature ⊓ WeaknessFeature ⊓ ≥1hasAttackComplexity ⊓ ≥1hasAttackRequirements ⊓ ≥1hasAttackVector ⊓ ≥1hasBaseSeverity ⊓ ≥1hasPrivilegesRequired ⊓ ≥1hasSubAvailabilityImpact ⊓ ≥1hasSubConfidentialityImpact ⊓ ≥1hasSubIntegrityImpact ⊓ ≥1hasUserInteraction ⊓ ≥1hasVulnAvailabilityImpact ⊓ ≥1hasVulnConfidentialityImpact ⊓ ≥1hasVulnIntegrityImpact ⊓ ∀hasAttackComplexity.AttackComplexityHigh ⊓ ∀hasAttackRequirements.AttackRequirementsPresent ⊓ ∀hasAttackVector.AttackVectorLocal ⊓ ∀hasBaseSeverity.SeverityLow ⊓ ∀hasPrivilegesRequired.PrivilegesRequiredHigh ⊓ ∀hasSubAvailabilityImpact.SubCiaLow ⊓ ∀hasSubConfidentialityImpact.SubCiaLow ⊓ ∀hasSubIntegrityImpact.SubCiaLow ⊓ ∀hasUserInteraction.UserInteractionNone ⊓ ∀hasVulnAvailabilityImpact.VulnCiaLow ⊓ ∀hasVulnConfidentialityImpact.VulnCiaLow ⊓ ∀hasVulnIntegrityImpact.VulnCiaLow)\\nPenalty: 38.00\\n\",\"score\":62,\"resourceIRI\":\"https://swot.sisinflab.poliba.it/cve#ObservedSoftwareAsset_5a806d8f72e6\"}",
+            "timestamp": "2026-11-07T09:07:46.390Z",
+            "reasoning": {
+              "contract": "explain-affinity-v1",
+              "ontologyKey": "controlled-logback-83b4f9629816003e",
+              "resourceIRI": "https://swot.sisinflab.poliba.it/cve#ObservedSoftwareAsset_5a806d8f72e6",
+              "requestIRI": "https://swot.sisinflab.poliba.it/cve#CVE-2026-1225_Containers_Cna_Solutions",
+              "native": {
+                "resourceIRI": "https://swot.sisinflab.poliba.it/cve#ObservedSoftwareAsset_5a806d8f72e6",
+                "score": 62.0,
+                "topPenalty": 0.0,
+                "abductionPenalty": 38.0,
+                "contractionPenalty": 0.0,
+                "hypothesis": "Hypothesis: (AddressesCWE_20 ⊓ AffectedContext ⊓ AffectedFeature ⊓ CVEContextFeature ⊓ ContextFeature ⊓ ForCVE_CVE_2026_1225 ⊓ MitigationStrategy ⊓ ProductFeature ⊓ RankingArgument ⊓ Solutions ⊓ TargetsProduct_Logback_core ⊓ TargetsVendor_QOS_CH_Sarl ⊓ VendorFeature ⊓ WeaknessFeature ⊓ ≥1hasAttackComplexity ⊓ ≥1hasAttackRequirements ⊓ ≥1hasAttackVector ⊓ ≥1hasBaseSeverity ⊓ ≥1hasPrivilegesRequired ⊓ ≥1hasSubAvailabilityImpact ⊓ ≥1hasSubConfidentialityImpact ⊓ ≥1hasSubIntegrityImpact ⊓ ≥1hasUserInteraction ⊓ ≥1hasVulnAvailabilityImpact ⊓ ≥1hasVulnConfidentialityImpact ⊓ ≥1hasVulnIntegrityImpact ⊓ ∀hasAttackComplexity.AttackComplexityHigh ⊓ ∀hasAttackRequirements.AttackRequirementsPresent ⊓ ∀hasAttackVector.AttackVectorLocal ⊓ ∀hasBaseSeverity.SeverityLow ⊓ ∀hasPrivilegesRequired.PrivilegesRequiredHigh ⊓ ∀hasSubAvailabilityImpact.SubCiaLow ⊓ ∀hasSubConfidentialityImpact.SubCiaLow ⊓ ∀hasSubIntegrityImpact.SubCiaLow ⊓ ∀hasUserInteraction.UserInteractionNone ⊓ ∀hasVulnAvailabilityImpact.VulnCiaLow ⊓ ∀hasVulnConfidentialityImpact.VulnCiaLow ⊓ ∀hasVulnIntegrityImpact.VulnCiaLow)\nPenalty: 38.00\n",
+                "giveUp": "",
+                "keep": ""
+              }
+            },
+            "operational": {
+              "contract": "operational-assessment-v1",
+              "context_digest": "sha256:6617255520797991d7ea250c95fe0a13807ada2c6ab003809cbc3c6e04a01040",
+              "policy_id": "operational-action-policy-v1",
+              "policy_digest": "sha256:230d299b1f7732d6cf76aeceb14659482f5c32873aecd8e4d32262713dc5c423",
+              "status": "requires_review",
+              "required_capabilities": [
+                "maintenance_window",
+                "package_upgrade"
+              ],
+              "missing_capabilities": [],
+              "prohibited_action": false,
+              "unassessed_constraints": [
+                "Upgrade must be performed during a maintenance window."
+              ],
+              "evaluator": "saas_operational_policy"
+            },
+            "effectiveStatus": "requires_prerequisites"
+          }
+        },
+        "disposition": "not_acceptable"
+      }
+    ]
+  },
+  "source_digests": {
+    "runtime_evidence": "sha256:dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc",
+    "vulnerability_report": "sha256:a0edb709dce5bc416bedf564d9459818c564cd36c9a683675895a59cd26c8fbc",
+    "candidate_strategies": "sha256:f4a65632a8fa8ba17fac0bc620db8afdb7068169821fd96fd1adf8e95bcc61aa",
+    "canonical_preparation": "sha256:6c4ba447f526b602181aff0802d6c02fa5f2b61eb39fe9376444b4eb8c4a4edf",
+    "native_strategic_ranking": "sha256:75da16385dd9bd0b94fac90719dab7b263972d33196729590a22294b1c087c13",
+    "native_strategic_validation": "sha256:3998667e4b2c4db804cbb519721c4f48c3283c3a474b78629443de327c335849",
+    "validation_profile": "sha256:9b97537f7a6dc240fbab74500cea9f9010508b1c8442bb479b6bc1e944b8cfe2",
+    "native_strategic_recommendation": "sha256:278496448a62d0d74f5a8452605d80ca324f84ee7006c4394581cdff8f6d91d6"
+  },
+  "commit": {
+    "transaction_id": "179598a2c1c0934f70420fa4a037138abbcf0e180ea2977eadb4b9acea113ca7",
+    "block_number": "22",
+    "validation_code": 0,
+    "successful": true
+  },
+  "readback": {
+    "record_provenance_receipt_identical": true,
+    "transaction_id": "179598a2c1c0934f70420fa4a037138abbcf0e180ea2977eadb4b9acea113ca7",
+    "block_number": "22",
+    "source": "/Users/reucalion/tesi/output/case-improvements-20261106/runs/C1-r2/finalization/native_strategic_finalization.json",
+    "source_sha256": "8162425c9f1fbc69c40632104d5723977c30f0f5c4723c2e8c809c0a2174da2c"
+  },
+  "provenance_counts": {
+    "entities": 16,
+    "activities": 9,
+    "agents": 11,
+    "relations": 40
+  },
+  "provenance": {
+    "decisionId": "DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+    "context": {
+      "prov": "http://www.w3.org/ns/prov#",
+      "d3f": "http://d3fend.mitre.org/ontologies/d3fend.owl#",
+      "slsa": "https://slsa.dev/provenance/v1"
+    },
+    "entities": [
+      {
+        "id": "urn:cti:decision:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+        "type": "prov:Entity",
+        "attributes": {
+          "decisionId": "DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+          "cveId": "CVE-2026-1225",
+          "tenantId": "Org1MSP",
+          "revision": 1,
+          "status": "CURRENT",
+          "topStrategy": "CVE-2026-1225_Containers_Cna_Solutions",
+          "topScore": 1,
+          "createdAt": "2026-11-07T09:04:57.321Z",
+          "updatedAt": "2026-11-07T09:04:57.321Z",
+          "knowledgeSnapshotId": "urn:cti:snapshot:controlled-logback:20261106:83b4f9629816"
+        }
+      },
+      {
+        "id": "urn:cti:entity:cve:CVE-2026-1225",
+        "type": "prov:Entity",
+        "attributes": {
+          "cveId": "CVE-2026-1225",
+          "inputDigest": "sha256:a953eb7134ce1fdec671fbc71bf803fc34cc5d01f24859e4fa39ac35b3f55ab6"
+        }
+      },
+      {
+        "id": "urn:cti:entity:candidates:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+        "type": "prov:Entity",
+        "attributes": {
+          "candidateCount": 1,
+          "techniques": []
+        }
+      },
+      {
+        "id": "urn:cti:entity:argumentation-graph:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+        "type": "prov:Entity",
+        "attributes": {
+          "graphId": "GRAPH_CVE-2026-1225_4263950e-4669-4b06-a832-31789380520d",
+          "chaincodeDigest": "sha256:03ae35c151cdc1cdb05a3226137db170b5474cbbd027eeea87c5eedf81ddb61e"
+        }
+      },
+      {
+        "id": "urn:cti:entity:ontology:sha256:83b4f9629",
+        "type": "prov:Entity",
+        "attributes": {
+          "name": "client_final_ontology.owl",
+          "sha256Digest": "sha256:83b4f9629816003ed30eeab4b541d35450a4f39cf4efe317879ac019884e9ee9",
+          "slsaVerified": false
+        }
+      },
+      {
+        "id": "urn:cti:snapshot:controlled-logback:20261106:83b4f9629816",
+        "type": "prov:Entity",
+        "attributes": {
+          "entityType": "cti:KnowledgeSnapshotBundle",
+          "snapshotId": "urn:cti:snapshot:controlled-logback:20261106:83b4f9629816",
+          "manifestDigest": "sha256:86ebca3e1bcbceff6a5da764f02dbffcfff40891310597e2197543afde1c2f4f",
+          "status": "not_attested",
+          "slsaCompliant": false
+        }
+      },
+      {
+        "id": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:runtime_evidence:dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc",
+        "type": "prov:Entity",
+        "attributes": {
+          "artifact_name": "runtime_evidence",
+          "sha256": "sha256:dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc",
+          "producer": "TelemetryAgent",
+          "origin": "mas_artifact_manifest",
+          "content_availability": "off_chain"
+        }
+      },
+      {
+        "id": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:vulnerability_report:a0edb709dce5bc416bedf564d9459818c564cd36c9a683675895a59cd26c8fbc",
+        "type": "prov:Entity",
+        "attributes": {
+          "artifact_name": "vulnerability_report",
+          "sha256": "sha256:a0edb709dce5bc416bedf564d9459818c564cd36c9a683675895a59cd26c8fbc",
+          "producer": "VulnerabilityAgent",
+          "origin": "mas_artifact_manifest",
+          "content_availability": "off_chain"
+        }
+      },
+      {
+        "id": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:candidate_strategies:f4a65632a8fa8ba17fac0bc620db8afdb7068169821fd96fd1adf8e95bcc61aa",
+        "type": "prov:Entity",
+        "attributes": {
+          "artifact_name": "candidate_strategies",
+          "sha256": "sha256:f4a65632a8fa8ba17fac0bc620db8afdb7068169821fd96fd1adf8e95bcc61aa",
+          "producer": "CountermeasureAgent",
+          "origin": "mas_artifact_manifest",
+          "content_availability": "off_chain"
+        }
+      },
+      {
+        "id": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:canonical_preparation:6c4ba447f526b602181aff0802d6c02fa5f2b61eb39fe9376444b4eb8c4a4edf",
+        "type": "prov:Entity",
+        "attributes": {
+          "artifact_name": "canonical_preparation",
+          "sha256": "sha256:6c4ba447f526b602181aff0802d6c02fa5f2b61eb39fe9376444b4eb8c4a4edf",
+          "producer": "SemanticPreparationAgent",
+          "origin": "mas_artifact_manifest",
+          "content_availability": "off_chain"
+        }
+      },
+      {
+        "id": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_ranking:75da16385dd9bd0b94fac90719dab7b263972d33196729590a22294b1c087c13",
+        "type": "prov:Entity",
+        "attributes": {
+          "artifact_name": "native_strategic_ranking",
+          "sha256": "sha256:75da16385dd9bd0b94fac90719dab7b263972d33196729590a22294b1c087c13",
+          "producer": "StrategicAgent",
+          "origin": "mas_artifact_manifest",
+          "content_availability": "off_chain"
+        }
+      },
+      {
+        "id": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_validation:3998667e4b2c4db804cbb519721c4f48c3283c3a474b78629443de327c335849",
+        "type": "prov:Entity",
+        "attributes": {
+          "artifact_name": "native_strategic_validation",
+          "sha256": "sha256:3998667e4b2c4db804cbb519721c4f48c3283c3a474b78629443de327c335849",
+          "producer": "StrategicAgent",
+          "origin": "mas_artifact_manifest",
+          "content_availability": "off_chain"
+        }
+      },
+      {
+        "id": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:validation_profile:9b97537f7a6dc240fbab74500cea9f9010508b1c8442bb479b6bc1e944b8cfe2",
+        "type": "prov:Entity",
+        "attributes": {
+          "artifact_name": "validation_profile",
+          "sha256": "sha256:9b97537f7a6dc240fbab74500cea9f9010508b1c8442bb479b6bc1e944b8cfe2",
+          "producer": "Operator",
+          "origin": "mas_artifact_manifest",
+          "content_availability": "off_chain"
+        }
+      },
+      {
+        "id": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_recommendation:278496448a62d0d74f5a8452605d80ca324f84ee7006c4394581cdff8f6d91d6",
+        "type": "prov:Entity",
+        "attributes": {
+          "artifact_name": "native_strategic_recommendation",
+          "sha256": "sha256:278496448a62d0d74f5a8452605d80ca324f84ee7006c4394581cdff8f6d91d6",
+          "producer": "StrategicAgent",
+          "origin": "mas_artifact_manifest",
+          "content_availability": "off_chain"
+        }
+      },
+      {
+        "id": "urn:cti:recommendation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "type": "prov:Entity",
+        "attributes": {
+          "document_sha256": "sha256:61c1f3531564c498bff1392dda39f040b98d6c628f1fe9c558420d9704fa8607",
+          "selected_strategy_id": null,
+          "outcome": "requires_prerequisites",
+          "ranking_decision_id": "DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+          "selection_policy": "first-effective-accepted-per-cve-v1",
+          "run_id": "run-1a08bfac6b924622aa6f64947360aaa2",
+          "asset_id": "thesis-observed-app",
+          "cve_id": "CVE-2026-1225",
+          "tenant_id": "Org1MSP",
+          "action_execution": "not_performed",
+          "ranking_graph_key": "GRAPH_CVE-2026-1225_4263950e-4669-4b06-a832-31789380520d"
+        }
+      },
+      {
+        "id": "urn:cti:validation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374:S_UPGRADE",
+        "type": "prov:Entity",
+        "attributes": {
+          "strategy_id": "S_UPGRADE",
+          "ontology_individual": "CVE-2026-1225_Containers_Cna_Solutions",
+          "countermeasure_iri": "https://swot.sisinflab.poliba.it/cve#CVE-2026-1225_Containers_Cna_Solutions",
+          "semantic_status": "requires_prerequisites",
+          "operational_status": "requires_review",
+          "effective_status": "requires_prerequisites",
+          "context_digest": "sha256:6617255520797991d7ea250c95fe0a13807ada2c6ab003809cbc3c6e04a01040",
+          "origin": "backend_recorded_validation",
+          "sha256": "sha256:3f4733ae8e1001b9d344636cd8af9b9bf7a46fb37ee79b2ba55b4cdf1bfe38f6"
+        }
+      }
+    ],
+    "activities": [
+      {
+        "id": "urn:cti:activity:argumentationRanking:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+        "type": "prov:Activity",
+        "startedAtTime": "2026-11-07T09:04:57.321Z",
+        "endedAtTime": "2026-11-07T09:04:57.321Z",
+        "usedEntities": [
+          "urn:cti:entity:argumentation-graph:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+          "urn:cti:entity:ontology:sha256:83b4f9629",
+          "urn:cti:snapshot:controlled-logback:20261106:83b4f9629816"
+        ]
+      },
+      {
+        "id": "urn:cti:activity:runtime_evidence:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "type": "prov:Activity",
+        "usedEntities": []
+      },
+      {
+        "id": "urn:cti:activity:vulnerability_report:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "type": "prov:Activity",
+        "usedEntities": [
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:runtime_evidence:dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc"
+        ]
+      },
+      {
+        "id": "urn:cti:activity:candidate_strategies:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "type": "prov:Activity",
+        "usedEntities": [
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:runtime_evidence:dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc",
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:vulnerability_report:a0edb709dce5bc416bedf564d9459818c564cd36c9a683675895a59cd26c8fbc"
+        ]
+      },
+      {
+        "id": "urn:cti:activity:canonical_preparation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "type": "prov:Activity",
+        "usedEntities": [
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:runtime_evidence:dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc",
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:vulnerability_report:a0edb709dce5bc416bedf564d9459818c564cd36c9a683675895a59cd26c8fbc",
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:candidate_strategies:f4a65632a8fa8ba17fac0bc620db8afdb7068169821fd96fd1adf8e95bcc61aa"
+        ]
+      },
+      {
+        "id": "urn:cti:activity:native_strategic_ranking:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "type": "prov:Activity",
+        "usedEntities": [
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:canonical_preparation:6c4ba447f526b602181aff0802d6c02fa5f2b61eb39fe9376444b4eb8c4a4edf"
+        ]
+      },
+      {
+        "id": "urn:cti:activity:native_strategic_validation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "type": "prov:Activity",
+        "usedEntities": [
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_ranking:75da16385dd9bd0b94fac90719dab7b263972d33196729590a22294b1c087c13",
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:validation_profile:9b97537f7a6dc240fbab74500cea9f9010508b1c8442bb479b6bc1e944b8cfe2"
+        ]
+      },
+      {
+        "id": "urn:cti:activity:native_strategic_recommendation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "type": "prov:Activity",
+        "usedEntities": [
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_ranking:75da16385dd9bd0b94fac90719dab7b263972d33196729590a22294b1c087c13",
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_validation:3998667e4b2c4db804cbb519721c4f48c3283c3a474b78629443de327c335849"
+        ]
+      },
+      {
+        "id": "urn:cti:activity:backend-validation-S_UPGRADE:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "type": "prov:Activity",
+        "usedEntities": [
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:validation_profile:9b97537f7a6dc240fbab74500cea9f9010508b1c8442bb479b6bc1e944b8cfe2",
+          "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_ranking:75da16385dd9bd0b94fac90719dab7b263972d33196729590a22294b1c087c13"
+        ],
+        "endedAtTime": "2026-11-07T09:07:46.390Z"
+      }
+    ],
+    "agents": [
+      {
+        "id": "urn:cti:agent:saas-adapter",
+        "type": "prov:SoftwareAgent"
+      },
+      {
+        "id": "urn:cti:agent:d3fend-enricher",
+        "type": "prov:SoftwareAgent"
+      },
+      {
+        "id": "urn:cti:agent:fabric-chaincode-argumentation",
+        "type": "prov:SoftwareAgent"
+      },
+      {
+        "id": "urn:cti:agent:tinyme-reasoner",
+        "type": "prov:SoftwareAgent"
+      },
+      {
+        "id": "urn:cti:agent:mas:TelemetryAgent",
+        "type": "prov:SoftwareAgent"
+      },
+      {
+        "id": "urn:cti:agent:mas:VulnerabilityAgent",
+        "type": "prov:SoftwareAgent"
+      },
+      {
+        "id": "urn:cti:agent:mas:CountermeasureAgent",
+        "type": "prov:SoftwareAgent"
+      },
+      {
+        "id": "urn:cti:agent:mas:SemanticPreparationAgent",
+        "type": "prov:SoftwareAgent"
+      },
+      {
+        "id": "urn:cti:agent:mas:StrategicAgent",
+        "type": "prov:SoftwareAgent"
+      },
+      {
+        "id": "urn:cti:agent:mas:Operator",
+        "type": "prov:Agent"
+      },
+      {
+        "id": "urn:cti:agent:saas-operational-policy",
+        "type": "prov:SoftwareAgent"
+      }
+    ],
+    "relations": [
+      {
+        "subject": "urn:cti:decision:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+        "predicate": "prov:wasGeneratedBy",
+        "object": "urn:cti:activity:argumentationRanking:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7"
+      },
+      {
+        "subject": "urn:cti:decision:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+        "predicate": "prov:wasDerivedFrom",
+        "object": "urn:cti:entity:cve:CVE-2026-1225"
+      },
+      {
+        "subject": "urn:cti:activity:argumentationRanking:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+        "predicate": "prov:used",
+        "object": "urn:cti:entity:argumentation-graph:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7"
+      },
+      {
+        "subject": "urn:cti:activity:argumentationRanking:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+        "predicate": "prov:used",
+        "object": "urn:cti:entity:ontology:sha256:83b4f9629"
+      },
+      {
+        "subject": "urn:cti:activity:argumentationRanking:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+        "predicate": "prov:wasAssociatedWith",
+        "object": "urn:cti:agent:fabric-chaincode-argumentation"
+      },
+      {
+        "subject": "urn:cti:activity:argumentationRanking:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+        "predicate": "prov:used",
+        "object": "urn:cti:snapshot:controlled-logback:20261106:83b4f9629816"
+      },
+      {
+        "subject": "urn:cti:entity:ontology:sha256:83b4f9629",
+        "predicate": "prov:wasDerivedFrom",
+        "object": "urn:cti:snapshot:controlled-logback:20261106:83b4f9629816"
+      },
+      {
+        "subject": "urn:cti:decision:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7",
+        "predicate": "prov:wasDerivedFrom",
+        "object": "urn:cti:snapshot:controlled-logback:20261106:83b4f9629816"
+      },
+      {
+        "subject": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:runtime_evidence:dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc",
+        "predicate": "prov:wasGeneratedBy",
+        "object": "urn:cti:activity:runtime_evidence:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374"
+      },
+      {
+        "subject": "urn:cti:activity:runtime_evidence:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:wasAssociatedWith",
+        "object": "urn:cti:agent:mas:TelemetryAgent"
+      },
+      {
+        "subject": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:vulnerability_report:a0edb709dce5bc416bedf564d9459818c564cd36c9a683675895a59cd26c8fbc",
+        "predicate": "prov:wasGeneratedBy",
+        "object": "urn:cti:activity:vulnerability_report:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374"
+      },
+      {
+        "subject": "urn:cti:activity:vulnerability_report:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:wasAssociatedWith",
+        "object": "urn:cti:agent:mas:VulnerabilityAgent"
+      },
+      {
+        "subject": "urn:cti:activity:vulnerability_report:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:used",
+        "object": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:runtime_evidence:dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc"
+      },
+      {
+        "subject": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:candidate_strategies:f4a65632a8fa8ba17fac0bc620db8afdb7068169821fd96fd1adf8e95bcc61aa",
+        "predicate": "prov:wasGeneratedBy",
+        "object": "urn:cti:activity:candidate_strategies:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374"
+      },
+      {
+        "subject": "urn:cti:activity:candidate_strategies:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:wasAssociatedWith",
+        "object": "urn:cti:agent:mas:CountermeasureAgent"
+      },
+      {
+        "subject": "urn:cti:activity:candidate_strategies:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:used",
+        "object": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:runtime_evidence:dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc"
+      },
+      {
+        "subject": "urn:cti:activity:candidate_strategies:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:used",
+        "object": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:vulnerability_report:a0edb709dce5bc416bedf564d9459818c564cd36c9a683675895a59cd26c8fbc"
+      },
+      {
+        "subject": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:canonical_preparation:6c4ba447f526b602181aff0802d6c02fa5f2b61eb39fe9376444b4eb8c4a4edf",
+        "predicate": "prov:wasGeneratedBy",
+        "object": "urn:cti:activity:canonical_preparation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374"
+      },
+      {
+        "subject": "urn:cti:activity:canonical_preparation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:wasAssociatedWith",
+        "object": "urn:cti:agent:mas:SemanticPreparationAgent"
+      },
+      {
+        "subject": "urn:cti:activity:canonical_preparation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:used",
+        "object": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:runtime_evidence:dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc"
+      },
+      {
+        "subject": "urn:cti:activity:canonical_preparation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:used",
+        "object": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:vulnerability_report:a0edb709dce5bc416bedf564d9459818c564cd36c9a683675895a59cd26c8fbc"
+      },
+      {
+        "subject": "urn:cti:activity:canonical_preparation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:used",
+        "object": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:candidate_strategies:f4a65632a8fa8ba17fac0bc620db8afdb7068169821fd96fd1adf8e95bcc61aa"
+      },
+      {
+        "subject": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_ranking:75da16385dd9bd0b94fac90719dab7b263972d33196729590a22294b1c087c13",
+        "predicate": "prov:wasGeneratedBy",
+        "object": "urn:cti:activity:native_strategic_ranking:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374"
+      },
+      {
+        "subject": "urn:cti:activity:native_strategic_ranking:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:wasAssociatedWith",
+        "object": "urn:cti:agent:mas:StrategicAgent"
+      },
+      {
+        "subject": "urn:cti:activity:native_strategic_ranking:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:used",
+        "object": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:canonical_preparation:6c4ba447f526b602181aff0802d6c02fa5f2b61eb39fe9376444b4eb8c4a4edf"
+      },
+      {
+        "subject": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_validation:3998667e4b2c4db804cbb519721c4f48c3283c3a474b78629443de327c335849",
+        "predicate": "prov:wasGeneratedBy",
+        "object": "urn:cti:activity:native_strategic_validation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374"
+      },
+      {
+        "subject": "urn:cti:activity:native_strategic_validation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:wasAssociatedWith",
+        "object": "urn:cti:agent:mas:StrategicAgent"
+      },
+      {
+        "subject": "urn:cti:activity:native_strategic_validation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:used",
+        "object": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_ranking:75da16385dd9bd0b94fac90719dab7b263972d33196729590a22294b1c087c13"
+      },
+      {
+        "subject": "urn:cti:activity:native_strategic_validation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:used",
+        "object": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:validation_profile:9b97537f7a6dc240fbab74500cea9f9010508b1c8442bb479b6bc1e944b8cfe2"
+      },
+      {
+        "subject": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_recommendation:278496448a62d0d74f5a8452605d80ca324f84ee7006c4394581cdff8f6d91d6",
+        "predicate": "prov:wasGeneratedBy",
+        "object": "urn:cti:activity:native_strategic_recommendation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374"
+      },
+      {
+        "subject": "urn:cti:activity:native_strategic_recommendation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:wasAssociatedWith",
+        "object": "urn:cti:agent:mas:StrategicAgent"
+      },
+      {
+        "subject": "urn:cti:activity:native_strategic_recommendation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:used",
+        "object": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_ranking:75da16385dd9bd0b94fac90719dab7b263972d33196729590a22294b1c087c13"
+      },
+      {
+        "subject": "urn:cti:activity:native_strategic_recommendation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:used",
+        "object": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_validation:3998667e4b2c4db804cbb519721c4f48c3283c3a474b78629443de327c335849"
+      },
+      {
+        "subject": "urn:cti:recommendation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:wasGeneratedBy",
+        "object": "urn:cti:activity:native_strategic_recommendation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374"
+      },
+      {
+        "subject": "urn:cti:recommendation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:wasDerivedFrom",
+        "object": "urn:cti:artifact:run-1a08bfac6b924622aa6f64947360aaa2:native_strategic_recommendation:278496448a62d0d74f5a8452605d80ca324f84ee7006c4394581cdff8f6d91d6"
+      },
+      {
+        "subject": "urn:cti:recommendation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:wasDerivedFrom",
+        "object": "urn:cti:decision:DEC_CVE-2026-1225_496d257e-a2f5-4863-91a8-9180fa7c0be7"
+      },
+      {
+        "subject": "urn:cti:validation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374:S_UPGRADE",
+        "predicate": "prov:wasGeneratedBy",
+        "object": "urn:cti:activity:backend-validation-S_UPGRADE:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374"
+      },
+      {
+        "subject": "urn:cti:activity:backend-validation-S_UPGRADE:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:wasAssociatedWith",
+        "object": "urn:cti:agent:tinyme-reasoner"
+      },
+      {
+        "subject": "urn:cti:activity:backend-validation-S_UPGRADE:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:wasAssociatedWith",
+        "object": "urn:cti:agent:saas-operational-policy"
+      },
+      {
+        "subject": "urn:cti:activity:native_strategic_recommendation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374",
+        "predicate": "prov:used",
+        "object": "urn:cti:validation:FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374:S_UPGRADE"
+      }
+    ],
+    "slsaAssurance": {
+      "builderId": "https://hyperledger-fabric.saas.cti/builder@v1",
+      "chaincodeDigest": "sha256:03ae35c151cdc1cdb05a3226137db170b5474cbbd027eeea87c5eedf81ddb61e",
+      "ontologyDigest": "sha256:83b4f9629816003ed30eeab4b541d35450a4f39cf4efe317879ac019884e9ee9",
+      "inputDigest": "sha256:a953eb7134ce1fdec671fbc71bf803fc34cc5d01f24859e4fa39ac35b3f55ab6",
+      "verified": false,
+      "artifacts": [
+        {
+          "artifactId": "deployed_ontology.owl",
+          "immutableDigest": "sha256:83b4f9629816003ed30eeab4b541d35450a4f39cf4efe317879ac019884e9ee9",
+          "producerId": "https://hyperledger-fabric.saas.cti/builder@v1",
+          "sourceVersion": "v1.0.0",
+          "generationParameters": {
+            "filePath": "/Users/reucalion/tesi/output/case-improvements-20261106/semantics/deployed_ontology.owl",
+            "fileSizeBytes": 9280
+          },
+          "inputArtifactIdentities": [],
+          "creationTime": "2026-11-07T09:04:57.326Z",
+          "verificationStatus": "VERIFIED"
+        },
+        {
+          "artifactId": "chaincode-argumentation",
+          "immutableDigest": "sha256:03ae35c151cdc1cdb05a3226137db170b5474cbbd027eeea87c5eedf81ddb61e",
+          "producerId": "https://hyperledger-fabric.saas.cti/builder@v1",
+          "sourceVersion": "v1.0:commit-3755b54",
+          "inputArtifactIdentities": [],
+          "creationTime": "2026-11-07T09:04:57.326Z",
+          "verificationStatus": "UNVERIFIABLE"
+        },
+        {
+          "artifactId": "input-cti-request",
+          "immutableDigest": "sha256:a953eb7134ce1fdec671fbc71bf803fc34cc5d01f24859e4fa39ac35b3f55ab6",
+          "producerId": "https://hyperledger-fabric.saas.cti/client",
+          "sourceVersion": "v1.0",
+          "generationParameters": {
+            "canonicalization": "RFC8785"
+          },
+          "inputArtifactIdentities": [],
+          "creationTime": "2026-11-07T09:04:57.326Z",
+          "verificationStatus": "VERIFIED"
+        }
+      ]
+    },
+    "knowledgeSnapshotId": "urn:cti:snapshot:controlled-logback:20261106:83b4f9629816",
+    "knowledgeSnapshotDigest": "sha256:86ebca3e1bcbceff6a5da764f02dbffcfff40891310597e2197543afde1c2f4f",
+    "finalizationId": "FIN_0f78c5a66b46c9b2af9cc076f742c73780c60c6fed5d1a7edc5a3e64840cf374"
+  },
+  "sources_sha256": {
+    "output/case-improvements-20261106/runs/C1-r2/sources/runtime_evidence.json": "dd6dc0a8a74533dc90ba535440220e9e1da93a0fa33a1960614bf7c051d219dc",
+    "output/case-improvements-20261106/runs/C1-r2/sources/vulnerability_report.json": "a0edb709dce5bc416bedf564d9459818c564cd36c9a683675895a59cd26c8fbc",
+    "output/case-improvements-20261106/runs/C1-r2/sources/cti_assessment.json": "efb144d74155c3985005de90e8fd42cf4f46faea58ca06441f65521395787a8a",
+    "output/case-improvements-20261106/runs/C1-r2/sources/countermeasure_context.json": "7900afce3d654668cc0bcca54ba30791c57fbf1ca0d71bc5b549c0cb2ceedcb2",
+    "output/case-improvements-20261106/runs/C1-r2/sources/candidate_strategies.json": "f4a65632a8fa8ba17fac0bc620db8afdb7068169821fd96fd1adf8e95bcc61aa",
+    "output/case-improvements-20261106/runs/C1-r2/preparation/canonical_preparation.json": "6c4ba447f526b602181aff0802d6c02fa5f2b61eb39fe9376444b4eb8c4a4edf",
+    "output/case-improvements-20261106/runs/C1-r2/preparation/observed_assets.owl": "80be62edbbb0e77c8de64c33ff89b5642a0fe4b17ab7d0c98509ec76fc12abc9",
+    "output/case-improvements-20261106/runs/C1-r2/preparation/aln_ontology.owl": "cba790b091d29f79edb0578d4fa5646353456832c11ed62e144c853749344328",
+    "output/case-improvements-20261106/runs/C1-r2/strategic/native_strategic_ranking.json": "75da16385dd9bd0b94fac90719dab7b263972d33196729590a22294b1c087c13",
+    "output/case-improvements-20261106/runs/C1-r2/validation/native_strategic_validation.json": "3998667e4b2c4db804cbb519721c4f48c3283c3a474b78629443de327c335849",
+    "output/case-improvements-20261106/runs/C1-r2/recommendation/native_strategic_recommendation.json": "278496448a62d0d74f5a8452605d80ca324f84ee7006c4394581cdff8f6d91d6",
+    "output/case-improvements-20261106/runs/C1-r2/finalization/native_strategic_finalization.json": "8162425c9f1fbc69c40632104d5723977c30f0f5c4723c2e8c809c0a2174da2c",
+    "output/case-improvements-20261106/runs/C1-r2/dag.json": "dfc3c9118ac79e5fa5465fbb038510b2146c0a02ac18419652175069d0a6de66",
+    "output/case-improvements-20261106/runs/C1-r2/execution.json": "ff63060562952cdbc02c6623fb7a894afbfea8be0caea1c20a8d931f7bd6dfce",
+    "output/final-evaluation-20261113-r1/readbacks/verification.json": "ebbd5d5202aa5d5f33fd2001911550ae25752a37062a5e27e0e15f7b1a237819"
+  },
+  "scope": "Read-only extraction of one existing complete run; no new experiment or added ontology axioms."
+}

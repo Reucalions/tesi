@@ -1,0 +1,59 @@
+{
+  "review_date": "2026-11-12",
+  "reviewer_type": "assistant_same_author_source_review",
+  "human_review_completed": false,
+  "inter_annotator_agreement_measured": false,
+  "full_original_owl_sha256_verified": "0ffa87d0ff610cd7860dc3cae4bd84e65ab223569ba19ef2f4240fba6da59350",
+  "full_original_database_sha256_verified": "e3566009408385c7aea7901a9e6499132f0ae4bb07ccbd80d22e2171e5f7990c",
+  "source_integrity_note": "Full original OWL and SQLite byte hashes were rechecked before this review; no services called.",
+  "sdk_original_files_verified": 4,
+  "extraction_cases_rechecked": 12,
+  "cti_cases_reviewed": 16,
+  "owl_sqlite_literal_checks": 33,
+  "labels_changed": 0,
+  "inputs_changed": 0,
+  "matching_policy_cases": [
+    "C08",
+    "C11",
+    "C16"
+  ],
+  "extraction_policy_cases": [
+    "E06",
+    "E07",
+    "E08",
+    "E09",
+    "E11",
+    "E12"
+  ],
+  "policy_evidence": {
+    "C08": [
+      {
+        "vendor": "QOS.CH Sarl",
+        "product": "logback"
+      },
+      {
+        "vendor": "QOS.ch",
+        "product": "logback"
+      }
+    ],
+    "C11": [
+      [
+        "Apache Software Foundation",
+        "Apache Log4j Core",
+        "org.apache.logging.log4j:log4j-core"
+      ]
+    ],
+    "C16": {
+      "exact_vendor_product_rows": 0,
+      "interpretation": "No resolved identity under explicit vendor constraint; not absence of Logback-core."
+    }
+  },
+  "clarifications": [
+    "Matching labels refer to resolved identity, not literal backend status.",
+    "C08 does not prove that the two vendor names identify different real companies.",
+    "Only a successful domain-level unknown can match an unknown reference; errors and missing responses cannot.",
+    "Report the 3 policy matching cases separately, without removing them from the primary 16-query denominator."
+  ],
+  "predictions_collected": false,
+  "system_under_evaluation_executed": false
+}

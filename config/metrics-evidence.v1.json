@@ -1,0 +1,116 @@
+{
+  "contract": "metrics-evidence-inventory-v1",
+  "as_of": "2026-11-08",
+  "proposal": "docs/riferimenti/proposta-agentic-cti.pdf",
+  "proposal_sha256": "9eed32a42b3dd3655e725c393306cdea8b5426d434a609d0434faf701cabf5bf",
+  "proposal_text": "output/scientific-consolidation-20261105/project-proposal.txt",
+  "current_batch": "output/case-improvements-20261106",
+  "earlier_batch": "output/real-cases-20261105-r1",
+  "scope": "Inventario offline delle evidenze archiviate; nessun nuovo esperimento o accesso ai servizi.",
+  "groups": [
+    {
+      "id": "project", "repository": "framework", "kind": "requirements",
+      "description": "Proposta iniziale, testo estratto e protocolli; le aspettative aggiornate non sono un oracle indipendente.",
+      "patterns": ["docs/riferimenti/proposta-agentic-cti.pdf", "docs/riferimenti/fonti.json", "output/scientific-consolidation-20261105/project-proposal.txt", "config/controlled-cases.v*.json", "config/scientific-graph-cases.v1.json"]
+    },
+    {
+      "id": "sources", "repository": "framework", "kind": "real_source_artifacts",
+      "description": "Due build Logback, SBOM e raccolte SDK; C3 usa una degradazione sintetica dichiarata.",
+      "patterns": ["output/case-improvements-20261106/sources/*/*", "output/case-improvements-20261106/snapshot-manifest.json", "output/case-improvements-20261106/preparation-scope.json"]
+    },
+    {
+      "id": "launchers", "repository": "framework", "kind": "real_diagnostic_launchers",
+      "description": "Cinque tentativi Logback del launcher; i file annidati sono copie di lineage, non nuove esecuzioni.",
+      "patterns": ["output/case-improvements-20261106/cases/*/*", "output/case-improvements-20261106/runs/C[1-4]-r[0-9]/**/*", "output/case-improvements-20261106/run_case.py"]
+    },
+    {
+      "id": "continuations", "repository": "framework", "kind": "partial_continuation",
+      "description": "Riprese della sola finalizzazione C4; non contano come launcher completi o ripetizioni indipendenti.",
+      "patterns": ["output/case-improvements-20261106/runs/C4-r1-finalization-r*/**/*"]
+    },
+    {
+      "id": "current_proofs", "repository": "framework", "kind": "archived_real_backend_evidence",
+      "description": "Ricevute, riletture, backup e ontologia distribuita; non certificano lo stato attuale dei servizi.",
+      "patterns": ["output/case-improvements-20261106/verification*.json", "output/case-improvements-20261106/report*.md", "output/case-improvements-20261106/native-readiness.json", "output/case-improvements-20261106/semantics/**/*", "output/case-improvements-20261106/C1-postrun-readback.json", "output/case-improvements-20261106/ledger-C4-readback-after-metadata-loss.json", "output/case-improvements-20261106/saas-data-C1-manifest.json", "output/case-improvements-20261106/saas-data-C1/**/*", "output/case-improvements-20261106/argumentation-single-deployment.json"]
+    },
+    {
+      "id": "earlier_attempts", "repository": "framework", "kind": "earlier_diagnostic_batch",
+      "description": "Tentativi precedenti Log4j: sorgenti, codice e copertura KG differenti; esclusi da medie Logback.",
+      "patterns": ["output/real-cases-20261105-r1/runs/*/summary.json", "output/real-cases-20261105-r1/report.md", "output/real-cases-20261105-r1/verification.json", "output/real-cases-20261105-r1/case-summaries.json"]
+    },
+    {
+      "id": "native_smoke", "repository": "framework", "kind": "real_native_component_smoke",
+      "description": "Singolo grafo baseline su Fabric reale; verifica roundtrip, pesi e prodotti, con limite sul significato di against.",
+      "patterns": ["output/real-cases-20261105-r1/mcp-live-r1/*.json", "output/real-cases-20261105-r1/native-benchmark-audit.json", "output/real-cases-20261105-r1/check_mcp_live.py"]
+    },
+    {
+      "id": "scientific", "repository": "framework", "kind": "offline_analysis_and_upstream_archive",
+      "description": "Cinque coppie di grafi, analisi ALN/anello e nove osservazioni upstream; non sono repliche native del prototipo corrente.",
+      "patterns": ["output/scientific-consolidation-20261105/baseline-graphs.json", "output/scientific-consolidation-20261105/historical-ranking-observations.json", "output/scientific-consolidation-20261105/historical-position-observation.json", "output/scientific-consolidation-20261105/projection-profiles.json", "output/scientific-consolidation-20261105/ring-invariance.json", "output/scientific-consolidation-20261105/verification.json", "output/scientific-consolidation-20261105/report.md", "output/scientific-consolidation-20261105/source-snapshot.json", "docs/tecnica/consolidamento-scientifico-grafo.md"]
+    },
+    {
+      "id": "mock", "repository": "framework", "kind": "mock_only",
+      "description": "Matrice e quattro scenari mock; non oracle numerico di Tiny-ME/BWAF o baseline equivalente off-chain.",
+      "patterns": ["docs/materiali/evidenze/**/*.json", "output/demo-matrix-20260916T074247Z-80665fa1/summary.json", "output/demo-matrix-20260916T074247Z-80665fa1/manifest.json", "output/controlled-cases-20261105/verification.json"]
+    },
+    {
+      "id": "cti_history", "repository": "framework", "kind": "cti_component_diagnostics",
+      "description": "Probe CTI e audit LLM storici, con revisioni differenti; nessun corpus manuale indipendente assunto.",
+      "patterns": ["tests/data/cti/*", "output/cti-core-negative-20261006/*.json", "output/cti-real-smoke-20261005T101110Z-f74ed28d/*/*.json", "output/observed-app-ollama-20261009-r4/audit.json", "output/apache-ollama-20261018-r2/audit.json", "output/kg-coverage-20261106/report.md"]
+    },
+    {
+      "id": "regression", "repository": "framework", "kind": "tests_and_simulated_contracts",
+      "description": "Log di test gia eseguiti e smoke con Fabric simulato; non tassi di accuratezza sperimentale.",
+      "patterns": ["output/case-improvements-20261106/tests*.log", "output/case-improvements-20261106/ruff-final-r2.log", "output/shared-finalization-20261103/verification.json", "output/shared-finalization-20261103/report.md", "tests/test_scientific_semantics.py", "tests/test_operational_validation.py", "tests/test_native_selection.py"]
+    },
+    {
+      "id": "pipeline_code", "repository": "pipeline", "kind": "existing_implementation",
+      "description": "Generazione osservata/proiezione ALN e bridge: ispezione e hash, nessuna esecuzione.",
+      "patterns": ["app/src/semantic_assets/owl_extension.py", "app/semantic_preparation/runner.py", "app/semantic_preparation/upstream-manifest.json", "app/semantic_preparation/installation-manifest.json", "app/semantic_preparation/upstream/app/tools/build_aln_projection.py", "mcp-fablo-server/src/toolHandlers.ts", "mcp-fablo-server/src/fabloClient.ts"]
+    },
+    {
+      "id": "ledger_code", "repository": "ledger", "kind": "existing_implementation_and_benchmarks",
+      "description": "Contratti e cinque coppie baseline esistenti; disponibilita dei file distinta da esperimenti eseguiti.",
+      "patterns": ["chaincode/ontology_manager.go", "chaincode/reasoner_wrapper.go", "chaincode/include/tme_reasoner.h", "chaincode-argumentation/client/tests/graph_test_*.json", "chaincode-argumentation/client/scientific_validation_test.go", "fablo-rest/src/services/DomainValidation.ts", "fablo-rest/src/services/OperationalValidation.ts"]
+    },
+    {
+      "id": "monitoring", "repository": "ledger", "kind": "baseline_monitoring_not_integrated_measurement",
+      "description": "Risorse Caliper preesistenti; report legacy non attribuito agli esperimenti integrati.",
+      "patterns": ["caliper-workspace/benchmarks/*.yaml", "caliper-workspace/workload/*.js", "caliper-workspace/report.html"]
+    }
+  ],
+  "metrics": [
+    {"id":"E01","section":"15.1","name":"Precisione estrazione","status":"mancante","evidence":["sources","launchers","cti_history"],"available":"Output reali e sorgenti verificabili.","gap":"Manca un campione annotato indipendente con regole di matching e TP/FP/FN.","next":"Annotare il campione prima di confrontarlo con le estrazioni; TP/(TP+FP)."},
+    {"id":"E02","section":"15.1","name":"Recall estrazione","status":"mancante","evidence":["sources","launchers","cti_history"],"available":"Log SDK, manifest e output degli agenti.","gap":"Non disponibile il conteggio indipendente delle entita attese e delle omissioni.","next":"Usare lo stesso campione annotato; TP/(TP+FN)."},
+    {"id":"E03","section":"15.1","name":"F1 estrazione","status":"mancante","evidence":["sources","launchers"],"available":"Le fonti per costruire il campione esistono.","gap":"Precisione e recall non ancora misurate; non assegnare zero o uno per convenzione.","next":"Calcolare 2PR/(P+R) dopo E01/E02 e dichiarare i denominatori nulli."},
+    {"id":"E04","section":"15.1","name":"Accuratezza matching prodotto","status":"parziale","evidence":["launchers","cti_history"],"available":"Casi reali positivi/negativi e degradazione controllata C3; probe storici.","gap":"Assente un corpus annotato comune; ambiguita/astensione e revisioni vanno separate.","next":"Definire risposte attese indipendenti, regole per alias e denominatore; riportare anche copertura/astensioni."},
+    {"id":"E05","section":"15.1","name":"Accuratezza classificazione versioni","status":"parziale","evidence":["sources","launchers","cti_history"],"available":"Build 1.5.24/1.5.25, assessment e probe di intervalli/versioni sconosciute.","gap":"Due build controllate non dimostrano accuratezza generale; nessuna confusion matrix indipendente.","next":"Annotare i verdetti per versione/CVE e separare unknown dalla classificazione binaria."},
+    {"id":"E06","section":"15.1","name":"Categorie di errore e casi rappresentativi","status":"disponibile_circoscritta","evidence":["launchers","earlier_attempts","cti_history","current_proofs"],"available":"Fallimenti tecnici, pubblicazioni invalide, copertura KG insufficiente e astensione archiviati.","gap":"Campagna diagnostica, non frequenze di errore su campione rappresentativo.","next":"Catalogare gli errori senza usare i test passati come accuratezza."},
+    {"id":"R01","section":"15.2","name":"Determinismo con nodi/archi riordinati","status":"parziale","evidence":["scientific","ledger_code","native_smoke"],"available":"Cinque coppie strutturalmente equivalenti e controlli client offline; un grafo live.","gap":"Non archiviata la comparazione numerica live completa delle cinque coppie.","next":"Eseguire originali/riordinati e confrontare score per ID, mantenendo binario e ontologia fissati."},
+    {"id":"R02","section":"15.2","name":"Persistenza grafi e risultati sul ledger","status":"disponibile_circoscritta","evidence":["native_smoke","launchers","current_proofs"],"available":"Roundtrip del grafo baseline; ranking/riletture C1 e record/provenance con commit.","gap":"Prove archiviate su casi specifici; nessuna verifica attuale dei servizi o nuova prova di riavvio.","next":"Riutilizzare ricevute/hash e distinguere persistenza Fabric dai metadati locali SaaS."},
+    {"id":"R03","section":"15.2","name":"Stabilita del vincitore tra ripetizioni","status":"parziale","evidence":["launchers","scientific"],"available":"Una candidata C1/C4; nove osservazioni upstream S/M/L separate.","gap":"Manca una serie corrente congelata con piu candidate; score C1 convenzionale, nessun vincitore accettato.","next":"Misurare ripetizioni native a grafo fissato; non aggregare serie upstream o revisioni diverse."},
+    {"id":"R04","section":"15.2","name":"Sensibilita ai pesi di nodi e archi","status":"mancante","evidence":["ledger_code","scientific"],"available":"Contratto e scale documentati; il JSON canonico contiene ID/tipi ed estremi.","gap":"Nessuno sweep controllato; pesi numerici arbitrari nel JSON non dimostrano un controllo del motore.","next":"Verificare i parametri realmente esposti; dichiarare non valutabile se il backend non consente la perturbazione."},
+    {"id":"R05","section":"15.2","name":"Comportamento al crescere del grafo","status":"parziale","evidence":["scientific","ledger_code","native_smoke"],"available":"Baseline da 6/8/12/24/40 nodi e archivio upstream S/M/L.","gap":"Non disponibile una campagna corrente omogenea di ranking e tempi sulle cinque dimensioni.","next":"Riutilizzare i cinque grafi con ambiente e ontologia fissati; tenere l'archivio upstream separato."},
+    {"id":"R06","section":"15.2","name":"Qualita delle spiegazioni del ranking","status":"parziale","evidence":["native_smoke","scientific","launchers"],"available":"Cammini/prodotti controllati sul grafo live; controesempio against con prodotto positivo.","gap":"Etichetta against non assimilabile al segno; C1 non ha cammini BWAF per convenzione singola candidata.","next":"Analisi qualitativa con rubric esplicita; nessuna prova di preferenza fra azioni da C1."},
+    {"id":"S01","section":"15.3","name":"Graduatoria prima e decisione dopo validazione","status":"disponibile_circoscritta","evidence":["launchers","current_proofs"],"available":"C1: candidata al rango 1, abduzione 38, richiede prerequisiti, selected_strategy_id nullo.","gap":"Un caso completo; C4 parziale. Non e una nuova coppia di esecuzioni con validazione disabilitata.","next":"Riportare il confronto sugli stessi artefatti e il limite di rappresentazione semantica."},
+    {"id":"S02","section":"15.3","name":"Prima candidata accettata","status":"solo_test_o_mock","evidence":["mock","regression","launchers"],"available":"Casi mock/contratti coprono accepted; nessuna accettazione nel C1 reale.","gap":"Percorso positivo reale non dimostrato nel perimetro semantico mantenuto dall'utente.","next":"Dichiarare il criterio non soddisfatto; nessuna estensione o accettazione artificiale."},
+    {"id":"S03","section":"15.3","name":"Candidata condizionata","status":"disponibile_circoscritta","evidence":["launchers","current_proofs"],"available":"C1 requires_prerequisites e controllo operativo requires_review; C4 ha manutenzione mancante.","gap":"C4 non completa la finalizzazione del launcher; variabilita generativa e semantica non isolata.","next":"Conservare i motivi separati e non presentare C4 come ablation operativa perfettamente controllata."},
+    {"id":"S04","section":"15.3","name":"Candidata rifiutata e fallback","status":"solo_test_o_mock","evidence":["mock","regression","native_smoke"],"available":"Test/mock del rifiuto e fallback; clash ontologico in un arco baseline live.","gap":"Clash di arco diverso da rifiuto domain-level di una candidata; una sola soluzione KG impedisce il fallback C1/C4.","next":"Segnalare l'assenza della prova reale di selezione alternativa nel caso corrente."},
+    {"id":"S05","section":"15.3","name":"Spiegazione di abduzione","status":"disponibile_circoscritta","evidence":["launchers","current_proofs"],"available":"Output Tiny-ME reale, ipotesi e penalita 38; ontologia distribuita coerente con C1.","gap":"La mancanza di classi contestuali/del rimedio non equivale a capacita operative mancanti.","next":"Riportare l'output e la sua interpretazione limitata, senza trasformare lo score in probabilita."},
+    {"id":"S06","section":"15.3","name":"Spiegazione Bonus","status":"non_eseguita","evidence":["ledger_code","launchers"],"available":"Servizio nella baseline Tiny-ME; risposta domain-level bonusEvaluated=false e lista vuota.","gap":"Il percorso ExplainAffinity corrente non esegue Bonus; vuoto non significa bonus misurato pari a zero.","next":"Dichiarare il servizio non valutato, mantenendo il perimetro concordato."},
+    {"id":"S07","section":"15.3","name":"Spiegazione di contrazione","status":"solo_test_o_mock","evidence":["regression","ledger_code","native_smoke","launchers"],"available":"Parsing/contratti e clash baseline; C1 percorre l'abduzione compatibile.","gap":"ContractionPenalty=0 in C1 non e una prova di esecuzione del ramo contrazione.","next":"Distinguere il ramo non invocato dalla correttezza dei test e dal clash del ranking."},
+    {"id":"P01","section":"15.4","name":"Latenza ingestione telemetria","status":"parziale","evidence":["launchers","sources"],"available":"elapsed_seconds della richiesta collect_telemetry su export SDK/replay.","gap":"Esclude il tempo dall'evento originale alla decisione; non dimostra real-time o latenza del collector completo.","next":"Riportare la latenza del gateway con il suo confine e il numero di osservazioni."},
+    {"id":"P02","section":"15.4","name":"Latenza estrazione asset","status":"parziale","evidence":["launchers","cti_history"],"available":"Conversazioni LLM e durata totale del launcher.","gap":"Manca un timer monotono isolato dell'intero agente di estrazione; i nomi file LLM non bastano.","next":"Lasciare il valore isolato nullo; aggiungere soltanto timer se una nuova campagna viene autorizzata."},
+    {"id":"P03","section":"15.4","name":"Latenza matching vulnerabilita","status":"disponibile_circoscritta","evidence":["launchers","cti_history"],"available":"elapsed_seconds di assess_software via MCP con status e digest.","gap":"Include client/trasporto/validazione; non tutta la durata del VulnerabilityAgent.","next":"Esportare ogni osservazione con run e riga di origine; non mischiare versioni/serie storiche."},
+    {"id":"P04","section":"15.4","name":"Latenza generazione OWL","status":"parziale","evidence":["launchers","pipeline_code"],"available":"Timer prepare_argumentation aggregato per OWL/grafo/ALN e verifiche delle fonti.","gap":"Non separabile nei tempi OWL, grafo e proiezione; non riutilizzare lo stesso valore per tre fasi.","next":"Riportare soltanto il tempo aggregato esistente, con campi isolati nulli."},
+    {"id":"P05","section":"15.4","name":"Latenza costruzione grafo","status":"parziale","evidence":["launchers","pipeline_code"],"available":"Artefatto del grafo e timer aggregato di preparazione canonica.","gap":"Nessun timer isolato del costruttore del grafo nel run corrente.","next":"Usare P04 come misura aggregata, senza attribuirla solo al grafo."},
+    {"id":"P06","section":"15.4","name":"Latenza memorizzazione grafo","status":"parziale","evidence":["native_smoke","launchers"],"available":"StoreGraph live provato; nei run il dominio rank_remediations raggruppa piu operazioni.","gap":"Lo smoke non archivia una durata isolata di StoreGraph; nessuna latenza transaction-only ricavabile.","next":"Lasciare nullo il timer isolato; non chiamare rank_remediations tempo di storage."},
+    {"id":"P07","section":"15.4","name":"Latenza ranking","status":"parziale","evidence":["launchers","native_smoke"],"available":"Timer MCP rank_remediations con archiviazione e orchestrazione SaaS incluse.","gap":"C1/C4 usano single_candidate_convention_v1; manca il tempo isolato BWAF su grafi multi-candidata.","next":"Etichettare il timer come chiamata di dominio aggregata; nessuna prestazione del core dedotta."},
+    {"id":"P08","section":"15.4","name":"Latenza validazione semantica","status":"disponibile_circoscritta","evidence":["launchers"],"available":"Timer MCP validate_countermeasure del dominio Tiny-ME e policy operativa.","gap":"Non distingue tempo CGO, peer, trasporto e policy; pochi campioni diagnostici.","next":"Riportare le osservazioni di chiamata senza interpretarle come tempo puro del reasoner."},
+    {"id":"P09","section":"15.4","name":"Latenza registrazione provenance","status":"parziale","evidence":["launchers","current_proofs"],"available":"Timer finalize_recommendation e get_finalization, con commit/riletture reali o errori.","gap":"Finalizzazione include verifiche e raccomandazione; il solo costo di scrittura PROV-O non e separato.","next":"Esportare le chiamate aggregate e mantenere visibili le durate dei tentativi falliti."},
+    {"id":"P10","section":"15.4","name":"Durata end-to-end","status":"disponibile_circoscritta","evidence":["launchers","earlier_attempts"],"available":"Timer monotono del runner per tentativi completi, falliti e interrotti.","gap":"Comprende teardown dei gateway; replay di fonti gia raccolte e assenza di repliche congelate.","next":"Conservare le durate dichiarate dal runner senza medie trasversali o percentili su campioni minimi."},
+    {"id":"P11","section":"15.4","name":"Overhead blockchain on-chain/off-chain","status":"mancante","evidence":["monitoring","native_smoke","mock"],"available":"Risorse Caliper legacy e tool reali.","gap":"Manca una coppia equivalente di computazioni con stesso input/motore; mock e on-chain non equivalenti.","next":"Dichiarare non misurato salvo disponibilita di un percorso off-chain equivalente gia riutilizzabile."},
+    {"id":"A01","section":"15.5","name":"Con e senza evidenza runtime","status":"mancante","evidence":["sources","launchers"],"available":"OTel, SBOM e provenienza dei quattro ingressi.","gap":"Nessuna coppia a inventario/KG fissati con sola evidenza runtime rimossa; C3 cambia l'identita.","next":"Valutare un confronto supportato dal percorso esistente; non rinominare C2/C3 come ablation runtime."},
+    {"id":"A02","section":"15.5","name":"Prima e dopo validazione semantica","status":"parziale","evidence":["launchers","current_proofs"],"available":"Confronto C1 fra rango 1 e decisione condizionata finale sugli stessi artefatti.","gap":"Confronto interno osservabile, non due run equivalenti con/senza la fase di validazione.","next":"Riutilizzare l'analisi S01 dichiarandone la natura descrittiva; non disabilitare i controlli per creare un successo."}
+  ]
+}

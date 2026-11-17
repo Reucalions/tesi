@@ -1,5 +1,31 @@
 # Contratto scientifico del grafo e della validazione semantica
 
+## Associazione corretta, limiti mantenuti: 13 novembre 2026
+
+Applicato nel chaincode Go esistente un controllo/adattamento dei cammini
+nativi, con output originale e audit conservati. [Verifica corrente](correzione-spiegazioni-native.md):
+30/30 prove, 60/60 destinazioni coerenti con la candidata, score/pesi invariati,
+60 commit VALID. Nessuna modifica della libreria o dell'algoritmo.
+
+Rimangono significato di against e scelta dei cammini/candidata spiegata sensibile
+all'ordine; solo 6/15 coppie con explanation identiche per label. Non si attesta
+invarianza completa, copertura di tutte le candidate o equivalenza al paper.
+Le sezioni sotto conservano lo stato precedente e i criteri scientifici originari.
+
+## Aggiornamento live: benchmark del 12 novembre 2026
+
+La campagna ora eseguita e descritta nei [risultati del benchmark](risultati-benchmark-ranking.md):
+30 prove, cinque coppie con tre repliche, punteggi e pesi identici nei 45 confronti,
+60 commit VALID e 30 riletture indipendenti. Ontologia baseline originale e
+binario effettivo fissati, con ripristino del container Logback a fine raccolta.
+
+Le spiegazioni non superano il controllo completo nei riordinati: 30 cammini
+associati a una candidata diversa dalla destinazione, pur con archi/prodotti
+corretti. L'ambiguita against resta presente. Quindi i punteggi sono invarianti,
+mentre l'oggetto completo non lo e; nessuna attestazione della libreria al paper.
+Le sezioni successive conservano analisi e criteri del 5 novembre: le indicazioni
+di esecuzione live ancora pendente sono superate nei soli limiti di questa serie.
+
 Revisione del 5 novembre 2026. Questo documento fissa il significato della
 rappresentazione utilizzata, le aspettative indipendenti e i controlli riproducibili.
 Il consolidamento offline non equivale a una validazione numerica del motore nativo:

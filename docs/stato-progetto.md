@@ -1,5 +1,145 @@
 # Stato del progetto
 
+## Nuova estensione richiesta: ispezione conclusa — 16 novembre 2026
+
+Disponibile l'[analisi D3FEND, testbed multi-tenant e conoscenza condivisa delle strategie](tecnica/ispezione-d3fend-conoscenza-condivisa.md),
+con verifica delle revisioni remote di Principe e stima di effort. Sono proposte
+di integrazione, non nuove funzioni già implementate o collaudate. La valutazione
+e il report esistenti rimangono invariati; la chiusura sotto riguarda quel perimetro.
+
+## Chiusura della valutazione — 13 novembre 2026
+
+Raccolta e consolidamento conclusi nel perimetro concordato. Disponibili
+[risultati finali](tecnica/valutazione-finale.md),
+[matrice rispetto alla proposta](tecnica/conformita-proposta.md) e
+[procedura riproducibile](tecnica/riproduzione-finale.md).
+32 criteri aggiornati nel catalogo v2, 227 timer, 45 confronti appaiati,
+3293 file inventariati. Risultati e ingressi compatti conservati in evaluation/final-results-v1.
+Nuove prove: archi, off-chain nativo equivalente, evaluate/invoke, diagnostiche
+semantiche e confronti runtime/prima-dopo validazione. Cinque finalizzazioni
+rilette identiche. C1/C4 completi tecnicamente ma condizionati, nessuna azione.
+
+Non e conformita integrale: riferimento assistito, pesi nodi non esposti,
+nessuna accepted/fallback applicativa, spiegazioni parziali, ablation circoscritta,
+ThreatAgent e nodi runtime espliciti mancanti. Nessuna nuova estensione o modifica
+produttiva in questa fase; DOCX intatti e modifiche ancora da committare.
+Gli aggiornamenti sotto sono cronologia e non sostituiscono il report finale.
+
+## Correzione delle spiegazioni verificata: 13 novembre 2026
+
+Distribuito l'adattamento nel chaincode Go esistente su costa-thesis: conserva
+JSON nativo e audit con digest, e associa la spiegazione alla candidata raggiunta
+solo dopo verifica di cammini/prodotti e destinazione univoca. Score, pesi,
+ordine e libreria nativa invariati; nessun nuovo servizio/tool/agente.
+
+Nuovo benchmark reale: 30/30 prove e riletture, 45 confronti con score/pesi
+identici anche rispetto al 12 novembre, 60/60 cammini associati correttamente
+(prima 30/60). Trenta digest nativi verificati, 60 commit VALID nei blocchi
+89–148. Convenzione singola verificata separatamente, C1/C4 riletti identici,
+1.662 file precedenti protetti invariati, diciassette test Go principali passati.
+
+Restano against positivo e copertura parziale; l'intera explanation puo variare
+nei riordinamenti (6/15 coppie identiche per label). Questo non riapre un cambio
+del core: il task autorizzato di associazione e concluso nel corpus verificato.
+Nuovo binario attivo con ontologia Logback, vecchio container conservato.
+[Dettagli e limiti](tecnica/correzione-spiegazioni-native.md).
+Le sezioni sotto conservano cronologia e benchmark precedente.
+
+## Benchmark nativo concluso: 12 novembre 2026
+
+30/30 prove tecniche su cinque coppie di grafi esistenti, tre repliche per input,
+tramite MCP/Fabric reale. Punteggi e pesi identici in 45/45 confronti, massimi
+stabili con pareggi espliciti. 60 commit VALID (blocchi 29–88), write set e
+30/30 riletture indipendenti verificati dopo ripristino del container originale.
+
+Limite sulle spiegazioni: archi e prodotti validi 60/60, associazione alla
+candidata valida 30/60; tutti i 15 riordinati falliscono questo controllo pur
+conservando score identici. Rimane against positivo in 12 cammini. Nessuna
+correzione del core o estensione semantica. Tempi MCP nativi misurati su 6–40
+nodi, non C++ puro; sensibilita ai pesi e overhead equivalente non misurati.
+
+Usata temporaneamente l'ontologia baseline nella stessa immagine del core;
+container Logback ripristinato, rete/ledger conservati. 1.336 file protetti e
+record/provenance/ricevute C1/C4 invariati. Esterni costa-thesis, nessuna suite
+SaaS nello store live. [Risultati e limiti](tecnica/risultati-benchmark-ranking.md).
+Le sezioni sotto conservano gli stati storici, incluso il benchmark allora aperto.
+
+## C4-r3: launcher integrale riuscito, 12 novembre 2026
+
+C4-r3 ha completato tutti gli otto nodi del DAG originale nello stesso launcher
+real/camel/pipeline: exit code 0, `dry_run_completed`, finalizzazione condivisa
+`completed`, senza riprese da checkpoint esterni. Durata 1224,254 s, timeout
+LLM 600 s. Restano tracciati i recuperi automatici CAMEL su qualita e binding.
+
+Nuovo commit nel blocco 28, validation_code=0; verificati rilettura indipendente
+MCP, record/provenance/ricevuta, grafi, digest e rinnovo credenziali. Salvati i tre
+metadati SaaS reali; 789 file precedenti e metadati live C1/C4-r2 invariati.
+Nessuna modifica dei componenti o della semantica.
+
+Esito `requires_prerequisites`, nessuna candidata selezionata o applicata:
+maintenance_window mancante, oltre al prerequisito testuale non riconciliato
+`package_upgrade capability`; `package_upgrade` e disponibile. Tiny-ME abduzione
+38, score 62. Il successo tecnico non attesta una contromisura accettata o un fallback.
+[Report e limiti](../output/c4-collaudo-20261112-r2/report.md).
+C1/C4 sono completi fino alla finalizzazione; C2/C3 restano assessment conclusi
+con fasi native non applicabili. Le sezioni seguenti conservano gli stati storici.
+
+## Ripresa della finalizzazione C4 verificata: 12 novembre 2026
+
+C4-r2 ha completato sette nodi del DAG, poi e fallito per timeout Ollama dopo
+il commit. Una ripresa CAMEL separata, con timeout LLM 600 s, ha completato
+finalizzazione e rilettura con exit code 0, conservando lo stesso record e commit
+nel blocco 25, validation_code=0. Il DAG originale resta failed: non e dimostrato
+un unico launcher C4 end-to-end riuscito.
+
+Esito `requires_prerequisites`, nessuna strategia selezionata; manca
+`maintenance_window`. Tiny-ME abduzione 38, score 62. Verificati grafo canonico,
+provenance, digest, rilettura indipendente MCP e rinnovo credenziali; salvati i
+tre metadati SaaS originali. Nessuna modifica ai componenti o alla semantica.
+[Report completo](../output/c4-collaudo-20261112-r1/report.md).
+Le sezioni sotto conservano la cronologia; le metriche assistite restano separate.
+
+## Metriche dei componenti calcolate: 12 novembre 2026
+
+Sul campione v2 congelato: estrazione tramite identificatore OTel esistente,
+precisione 87,50%, recall 70%, F1 77,78%, accuracy documentale 9/12. CTI reale
+via MCP: matching 13/16 (81,25%), versione tre classi 10/13 (76,92%) e binaria
+7/8 (87,50%). Nessun errore tecnico nelle 16 query e nei 12 documenti.
+Riferimento assistito, senza revisione umana indipendente; due famiglie software.
+Misura dei componenti, senza inferenza LLM o launcher completo. Nessuna modifica
+di backend, etichette o semantica C1; C4 resta non completato.
+[Report, discrepanze e limiti](tecnica/risultati-metriche-componenti.md).
+
+## Revisione del campione: 12 novembre 2026
+
+Su delega esplicita dell'utente, completata la [revisione tecnica v2](../evaluation/annotated-sample-v2/review-report.md)
+dei 28 casi sulle fonti originali, con hash integrali OWL/SQLite ricontrollati e
+33 campi grezzi concordanti. Nessuna etichetta o ingresso modificato; precisati
+C08/C11/C16, significato delle categorie di matching e trattamento degli errori.
+La v1 resta immutata. Campione congelato per una valutazione controllata con
+riferimento assistito; revisione umana indipendente non effettuata e non attestata.
+Non occorre far ripetere all'utente i controlli tecnici. Prossimo passo: raccolta
+delle predizioni e metriche con i denominatori fissati; nessun punteggio ancora prodotto.
+
+## Campione annotato: 12 novembre 2026
+
+Preparata la [bozza v1](../evaluation/annotated-sample-v1/README.md): 12 documenti
+per estrazione e 16 query per matching/versioni, con fonti SDK/OWL/SQLite, scheda
+di revisione e denominatori espliciti. Quattro raccolte reali e otto variazioni
+sintetiche sono distinte. Le annotazioni sono assistite e richiedono revisione
+umana: nessun punteggio o nuovo esperimento e dichiarato. Il limite semantico
+di C1 resta invariato; nessuna modifica ai backend o alle fonti originali.
+
+## Inventario delle metriche: 8 novembre 2026
+
+Completata la raccolta offline: 698 file con SHA-256, 32 requisiti della sezione 15
+della proposta, 30 osservazioni temporali esplicite e 42 controlli di integrita
+coerenti con gli archivi. Disponibili inventario, tabella di copertura e dati
+JSON/CSV, con tentativi e riprese separati. Nessun nuovo run o accesso ai servizi.
+Il limite semantico C1 resta nel perimetro concordato. Accuratezza su corpus
+indipendente, repliche omogenee e confronti controllati rimangono da raccogliere.
+[Risultati e lacune](tecnica/valutazione-metriche.md).
+
 ## Chiusura C1 verificata: 7 novembre 2026
 
 C1-r2 ha completato il launcher reale CAMEL/Ollama e tutti gli otto nodi del DAG

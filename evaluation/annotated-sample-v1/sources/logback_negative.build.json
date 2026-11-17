@@ -1,0 +1,43 @@
+{
+  "status": "sources-validated",
+  "application": "local-demonstration",
+  "sbom_origin": "cyclonedx-maven-plugin:2.9.3",
+  "telemetry_origin": "opentelemetry-java-sdk:1.66.0",
+  "build_executed": true,
+  "observed_component": "logback-core",
+  "requested_dependency_version": "1.5.25",
+  "build_command": [
+    "mvn",
+    "-B",
+    "-ntp",
+    "package",
+    "-Plogback",
+    "-Dlogback.version=1.5.25"
+  ],
+  "application_command": [
+    "java",
+    "-Dthesis.observed.component=logback-core",
+    "-cp",
+    "/Users/reucalion/tesi/output/case-improvements-20261106/sources/negative/application.jar:/Users/reucalion/.m2/repository/org/apache/logging/log4j/log4j-core/2.26.1/log4j-core-2.26.1.jar:/Users/reucalion/.m2/repository/org/apache/logging/log4j/log4j-api/2.26.1/log4j-api-2.26.1.jar:/Users/reucalion/.m2/repository/io/opentelemetry/opentelemetry-sdk/1.66.0/opentelemetry-sdk-1.66.0.jar:/Users/reucalion/.m2/repository/io/opentelemetry/opentelemetry-api/1.66.0/opentelemetry-api-1.66.0.jar:/Users/reucalion/.m2/repository/io/opentelemetry/opentelemetry-context/1.66.0/opentelemetry-context-1.66.0.jar:/Users/reucalion/.m2/repository/io/opentelemetry/opentelemetry-common/1.66.0/opentelemetry-common-1.66.0.jar:/Users/reucalion/.m2/repository/io/opentelemetry/opentelemetry-sdk-common/1.66.0/opentelemetry-sdk-common-1.66.0.jar:/Users/reucalion/.m2/repository/io/opentelemetry/opentelemetry-sdk-trace/1.66.0/opentelemetry-sdk-trace-1.66.0.jar:/Users/reucalion/.m2/repository/io/opentelemetry/opentelemetry-sdk-metrics/1.66.0/opentelemetry-sdk-metrics-1.66.0.jar:/Users/reucalion/.m2/repository/io/opentelemetry/opentelemetry-sdk-logs/1.66.0/opentelemetry-sdk-logs-1.66.0.jar:/Users/reucalion/.m2/repository/io/opentelemetry/opentelemetry-exporter-logging-otlp/1.66.0/opentelemetry-exporter-logging-otlp-1.66.0.jar:/Users/reucalion/.m2/repository/io/opentelemetry/opentelemetry-exporter-otlp-common/1.66.0/opentelemetry-exporter-otlp-common-1.66.0.jar:/Users/reucalion/.m2/repository/io/opentelemetry/opentelemetry-exporter-common/1.66.0/opentelemetry-exporter-common-1.66.0.jar:/Users/reucalion/.m2/repository/ch/qos/logback/logback-core/1.5.25/logback-core-1.5.25.jar",
+    "it.poliba.thesis.ObservedApplication",
+    "/Users/reucalion/tesi/output/case-improvements-20261106/sources/negative/otel.jsonl"
+  ],
+  "started_at": "2026-11-06T09:57:42.423670+00:00",
+  "finished_at": "2026-11-06T09:57:42.665717+00:00",
+  "loaded_version": "1.5.25",
+  "loaded_jar_sha256": "aeb86d749936a960a1ec897aa821fe611ab6b105f1170ad334ae5eadc4bd689c",
+  "record_count": 5,
+  "component_ref": "pkg:maven/ch.qos.logback/logback-core@1.5.25?type=jar",
+  "files": {
+    "application.jar": "3da09ee625fb553006c992728d633ea0fc9ee8b2036de5d48efd62c3ee5a6a3a",
+    "pom.xml": "c68c371b1c78efc67f3ae9b890da9ca5272a30a503fca868524035c71b312b4e",
+    "sbom.cdx.json": "a9fc244368c53e59f45eb7c81a93a83eb8fc008a5b60839abdb2eb9e07b7f3d8",
+    "otel.jsonl": "7cb1e139649b5a1ab5d29b98c9ea35c22770b1aa321d64a3bc37f63f97c46f42"
+  },
+  "limitations": [
+    "Finite demonstration workload, not production monitoring.",
+    "Observed SDK logs only; no Collector, traces or metrics in this run.",
+    "JAR/SBOM hash equality is checked by the demo harness, not remote attestation.",
+    "Source preparation does not run CAMEL or an LLM."
+  ]
+}

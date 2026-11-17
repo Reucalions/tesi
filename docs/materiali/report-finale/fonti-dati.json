@@ -1,0 +1,32 @@
+{
+  "numeric_tables_verified": [
+    4,
+    17,
+    18,
+    19,
+    20,
+    22,
+    23,
+    24,
+    25,
+    26
+  ],
+  "stable_metric_table_ids": [
+    4,
+    11,
+    12,
+    13,
+    14,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "scope": "Formatting and consistency checks; no new experiments or rescoring.",
+  "sources_sha256": {
+    "output/demo-matrix-20260916T074247Z-80665fa1/summary.json": "055ff0d10c05cf29699ab6d5532db0fdcda468ad094cf8bc9ad472359f00cd48",
+    "evaluation/final-results-v1/results.json": "81d6036cc30ea0407998c304ed1334fd73b43c8f12b69166fda20d139783de97",
+    "config/metrics-evidence.v2.json": "d3bd1dcda95cbaeab483563221e50a4c2fe653437bfdca5905427481777b5e65"
+  }
+}

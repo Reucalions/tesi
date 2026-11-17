@@ -1,0 +1,26 @@
+{
+  "logback_vulnerable": {
+    "original_directory": "output/case-improvements-20261106/sources/vulnerable",
+    "otel_sha256": "0f5a186d96171de4a20f9f9ac51fd46b3eb406b2b13277620ef03b189ae64802",
+    "record_count": 5,
+    "source_manifest_sha256": "6c3f656f4936c859054401c70900488f617eb944b559b34da9be87b83563bf6b"
+  },
+  "logback_negative": {
+    "original_directory": "output/case-improvements-20261106/sources/negative",
+    "otel_sha256": "7cb1e139649b5a1ab5d29b98c9ea35c22770b1aa321d64a3bc37f63f97c46f42",
+    "record_count": 5,
+    "source_manifest_sha256": "efd589955ccf7119518921ba5b3579aef2652879b66e2735ab277b96a9b10895"
+  },
+  "log4j_vulnerable": {
+    "original_directory": "output/real-cases-20261105-r1/sources/vulnerable",
+    "otel_sha256": "ac1a570881ce5f38017e498b2c3592126bab033afaa019e47984ce80a6a4b758",
+    "record_count": 5,
+    "source_manifest_sha256": "ccb9fb60024d3c1e94d9348f61be06f9d5d5280b87f6e44793c297855094b72d"
+  },
+  "log4j_negative": {
+    "original_directory": "output/real-cases-20261105-r1/sources/negative",
+    "otel_sha256": "d9dd4116897e6cddd66410d87546380c6eff344b96185452abc82a6733edf1c4",
+    "record_count": 5,
+    "source_manifest_sha256": "27cfed66d1bd9af7e755c5d70d7339b09bdbd6fa54cb57417c1c007465a077ed"
+  }
+}

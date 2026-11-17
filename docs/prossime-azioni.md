@@ -1,5 +1,149 @@
 # Prossime azioni dopo il porting dei servizi condivisi
 
+## Proposta per il nuovo perimetro del professore — 16 novembre 2026
+
+Ispezionate le revisioni remote aggiornate di Principe, incluso il testbed a due
+organizzazioni. [Analisi, sequenza proposta ed effort](tecnica/ispezione-d3fend-conoscenza-condivisa.md).
+Prima dell'implementazione va definita la visibilità consortile o privata dei
+contesti; seguono profili D3FEND, asset strategici versionati, recupero/feedback
+nei due tenant e confronto CAMEL/deterministico. Il catalogo condiviso e la
+composizione non sono ancora implementati. La raccolta chiusa sotto rimane
+quella precedente, senza nuove prove Fabric o CAMEL eseguite in questa ispezione.
+
+## Raccolta conclusa — 13 novembre 2026
+
+La sintesi finale e stata completata, compresi confronti runtime, semantica,
+pesi degli archi e stima circoscritta del costo del ledger. Non servono altre
+raccolte per chiudere questo task. Consultare [valutazione finale](tecnica/valutazione-finale.md),
+[conformita alla proposta](tecnica/conformita-proposta.md) e
+[riproduzione](tecnica/riproduzione-finale.md).
+
+Restano attivita di consegna: inserire risultati e limiti nella relazione manuale,
+confermare attribuzioni/licenze private, selezionare e registrare le modifiche
+locali in commit. I due DOCX sono intatti. Le lacune architetturali/scientifiche
+sono limitazioni dichiarate, senza nuove estensioni richieste in questa fase.
+La roadmap sottostante e storica; le richieste di misure ormai concluse non
+costituiscono nuovi task aperti.
+
+## Correzione circoscritta conclusa: 13 novembre 2026
+
+Implementata e distribuita l'associazione verificata delle spiegazioni nel
+chaincode esistente costa-thesis, con JSON nativo integro e audit rileggibili
+via get_graph. Nuova campagna: 30 prove, 60/60 cammini associati correttamente,
+score/pesi invariati e commit/riletture verificati. Diciassette test Go principali
+passati. [Risultati](tecnica/correzione-spiegazioni-native.md).
+
+Non occorre ripetere questa raccolta o estendere il core per chiudere il task.
+Conservare i limiti separati: significato di against, copertura incompleta e
+scelta di cammini/candidata spiegata ancora dipendente dall'ordine. Solo 6/15
+coppie hanno explanation identiche, pur con tutte le associazioni ora valide.
+
+Proseguire con sintesi finale delle metriche e dei confronti disponibili,
+relazione e procedura dimostrativa con switch mock/real. Riportare criteri non
+misurati senza inventare baseline o aggiungere profili semantici per ottenere
+accettazioni. Le indicazioni sotto sul difetto di associazione descrivono lo
+stato del 12 novembre, ora superato da questa verifica dell'adattamento.
+
+## Benchmark concluso: 12 novembre 2026
+
+Conclusa la campagna nativa richiesta: 30 prove, cinque coppie originali/riordinate,
+tre repliche, punteggi e pesi identici nei 45 confronti. Commit e riletture
+verificati, latenze archiviate. [Risultati](tecnica/risultati-benchmark-ranking.md).
+Non occorre ripetere questa stessa serie per chiuderne la raccolta.
+
+Resta un limite specifico: spiegazioni associate alla candidata errata in tutti
+i riordinati, pur con archi e prodotti corretti; against positivo gia noto.
+Conservare gli output e dichiarare separatamente stabilita dei punteggi e
+mancata invarianza delle spiegazioni. Nessuna nuova patch al core in questo task.
+
+Proseguire con la sintesi finale delle metriche e dei confronti effettivamente
+sostenibili, riportando quelli non misurati (pesi impostabili, overhead equivalente,
+ablation runtime). Preparare relazione e procedura dimostrativa con switch
+mock/real gia disponibile. Non ampliare KG o profili semantici per produrre
+artificialmente un caso accettato. Un'eventuale correzione delle spiegazioni nel
+core e un intervento separato; non presentare il criterio come superato.
+L'inventario storico dell'8 novembre resta invariato; le sezioni sotto ne
+conservano lo stato e i precedenti passi ora svolti.
+
+## C4 integrale concluso: 12 novembre 2026
+
+L'ultimo tentativo C4-r3 e riuscito: un solo launcher real/camel/pipeline,
+otto nodi completed, finalizzazione e rilettura verificate, exit code 0.
+Timeout LLM 600 s, durata osservata 1224,254 s, nessuna ripresa manuale.
+Il nuovo commit e nel blocco 28; gli archivi precedenti restano intatti.
+[Report corrente](../output/c4-collaudo-20261112-r2/report.md).
+
+Non occorre un altro tentativo C4 per chiudere questo collaudo. Conservare
+`requires_prerequisites`, i prerequisiti semantici e il limite lessicale operativo
+come risultati effettivi; non introdurre estensioni per produrre un'accettazione.
+La valutazione ancora aperta riguarda ranking nativo su grafi riordinati e crescenti,
+repliche omogenee, confronti sostenibili e relazione finale. Le metriche del
+campione assistito e l'inventario storico dell'8 novembre restano separati.
+Le sezioni sotto conservano i precedenti stati di C4, ora superati da C4-r3.
+
+## C4: finalizzazione ripresa e verificata, 12 novembre 2026
+
+Conclusa la ripresa CAMEL del solo ultimo nodo C4-r2: exit code 0,
+finalizzazione/rilettura identiche al commit originale nel blocco 25.
+Esito `requires_prerequisites`, `maintenance_window` mancante, nessuna candidata
+selezionata. Il launcher originale e il DAG restano failed per timeout Ollama;
+sette nodi originali e l'ultimo completato nella ripresa sono verificati separatamente.
+[Evidenze e perimetro](../output/c4-collaudo-20261112-r1/report.md).
+
+Resta non dimostrata una riuscita C4 in un unico launcher: una ripetizione dovra
+usare una nuova directory, risorse locali adeguate e dichiarare il timeout LLM.
+Nessuna nuova funzione o estensione semantica e necessaria per questa verifica.
+Ranking nativo su grafi riordinati e crescenti, repliche, confronti e relazione
+restano separati da questa ripresa e dai risultati assistiti dei componenti.
+L'inventario dell'8 novembre resta una fotografia storica, senza nuovi conteggi
+di copertura ricavati automaticamente dal solo esito C4. Le sezioni sotto
+conservano gli stati precedenti.
+
+## Prima misura completata: 12 novembre 2026
+
+Calcolate [precisione/recall/F1 e accuratezze dei componenti](tecnica/risultati-metriche-componenti.md)
+sul riferimento assistito v2, senza modificare etichette o backend. Archiviati
+predizioni, audit MCP, protocollo, conteggi, CSV e hash. Disaccordi su vendor/
+identita parziali, certezza delle versioni fuori intervallo e astensioni lessicali
+rimangono nei risultati; non correggerli o eliminare casi per migliorare lo score.
+I criteri non ancora misurati della sezione 15 restano aperti: ranking su coppie
+riordinate e dimensioni crescenti, repliche omogenee, ablation e overhead equivalente.
+Il corpus manuale umano resta non dimostrato; la misura attuale e su annotazioni
+assistite verificate sulle fonti. Le sezioni sotto conservano la cronologia.
+
+## Revisione delegata conclusa: 12 novembre 2026
+
+L'utente ha delegato i controlli all'assistente: [v2 verificata e congelata](../evaluation/annotated-sample-v2/README.md),
+28 casi confermati contro fonti e protocollo, nessun nuovo output del sistema.
+Non richiedere che l'utente ripeta la verifica tecnica. Lavoro successivo:
+raccogliere predizioni dai componenti esistenti, tenere le etichette fuori dagli
+ingressi, calcolare le metriche senza cambiare i denominatori. Dichiarare che il
+riferimento e assistito e non revisionato da un annotatore umano indipendente;
+non presentarlo come pieno soddisfacimento del corpus manuale della proposta.
+Le indicazioni sotto sulla revisione umana descrivono la precedente preparazione
+della v1, ora conservata come bozza storica. Semantica e backend restano invariati.
+
+## Campione di valutazione: 12 novembre 2026
+
+Preparata la [bozza annotata v1](../evaluation/annotated-sample-v1/README.md),
+con 28 casi, ingressi separati dalle risposte attese e motivazioni basate sulle
+fonti grezze, senza usare output del matcher/evaluator per generare etichette.
+Prossimo passo: revisione umana della scheda, risoluzione delle correzioni e
+congelamento di una nuova revisione approvata prima delle predizioni. Mantenere
+distinti dati reali/derivati, unknown/negativo e matching/classificazione della
+versione. Nessun punteggio e ancora disponibile; non espandere la semantica di C1.
+
+## Valutazione finale: 8 novembre 2026
+
+L'utente mantiene il limite semantico di C1 e passa alla valutazione del prototipo.
+Completati [inventario e copertura delle metriche](tecnica/valutazione-metriche.md):
+698 file, 32 requisiti, 30 durate esplicite, 42 controlli di integrita coerenti.
+Nessuna nuova esecuzione o modifica dei backend. Prossimo passo: definire un
+campione annotato indipendente per estrazione/matching e il protocollo delle
+misure mancanti, prima di nuovi run. C4 resta non completato; le due riprese non
+valgono come launcher riusciti. Non introdurre nuovi profili semantici per chiudere
+artificialmente il caso positivo; dichiarare i criteri ancora non dimostrati.
+
 ## Chiusura C1 verificata: 7 novembre 2026
 
 C1-r2 ha completato il launcher reale CAMEL/Ollama e tutti gli otto nodi del DAG

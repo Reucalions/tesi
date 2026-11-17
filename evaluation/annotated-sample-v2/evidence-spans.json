@@ -1,0 +1,410 @@
+[
+  {
+    "case_id": "E01",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E01",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.24",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E01",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 2,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E01",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.24",
+    "line": 2,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E01",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 3,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E01",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.24",
+    "line": 3,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E01",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 4,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E01",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.24",
+    "line": 4,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E01",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 5,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E01",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.24",
+    "line": 5,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E02",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E02",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.25",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E02",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 2,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E02",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.25",
+    "line": 2,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E02",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 3,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E02",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.25",
+    "line": 3,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E02",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 4,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E02",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.25",
+    "line": 4,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E02",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 5,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E02",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.25",
+    "line": 5,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E03",
+    "entity_index": 0,
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/4/value/stringValue"
+  },
+  {
+    "case_id": "E03",
+    "entity_index": 0,
+    "field": "version",
+    "value": "2.14.1",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E03",
+    "entity_index": 0,
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "line": 2,
+    "pointer": "/resourceLogs/0/resource/attributes/4/value/stringValue"
+  },
+  {
+    "case_id": "E03",
+    "entity_index": 0,
+    "field": "version",
+    "value": "2.14.1",
+    "line": 2,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E03",
+    "entity_index": 0,
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "line": 3,
+    "pointer": "/resourceLogs/0/resource/attributes/4/value/stringValue"
+  },
+  {
+    "case_id": "E03",
+    "entity_index": 0,
+    "field": "version",
+    "value": "2.14.1",
+    "line": 3,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E03",
+    "entity_index": 0,
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "line": 4,
+    "pointer": "/resourceLogs/0/resource/attributes/4/value/stringValue"
+  },
+  {
+    "case_id": "E03",
+    "entity_index": 0,
+    "field": "version",
+    "value": "2.14.1",
+    "line": 4,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E03",
+    "entity_index": 0,
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "line": 5,
+    "pointer": "/resourceLogs/0/resource/attributes/4/value/stringValue"
+  },
+  {
+    "case_id": "E03",
+    "entity_index": 0,
+    "field": "version",
+    "value": "2.14.1",
+    "line": 5,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E04",
+    "entity_index": 0,
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/4/value/stringValue"
+  },
+  {
+    "case_id": "E04",
+    "entity_index": 0,
+    "field": "version",
+    "value": "2.26.1",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E04",
+    "entity_index": 0,
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "line": 2,
+    "pointer": "/resourceLogs/0/resource/attributes/4/value/stringValue"
+  },
+  {
+    "case_id": "E04",
+    "entity_index": 0,
+    "field": "version",
+    "value": "2.26.1",
+    "line": 2,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E04",
+    "entity_index": 0,
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "line": 3,
+    "pointer": "/resourceLogs/0/resource/attributes/4/value/stringValue"
+  },
+  {
+    "case_id": "E04",
+    "entity_index": 0,
+    "field": "version",
+    "value": "2.26.1",
+    "line": 3,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E04",
+    "entity_index": 0,
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "line": 4,
+    "pointer": "/resourceLogs/0/resource/attributes/4/value/stringValue"
+  },
+  {
+    "case_id": "E04",
+    "entity_index": 0,
+    "field": "version",
+    "value": "2.26.1",
+    "line": 4,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E04",
+    "entity_index": 0,
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "line": 5,
+    "pointer": "/resourceLogs/0/resource/attributes/4/value/stringValue"
+  },
+  {
+    "case_id": "E04",
+    "entity_index": 0,
+    "field": "version",
+    "value": "2.26.1",
+    "line": 5,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E05",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E05",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.24",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E05",
+    "entity_index": 0,
+    "field": "vendor",
+    "value": "QOS.CH Sarl",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/9/value/stringValue"
+  },
+  {
+    "case_id": "E06",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E10",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E10",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.24",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E10",
+    "entity_index": 1,
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "line": 2,
+    "pointer": "/resourceLogs/0/resource/attributes/4/value/stringValue"
+  },
+  {
+    "case_id": "E10",
+    "entity_index": 1,
+    "field": "version",
+    "value": "2.14.1",
+    "line": 2,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E11",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  },
+  {
+    "case_id": "E11",
+    "entity_index": 0,
+    "field": "version",
+    "value": "1.5.24",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/7/value/stringValue"
+  },
+  {
+    "case_id": "E12",
+    "entity_index": 0,
+    "field": "product",
+    "value": "logback-core",
+    "line": 1,
+    "pointer": "/resourceLogs/0/resource/attributes/5/value/stringValue"
+  }
+]

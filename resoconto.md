@@ -1,6 +1,589 @@
 # Resoconto operativo
 
-Aggiornato al 7 novembre 2026. **Concluso il task richiesto per C1.**
+## Punto di ripresa: roadmap concordata nei tre punti del professore — 17 novembre 2026
+
+**Leggere prima questa sezione per riprendere il lavoro.** Riassume le decisioni
+della chat successive all'ispezione del 16 novembre; le sezioni sotto conservano
+la cronologia e possono riportare stati precedenti. Il report accademico è
+considerato soddisfacente dall'utente. Non sono iniziate le nuove implementazioni.
+L'ultima richiesta autorizza soltanto questo aggiornamento di `resoconto.md`.
+
+### Perimetro e decisioni concordate
+
+Il professore chiede di mantenere come struttura i **tre punti iniziali**:
+
+1. Stesso caso CTI su due tenant con comunità CAMEL distinte e contesti/policy
+   differenti, verificando coerenza delle decisioni e separazione di workflow,
+   artefatti e provenance.
+2. Confronto tra esecuzione CAMEL effettiva e percorso deterministico/prefissato
+   sullo stesso scenario: candidate, tool, retry/recuperi, esito e tempi.
+3. Caso con due/tre contromisure: ranking, validazione semantica/operativa e
+   prima candidata applicabile oppure astensione; se il caso lo consente,
+   dimostrare il passaggio a una candidata successiva alla prima nel ranking.
+
+D3FEND, conoscenza condivisa, feedback, riuso e composizione vanno integrati
+**dentro questi tre punti**, non trasformati in ulteriori progetti autonomi.
+Il professore richiede anche la valutazione di ATT&CK, da integrare se possibile,
+e il monitoraggio delle metriche prestazionali, riusando l'osservabilità di
+Principe. «Def3nder» è stato chiarito come MITRE D3FEND, non un altro strumento.
+
+L'utente ha accettato una roadmap per un **dimostratore circoscritto in una
+settimana lavorativa**, con un solo caso, due tenant, due/tre strategie, un ciclo
+di feedback e una composizione dichiarata di due azioni. È un obiettivo
+condizionato, non una garanzia di completamento già verificata. Le stime di
+10–15 giornate della sezione successiva riguardano l'estensione più generale.
+
+### Riscontri disponibili: non ripetere l'ispezione completa
+
+Teste remote ricontrollate in sola lettura il 17 novembre, invariate dal 16:
+
+| Repository locale | Branch di lavoro da conservare | Testa remota `principe-thesis` verificata |
+| --- | --- | --- |
+| `/Users/reucalion/Desktop/agent-based-cti-argumentation-pipeline` | `costa-thesis` | `18384d7c168225deacb347c5218e10f897b2a6c3` |
+| `/Users/reucalion/Desktop/semantic-cti-ledger-argumentation` | `costa-thesis` | `5a31ca8403bf34f6344683787412be0967936d89` |
+
+Il framework è sul branch `full`. Qualsiasi integrazione nei due repository
+esterni deve avvenire esclusivamente su `costa-thesis`; lo switch mockup/reale
+resta un comando applicativo e non richiede cambi di branch.
+
+Il riferimento locale ledger `origin/principe-thesis` è obsoleto (`a16be9e`).
+Usare per la lettura della revisione verificata la copia bare esistente
+`output/integration-inspection-20261116/ledger.git`, ref `audit-principe`, oppure
+i sorgenti estratti. Non sovrascrivere il codice Costa con quello upstream:
+vanno conservate le correzioni di contratti, identità, parsing, commit,
+validazione operativa e finalizzazione. Il connettore GitHub non vede i due
+repository; l'accesso Git remoto configurato ha funzionato. Non eseguiti fetch
+nei repository esterni né cambi di branch.
+
+Materiali da consultare con letture mirate:
+
+- [Ispezione tecnica dettagliata](docs/tecnica/ispezione-d3fend-conoscenza-condivisa.md).
+- [Indice delle evidenze](output/integration-inspection-20261116/README.md):
+  revisioni, manifest, sorgenti, differenze dal porting e prova D3FEND.
+- `output/integration-inspection-20261116/principe-ledger/testbed/`: configurazione
+  consortile, due org/quattro peer, un channel `consortium`, due SaaS su 8801/8802.
+- D3FENDEnricher e SelectiveRecomputationEngine di Costa sono già identici alle
+  versioni remote verificate. Il classificatore mappa upgrade/isolamento, mentre
+  monitoraggio generico resta `unmapped`; mapping e confidenza non provano
+  applicabilità o efficacia. Il grafo canonico attuale salta l'arricchimento
+  automatico e non trasferisce le annotazioni D3FEND nelle candidate native.
+- L'asset store SaaS esistente descrive software in RAM/disco; non è ancora un
+  catalogo ledger di strategie. Le finalizzazioni hanno lettura di dominio
+  riservata al proprietario: la condivisione richiede una pubblicazione esplicita.
+- ATT&CK è predisposto nell'ontologia di base (`AttackPattern`,
+  `hasMITREATTCKID`, `hasSubTechniqueID`), ma non è operativo nel percorso canonico
+  collaudato. Le caratteristiche CVSS `hasAttackVector`/`AttackVectorLocal`
+  non sono tecniche ATT&CK; C1 non contiene questi mapping ATT&CK.
+
+### Osservabilità verificata il 17 novembre
+
+Nella pipeline di Principe, lettura con `git show origin/principe-thesis:<path>`:
+
+- `app/src/utils/e2e_metrics.py`: timer delle quattro fasi e campionamento RSS
+  del solo processo Python; è collegato a `app/src/main.py`. Il sampler usa
+  `/proc/self/statm`: va adattato o eseguito in ambiente compatibile per macOS.
+- `app/src/utils/monitoring.py`: contatori e durate dell'estrazione per chunk.
+- `opentelemetry/otel-collector-config.yaml`: acquisizione di log ed export su
+  file; non equivale al monitoraggio delle prestazioni delle comunità CAMEL.
+
+Nel ledger di Principe, lettura della copia bare `audit-principe`:
+
+- `testbed/docker-compose.monitoring.yaml` e `testbed/prometheus.yml`:
+  Prometheus/Grafana, scraping di orderer e dei quattro peer. Non comprende
+  ancora le metriche dei nostri run CAMEL o dei due SaaS.
+- `monitoring/` include anche Pushgateway e un target REST; la presenza di un
+  target configurato non prova l'esistenza dell'endpoint applicativo `/metrics`.
+- Esiste una dashboard Fabric con 16 pannelli, intitolata per la versione 1.4:
+  verificare query/compatibilità con i servizi effettivi prima di riutilizzarla.
+- Nel framework `RunAudit` e il client MCP registrano già run, stati, errori e
+  `elapsed_seconds`. Da raccordare all'esposizione delle metriche e alla dashboard.
+
+Quindi la base di osservabilità esiste; resta l'integrazione con tenant,
+modalità, fasi, tool e run del framework. Nessuna nuova rete, dashboard o
+esecuzione sperimentale è stata avviata durante questa verifica.
+
+### Task di implementazione dentro i tre punti
+
+**Punto 1 — Tenant e comunità.** Riusare il testbed e le indicazioni che darà il
+professore; collegare due Workforce, identità, sessioni MCP e memorie separate.
+Conservare artefatti/provenance distinti; aggiungere volumi SaaS separati e
+verificare accessi incrociati, commit e riletture. Il nuovo script di setup ha
+operazioni di pulizia ampie e il generatore multi-channel ha raccordi mancanti:
+non avviarlo senza circoscrivere la rete e seguire la configurazione confermata.
+
+Per il piano settimanale l'ipotesi è un canale consortile con dati controllati e
+schede strategiche pubblicate esplicitamente, mantenendo separazione applicativa
+dei tenant. La visibilità va fissata al giorno 1: lo stato pubblico del canale
+è visibile ai peer membri. La riservatezza rispetto ai loro amministratori
+richiederebbe collection/transient e non è inclusa nella settimana proposta.
+
+**Punto 2 — Confronto e metriche.** Realizzare una baseline deterministica sui
+medesimi backend reali, con scenario, fonti, policy e catalogo fissati. La CLI
+attuale impone CAMEL per `--backend-mode real`; le fixture mock non costituiscono
+la baseline richiesta. Riutilizzare sessioni e operazioni esistenti, mantenendo
+esplicita l'assenza di inferenza nel percorso prefissato.
+
+Integrare Prometheus/Grafana con durata end-to-end e delle fasi, tool invocati,
+errori, retry/recuperi, memoria del processo osservato e metriche Fabric già
+disponibili. Correlare tenant/modalità/run e conservare gli eventi originali.
+Verificare la raccolta effettiva, non la sola presenza della dashboard.
+
+**Punto 3 — Candidate, semantica e feedback.** Scegliere due/tre alternative
+documentate, raccordare D3FEND al preparatore canonico e mantenere ranking,
+validazioni e prima selezione applicabile effettivi. Inserire un piccolo
+registro ledger di strategie/versioni con condizioni, annotazioni e provenance
+pubblicabile; recuperarle tramite MCP come input del CountermeasureAgent.
+A pubblica una strategia qualificata, B la istanzia/rivalida nel proprio contesto
+e può pubblicare un adattamento collegato all'origine. Un template riusabile
+richiede individui contestuali: il proiettore oggi rifiuta lo stesso individuo
+strategico condiviso tra CVE differenti. Non indebolire silenziosamente i binding
+KG e i controlli canonici per introdurre candidate arbitrarie.
+
+Per la composizione limitarsi a una sequenza predefinita di due azioni, con
+ordine, precondizioni, effetti e compatibilità espliciti. Per ATT&CK valutare
+subito una/due associazioni documentabili, versionate e pertinenti al caso;
+integrare soltanto se supportate dalle fonti. Una CVE non dimostra che una tecnica
+sia stata osservata; distinguere contesto ipotizzato da evidenza osservata.
+Riutilizzare i ruoli esistenti, senza aprire un progetto autonomo ATT&CK.
+
+### Sequenza settimanale accettata
+
+| Giorno | Attività | Risultato atteso |
+| --- | --- | --- |
+| 1 | Fissare perimetro/visibilità; verificare rete, caso semantico e metriche; valutare ATT&CK | Prerequisiti verificati e scenario fissato |
+| 2 | Collegare i tenant, raccordare D3FEND e avviare strumentazione delle metriche | Primo percorso completo sui due contesti |
+| 3 | Pubblicazione, recupero e riferimenti versionati delle strategie | Primo riuso A → ledger → B |
+| 4 | Baseline deterministica, fallback, composizione limitata e dashboard | Quattro condizioni principali eseguibili |
+| 5 | Repliche, ciclo di feedback, isolamento e sintesi | Evidenze e confronto conclusivo |
+
+Raccolta minima proposta: due tenant × due modalità × tre ripetizioni (12 run),
+più una dimostrazione separata del feedback. Le sei esecuzioni CAMEL, ai tempi
+storici di circa 20–21 minuti ciascuna, richiedono già circa due ore, oltre a
+baseline e controlli. Tenere fisso lo snapshot del catalogo nei confronti ed
+evitare che il feedback di una replica contamini le successive.
+
+**Primo passo alla ripresa: giorno 1, verifica dei prerequisiti, prima di nuovi
+sviluppi.** Il caso C1 attuale rimane semanticamente condizionato e non dimostra
+una candidata accettata: serve scegliere un caso con profili adeguati e fonti
+verificabili per mostrare selezione, alternativa e pubblicazione qualificata.
+Se rete o caso semantico richiedono interventi sostanziali, rivalutare subito
+la fattibilità settimanale. Non fabbricare accettazioni o modificare gli score.
+
+### Vincoli da mantenere nella ripresa
+
+- Nuove integrazioni esterne solo su `costa-thesis`; ispezionare prima i
+  componenti disponibili e riusare framework, backend, contratti e osservabilità.
+- Separare attività proposte, implementate e collaudate. La roadmap è accettata,
+  ma l'esecuzione non è ancora iniziata: non interpretare questa nota come
+  un collaudo o come avvio dei servizi.
+- Lo stato resta dry-run: strategia proposta/validata/selezionata o riusata nel
+  ragionamento non significa azione applicata né efficacia misurata sul campo.
+- Fuori dal dimostratore settimanale: catalogo generale, composizione automatica,
+  integrazione estesa ATT&CK e riservatezza completa sul ledger.
+- Preservare report approvato, Word manuali, risultati/log/snapshot storici e
+  ledger esistente. Non eseguire test SaaS negli store live o reset distruttivi.
+
+## Ispezione D3FEND, multi-tenant e feedback condiviso — 16 novembre 2026
+
+Esaminate le nuove richieste del professore: due comunità CAMEL, confronto con
+percorso deterministico sugli stessi backend, più candidate e riuso/composizione
+delle strategie come conoscenza condivisa sul ledger. D3FEND confermato come
+significato di «Def3nder». Analisi e proposta, senza implementazione delle nuove
+funzioni o modifica del report accademico.
+
+Verificate le teste remote: pipeline `18384d7`, ledger `5a31ca8`. Il riferimento
+locale ledger era fermo a `a16be9e`; la revisione aggiornata è stata acquisita
+soltanto nella copia di ispezione nel workspace. Entrambi gli esterni restano su
+costa-thesis, senza merge, porting o aggiornamento dei loro riferimenti Git.
+Individuato il testbed consortile già predisposto: due organizzazioni, quattro
+peer, un channel e due SaaS. D3FENDEnricher e SelectiveRecomputationEngine correnti
+coincidono con quelli remoti. Prova isolata: upgrade e isolamento mappati,
+monitoraggio generico non mappato; le tecniche custom non sono classi MITRE
+automaticamente certificate. Nessun SaaS, Fabric o LLM invocato.
+
+Mancano un catalogo ledger di strategie versionate, pubblicazione/visibilità
+esplicite, recupero negli agenti e riqualificazione nel contesto destinatario.
+L'asset store esistente descrive software e usa RAM/disco del SaaS. Il grafo
+canonico salta l'arricchimento D3FEND automatico e vincola oggi le candidate ai
+rimedi KG. I template riusabili devono avere istanze ontologiche contestuali.
+Distinta separazione API tenant da riservatezza del ledger consortile; rilevati
+volumi SaaS mancanti, raccordi di configurazione e limiti del generatore multi-channel.
+
+Proposta circoscritta: D3FEND per classificazione/ricerca, selezione dopo ranking
+e validazione del nuovo contesto, pubblicazione autorizzata di asset qualificati,
+feedback con provenance e una composizione di due passi. Lo stato corrente
+resta dry-run: nessuna efficacia operativa o azione eseguita viene rivendicata.
+Effort indicativo 10–15 giornate-persona per demo con visibilità consortile;
+riservatezza ledger con collection/transient richiede ulteriori 5–8 giornate,
+da affinare sulla configurazione che fornirà il professore. Le stime precedenti
+riguardavano il perimetro sperimentale più ristretto.
+
+[Ispezione e proposta dettagliata](docs/tecnica/ispezione-d3fend-conoscenza-condivisa.md).
+Evidenze, sorgenti congelati e verifiche in `output/integration-inspection-20261116/`.
+
+## Nomenclatura tecnica riconoscibile nel report
+
+Uniformata la tipografia di testo, tabelle, didascalie e sei diagrammi: ruoli e
+termini ontologici in grassetto petrolio; identificatori, stati e capacità con
+fondo tenue; alias come a, c e r in grassetto corsivo. PT Sans conservato in
+tutte le varianti. Le lettere comuni del testo non sono trattate come simboli.
+
+Rigenerati PDF, Word, Markdown e anteprime. PDF sempre di 29 pagine entro il
+limite di 30. Controllati gli stili effettivi PDF/Word su dieci esempi, font
+incorporati, impaginazione e integrità delle fonti. Testo della narrativa,
+testo Word e contenuto testuale delle 29 pagine PDF identici alla revisione
+precedente; verifiche delle metriche e del caso C1 superate. Nessuna modifica
+ai dati scientifici o ai backend. Copia precedente e confronto conservati in
+`output/report-tipografia-r1/`.
+[Report aggiornato](docs/materiali/report-finale/README.md).
+
+## Dettaglio semantico del report: caso C1 completo
+
+Integrato il report con un capitolo di cinque pagine, basato esclusivamente
+sulla stessa run C1 completata negli otto nodi del DAG. Mostrati dati iniziali,
+regola di versione, arricchimento SBOM/OSV, alias degli individui effettivi,
+tre asserzioni ABox, estratti ALN e conseguenze della TBox. Esplicito il limite:
+il collegamento al pacchetto non trasferisce automaticamente all'asset il
+contesto del rimedio. Il grafo effettivo ha due nodi e un arco, con score singolo
+convenzionale distinto dall'affinità Tiny-ME 62/100 e dalla penalità 38.
+
+C1 conserva entrambe le capacità operative, ma un vincolo testuale non mappato
+richiede revisione; lo stato semantico condizionato prevale. Inclusi esempi PROV-O,
+otto digest, commit e rilettura. Estratti verificati contro 15 sorgenti immutate,
+senza nuove inferenze, esperimenti, assiomi o modifiche ai backend.
+
+PDF corrente: 29 pagine entro il nuovo massimo di 30, sei figure e 26 tabelle
+numerate. Aggiornati DOCX, Markdown, indice e segnalibri. Font PT Sans e metadati
+accademici conservati; i due DOCX manuali intatti. Versione di 24 pagine salvata
+separatamente; la sezione seguente ne conserva il resoconto storico.
+[Report e verifiche](docs/materiali/report-finale/README.md).
+
+## Nuovo report accademico completo
+
+Realizzato un documento autonomo in italiano formale, con PT Sans, frontespizio
+per il prof. Saverio Ieva e il corso Information Systems Design and Big Data.
+PDF verificato di 24 pagine complessive, quattro figure e venti tabelle numerate;
+DOCX modificabile con font incorporati e testo Markdown disponibili nella stessa
+cartella. Struttura: introduzione, problema/soluzione, mockup, architettura
+completa, risultati/metriche, conclusioni con limiti e sviluppi futuri.
+
+[Report e note editoriali](docs/materiali/report-finale/README.md).
+Le tabelle numeriche sono confrontate con le misure congelate; nessun nuovo
+esperimento o modifica ai backend. I due DOCX manuali rimangono invariati.
+Conteggio e resa PDF verificati; il riscontro nativo Word non e disponibile per
+timeout dell'applicazione. Nel testo del report sono esclusi cronologia operativa,
+nomi di file e nomi interni dei repository/branch; le basi software sono descritte
+per funzione. I limiti scientifici rimangono espliciti.
+
+## Valutazione finale consolidata — 13 novembre 2026
+
+Conclusa la raccolta nel perimetro concordato: sensibilita degli archi (15 prove),
+stesso contratto nativo in memoria contro MCP (30 confronti), costo del percorso
+REST invoke/evaluate (15 coppie), Bonus/contrazione reali e controlli semantici
+baseline. Completati due replay con/senza runtime a inventario/CTI fissati,
+confronto inventario osservato/dichiarato e tre step TelemetryAgent reali.
+Grafo, OWL e ALN identici nei due replay: limite del contributo contestuale attuale.
+Nessuna estensione architetturale, modifica al core o nuova accettazione artificiale.
+
+[Report finale](docs/tecnica/valutazione-finale.md),
+[conformita e contributi](docs/tecnica/conformita-proposta.md),
+[riproduzione](docs/tecnica/riproduzione-finale.md).
+Catalogo v2: 32 criteri; sintesi con 227 timer, 45 confronti appaiati e inventario
+3293 file. Dati essenziali e ingressi compatti in evaluation/final-results-v1,
+ricalcolabili offline; vecchie raccolte e fallimenti conservati. Cinque nuove
+riletture ledger identiche e sei metadati SaaS autentici salvati.
+
+La raccolta e conclusa; la proposta resta parziale per revisione umana del
+campione, pesi dei nodi, accepted/fallback applicativi, ThreatAgent separato
+e nodi runtime espliciti. Pesi/overhead/Bonus prima indicati come non misurati
+sono ora documentati entro i rispettivi confini. Restano stesura manuale della
+relazione e registrazione delle modifiche locali in commit; nessun commit/push
+eseguito. Le sezioni seguenti conservano gli stati storici.
+
+## Associazione delle spiegazioni corretta e collaudata: 13 novembre 2026
+
+Su autorizzazione dell'utente, implementato l'adattamento circoscritto nel
+chaincode Go esistente, esclusivamente sul repository ledger costa-thesis.
+Nuovo native_explanation.go applicato nel punto RankGraph: controlla topologia,
+nodi/label/candidate, archi orientati, prodotti (tolleranza assoluta 1e-5) e
+concordanza di tutti i cammini su una destinazione univoca. Nessun cambio a
+libgraph.so, algoritmo, score, ordine delle candidate, pesi, cammini o categorie.
+Le spiegazioni ambigue/invalide sono escluse dal ranking esposto e segnalate
+come unvalidated con motivo; restano integre nell'output originale.
+
+Per ogni nuovo ranking nativo, nella stessa transazione si conservano
+<graphKey>_native_output (JSON esatto) e <graphKey>_explanation_audit (metodo
+native-explanation-destination-v1 e digest), oltre a ranking e annotato.
+Lettura con il tool get_graph gia esistente, usando la chiave completa.
+Nessun nuovo endpoint, agente o servizio. Convenzione a candidata singola
+separata e invariata; elimina eventuali vecchie evidenze native su chiavi riusate.
+
+Nuova campagna congelata prima della raccolta: 30/30 prove reali e riletture,
+cinque originali/riordinati con tre repliche. Score e pesi identici nei 45
+confronti e identici a quelli del 12 novembre. Tutti i 60 cammini ora associati
+alla candidata raggiunta (prima 30/60): 15 spiegazioni riordinate riassociate,
+15 originali conservate. Verificati 30 digest originali e 60 commit VALID nei
+blocchi 89–148 con tutti i write set. Controllo live singola candidata separato
+confermato; nessuna nuova esecuzione completa CAMEL.
+
+Limiti distinti conservati: 12 against con prodotto positivo; 156/186
+occorrenze di candidate senza cammini. Solo 6/15 coppie hanno explanation
+identiche anche per label: nei casi 3–5 puo variare la scelta dei cammini o
+della candidata spiegata, pur rimanendo l'associazione verificata. Non si
+certifica invarianza dell'intero output o equivalenza al paper. Sensibilita
+ai pesi, overhead equivalente e ablation runtime non misurati.
+
+Diciassette test Go principali con sottocasi passati, inclusi i dieci output
+reali archiviati e i casi ambigui/malformati. Build offline dal repository
+montato in sola lettura. Immagine attiva argumentation-chaincode:explanation-20261113-r1;
+binario SHA 272f2780a2b83b019bd24e39680805355232244989e65f49b516597f8311ff92.
+Container precedente conservato per rollback, rete/ledger esistenti mantenuti.
+A fine benchmark nuovo binario attivo con ontologia Logback invariata; nessuna
+suite SaaS nello store live. Assurance SaaS ancora distinta dall'impronta reale.
+
+1.662 file precedenti protetti invariati, incluse evidenze del benchmark
+originale, Word e metadati; C1/C4-r2/C4-r3 riletti con record, provenance e
+ricevute identici. Framework full e due esterni costa-thesis, head invariati.
+Prossimo passo: sintesi finale delle metriche, confronti sostenibili, limiti e
+procedura dimostrativa. Non ampliare il lavoro per rendere identici tutti i cammini.
+
+[Sintesi versionata](docs/tecnica/correzione-spiegazioni-native.md),
+[implementazione e deployment](output/native-explanation-fix-20261113-r1/report.md),
+[nuovo benchmark](output/native-explanation-benchmark-20261113-r1/report.md),
+[verifica completa](output/native-explanation-benchmark-20261113-r1/verification.json).
+Le sezioni successive conservano i precedenti esiti, incluso il difetto ora
+corretto nell'output adattato; nessun dato storico e stato riscritto.
+
+## Benchmark nativo completato: 12 novembre 2026
+
+Eseguite 30/30 prove tecniche tramite MCP stdio/SaaS/Fabric: cinque coppie di
+grafi esistenti, tre repliche per originale e riordinato, 6–40 nodi. Protocollo,
+input e hash fissati prima della raccolta, nessun retry di scrittura o warm-up
+escluso. Raccoglitore di misura riusato dallo smoke e dalla sequenza del client;
+nessuna modifica del ranking o dei repository esterni, entrambi costa-thesis.
+
+Punteggi e pesi esattamente identici nei 45 confronti (30 fra repliche, 15 fra
+permutazioni); massimi stabili, con pareggi/tolleranza dichiarati. Verificati
+60 commit VALID nei blocchi 29–88 e relativi write set, 30/30 riletture da una
+nuova sessione dopo ripristino del container Logback originale. Ontologia del
+benchmark: client_final_ontology.owl originale, distinta dalla generata C1/C4;
+stesso binario e immagine immutabile, selezione temporanea senza reset Fabric.
+
+Nuovo limite osservato: gli score sono stabili, ma le spiegazioni non sono
+invarianti. I 30 cammini degli originali hanno destinazione coerente; i 30 dei
+riordinati sono associati a una candidata diversa da quella raggiunta. Archi e
+prodotti numerici validi 60/60; nessuna rimappatura per far passare il controllo.
+Dodici cammini against hanno prodotto positivo, limite gia noto. Solo 30/186
+occorrenze di candidate hanno explanation. Controllo completo: 15/15 originali
+passati, 0/15 riordinati. Nessuna patch al core, Graph.cpp non disponibile.
+
+Mediane RankGraph originali/riordinati: circa 122/121, 152/156, 135/135,
+181/190 e 266/294 ms; i valori precisi sono nella tabella del report. Tempi MCP
+comprendono OWL/core, REST e consenso: C++ puro e overhead off-chain/on-chain
+non isolati. Sensibilita ai pesi non valutata, API priva di pesi impostabili.
+Non sono run CAMEL, né una prova di accettazione semantica delle strategie.
+
+1.336 file protetti invariati, incluso codice, Word e metadati live; riletture
+C1/C4-r2/C4-r3 identiche per record, provenance e ricevute. Dodici test numerici
+del raccoglitore e Ruff passati. Nessuna suite SaaS nello store live. Risultati
+assistiti e inventario storico restano immutati. Prossimo lavoro: sintesi finale
+delle misure e dei confronti sostenibili, limiti e procedura dimostrativa;
+l'eventuale correzione del core resta distinta da questa campagna conclusa.
+
+[Report completo](output/native-ranking-benchmark-20261112-r1/report.md),
+[sintesi versionata](docs/tecnica/risultati-benchmark-ranking.md),
+[metriche e latenze](output/native-ranking-benchmark-20261112-r1/metrics.json),
+[verifiche](output/native-ranking-benchmark-20261112-r1/verification.json).
+Le sezioni successive conservano la cronologia precedente.
+
+## C4-r3 completato in un unico launcher: 12 novembre 2026
+
+L'ultimo tentativo integrale real/camel/pipeline e terminato con exit code 0,
+`dry_run_completed` e `shared_finalization=completed`. Tutti gli otto nodi
+del DAG originale C4-r3 sono `completed` nella stessa invocazione, senza
+riprese da checkpoint esterni. Durata osservata: 1224,254 s (20 min 24 s).
+I normali recuperi automatici CAMEL su qualita CTI e binding restano nel log.
+
+Usato il runner esistente in una nuova directory con timeout LLM 600 s,
+modello/context/output/temperatura invariati, fonti SDK originali e backend reali.
+Nessuna modifica dei componenti, della semantica o dei risultati per ottenere
+il successo. Framework full e repository esterni costa-thesis, head invariati.
+
+Nuovo commit nel blocco 28, validation_code=0, transaction ID
+`220b4df9cc71cbd8b85fd005a06b42443650016073f200a892342196c80c725c`.
+Riletture indipendenti MCP di record/provenance/ricevuta e grafi verificate;
+anche il rinnovo dopo rifiuto controllato 403 restituisce lo stesso record.
+Backup byte per byte dei tre metadati SaaS, 789 file precedenti e metadati
+live C1/C4-r2 invariati. Nessuna suite SaaS nello store live o reset Fabric.
+
+Esito di dominio `requires_prerequisites`, `selected_strategy_id=null`,
+nessuna remediation. Manca `maintenance_window`; il testo del prerequisito
+`package_upgrade capability` e inoltre trattato letteralmente come distinto
+dalla capacita `package_upgrade` disponibile. Questo limite lessicale resta
+visibile nei risultati. Tiny-ME: abduzione 38, contrazione 0, score 62.
+Ranking singola candidata con convenzione Bottalico, senza pesi BWAF calcolati.
+
+C1 e C4 hanno ora un launcher completo con finalizzazione/rilettura; C2/C3
+conservano gli assessment conclusi, con fasi native non applicabili.
+Il collaudo non sostituisce benchmark nativi, repliche o i restanti criteri
+scientifici della proposta. I tentativi falliti e la ripresa restano conservati.
+[Report C4-r3](output/c4-collaudo-20261112-r2/report.md) e
+[verifica completa](output/c4-collaudo-20261112-r2/verification.json).
+Le sezioni sotto descrivono la cronologia precedente, ora superata da C4-r3.
+
+## Ripresa C4 verificata: 12 novembre 2026
+
+Completata la finalizzazione C4-r2 tramite ripresa CAMEL dell'ultimo nodo:
+exit code 0, `dry_run_completed`, finalizzazione condivisa `completed`.
+Il launcher originale resta `failed` per APITimeoutError di Ollama, con sette
+nodi del DAG completati e finalizzazione gia registrata; il suo DAG non e stato
+riscritto. La ripresa riusa checkpoint, NativeFinalizationSession e agente esistenti,
+con timeout LLM 600 s invece di 180 s. Non e un nuovo launcher integrale riuscito.
+
+Commit originale conservato: blocco 25, validation_code=0, transaction ID
+`b5db2d62657d1c3d4931b51ef7efa254c12da1a8e594ff213ffaec782ef42639`.
+Record, provenance e ricevuta identici nella rilettura MCP indipendente; grafo
+originale coerente con il canonico, grafo annotato verificato. Anche il rinnovo
+client dopo rifiuto controllato 403 e la rilettura con nuova identita sono passati.
+
+Esito: `requires_prerequisites`, `selected_strategy_id=null`; manca la capacita
+operativa `maintenance_window`. Tiny-ME: abduzione 38, contrazione 0, score 62.
+Ranking della sola candidata con convenzione Bottalico, senza pesi BWAF calcolati.
+Nessuna remediation o estensione semantica. Durate separate: launcher fallito
+3385,390 s; ripresa 256,003 s. Condizioni locali e timeout conservati nei log.
+
+Salvati i tre metadati SaaS realmente scritti; verificati invariati 550 file
+precedenti, 164 file C4-r2 e i metadati live C1. Nessuna suite SaaS nello store
+live, reset Fabric, modifica dei componenti o cambio branch. Framework full;
+entrambi i repository esterni costa-thesis. Le misure del campione restano separate.
+
+[Report e limiti](output/c4-collaudo-20261112-r1/report.md),
+[verifica](output/c4-collaudo-20261112-r1/verification.json) e
+[copertura dei nodi tra launcher e ripresa](output/c4-collaudo-20261112-r1/case-stage-verification.json).
+Le sezioni successive conservano gli stati precedenti; una riuscita C4 in un
+unico launcher resta non dimostrata.
+
+## Metriche dei componenti: 12 novembre 2026
+
+Aggiornato al 12 novembre 2026. **Prima raccolta delle metriche dei componenti completata.**
+
+Eseguito il calcolo sul campione assistito v2 congelato, con ingressi separati
+dalle etichette. L'estrazione usa la funzione di produzione del gateway OTel
+identify(resource,record), non CAMEL/LangExtract. CTI: sedici nuove query via MCP
+al servizio reale 127.0.0.1:18043, pin del dataset e hash del motore verificati.
+Protocollo e hash del codice fissati prima delle predizioni; scoring successivo.
+
+Risultati: 7 TP, 1 FP, 3 FN; precisione 87,50%, recall 70%, F1 77,78%; documenti
+esatti 9/12. Quattro SDK originali: 4/4; otto derivati controllati: 5/8 documenti
+esatti, precisione 75%, recall 50%, F1 60%. Matching 13/16 (81,25%); versioni
+a tre classi 10/13 (76,92%), binarie 7/8 (87,50%). Zero errori tecnici in raccolta.
+Sei test delle formule e dei casi limite passati; frazioni e conteggi verificati
+indipendentemente. Nessun test SaaS o intervento sulla directory del servizio.
+
+Errori/disaccordi conservati: vendor E05 omesso; identita parziali E06/E12
+omesse; C04/C05 diventano not_vulnerable nel backend nonostante default unknown
+del riferimento; C11 alias non risolto; C15/C16 restano ambiguous invece di
+not_found. Queste ultime sono astensioni prudenti, non finding inventati.
+Matching diretto 12/13, casi di policy 1/3. Nessun caso eliminato a posteriori.
+
+Artefatti in output/component-metrics-20261112-r1/: risposte e audit per query,
+predizioni, protocollo, metriche JSON, CSV, report e manifest. Raccoglitore/scorer
+evaluation/run_metrics.py; test tests/test_evaluation_metrics.py. Nessuna etichetta,
+input gold, backend esterno, Word o archivio precedente modificato. Nessuna inferenza
+LLM, Tiny-ME, ranking o chiamata Fabric; C1/C4 restano nello stato precedente.
+Riferimento assistito e campione piccolo: corpus manuale umano, holdout cieco e
+generalizzazione statistica non dimostrati. Restano le altre misure della sezione 15.
+
+[Risultati e limiti](docs/tecnica/risultati-metriche-componenti.md),
+[report completo](output/component-metrics-20261112-r1/report.md),
+[metriche JSON](output/component-metrics-20261112-r1/metrics.json),
+[CSV sintetico](output/component-metrics-20261112-r1/metrics-summary.csv).
+
+## Revisione tecnica del campione: 12 novembre 2026
+
+L'utente ha chiesto di svolgere direttamente i controlli sulle annotazioni.
+Riesaminati i 28 casi: quattro sorgenti SDK originali, dodici ingressi di
+estrazione, righe e regole grezze delle tre CVE; hash completi dell'OWL da 5 GB
+e dell'indice SQLite nuovamente verificati. I 33 literal OWL/SQLite concordano.
+Verificati alias Maven, due identita letterali logback e vendor sintetico assente.
+
+Congelata `evaluation/annotated-sample-v2/`, con 33 file hashati, scheda compilata
+dall'assistente, rapporto caso per caso e manifest collegato alla v1 immutata.
+Nessuna etichetta o ingresso modificato. Chiariti C08/C11/C16: ambiguita sotto
+policy, alias documentato e vendor come vincolo; nessuna pretesa di organizzazioni
+realmente diverse. Le categorie descrivono la risoluzione, non matching.status
+letterale. Errori tecnici/risposte assenti/identita sbagliate non valgono come
+unknown corretto. Denominatori invariati: documenti 12, matching 16, versioni
+a tre classi 13, binarie 8; riportare anche i tre casi matching di policy separati.
+
+Campione pronto per uno studio controllato con riferimento assistito verificato
+sulle fonti. Non e una revisione umana indipendente, un blind holdout o un accordo
+tra annotatori; human_review_completed=false. Non dichiarare soddisfatto il requisito
+di annotazione manuale umana della proposta. Non chiedere all'utente di rifare la
+verifica tecnica gia delegata. Nessuna inferenza, misura o accesso ai servizi;
+restano da raccogliere le predizioni e calcolare le metriche. Backend, semantica
+C1, Word manuali e archivi precedenti invariati.
+
+[Protocollo v2](evaluation/annotated-sample-v2/README.md),
+[rapporto](evaluation/annotated-sample-v2/review-report.md),
+[scheda compilata](evaluation/annotated-sample-v2/review.csv),
+[manifest](evaluation/annotated-sample-v2/manifest.json).
+
+## Preparazione della bozza: 12 novembre 2026
+
+Preparata `evaluation/annotated-sample-v1/`: 12 documenti per l'estrazione
+(4 raccolte SDK originali, 8 variazioni sintetiche dichiarate), 10 entita gold
+proposte, 3 documenti negativi e 16 query CTI. Per la versione: 5 vulnerable,
+3 not_vulnerable, 5 unknown, 3 not_evaluable. Denominatori prefissati: matching
+16, accuracy versione a tre classi 13, binaria 8. Niente score o predizioni.
+
+Le annotazioni sono una bozza assistita da fonti, **non una revisione umana gia
+effettuata** e non un blind holdout: il disegno usa i casi diagnostici noti.
+Nessuna risposta dei servizi e usata per generare il gold. Verificato SHA del KG
+originale completo e del database; 33 campi grezzi OWL/SQLite concordano.
+Ingressi separati, puntatori ai literal, sorgenti copiate, `review.csv` e manifest
+con 31 file verificabili. I cinque log di una build non valgono come cinque
+osservazioni indipendenti; le variazioni sintetiche non sono nuovi run reali.
+
+Importante: per CVE-2026-1225 il default e unknown; versioni fuori dalle due
+regole esplicite non sono automaticamente negative. Un nome ambiguo o assente
+non produce una CVE negativa. Nessun matcher, evaluator, agente o servizio e
+stato eseguito; backend esterni, originali, esportazioni dell'8 novembre e Word
+manuali restano invariati. Prossimo passo: revisione umana e congelamento delle
+etichette in una nuova revisione approvata, poi raccolta degli output.
+
+[Protocollo e campione](evaluation/annotated-sample-v1/README.md),
+[annotazioni](evaluation/annotated-sample-v1/annotations.json),
+[scheda revisione](evaluation/annotated-sample-v1/review.csv),
+[manifest](evaluation/annotated-sample-v1/manifest.json),
+[preparazione/verifica offline](evaluation/prepare_annotated_sample.py).
+
+## Inventario delle metriche: 8 novembre 2026
+
+L'utente mantiene il limite semantico di C1 e passa alla valutazione finale della
+proposta, sezioni 15.1–15.5. Raccolta offline completata: 698 file univoci con
+SHA-256 in 14 gruppi, 32 voci di copertura, 30 durate esplicite, 9 eventi senza
+timer isolato e 42 controlli di integrita coerenti. Cinque tentativi Logback
+(tre launcher completati), due riprese della sola finalizzazione e cinque tentativi
+Log4j precedenti sono separati; nessuna media fra revisioni/casi differenti.
+
+La copertura contiene 8 voci disponibili entro limiti dichiarati, 14 parziali,
+6 mancanti, 3 coperte solo da test/mock e 1 non eseguita. Precisione, recall, F1,
+accuratezze e overhead blockchain restano non misurati; nessun valore inventato.
+Servono corpus annotato indipendente, repliche omogenee e confronti controllati.
+Nuovo raccoglitore offline standard library, nessun import degli agenti o contatto
+con servizi; catalogo versionato e JSON/CSV conservati in output. Nessuna modifica
+ai backend esterni, alle fonti dei run o ai Word manuali; nessun nuovo esperimento.
+
+[Guida e copertura](docs/tecnica/valutazione-metriche.md),
+[report corrente r2](output/metrics-inventory-20261108-r2/report.md),
+[manifest](output/metrics-inventory-20261108-r2/manifest.json),
+[catalogo](config/metrics-evidence.v1.json),
+[raccoglitore](evaluation/collect_inventory.py).
+La prima esportazione `output/metrics-inventory-20261108/` resta conservata;
+r2 aggiunge le osservazioni di decisione e usa il raccoglitore consolidato.
+
+## Stato C1 e collaudo precedente: 7 novembre 2026
 
 C1-r2 ha completato il launcher reale CAMEL/Ollama e tutti gli otto nodi del DAG
 con `dry_run_completed` e finalizzazione condivisa `completed`.

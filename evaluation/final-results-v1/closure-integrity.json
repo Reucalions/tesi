@@ -1,0 +1,30 @@
+{
+  "protected": {
+    "files": 2715,
+    "unchanged": true,
+    "differences": []
+  },
+  "source": {
+    "files": 280,
+    "unchanged": true,
+    "differences": []
+  },
+  "repositories": {
+    "/Users/reucalion/tesi": {
+      "branch": "full",
+      "head": "75d9fad6562f36903fe01e2e2f590b94146d0371"
+    },
+    "/Users/reucalion/Desktop/agent-based-cti-argumentation-pipeline": {
+      "branch": "costa-thesis",
+      "head": "3b483624286262f2e0ac94b4b950b904a5dc2ad4"
+    },
+    "/Users/reucalion/Desktop/semantic-cti-ledger-argumentation": {
+      "branch": "costa-thesis",
+      "head": "a3dab4a5def79dda356dd753aa34306e03ea346a"
+    }
+  },
+  "metadata_backups": {
+    "files": 6,
+    "unchanged": true
+  }
+}

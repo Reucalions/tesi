@@ -1,0 +1,16 @@
+{
+  "contract": "final-evaluation-consolidation-v1",
+  "as_of": "2026-11-13",
+  "offline": true,
+  "source_campaign": "output/final-evaluation-20261113-r1",
+  "consolidation": "consolidated-r2",
+  "component_cohort": "component-metrics-20261112-r1",
+  "native_cohort": "native-explanation-benchmark-20261113-r1",
+  "statistics": "n/min/median/max/sample SD per explicit cohort and timing boundary; signed paired differences; no p95 or significance tests",
+  "sampling": "All collected observations retained, no warmup exclusion, no failure relabeling",
+  "runtime_comparison": "Fixed artifact-boundary replay, one run per arm; not full CAMEL ablation",
+  "semantic_controls": "Baseline reflexivity and disjointness; not real asset mitigation acceptance",
+  "source_changes": "No product/core/library changes in this evaluation; existing native explanation adapter retained",
+  "human_reference_review": false,
+  "live_services_required_for_recalculation": false
+}

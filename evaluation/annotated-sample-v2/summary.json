@@ -1,0 +1,25 @@
+{
+  "extraction_documents": 12,
+  "original_runtime_builds": 4,
+  "original_sdk_documents": 4,
+  "controlled_derivative_documents": 8,
+  "gold_entities": 10,
+  "negative_extraction_documents": 3,
+  "matching_queries": 16,
+  "version_labels": {
+    "vulnerable": 5,
+    "not_vulnerable": 3,
+    "unknown": 5,
+    "not_evaluable": 3
+  },
+  "version_accuracy_3class_denominator": 13,
+  "version_accuracy_binary_denominator": 8,
+  "raw_owl_sqlite_fields_checked": 33,
+  "human_review_completed": false,
+  "predictions_collected": false,
+  "technical_review_completed": true,
+  "labels_changed": 0,
+  "extraction_policy_cases": 6,
+  "matching_policy_cases": 3,
+  "evaluation_ready_for_controlled_assisted_study": true
+}

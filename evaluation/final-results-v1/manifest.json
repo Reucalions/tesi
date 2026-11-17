@@ -1,0 +1,18 @@
+{
+  "README.md": "6a9e656f6386fabbd25e869136e65d8cce4f2c31d2ac6852afc5266c2e936ddf",
+  "case-outcomes.csv": "afd9dc109132206dee6aa6f6eb9cd3e22290ea552ed5fa69dc9742dcfa7de75c",
+  "closure-integrity.json": "89a213408078ca9263a0bb6d6345f833c85b900a14b3c229a1bf70d1bed73d86",
+  "comparisons.csv": "518409daacada3f86da7615a77b3ae86ade0a13ebc2a6549744a9ada1ae89eeb",
+  "coverage.csv": "9a999c4e5bdfcb5abdfd81a6d5ee7d9e7fba168b6e06bf1edab0a75bc50847f6",
+  "coverage.json": "0db909c557cab34daf51b7ac4bdbcad1bbe6feca0647a23966a516b964c58187",
+  "input-manifest.json": "269be64a56fc75aa7029c1633fc3daa1172f40a76978a703b4972ec2eb5be32a",
+  "inventory.csv": "34e40bf3793101072b25e6facba760628eb4bbbf7697654c8758411d3eb9f453",
+  "inventory.json": "3309955e542436fcd2ea4f054c9bd6443c5de5a515829bc872f2929333fe525f",
+  "paired-statistics.csv": "5153393a82b24eed4af2305b9af8ff76bb2d94c383428c08247d934b6f6b14c1",
+  "protocol.json": "ad101bfb4333c5695e12247e89267c90a718e2c8fc81a48a999d2e0a56f898ed",
+  "results.json": "81d6036cc30ea0407998c304ed1334fd73b43c8f12b69166fda20d139783de97",
+  "runtime-final.json": "24e52ac7cca7f0dc80abc5902cc8c538ebd149f83b69fd12aff130a53be27999",
+  "series.csv": "9dca60d7c4f8bf35e21a05d43fd53cbd431f7f7bec6aeff976f5be8adb242bec",
+  "source-inputs.tar.gz": "8f04c45da05d781488099b21a2ac985d95e8ddc3cd609ae1833f74f429c575ba",
+  "statistics.csv": "8bc46a347e38097ec8b0dc0c5ea5b2ac2ebdad022de4a36bf4c7a062f8b968c2"
+}

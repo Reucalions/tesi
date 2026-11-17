@@ -1,0 +1,90 @@
+cohort,metric,boundary,n,min,median,max,sample_sd
+artifact-replay-with-runtime,downstream_elapsed,Generator through finalization; no upstream LLM workers,1,205.54407345794607,205.54407345794607,205.54407345794607,
+artifact-replay-with-runtime,finalize_recommendation,Aggregate domain MCP call; finalization includes decision and PROV-O,1,0.116351,0.116351,0.116351,
+artifact-replay-with-runtime,get_decision,Aggregate domain MCP call; finalization includes decision and PROV-O,1,0.004163,0.004163,0.004163,
+artifact-replay-with-runtime,get_finalization,Aggregate domain MCP call; finalization includes decision and PROV-O,1,0.015823,0.015823,0.015823,
+artifact-replay-with-runtime,get_provenance,Aggregate domain MCP call; finalization includes decision and PROV-O,1,0.003881,0.003881,0.003881,
+artifact-replay-with-runtime,rank_remediations,Aggregate domain MCP call; finalization includes decision and PROV-O,1,0.375213,0.375213,0.375213,
+artifact-replay-with-runtime,validate_countermeasure,Aggregate domain MCP call; finalization includes decision and PROV-O,1,0.018692,0.018692,0.018692,
+artifact-replay-without-runtime,downstream_elapsed,Generator through finalization; no upstream LLM workers,1,209.07983029203024,209.07983029203024,209.07983029203024,
+artifact-replay-without-runtime,finalize_recommendation,Aggregate domain MCP call; finalization includes decision and PROV-O,1,0.128077,0.128077,0.128077,
+artifact-replay-without-runtime,get_decision,Aggregate domain MCP call; finalization includes decision and PROV-O,1,0.00557,0.00557,0.00557,
+artifact-replay-without-runtime,get_finalization,Aggregate domain MCP call; finalization includes decision and PROV-O,1,0.017766,0.017766,0.017766,
+artifact-replay-without-runtime,get_provenance,Aggregate domain MCP call; finalization includes decision and PROV-O,1,0.004644,0.004644,0.004644,
+artifact-replay-without-runtime,rank_remediations,Aggregate domain MCP call; finalization includes decision and PROV-O,1,0.363173,0.363173,0.363173,
+artifact-replay-without-runtime,validate_countermeasure,Aggregate domain MCP call; finalization includes decision and PROV-O,1,0.019473,0.019473,0.019473,
+baseline-direct-clash,AnalyzeOntology,REST evaluate of transient existing ontology; includes transport/reasoner,3,0.04830904200207442,0.05414483300410211,0.06957774993497878,0.010989307824349662
+full-launcher-C1-r2,assess_software,Recorded domain/gateway call; overlapping events must not be summed,1,0.11206,0.11206,0.11206,
+full-launcher-C1-r2,collect_supply_chain,Recorded domain/gateway call; overlapping events must not be summed,1,0.556913,0.556913,0.556913,
+full-launcher-C1-r2,collect_telemetry,Recorded domain/gateway call; overlapping events must not be summed,1,0.034799,0.034799,0.034799,
+full-launcher-C1-r2,end_to_end,Real CAMEL runner including teardown; archived SDK replay,1,1274.172,1274.172,1274.172,
+full-launcher-C1-r2,finalize_recommendation,Recorded domain/gateway call; overlapping events must not be summed,1,0.693981,0.693981,0.693981,
+full-launcher-C1-r2,get_decision,Recorded domain/gateway call; overlapping events must not be summed,1,0.024109,0.024109,0.024109,
+full-launcher-C1-r2,get_finalization,Recorded domain/gateway call; overlapping events must not be summed,1,0.132239,0.132239,0.132239,
+full-launcher-C1-r2,get_provenance,Recorded domain/gateway call; overlapping events must not be summed,1,0.024214,0.024214,0.024214,
+full-launcher-C1-r2,prepare_argumentation,Recorded domain/gateway call; overlapping events must not be summed,1,191.2890886659734,191.2890886659734,191.2890886659734,
+full-launcher-C1-r2,rank_remediations,Recorded domain/gateway call; overlapping events must not be summed,1,0.744415,0.744415,0.744415,
+full-launcher-C1-r2,validate_countermeasure,Recorded domain/gateway call; overlapping events must not be summed,1,0.302031,0.302031,0.302031,
+full-launcher-C2-r1,assess_software,Recorded domain/gateway call; overlapping events must not be summed,1,0.283373,0.283373,0.283373,
+full-launcher-C2-r1,collect_supply_chain,Recorded domain/gateway call; overlapping events must not be summed,1,0.561388,0.561388,0.561388,
+full-launcher-C2-r1,collect_telemetry,Recorded domain/gateway call; overlapping events must not be summed,1,0.036253,0.036253,0.036253,
+full-launcher-C2-r1,end_to_end,Real CAMEL runner including teardown; archived SDK replay,1,298.132,298.132,298.132,
+full-launcher-C3-r1,assess_software,Recorded domain/gateway call; overlapping events must not be summed,1,1.050447,1.050447,1.050447,
+full-launcher-C3-r1,collect_supply_chain,Recorded domain/gateway call; overlapping events must not be summed,1,0.614909,0.614909,0.614909,
+full-launcher-C3-r1,collect_telemetry,Recorded domain/gateway call; overlapping events must not be summed,1,0.022099,0.022099,0.022099,
+full-launcher-C3-r1,end_to_end,Real CAMEL runner including teardown; archived SDK replay,1,296.697,296.697,296.697,
+full-launcher-C4-r3,assess_software,Recorded domain/gateway call; overlapping events must not be summed,1,0.16613,0.16613,0.16613,
+full-launcher-C4-r3,collect_supply_chain,Recorded domain/gateway call; overlapping events must not be summed,1,0.494271,0.494271,0.494271,
+full-launcher-C4-r3,collect_telemetry,Recorded domain/gateway call; overlapping events must not be summed,1,0.023258,0.023258,0.023258,
+full-launcher-C4-r3,end_to_end,Real CAMEL runner including teardown; archived SDK replay,1,1224.254,1224.254,1224.254,
+full-launcher-C4-r3,finalize_recommendation,Recorded domain/gateway call; overlapping events must not be summed,1,0.677643,0.677643,0.677643,
+full-launcher-C4-r3,get_decision,Recorded domain/gateway call; overlapping events must not be summed,1,0.012174,0.012174,0.012174,
+full-launcher-C4-r3,get_finalization,Recorded domain/gateway call; overlapping events must not be summed,1,0.084434,0.084434,0.084434,
+full-launcher-C4-r3,get_provenance,Recorded domain/gateway call; overlapping events must not be summed,1,0.017767,0.017767,0.017767,
+full-launcher-C4-r3,prepare_argumentation,Recorded domain/gateway call; overlapping events must not be summed,1,195.24054912501015,195.24054912501015,195.24054912501015,
+full-launcher-C4-r3,rank_remediations,Recorded domain/gateway call; overlapping events must not be summed,1,1.256849,1.256849,1.256849,
+full-launcher-C4-r3,validate_countermeasure,Recorded domain/gateway call; overlapping events must not be summed,1,0.260106,0.260106,0.260106,
+generator-with-runtime,aln_projection,Existing function plus thin timer wrapper; graph phase includes KG lookup,1,102.02687104092911,102.02687104092911,102.02687104092911,
+generator-with-runtime,graph_build_and_kg_lookup,Existing function plus thin timer wrapper; graph phase includes KG lookup,1,8.54296212492045,8.54296212492045,8.54296212492045,
+generator-with-runtime,observed_asset_owl,Existing function plus thin timer wrapper; graph phase includes KG lookup,1,0.00032187497708946466,0.00032187497708946466,0.00032187497708946466,
+generator-without-runtime,aln_projection,Existing function plus thin timer wrapper; graph phase includes KG lookup,1,105.4986573329661,105.4986573329661,105.4986573329661,
+generator-without-runtime,graph_build_and_kg_lookup,Existing function plus thin timer wrapper; graph phase includes KG lookup,1,9.517913875053637,9.517913875053637,9.517913875053637,
+generator-without-runtime,observed_asset_owl,Existing function plus thin timer wrapper; graph phase includes KG lookup,1,0.0004136249190196395,0.0004136249190196395,0.0004136249190196395,
+isolated-telemetry-worker,collect_telemetry,HTTP replay gateway only; original SDK acquisition excluded,3,0.019959,0.027668,0.135874,0.06481287724673238
+isolated-telemetry-worker,worker_step,"Production worker step, real model/tools/publication; managers excluded; first load retained",3,56.668928166036494,57.370528333005495,71.08605770894792,8.128772079407401
+logback-abduction-bonus,AnalyzeOntology,REST evaluate of transient existing ontology; includes transport/reasoner,3,0.006861457950435579,0.0070415419759228826,0.07399924995843321,0.03871014122990794
+offchain-baseline-1,rank_graph,Same Go/native contract; in-memory state; excludes client/Fabric,6,0.032085458,0.032637166499999995,0.108770625,0.030540369041553442
+offchain-baseline-1,store_graph,Same Go/native contract; in-memory state; excludes client/Fabric,6,2.6791e-05,3.2312e-05,0.000963709,0.00038074601198734395
+offchain-baseline-2,rank_graph,Same Go/native contract; in-memory state; excludes client/Fabric,6,0.0575255,0.061767541499999995,0.072658875,0.00534543706778224
+offchain-baseline-2,store_graph,Same Go/native contract; in-memory state; excludes client/Fabric,6,3.8459e-05,4.2104e-05,4.8958e-05,3.6601326433159046e-06
+offchain-baseline-3,rank_graph,Same Go/native contract; in-memory state; excludes client/Fabric,6,0.043920209,0.0454454585,0.061064375,0.007453316178355871
+offchain-baseline-3,store_graph,Same Go/native contract; in-memory state; excludes client/Fabric,6,4.4875e-05,4.5896e-05,0.000883084,0.00034109980353536805
+offchain-baseline-4,rank_graph,Same Go/native contract; in-memory state; excludes client/Fabric,6,0.089522708,0.0925659795,0.09968075,0.00437285327752882
+offchain-baseline-4,store_graph,Same Go/native contract; in-memory state; excludes client/Fabric,6,9.0917e-05,9.6229e-05,0.00025975,6.68769042903951e-05
+offchain-baseline-5,rank_graph,Same Go/native contract; in-memory state; excludes client/Fabric,6,0.177391292,0.1963024585,0.206669375,0.013156620252242877
+offchain-baseline-5,store_graph,Same Go/native contract; in-memory state; excludes client/Fabric,6,0.000142417,0.000163458,0.00039725,9.814622763815224e-05
+onchain-baseline-1,rank_graph,"MCP call including client, transport, Fabric and contract",6,0.10868916695471853,0.11547299951780587,0.19051666697487235,0.03141168638717675
+onchain-baseline-1,store_graph,"MCP call including client, transport, Fabric and contract",6,0.06683737505227327,0.07401718746405095,0.3605374579783529,0.1179442841889516
+onchain-baseline-2,rank_graph,"MCP call including client, transport, Fabric and contract",6,0.14049691695254296,0.14506172947585583,0.15494000003673136,0.005070414556799846
+onchain-baseline-2,store_graph,"MCP call including client, transport, Fabric and contract",6,0.06785454193595797,0.07075700000859797,0.07938654196914285,0.0049151049961544055
+onchain-baseline-3,rank_graph,"MCP call including client, transport, Fabric and contract",6,0.12414858292322606,0.13158708304399624,0.13929179101251066,0.005577115431975532
+onchain-baseline-3,store_graph,"MCP call including client, transport, Fabric and contract",6,0.07076412497553974,0.07586206251289696,0.08255629194900393,0.00550331885959952
+onchain-baseline-4,rank_graph,"MCP call including client, transport, Fabric and contract",6,0.16562104201875627,0.18354818754596636,0.1950744999339804,0.011504152238754627
+onchain-baseline-4,store_graph,"MCP call including client, transport, Fabric and contract",6,0.07008491700980812,0.0744691879954189,0.09215879207476974,0.008030439762493558
+onchain-baseline-5,rank_graph,"MCP call including client, transport, Fabric and contract",6,0.271430250024423,0.29005606251303107,0.31049674993846565,0.01936953857055639
+onchain-baseline-5,store_graph,"MCP call including client, transport, Fabric and contract",6,0.07058208400849253,0.07285722898086533,0.07800249999854714,0.002948732982492506
+rest-baseline-1,invoke,Same REST client and RankGraph; evaluate vs endorse/submit/commit,3,0.11163941700942814,0.11476608295924962,0.11479499994311482,0.0018135866767772393
+rest-baseline-1,query,Same REST client and RankGraph; evaluate vs endorse/submit/commit,3,0.042653625016100705,0.045855000033043325,0.11256649997085333,0.039472528654728986
+rest-baseline-2,invoke,Same REST client and RankGraph; evaluate vs endorse/submit/commit,3,0.13791675004176795,0.13814862503204495,0.1445818330394104,0.0037829279366343046
+rest-baseline-2,query,Same REST client and RankGraph; evaluate vs endorse/submit/commit,3,0.07355529104825109,0.07395970798097551,0.07633783388882875,0.0015034172490655555
+rest-baseline-3,invoke,Same REST client and RankGraph; evaluate vs endorse/submit/commit,3,0.11659233295358717,0.12135137489531189,0.13048862491268665,0.007062161476201208
+rest-baseline-3,query,Same REST client and RankGraph; evaluate vs endorse/submit/commit,3,0.053626167005859315,0.05590345896780491,0.06002404203172773,0.003242891413365044
+rest-baseline-4,invoke,Same REST client and RankGraph; evaluate vs endorse/submit/commit,3,0.1731538330204785,0.17451062495820224,0.17566145793534815,0.0012552213362082005
+rest-baseline-4,query,Same REST client and RankGraph; evaluate vs endorse/submit/commit,3,0.10271649993956089,0.10932533408049494,0.1115503340261057,0.004594633429864026
+rest-baseline-5,invoke,Same REST client and RankGraph; evaluate vs endorse/submit/commit,3,0.26749516697600484,0.2772629999089986,0.2804598330985755,0.006754169950465028
+rest-baseline-5,query,Same REST client and RankGraph; evaluate vs endorse/submit/commit,3,0.2054670830257237,0.20695695898029953,0.20797037496231496,0.0012591804763701416
+weight-attack-half,compute_rank,Native ComputeRank including logging; excludes ontology/graph load,3,0.02727175,0.029300208,0.039882083,0.0067714008735794825
+weight-attack-stronger,compute_rank,Native ComputeRank including logging; excludes ontology/graph load,3,0.031244959,0.031724958,0.036170542,0.0027158480575732395
+weight-baseline,compute_rank,Native ComputeRank including logging; excludes ontology/graph load,3,0.029122875,0.032873375,0.043154375,0.007264619782434132
+weight-support-half,compute_rank,Native ComputeRank including logging; excludes ontology/graph load,3,0.031761375,0.037339,0.040001083,0.004204944994978688
+weight-support-stronger,compute_rank,Native ComputeRank including logging; excludes ontology/graph load,3,0.032341208,0.033259917,0.0360395,0.001925593916944155

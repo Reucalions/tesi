@@ -1,0 +1,139 @@
+{
+  "database": "/Users/reucalion/Desktop/agent-based-cti-argumentation-pipeline/app/data/cve2owl_20260523_143950.affected.sqlite",
+  "database_sha256": "e3566009408385c7aea7901a9e6499132f0ae4bb07ccbd80d22e2171e5f7990c",
+  "access": "sqlite3 mode=ro, query_only; raw rows, no matcher/evaluator imports",
+  "products": [
+    {
+      "id": 542283,
+      "cve_id": "CVE-2025-68161",
+      "container_kind": "cna",
+      "adp_index": null,
+      "json_path": "containers.cna.affected[0]",
+      "affected_iri": "CVE-2025-68161_Containers_Cna_Affected",
+      "vendor": "Apache Software Foundation",
+      "product": "Apache Log4j Core",
+      "collection_url": "https://repo.maven.apache.org/maven2",
+      "package_name": "org.apache.logging.log4j:log4j-core",
+      "default_status": "unaffected",
+      "repo": null,
+      "normalized_vendor": "apache software foundation",
+      "normalized_product": "apache log4j core",
+      "normalized_package_name": "org apache logging log4j log4j core"
+    },
+    {
+      "id": 552657,
+      "cve_id": "CVE-2026-1225",
+      "container_kind": "cna",
+      "adp_index": null,
+      "json_path": "containers.cna.affected[0]",
+      "affected_iri": "CVE-2026-1225_Containers_Cna_Affected",
+      "vendor": "QOS.CH Sarl",
+      "product": "Logback-core",
+      "collection_url": null,
+      "package_name": null,
+      "default_status": "unknown",
+      "repo": null,
+      "normalized_vendor": "qos ch sarl",
+      "normalized_product": "logback core",
+      "normalized_package_name": null
+    },
+    {
+      "id": 572766,
+      "cve_id": "CVE-2026-34477",
+      "container_kind": "cna",
+      "adp_index": null,
+      "json_path": "containers.cna.affected[0]",
+      "affected_iri": "CVE-2026-34477_Containers_Cna_Affected",
+      "vendor": "Apache Software Foundation",
+      "product": "Apache Log4j Core",
+      "collection_url": "https://repo.maven.apache.org/maven2",
+      "package_name": "org.apache.logging.log4j:log4j-core",
+      "default_status": "unaffected",
+      "repo": null,
+      "normalized_vendor": "apache software foundation",
+      "normalized_product": "apache log4j core",
+      "normalized_package_name": "org apache logging log4j log4j core"
+    }
+  ],
+  "versions": [
+    {
+      "id": 1033125,
+      "affected_product_id": 542283,
+      "json_path": "containers.cna.affected[0].versions[0]",
+      "version_iri": "CVE-2025-68161_Containers_Cna_Affected_Versions_0",
+      "version": "2.0-beta9",
+      "status": "affected",
+      "version_type": "maven",
+      "less_than": "2.25.3",
+      "less_than_or_equal": null
+    },
+    {
+      "id": 1033126,
+      "affected_product_id": 542283,
+      "json_path": "containers.cna.affected[0].versions[1]",
+      "version_iri": "CVE-2025-68161_Containers_Cna_Affected_Versions_1",
+      "version": "3.0.0-alpha1",
+      "status": "affected",
+      "version_type": "maven",
+      "less_than": null,
+      "less_than_or_equal": "3.0.0-beta3"
+    },
+    {
+      "id": 1052835,
+      "affected_product_id": 552657,
+      "json_path": "containers.cna.affected[0].versions[0]",
+      "version_iri": "CVE-2026-1225_Containers_Cna_Affected_Versions_0",
+      "version": "0.9.20",
+      "status": "affected",
+      "version_type": "maven",
+      "less_than": null,
+      "less_than_or_equal": "1.5.24"
+    },
+    {
+      "id": 1052836,
+      "affected_product_id": 552657,
+      "json_path": "containers.cna.affected[0].versions[1]",
+      "version_iri": "CVE-2026-1225_Containers_Cna_Affected_Versions_1",
+      "version": "1.5.25",
+      "status": "unaffected",
+      "version_type": null,
+      "less_than": null,
+      "less_than_or_equal": null
+    },
+    {
+      "id": 1108903,
+      "affected_product_id": 572766,
+      "json_path": "containers.cna.affected[0].versions[0]",
+      "version_iri": "CVE-2026-34477_Containers_Cna_Affected_Versions_0",
+      "version": "2.12.0",
+      "status": "affected",
+      "version_type": "maven",
+      "less_than": "2.25.4",
+      "less_than_or_equal": null
+    },
+    {
+      "id": 1108904,
+      "affected_product_id": 572766,
+      "json_path": "containers.cna.affected[0].versions[1]",
+      "version_iri": "CVE-2026-34477_Containers_Cna_Affected_Versions_1",
+      "version": "3.0.0-alpha1",
+      "status": "affected",
+      "version_type": "maven",
+      "less_than": null,
+      "less_than_or_equal": "3.0.0-beta3"
+    }
+  ],
+  "version_changes": [],
+  "generic_logback_identities": [
+    {
+      "vendor": "QOS.CH Sarl",
+      "product": "logback"
+    },
+    {
+      "vendor": "QOS.ch",
+      "product": "logback"
+    }
+  ],
+  "unlisted_exact_product_count": 0,
+  "wrong_vendor_exact_identity_count": 0
+}

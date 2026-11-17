@@ -1,0 +1,233 @@
+[
+  {
+    "table_id": 542283,
+    "individual": "CVE-2025-68161_Containers_Cna_Affected",
+    "field": "vendor",
+    "value": "Apache Software Foundation",
+    "owl_line": 40270435
+  },
+  {
+    "table_id": 542283,
+    "individual": "CVE-2025-68161_Containers_Cna_Affected",
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "owl_line": 40270434
+  },
+  {
+    "table_id": 542283,
+    "individual": "CVE-2025-68161_Containers_Cna_Affected",
+    "field": "package_name",
+    "value": "org.apache.logging.log4j:log4j-core",
+    "owl_line": 40270432
+  },
+  {
+    "table_id": 542283,
+    "individual": "CVE-2025-68161_Containers_Cna_Affected",
+    "field": "default_status",
+    "value": "unaffected",
+    "owl_line": 40270431
+  },
+  {
+    "table_id": 552657,
+    "individual": "CVE-2026-1225_Containers_Cna_Affected",
+    "field": "vendor",
+    "value": "QOS.CH Sarl",
+    "owl_line": 40985194
+  },
+  {
+    "table_id": 552657,
+    "individual": "CVE-2026-1225_Containers_Cna_Affected",
+    "field": "product",
+    "value": "Logback-core",
+    "owl_line": 40985193
+  },
+  {
+    "table_id": 552657,
+    "individual": "CVE-2026-1225_Containers_Cna_Affected",
+    "field": "default_status",
+    "value": "unknown",
+    "owl_line": 40985189
+  },
+  {
+    "table_id": 572766,
+    "individual": "CVE-2026-34477_Containers_Cna_Affected",
+    "field": "vendor",
+    "value": "Apache Software Foundation",
+    "owl_line": 42226150
+  },
+  {
+    "table_id": 572766,
+    "individual": "CVE-2026-34477_Containers_Cna_Affected",
+    "field": "product",
+    "value": "Apache Log4j Core",
+    "owl_line": 42226149
+  },
+  {
+    "table_id": 572766,
+    "individual": "CVE-2026-34477_Containers_Cna_Affected",
+    "field": "package_name",
+    "value": "org.apache.logging.log4j:log4j-core",
+    "owl_line": 42226147
+  },
+  {
+    "table_id": 572766,
+    "individual": "CVE-2026-34477_Containers_Cna_Affected",
+    "field": "default_status",
+    "value": "unaffected",
+    "owl_line": 42226146
+  },
+  {
+    "table_id": 1033125,
+    "individual": "CVE-2025-68161_Containers_Cna_Affected_Versions_0",
+    "field": "version",
+    "value": "2.0-beta9",
+    "owl_line": 40270438
+  },
+  {
+    "table_id": 1033125,
+    "individual": "CVE-2025-68161_Containers_Cna_Affected_Versions_0",
+    "field": "status",
+    "value": "affected",
+    "owl_line": 40270437
+  },
+  {
+    "table_id": 1033125,
+    "individual": "CVE-2025-68161_Containers_Cna_Affected_Versions_0",
+    "field": "version_type",
+    "value": "maven",
+    "owl_line": 40270439
+  },
+  {
+    "table_id": 1033125,
+    "individual": "CVE-2025-68161_Containers_Cna_Affected_Versions_0",
+    "field": "less_than",
+    "value": "2.25.3",
+    "owl_line": 40270436
+  },
+  {
+    "table_id": 1033126,
+    "individual": "CVE-2025-68161_Containers_Cna_Affected_Versions_1",
+    "field": "version",
+    "value": "3.0.0-alpha1",
+    "owl_line": 40270443
+  },
+  {
+    "table_id": 1033126,
+    "individual": "CVE-2025-68161_Containers_Cna_Affected_Versions_1",
+    "field": "status",
+    "value": "affected",
+    "owl_line": 40270442
+  },
+  {
+    "table_id": 1033126,
+    "individual": "CVE-2025-68161_Containers_Cna_Affected_Versions_1",
+    "field": "version_type",
+    "value": "maven",
+    "owl_line": 40270444
+  },
+  {
+    "table_id": 1033126,
+    "individual": "CVE-2025-68161_Containers_Cna_Affected_Versions_1",
+    "field": "less_than_or_equal",
+    "value": "3.0.0-beta3",
+    "owl_line": 40270441
+  },
+  {
+    "table_id": 1052835,
+    "individual": "CVE-2026-1225_Containers_Cna_Affected_Versions_0",
+    "field": "version",
+    "value": "0.9.20",
+    "owl_line": 40985197
+  },
+  {
+    "table_id": 1052835,
+    "individual": "CVE-2026-1225_Containers_Cna_Affected_Versions_0",
+    "field": "status",
+    "value": "affected",
+    "owl_line": 40985196
+  },
+  {
+    "table_id": 1052835,
+    "individual": "CVE-2026-1225_Containers_Cna_Affected_Versions_0",
+    "field": "version_type",
+    "value": "maven",
+    "owl_line": 40985198
+  },
+  {
+    "table_id": 1052835,
+    "individual": "CVE-2026-1225_Containers_Cna_Affected_Versions_0",
+    "field": "less_than_or_equal",
+    "value": "1.5.24",
+    "owl_line": 40985195
+  },
+  {
+    "table_id": 1052836,
+    "individual": "CVE-2026-1225_Containers_Cna_Affected_Versions_1",
+    "field": "version",
+    "value": "1.5.25",
+    "owl_line": 40985201
+  },
+  {
+    "table_id": 1052836,
+    "individual": "CVE-2026-1225_Containers_Cna_Affected_Versions_1",
+    "field": "status",
+    "value": "unaffected",
+    "owl_line": 40985200
+  },
+  {
+    "table_id": 1108903,
+    "individual": "CVE-2026-34477_Containers_Cna_Affected_Versions_0",
+    "field": "version",
+    "value": "2.12.0",
+    "owl_line": 42226153
+  },
+  {
+    "table_id": 1108903,
+    "individual": "CVE-2026-34477_Containers_Cna_Affected_Versions_0",
+    "field": "status",
+    "value": "affected",
+    "owl_line": 42226152
+  },
+  {
+    "table_id": 1108903,
+    "individual": "CVE-2026-34477_Containers_Cna_Affected_Versions_0",
+    "field": "version_type",
+    "value": "maven",
+    "owl_line": 42226154
+  },
+  {
+    "table_id": 1108903,
+    "individual": "CVE-2026-34477_Containers_Cna_Affected_Versions_0",
+    "field": "less_than",
+    "value": "2.25.4",
+    "owl_line": 42226151
+  },
+  {
+    "table_id": 1108904,
+    "individual": "CVE-2026-34477_Containers_Cna_Affected_Versions_1",
+    "field": "version",
+    "value": "3.0.0-alpha1",
+    "owl_line": 42226158
+  },
+  {
+    "table_id": 1108904,
+    "individual": "CVE-2026-34477_Containers_Cna_Affected_Versions_1",
+    "field": "status",
+    "value": "affected",
+    "owl_line": 42226157
+  },
+  {
+    "table_id": 1108904,
+    "individual": "CVE-2026-34477_Containers_Cna_Affected_Versions_1",
+    "field": "version_type",
+    "value": "maven",
+    "owl_line": 42226159
+  },
+  {
+    "table_id": 1108904,
+    "individual": "CVE-2026-34477_Containers_Cna_Affected_Versions_1",
+    "field": "less_than_or_equal",
+    "value": "3.0.0-beta3",
+    "owl_line": 42226156
+  }
+]

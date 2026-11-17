@@ -1,0 +1,1866 @@
+{
+  "metadata": {
+    "institution": "POLITECNICO DI BARI",
+    "course": "Information Systems Design and Big Data",
+    "professor": "Saverio Ieva",
+    "author": "Alessandro Costa",
+    "title": "Cyber Threat Intelligence spiegabile",
+    "subtitle": "Progettazione, realizzazione e valutazione di un’architettura multi-agente con servizi semantici e ledger distribuito",
+    "font": "PT Sans",
+    "max_pages": 30,
+    "semantic_example": "C1: complete archived application run; source data verified separately"
+  },
+  "pages": [
+    {
+      "title": "Frontespizio",
+      "blocks": []
+    },
+    {
+      "title": "Sommario",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Il lavoro presenta un prototipo di Cyber Threat Intelligence che integra osservabilità applicativa, collaborazione tra agenti, rappresentazione semantica delle vulnerabilità e registrazione verificabile delle decisioni. L’obiettivo è trasformare evidenze software eterogenee in raccomandazioni motivate, mantenendo distinta l’acquisizione dei dati dalla formulazione delle proposte e dalla loro validazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "La soluzione comprende una configurazione mockup, destinata alla verifica dei contratti e dei percorsi decisionali, e una configurazione completa collegata a servizi effettivi. Il framework CAMEL coordina gli agenti, mentre i backend eseguono ricerca CTI, generazione ontologica, ranking argomentativo, ragionamento Tiny-ME e persistenza su Hyperledger Fabric. Le due configurazioni sono selezionabili mediante un’opzione della stessa applicazione. Un caso completo collega esplicitamente dati osservati, asserzioni OWL, descrizioni ALN, grafo e ipotesi del reasoner fino alla finalizzazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "La valutazione distingue prove controllate del mockup, misure dei componenti, casi applicativi completi e confronti del motore nativo. I risultati attestano la coerenza dei punteggi nei confronti di riordinamento e ripetizione, la persistenza delle evidenze e il completamento dei percorsi applicativi valutabili. Rimangono limiti nella copertura della conoscenza, nella caratterizzazione delle contromisure e nella rappresentazione del contesto runtime. Il sistema produce raccomandazioni in esecuzione simulata, senza applicare modifiche agli ambienti osservati."
+        },
+        {
+          "type": "heading",
+          "text": "Articolazione del report"
+        },
+        {
+          "type": "table",
+          "caption": null,
+          "headers": [
+            "Sezione",
+            "Contenuto",
+            "Pagina"
+          ],
+          "rows": [
+            [
+              "1",
+              "Introduzione e obiettivi",
+              "3"
+            ],
+            [
+              "2",
+              "Problema e soluzione proposta",
+              "4"
+            ],
+            [
+              "3",
+              "Realizzazione e valutazione del mockup",
+              "5"
+            ],
+            [
+              "4",
+              "Realizzazione dell’architettura completa",
+              "8"
+            ],
+            [
+              "5",
+              "Caso di studio: una run completa",
+              "16"
+            ],
+            [
+              "6",
+              "Risultati, metriche e analisi critica",
+              "21"
+            ],
+            [
+              "7",
+              "Conclusioni, limiti e sviluppi futuri",
+              "28"
+            ],
+            [
+              "",
+              "Riferimenti bibliografici",
+              "29"
+            ]
+          ],
+          "widths": [
+            0.12,
+            0.75,
+            0.13
+          ]
+        }
+      ]
+    },
+    {
+      "title": "1. Introduzione",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "La valutazione della sicurezza del software richiede di correlare informazioni che descrivono aspetti differenti dello stesso sistema: componenti effettivamente osservati, dipendenze dichiarate, vulnerabilità note, condizioni di applicabilità e possibilità operative di intervento. La sola presenza di una corrispondenza tra un nome di prodotto e una voce CTI non dimostra né la sfruttabilità di una vulnerabilità né l’adeguatezza di una mitigazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "L’impiego di modelli linguistici introduce capacità di interpretazione e coordinamento, ma rende necessario delimitare quali affermazioni provengano dalle fonti e quali costituiscano proposte. Analogamente, la registrazione su un ledger può rendere verificabile l’integrità di una decisione, senza dimostrarne automaticamente la correttezza semantica. Il problema progettuale consiste quindi nel collegare osservazione, ragionamento e tracciabilità attraverso contratti espliciti."
+        },
+        {
+          "type": "heading",
+          "text": "1.1 Obiettivi e domande di valutazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il prototipo persegue tre obiettivi: preservare l’identità delle evidenze durante il passaggio tra agenti e servizi; delegare ranking e validazione a componenti specialistici riutilizzabili; conservare la decisione con la relativa provenienza e con riscontri di persistenza. Le domande sperimentali riguardano la correttezza dell’estrazione e del matching, la stabilità del ranking, il ruolo della validazione rispetto alla proposta iniziale e il costo delle operazioni distribuite."
+        },
+        {
+          "type": "paragraph",
+          "text": "La collaborazione è implementata mediante agenti con ruoli e strumenti distinti, coordinati dal framework CAMEL [1]. I controlli deterministici verificano pubblicazioni, riferimenti e transizioni di stato. Questa separazione evita che un riepilogo testuale del modello sostituisca un risultato strutturato o che un guasto di servizio venga presentato come un giudizio di sicurezza."
+        },
+        {
+          "type": "heading",
+          "text": "1.2 Perimetro scientifico"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’elaborazione utilizza esportazioni di telemetria e inventari controllati. Non si rivendicano proprietà di funzionamento in tempo reale, copertura generale delle minacce o mitigazione autonoma. Il risultato atteso è una raccomandazione verificabile, oppure un’astensione motivata quando le informazioni non consentono una scelta. Il confronto fra mockup e architettura completa riguarda la sostituzione dei servizi mantenendo le responsabilità del sistema, non l’equivalenza numerica tra un ranking dimostrativo e un motore argomentativo nativo."
+        }
+      ]
+    },
+    {
+      "title": "2. Problema e soluzione proposta",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "2.1 Dall’evidenza alla decisione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un evento applicativo può riportare un nome software senza identificare univocamente il prodotto, la versione o il pacchetto della distribuzione. Una distinta dei componenti descrive dipendenze dichiarate, ma non prova che siano state eseguite. Un advisory può riguardare una versione upstream senza considerare correzioni distribuite mediante backport. Il sistema deve pertanto mantenere separati osservazione, inventario, identità del prodotto, applicabilità della vulnerabilità e fattibilità della contromisura."
+        },
+        {
+          "type": "paragraph",
+          "text": "La soluzione adotta un flusso ibrido. Gli agenti acquisiscono e organizzano informazioni e proposte; moduli deterministici generano asserzioni OWL e grafi; i servizi specialistici calcolano ranking e valutazioni semantiche; un livello di selezione combina gli esiti con i vincoli operativi. Le identità degli oggetti e i digest delle evidenze collegano l’intero percorso."
+        },
+        {
+          "type": "heading",
+          "text": "2.2 Framework e patrimonio software riutilizzato"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il patrimonio di partenza comprende due raccolte software distinte: una pipeline CTI agentica, con estrazione, accesso alla conoscenza e generazione semantica; un insieme di servizi semantici e di argomentazione basati su un ledger distribuito. Le funzionalità sono state ispezionate e integrate selettivamente. Il loro riuso non implica l’impiego di ogni modulo presente: la generazione canonica adottata è deterministica, mentre l’inferenza linguistica è affidata agli agenti CAMEL."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 1. Riuso e contributi di integrazione.",
+          "headers": [
+            "Risorsa di partenza",
+            "Funzione riutilizzata",
+            "Contributo realizzato"
+          ],
+          "rows": [
+            [
+              "Pipeline CTI",
+              "Ricerca sul KG, costruttori OWL e grafo, proiezione ALN",
+              "Contratti canonici, verifica delle fonti e raccordo agli agenti"
+            ],
+            [
+              "Servizi semantici e ledger",
+              "Tiny-ME, ranking nativo, contratti Fabric e accesso applicativo",
+              "Integrazione MCP, controlli degli esiti e finalizzazione condivisa"
+            ],
+            [
+              "CAMEL e inferenza locale",
+              "Agenti, strumenti e coordinamento",
+              "Ruoli vincolati, pubblicazioni controllate e dipendenze esplicite"
+            ],
+            [
+              "Standard di evidenza",
+              "OpenTelemetry, CycloneDX, OWL e PROV-O",
+              "Correlazione delle fonti e conservazione della provenienza"
+            ]
+          ],
+          "widths": [
+            0.23,
+            0.34,
+            0.43
+          ],
+          "metric_table_id": 1
+        },
+        {
+          "type": "paragraph",
+          "text": "La novità progettuale risiede nel raccordo verificabile tra componenti, nella separazione degli esiti semantici e operativi e nella conservazione delle evidenze. Non viene introdotta una nuova semantica matematica di ranking."
+        }
+      ]
+    },
+    {
+      "title": "3. Realizzazione del mockup",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "3.1 Architettura e responsabilità"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il mockup implementa quattro ruoli: TelemetryAgent costruisce l’evidenza degli asset; VulnerabilityAgent interroga una sorgente CTI controllata; CountermeasureAgent propone strategie; StrategicAgent richiede grafo, ranking e validazioni, quindi pubblica la decisione e la provenienza. Il passaggio dei dati avviene attraverso una sessione di artefatti strutturati, distinta dalle memorie conversazionali degli agenti."
+        },
+        {
+          "type": "figure",
+          "name": "architettura-mockup",
+          "caption": "Figura 1. Architettura del mockup. Le frecce rappresentano dipendenze informative; i servizi strategici sono simulati.",
+          "height": 225
+        },
+        {
+          "type": "paragraph",
+          "text": "L’orchestrazione supporta sia esecuzioni con dati prefissati, prive di inferenza, sia esecuzioni CAMEL con un modello locale Qwen erogato da Ollama [12]. Le prime isolano contratti e regole decisionali; le seconde includono formulazione delle proposte, uso degli strumenti e recuperi del coordinatore."
+        },
+        {
+          "type": "paragraph",
+          "text": "I backend simulati di lookup, ranking, validazione e provenienza possono essere richiamati localmente o tramite MCP. Il trasporto remoto consente di verificare serializzazione, discovery e propagazione degli errori, ma non trasforma il servizio simulato in un motore semantico effettivo. Le spiegazioni autorevoli sono derivate dagli artefatti validati; il commento libero del modello rimane riconoscibile come contenuto non verificato."
+        }
+      ]
+    },
+    {
+      "title": "3.2 Contratti, ranking e selezione nel mockup",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Gli oggetti scambiati sono validati mediante Pydantic [11]. La sessione verifica anche proprietà trasversali: corrispondenza tra software e osservazione CTI, appartenenza delle strategie alla CVE, presenza delle candidate nel grafo, coerenza dell’ordine di validazione e compatibilità tra decisione finale e risultati degli strumenti. I dati invalidi non alimentano la cache e non autorizzano la pubblicazione di un esito di dominio."
+        },
+        {
+          "type": "heading",
+          "text": "Regola argomentativa dimostrativa"
+        },
+        {
+          "type": "paragraph",
+          "text": "Per ciascuna strategia il grafo simulato comprende un contributo di beneficio e uno di impatto operativo. A partire da un valore iniziale pari a 0,5, il ranking usa la regola seguente, dove B e I sono stime comprese tra zero e uno:"
+        },
+        {
+          "type": "note",
+          "text": "score(s) = clamp(0,5 + 0,5 B(s) − 0,5 I(s), 0, 1)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Con beneficio 0,95 e impatto 0,20 si ottiene 0,875. La formula è una scelta dimostrativa del prototipo: non deriva dal motore nativo, non costituisce un risultato empirico e non esprime una probabilità di successo. Il confronto teorico con i Bipolar Weighted Argumentation Frameworks richiede di distinguere aggregazione e influenza [2]."
+        },
+        {
+          "type": "heading",
+          "text": "Sequenza degli strumenti ed esempio di fallback"
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 2. Esempio funzionale delle chiamate strategiche.",
+          "headers": [
+            "Operazione",
+            "Informazione trasmessa",
+            "Riscontro atteso"
+          ],
+          "rows": [
+            [
+              "Costruzione del grafo",
+              "Candidate e stime di beneficio/impatto",
+              "Nodi e archi riferiti alle proposte effettive"
+            ],
+            [
+              "Ranking",
+              "Grafo validato",
+              "Ordinamento e punteggi del backend mock"
+            ],
+            [
+              "Validazione dell’upgrade",
+              "Strategia, capacità e divieti",
+              "Rifiuto se manca la manutenzione"
+            ],
+            [
+              "Validazione dell’alternativa",
+              "Successiva candidata nel ranking",
+              "Accettazione se i requisiti sono soddisfatti"
+            ],
+            [
+              "Decisione e provenienza",
+              "Esiti e fonti utilizzate",
+              "Prima candidata accettata oppure astensione"
+            ]
+          ],
+          "widths": [
+            0.27,
+            0.38,
+            0.35
+          ],
+          "metric_table_id": 2
+        },
+        {
+          "type": "paragraph",
+          "text": "Un guasto tecnico interrompe il percorso: non equivale a una contromisura rifiutata. Se tutte le proposte violano la policy, l’esito indica assenza di strategie valide. Se manca copertura CTI, il sistema dichiara evidenza insufficiente, senza concludere che il software sia sicuro."
+        }
+      ]
+    },
+    {
+      "title": "3.3 Casi controllati e risultati del mockup",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "La valutazione del mockup comprende quattro scenari, esercitati con dati prefissati e con due esecuzioni indipendenti del modello per scenario. Il caso nominale usa un componente Log4j con capacità operative disponibili; gli altri casi isolano rispettivamente la manutenzione assente, il divieto delle azioni e la mancata copertura del lookup."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 3. Esiti dei quattro scenari simulati.",
+          "headers": [
+            "Scenario",
+            "Dati prefissati",
+            "Agenti con inferenza locale"
+          ],
+          "rows": [
+            [
+              "Nominale",
+              "Aggiornamento selezionato",
+              "Aggiornamento selezionato in entrambe le esecuzioni"
+            ],
+            [
+              "Manutenzione assente",
+              "Upgrade rifiutato; isolamento selezionato",
+              "Upgrade rifiutato; monitoraggio selezionato in entrambe"
+            ],
+            [
+              "Azioni vietate",
+              "Nessuna strategia valida",
+              "Nessuna strategia valida in entrambe"
+            ],
+            [
+              "Lookup non supportato",
+              "Evidenza insufficiente",
+              "Evidenza insufficiente in entrambe"
+            ]
+          ],
+          "widths": [
+            0.24,
+            0.35,
+            0.41
+          ],
+          "metric_table_id": 3
+        },
+        {
+          "type": "paragraph",
+          "text": "La differenza tra isolamento e monitoraggio deriva dalle proposte e dalle stime del modello. Entrambe rispettano le regole del mockup; il monitoraggio non viene tuttavia interpretato come eliminazione della vulnerabilità. La prova deterministica dimostra il fallback nella configurazione prescritta, mentre le esecuzioni linguistiche misurano il comportamento del modello entro gli stessi vincoli."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 4. Durate e richieste al modello nel mockup.",
+          "headers": [
+            "Scenario",
+            "Durata 1 [s]",
+            "Durata 2 [s]",
+            "Richieste 1 / 2"
+          ],
+          "rows": [
+            [
+              "Nominale",
+              "125,43",
+              "135,10",
+              "22 / 27"
+            ],
+            [
+              "Manutenzione assente",
+              "118,50",
+              "116,81",
+              "23 / 23"
+            ],
+            [
+              "Azioni vietate",
+              "114,49",
+              "113,10",
+              "25 / 25"
+            ],
+            [
+              "Lookup non supportato",
+              "150,78",
+              "111,14",
+              "37 / 30"
+            ]
+          ],
+          "widths": [
+            0.4,
+            0.19,
+            0.19,
+            0.22
+          ],
+          "metric_table_id": 4
+        },
+        {
+          "type": "paragraph",
+          "text": "Le otto esecuzioni completano i controlli sugli artefatti, con 212 richieste al modello, incluse quelle gestionali. I log mostrano recuperi per pubblicazioni mancanti, giudizi automatici non compatibili con un’astensione corretta e una chiamata di validazione respinta sul ranking vuoto. La riuscita finale non implica assenza di errori intermedi. I tempi del mockup restano una coorte distinta da quelli dell’architettura completa."
+        }
+      ]
+    },
+    {
+      "title": "4. Realizzazione dell’architettura completa",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "4.1 Strati applicativi e collegamenti ai servizi"
+        },
+        {
+          "type": "paragraph",
+          "text": "La configurazione completa conserva i ruoli dei produttori, introduce un agente di preparazione semantica e articola il ruolo StrategicAgent in ranking, validazione, selezione e finalizzazione. L’accesso infrastrutturale è mediato da un backend applicativo: gli agenti non gestiscono credenziali Fabric, comandi del ledger o dettagli del reasoner."
+        },
+        {
+          "type": "figure",
+          "name": "architettura-completa",
+          "caption": "Figura 2. Architettura completa. La piattaforma applicativa espone operazioni di dominio; la rete Fabric ospita i contratti specialistici.",
+          "height": 268
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 5. Tecnologie principali e collocazione.",
+          "headers": [
+            "Livello",
+            "Tecnologie"
+          ],
+          "rows": [
+            [
+              "Agenti e contratti",
+              "Python, CAMEL, Pydantic, Ollama e Qwen"
+            ],
+            [
+              "Fonti e conoscenza",
+              "OpenTelemetry, CycloneDX, OSV, cve2owl, SQLite, RDFLib e OWL"
+            ],
+            [
+              "Interoperabilità",
+              "MCP, JSON-RPC, stdio, HTTP, HTTPX, AnyIO e Uvicorn"
+            ],
+            [
+              "Servizi e ledger",
+              "Node.js, TypeScript, Express, Fabric Gateway, Hyperledger Fabric e Fablo"
+            ],
+            [
+              "Motori e provenienza",
+              "Go, CGO, C++, Boost Graph, Tiny-ME, ALN, RDF/JSON-LD e PROV-O"
+            ],
+            [
+              "Distribuzione e verifica",
+              "Docker, pytest, Jest, test Go e controlli di integrità SHA-256"
+            ]
+          ],
+          "widths": [
+            0.27,
+            0.73
+          ],
+          "metric_table_id": 5
+        }
+      ]
+    },
+    {
+      "title": "4.2 Telemetria, identità e conoscenza CTI",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "L’ingresso di osservabilità utilizza un gateway HTTP su esportazioni OpenTelemetry [3]. Il contratto conserva origine, modalità di acquisizione, riferimenti dell’osservazione e digest. L’estrazione distingue nome e versione esplicitamente dichiarati dall’instrumentazione da attributi non osservati: esposizione di rete, deserializzazione o sfruttamento non vengono dedotti dalla sola presenza di un componente."
+        },
+        {
+          "type": "paragraph",
+          "text": "VulnerabilityAgent interroga un servizio MCP sul KG cve2owl, indicizzato mediante SQLite. La risposta deve riferirsi allo stesso asset, software, versione ed evidence identifier della richiesta. I verdetti non valutabili, ambigui o privi di copertura sono mantenuti distinti dai riscontri negativi. Le informazioni recuperate alimentano il rapporto CTI; gli advisory di altre fonti non lo sostituiscono implicitamente."
+        },
+        {
+          "type": "heading",
+          "text": "Identità del prodotto e pacchetti della distribuzione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il caso Apache rende esplicita la distinzione fra nome commerciale, alias CTI e pacchetto installato. Il resolver controllato conserva 113 identità candidate: sei equivalenti, 107 escluse e nessuna irrisolta nel campione esaminato. Le 129 voci associate alle identità equivalenti corrispondono a 120 CVE distinte. L’equivalenza di identità non certifica l’applicabilità della vulnerabilità alla piattaforma."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 6. Valutazione separata dell’inventario Apache su Ubuntu.",
+          "headers": [
+            "Esito sul pacchetto",
+            "CVE",
+            "Interpretazione"
+          ],
+          "rows": [
+            [
+              "Corretto dalla distribuzione",
+              "34",
+              "La revisione inventariata raggiunge la soglia del fix"
+            ],
+            [
+              "Non interessato",
+              "28",
+              "Esclusione esplicita per pacchetto e distribuzione"
+            ],
+            [
+              "Potenzialmente interessato",
+              "46",
+              "Problema aperto o versione inferiore alla soglia del fix"
+            ],
+            [
+              "Indeterminato",
+              "12",
+              "Stato del pacchetto non disponibile o non sufficiente"
+            ]
+          ],
+          "widths": [
+            0.29,
+            0.1,
+            0.61
+          ],
+          "metric_table_id": 6
+        },
+        {
+          "type": "paragraph",
+          "text": "Il confronto usa python-debian e la revisione completa del pacchetto, evitando ordinamenti lessicografici o il solo numero upstream. La corrispondenza tra inventario e processo osservato richiede un’evidenza ulteriore; non viene assunta. In questo percorso le richieste di approfondimento restano separate dalle strategie e l’insufficienza informativa non produce una raccomandazione artificiale."
+        }
+      ]
+    },
+    {
+      "title": "4.3 Integrazione di SBOM e advisory OSV",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "La Software Bill of Materials fornisce un inventario dichiarato delle dipendenze. Il gateway dedicato legge documenti CycloneDX e associa il software osservato al componente tramite servizio, nome e versione. Le coordinate Maven e il Package URL devono essere coerenti con il componente selezionato. Una discrepanza interrompe l’arricchimento, senza correzioni implicite da parte del modello."
+        },
+        {
+          "type": "paragraph",
+          "text": "OSV viene interrogato per coordinata del pacchetto e versione [4]. Il servizio acquisisce tutte le pagine della risposta; token ripetuti, superamento dei limiti o errori impediscono di accettare un insieme parziale come completo. I riferimenti CVE degli advisory sono correlati ai finding CTI, mentre gli identificatori non correlati rimangono informazioni supplementari."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 7. Origine e funzione delle evidenze.",
+          "headers": [
+            "Fonte",
+            "Che cosa documenta",
+            "Che cosa non dimostra"
+          ],
+          "rows": [
+            [
+              "Telemetria OpenTelemetry",
+              "Componente dichiarato dall’instrumentazione e osservazioni raccolte",
+              "Inventario completo, esposizione o sfruttabilità"
+            ],
+            [
+              "SBOM CycloneDX",
+              "Dipendenze dichiarate della build o dell’inventario fornito",
+              "Esecuzione effettiva di ogni dipendenza"
+            ],
+            [
+              "KG delle vulnerabilità",
+              "Relazioni, intervalli e rimedi presenti nella conoscenza",
+              "Completezza degli advisory o fattibilità operativa"
+            ],
+            [
+              "OSV",
+              "Advisory per il pacchetto e la versione interrogati",
+              "Applicabilità autonoma di una mitigazione"
+            ]
+          ],
+          "widths": [
+            0.23,
+            0.38,
+            0.39
+          ],
+          "metric_table_id": 7
+        },
+        {
+          "type": "paragraph",
+          "text": "Il lettore supporta un sottoinsieme esplicito di CycloneDX per componenti Maven; non viene presentato come parser universale degli inventari software. L’interrogazione applicativa riguarda il componente associato all’asset, senza presumere una scansione di tutte le dipendenze. Le SBOM dimostrative e quelle associate a build effettive restano distinguibili per origine."
+        },
+        {
+          "type": "paragraph",
+          "text": "CountermeasureAgent riceve il contesto verificato insieme al rapporto CTI e pubblica le proprie candidate. Il contesto di arricchimento non genera una strategia al posto dell’agente, non converte un advisory in finding confermato e non attribuisce alla telemetria dati provenienti dall’inventario. Questa separazione è essenziale per una spiegazione fedele delle fonti."
+        },
+        {
+          "type": "paragraph",
+          "text": "L’integrazione è realizzata mediante HTTP applicativo, client validati e server Uvicorn o gateway dedicati. HTTPX e AnyIO supportano comunicazione e coordinamento; il trasporto MCP rimane riservato alle interfacce che lo espongono effettivamente."
+        }
+      ]
+    },
+    {
+      "title": "4.4 Preparazione canonica, OWL e grafo",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "SemanticPreparationAgent riceve evidenza runtime, rapporto CTI e candidate. I controlli verificano digest, copertura delle CVE, proprietà degli oggetti interessati e associazione esatta tra identificativo della proposta e individuo del KG. Il binding è una configurazione esplicita dell’operatore: il modello non inventa IRI o sinonimi per colmare una relazione assente."
+        },
+        {
+          "type": "paragraph",
+          "text": "I moduli riutilizzati costruiscono asserzioni OWL dell’asset osservato, un grafo per CVE e una proiezione nella logica descrittiva ALN, destinata al reasoner Tiny-ME [5, 6]. RDFLib supporta il trattamento dei contenuti semantici. Manifest e hash distinguono l’ontologia sorgente, la proiezione generata e l’ontologia effettivamente distribuita."
+        },
+        {
+          "type": "figure",
+          "name": "grafo-canonico",
+          "caption": "Figura 3. Esempio di topologia canonica con tre candidate. Le relazioni di rimedio provengono dal KG; l’anello è una convenzione di confronto.",
+          "height": 178
+        },
+        {
+          "type": "paragraph",
+          "text": "Gli archi dalla CVE alle strategie derivano dalle relazioni di rimedio presenti nella conoscenza. Con più strategie, il generatore introduce un anello orientato secondo un ordinamento canonico. L’anello è una convenzione tecnica, non una relazione causale tra azioni né una prova di indipendenza dal posizionamento. L’origine degli archi è conservata; polarità e pesi numerici sono demandati al backend."
+        },
+        {
+          "type": "paragraph",
+          "text": "Le stime linguistiche di beneficio e impatto del mockup non diventano pesi nativi. Anche i concetti di contesto CVE, prodotto, vendor e debolezza non costituiscono automaticamente profili di requisiti ed effetti delle contromisure. La generazione rimane ibrida: coordinamento agentico e acquisizione assistita da LLM, trasformazioni OWL/grafo/ALN deterministiche."
+        }
+      ]
+    },
+    {
+      "title": "4.5 Collegamento MCP e consolidamento dei backend",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Il client MCP supporta HTTP e stdio [10]. Nel percorso condiviso viene mantenuta una sessione di processo per le operazioni strategiche; comando e argomenti sono configurati dall’operatore senza esecuzione tramite shell. Il client verifica discovery, schemi, risultati, timeout e chiusura delle risorse. Le credenziali restano esterne ai payload controllati dall’agente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il bridge Node.js e TypeScript traduce le operazioni di dominio in chiamate REST al backend Express. Questo livello applicativo, organizzato secondo il modello SaaS, centralizza autenticazione, tenant, snapshot e policy. Non implica un servizio pubblico ospitato nel cloud: la dimostrazione impiega servizi locali."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 8. Operazioni strategiche impiegate attraverso MCP.",
+          "headers": [
+            "Operazione",
+            "Responsabilità verificata"
+          ],
+          "rows": [
+            [
+              "rank_remediations",
+              "Persistenza del grafo, ranking e conservazione della decisione"
+            ],
+            [
+              "validate_countermeasure",
+              "Valutazione Tiny-ME e controllo operativo separati"
+            ],
+            [
+              "get_decision / get_provenance",
+              "Rilettura del ranking e della relativa provenienza"
+            ],
+            [
+              "finalize_recommendation",
+              "Registrazione condivisa della raccomandazione"
+            ],
+            [
+              "get_finalization",
+              "Rilettura di documento, provenienza e ricevuta di commit"
+            ]
+          ],
+          "widths": [
+            0.44,
+            0.56
+          ],
+          "metric_table_id": 8
+        },
+        {
+          "type": "paragraph",
+          "text": "Il consolidamento elimina valori favorevoli di ripiego: un punteggio assente, non finito o associato a un nome estraneo non diventa zero; una risposta malformata non diventa ranking vuoto; una penalità semantica illeggibile non viene trasformata in rifiuto. Identificativi, CVE, digest e snapshot sono confrontati esattamente. Gli errori di input, protocollo e disponibilità restano distinti dagli esiti di dominio."
+        },
+        {
+          "type": "paragraph",
+          "text": "La conferma della scrittura del grafo e del ranking è verificata prima della pubblicazione della decisione. Le risposte rileggibili conservano assurance e riferimenti originali, senza attribuire una verifica a informazioni non controllate. In caso di scadenza dell’autenticazione, il rinnovo ammesso riguarda soltanto un rifiuto esplicito antecedente all’esecuzione; timeout e guasti non autorizzano la ripetizione automatica di operazioni mutanti."
+        }
+      ]
+    },
+    {
+      "title": "4.6 Validazione semantica e vincoli operativi",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "La valutazione semantica usa IRI assoluti dell’asset e della contromisura, con una chiave ontologica esplicita. Il lookup confronta gli identificatori completi: due nomi locali uguali in namespace differenti non rappresentano lo stesso individuo. Le richieste estranee al ranking, al tenant o allo snapshot vengono respinte prima dell’interrogazione del reasoner."
+        },
+        {
+          "type": "paragraph",
+          "text": "Tiny-ME restituisce penalità e spiegazioni di abduzione o contrazione. L’adapter controlla la presenza di valori numerici finiti e non negativi e conserva le scale native. Nell’interfaccia applicativa l’affinità deriva dal punteggio nativo diviso per cento; questa normalizzazione non modifica il ranking argomentativo. Bonus è un servizio distinto e non viene presunto eseguito quando la risposta applicativa non lo dichiara. Il contratto adotta un punteggio non negativo ottenuto sottraendo da cento la penalità di abduzione, se positiva, oppure quella di contrazione; non si tratta di una probabilità."
+        },
+        {
+          "type": "heading",
+          "text": "Composizione con la policy operativa"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il contesto operativo comprende capacità disponibili, azioni proibite, prerequisiti e mapping espliciti dei vincoli. È un’assunzione dell’operatore, non un’osservazione prodotta automaticamente dalla telemetria. I requisiti fissi delle categorie di azione sono uniti a quelli della candidata; i vincoli testuali senza mapping richiedono revisione."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 9. Interpretazione degli esiti effettivi.",
+          "headers": [
+            "Esito",
+            "Significato",
+            "Effetto sulla selezione"
+          ],
+          "rows": [
+            [
+              "Rifiutata",
+              "Conflitto semantico o divieto operativo",
+              "Candidata non selezionabile"
+            ],
+            [
+              "Richiede prerequisiti",
+              "Caratteristiche semantiche o capacità necessarie non soddisfatte",
+              "Nessuna accettazione implicita"
+            ],
+            [
+              "Richiede revisione",
+              "Vincolo o condizione non valutati automaticamente",
+              "Decisione sospesa per quella candidata"
+            ],
+            [
+              "Accettata",
+              "Valutazioni applicabili favorevoli",
+              "Può essere scelta nell’ordine del ranking"
+            ]
+          ],
+          "widths": [
+            0.25,
+            0.46,
+            0.29
+          ],
+          "metric_table_id": 9
+        },
+        {
+          "type": "paragraph",
+          "text": "La precedenza nella combinazione degli esiti è rifiuto, prerequisiti, revisione, accettazione. La policy non sostituisce l’ontologia e le liste operative non vengono presentate come conclusioni inferite da Tiny-ME. Una risposta semanticamente favorevole non supera un divieto operativo. Tutte le candidate vengono validate e conservate nel checkpoint; la selezione sceglie la prima effettivamente accettata nell’ordine restituito dal backend."
+        }
+      ]
+    },
+    {
+      "title": "4.7 Orchestrazione, switch e percorsi di esecuzione",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Il percorso completo è un DAG composto da otto nodi: tre produttori, preparazione canonica e quattro fasi strategiche. CAMEL esegue i produttori e i task dei ruoli; il coordinatore controlla dipendenze, pubblicazioni e avanzamento. Gli otto nodi non corrispondono a otto agenti distinti: ranking, validazione, selezione e finalizzazione sono responsabilità dello stesso ruolo strategico."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 10. Dipendenze essenziali del percorso completo.",
+          "headers": [
+            "Fase",
+            "Ingressi autorevoli",
+            "Pubblicazione verificata"
+          ],
+          "rows": [
+            [
+              "Produttori",
+              "Telemetria, CTI e arricchimento SBOM/OSV",
+              "Asset, finding e candidate"
+            ],
+            [
+              "Preparazione",
+              "Tre artefatti dei produttori e binding",
+              "OWL/ALN, grafi e richieste per CVE"
+            ],
+            [
+              "Ranking",
+              "Preparazione e fonti con digest",
+              "Ranking e riscontri del backend"
+            ],
+            [
+              "Validazione",
+              "Ranking, IRI e policy",
+              "Esiti semantici, operativi ed effettivi"
+            ],
+            [
+              "Selezione",
+              "Graduatoria e tutte le validazioni",
+              "Prima accettata o astensione motivata"
+            ],
+            [
+              "Finalizzazione",
+              "Decisione e lineage completo",
+              "Record condiviso, ricevuta e rilettura"
+            ]
+          ],
+          "widths": [
+            0.22,
+            0.4,
+            0.38
+          ],
+          "metric_table_id": 10
+        },
+        {
+          "type": "paragraph",
+          "text": "Ogni nodo conclude soltanto in presenza di un artefatto valido. La mancanza di una pubblicazione blocca i discendenti; l’alterazione di un ingresso è rilevata mediante controlli di integrità. Quando l’assessment non produce candidate, le fasi native sono non applicabili: non si costruiscono grafi fittizi e non si interroga il reasoner per produrre comunque una decisione."
+        },
+        {
+          "type": "heading",
+          "text": "Selezione delle modalità"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lo switch applicativo è espresso dall’opzione “--backend-mode mockup” oppure “--backend-mode real”. Un’opzione distinta, “--mode”, seleziona dati prefissati o inferenza CAMEL. La configurazione reale richiede fonti acquisite, servizi effettivi, binding coerenti e un profilo completo; non attiva servizi mock come ripiego. La verifica preliminare accerta la coerenza locale della configurazione, ma non certifica da sola la disponibilità dei servizi remoti."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il controllo della sequenza limita gli strumenti ammessi a ciascuna fase. Il modello può richiedere operazioni consentite e commentarne i risultati, ma non scegliere nuovi destinatari di rete, riscrivere i digest o sostituire il contenuto dei checkpoint con un riepilogo conversazionale."
+        }
+      ]
+    },
+    {
+      "title": "4.8 Provenienza, persistenza e affidabilità",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "La raccomandazione locale e la finalizzazione condivisa sono due risultati distinti. Il backend verifica che ranking e validazioni corrispondano alle evidenze effettivamente conservate e registra decisione e provenienza nella stessa transazione del contratto Fabric esistente. Non viene introdotto un secondo servizio di ragionamento o un ledger parallelo."
+        },
+        {
+          "type": "paragraph",
+          "text": "La provenienza PROV-O [7] collega entità, attività e agenti: evidenza runtime, rapporto CTI, candidate, preparazione, ranking, validazione, policy e raccomandazione. I digest riguardano i byte originali delle fonti. I collegamenti documentano il lineage, ma non costituiscono una firma del produttore né una prova indipendente della veridicità del dato originario."
+        },
+        {
+          "type": "figure",
+          "name": "provenienza",
+          "caption": "Figura 4. Catena di provenienza e verifica. Decisione e PROV-O sono registrate insieme; la conclusione richiede una rilettura conforme.",
+          "height": 164
+        },
+        {
+          "type": "paragraph",
+          "text": "L’identità della finalizzazione deriva dal contesto applicativo. Una richiesta identica restituisce il record e la transazione già associati; un contenuto differente a parità di identità genera conflitto. La lettura controlla documento, provenienza, digest, identificativo di transazione e codice di validazione del commit. Il solo identificativo di transazione non è considerato sufficiente."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fabric Gateway, identità MSP, certificati, TLS e autenticazione del servizio sono gestiti dal backend [8]. La cache delle connessioni distingue i certificati e chiude le risorse scadute, evitando il riuso di un firmatario non coerente. Docker e Fablo supportano la rete e la distribuzione dei contratti Go, con collegamento CGO alle librerie C++."
+        },
+        {
+          "type": "paragraph",
+          "text": "I metadati locali del backend restano separati dal ledger: una loro perdita può impedire alcune operazioni applicative anche quando il record distribuito è integro. Backup e riletture sono quindi complementari. L’architettura verifica quanto riportato dal backend autenticato; non ricostruisce autonomamente tutte le firme dei blocchi o le attestazioni del reasoner."
+        }
+      ]
+    },
+    {
+      "title": "5. Caso di studio: una run completa",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "5.1 Evidenze, finding e candidata del caso C1"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’esempio segue una sola esecuzione applicativa C1, completata negli otto nodi del DAG e verificata fino alla rilettura della decisione condivisa. Tutti i passaggi descritti appartengono alla stessa run; non vengono combinati gli esiti di prove differenti. Il caso è nominale rispetto alle capacità configurate, ma l’esito semantico rimane condizionato."
+        },
+        {
+          "type": "figure",
+          "name": "flusso-semantico-c1",
+          "caption": "Figura 5. Percorso del caso C1: dalle osservazioni alle descrizioni logiche, fino alla decisione e alla relativa provenienza.",
+          "height": 172
+        },
+        {
+          "type": "table",
+          "semantic_table_id": "inputs",
+          "caption": "Tabella 11. Dati iniziali e riscontri effettivi di C1.",
+          "headers": [
+            "Passaggio",
+            "Dato acquisito",
+            "Funzione nel flusso"
+          ],
+          "rows": [
+            [
+              "OpenTelemetry",
+              "Cinque log; logback-core 1.5.24",
+              "Identifica il software osservato; esposizione e deserializzazione restano indeterminate"
+            ],
+            [
+              "Matching CTI",
+              "QOS.CH Sarl / Logback-core; CVE-2026-1225",
+              "La versione soddisfa la regola affected: da 0.9.20 a 1.5.24, estremi inclusi"
+            ],
+            [
+              "SBOM e OSV",
+              "ch.qos.logback:logback-core; correzione indicata in 1.5.25",
+              "Conferma il componente associato e arricchisce il finding con l’advisory correlato"
+            ],
+            [
+              "CountermeasureAgent",
+              "S_UPGRADE: aggiornare a 1.5.25",
+              "Produce una candidata con manutenzione e capacità di aggiornamento come prerequisiti"
+            ]
+          ],
+          "widths": [
+            0.23,
+            0.36,
+            0.41
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "La SBOM è un inventario fornito, non un’osservazione di esecuzione. La versione correttiva riguarda l’advisory correlato, non certifica la sicurezza generale della destinazione. Le stime della candidata, beneficio 0,9 e impatto 0,3, rimangono proposte dell’agente e non diventano pesi del ranking nativo."
+        }
+      ]
+    },
+    {
+      "title": "5.2 Asserzioni OWL generate per l’asset",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "La preparazione introduce un individuo dell’asset osservato e lo collega agli individui di pacchetto e dichiarazione di versione già identificati nella conoscenza. Per leggere gli estratti si usano gli alias seguenti; gli identificatori effettivi non sono rinominati dal sistema. Il prefisso ontologico comune è https://swot.sisinflab.poliba.it/cve#."
+        },
+        {
+          "type": "table",
+          "semantic_table_id": "aliases",
+          "caption": "Tabella 12. Alias espositivi degli individui effettivamente utilizzati.",
+          "headers": [
+            "Alias",
+            "Nome locale dell’individuo"
+          ],
+          "rows": [
+            [
+              "a",
+              "ObservedSoftwareAsset_5a806d8f72e6"
+            ],
+            [
+              "p",
+              "CVE-2026-1225_Containers_Cna_Affected"
+            ],
+            [
+              "v",
+              "CVE-2026-1225_Containers_Cna_Affected_Versions_0"
+            ],
+            [
+              "c",
+              "CVE-2026-1225"
+            ],
+            [
+              "r",
+              "CVE-2026-1225_Containers_Cna_Solutions"
+            ]
+          ],
+          "widths": [
+            0.11,
+            0.89
+          ]
+        },
+        {
+          "type": "table",
+          "semantic_table_id": "owl",
+          "caption": "Tabella 13. Estratto delle asserzioni generate; prefissi omessi e alias sostituiti a scopo espositivo.",
+          "headers": [
+            "Asserzione OWL abbreviata",
+            "Significato"
+          ],
+          "rows": [
+            [
+              "ClassAssertion(ObservedSoftwareAsset a)",
+              "a appartiene alla classe degli asset software osservati"
+            ],
+            [
+              "ObjectPropertyAssertion(hasAffectedPackage a p)",
+              "a è collegato al pacchetto affected selezionato"
+            ],
+            [
+              "ObjectPropertyAssertion(hasAffectedVersionStatement a v)",
+              "a è collegato alla regola di versione che ha prodotto il finding"
+            ]
+          ],
+          "widths": [
+            0.59,
+            0.41
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Queste sono asserzioni sugli individui, appartenenti all’ABox. Le dichiarazioni di classi e proprietà ne introducono il vocabolario; le annotazioni rdfs:comment ne descrivono l’origine, senza aggiungere requisiti logici al profilo. La corrispondenza della versione è stabilita dal valutatore CTI e riutilizzata dalla preparazione, non ricalcolata da questi tre assiomi."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il collegamento hasAffectedPackage(a,p) non implica da solo che a erediti ogni caratteristica di p, della CVE o del rimedio. Occorrerebbero ulteriori assiomi di propagazione o un profilo esplicito. Nel frammento dell’asset non vengono quindi asseriti automaticamente esposizione, vettore d’attacco o capacità di eseguire un aggiornamento. Questa distinzione spiega il diverso contenuto delle descrizioni confrontate dal reasoner."
+        }
+      ]
+    },
+    {
+      "title": "5.3 Descrizioni ALN e significato delle annotazioni",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "La proiezione produce descrizioni per la vulnerabilità c e il rimedio r. Alla prima assegna il tipo VulnerabilityArgument, al secondo Solutions; entrambe riusano il contesto della CVE. I termini nella tabella sono estratti dalla congiunzione asserita per r, con alias e prefissi abbreviati. Sono dati della conoscenza proiettata, non osservazioni dedotte dai log."
+        },
+        {
+          "type": "table",
+          "semantic_table_id": "aln",
+          "caption": "Tabella 14. Estratto della descrizione asserita del rimedio r.",
+          "headers": [
+            "Termine o restrizione",
+            "Interpretazione"
+          ],
+          "rows": [
+            [
+              "Solutions; ForCVE_CVE_2026_1225",
+              "Tipo di rimedio e contesto della CVE considerata"
+            ],
+            [
+              "TargetsProduct_Logback_core; TargetsVendor_QOS_CH_Sarl",
+              "Prodotto e vendor descritti dal KG"
+            ],
+            [
+              "AddressesCWE_20",
+              "Riferimento alla categoria di debolezza presente nel KG"
+            ],
+            [
+              "ObjectSomeValuesFrom(hasAttackVector owl:Thing)",
+              "Esiste almeno un valore per il ruolo hasAttackVector"
+            ],
+            [
+              "ObjectAllValuesFrom(hasAttackVector AttackVectorLocal)",
+              "Ogni valore di quel ruolo appartiene ad AttackVectorLocal"
+            ]
+          ],
+          "widths": [
+            0.56,
+            0.44
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "La coppia esistenziale/universale è rilevante: la sola restrizione universale non impone l’esistenza di un valore. La proiezione usa la stessa forma per complessità d’attacco elevata, privilegi richiesti elevati, severità bassa e altre dimensioni CVSS rappresentate. Il rapporto CTI normalizzato non espone tutti questi metadati; il generatore li recupera dal KG. Non sono pertanto nuove osservazioni runtime o valori inventati dal modello."
+        },
+        {
+          "type": "heading",
+          "text": "Dati asseriti e conseguenze della terminologia"
+        },
+        {
+          "type": "paragraph",
+          "text": "La TBox contiene l’inclusione di Solutions in MitigationStrategy e di MitigationStrategy in RankingArgument. Dall’appartenenza asserita di r a Solutions segue quindi che r è anche una strategia di mitigazione e un argomento di ranking. Questa è una conseguenza degli assiomi di classe; non equivale a dimostrare che l’aggiornamento sia eseguibile sull’asset."
+        },
+        {
+          "type": "paragraph",
+          "text": "La descrizione di r caratterizza soprattutto il contesto della vulnerabilità: non formalizza effetti, costi e precondizioni specifici dell’azione. Analogamente, il riferimento a CWE-20 non attesta che una determinata modalità di sfruttamento sia stata osservata. Il confronto semantico deve essere interpretato entro questo potere descrittivo."
+        }
+      ]
+    },
+    {
+      "title": "5.4 Grafo effettivo e risposta di Tiny-ME",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Il binding associa S_UPGRADE all’individuo r. Il grafo effettivo contiene soltanto due nodi, c e r, e un arco dalla CVE al rimedio, derivato dalla relazione presente nel KG. L’anello multicandidata non compare in questo caso e la preparazione non assegna un peso o un segno all’arco."
+        },
+        {
+          "type": "figure",
+          "name": "grafo-c1",
+          "caption": "Figura 6. Grafo effettivo di C1. L’arco indica la relazione di rimedio; non rappresenta un peso BWAF misurato.",
+          "height": 91
+        },
+        {
+          "type": "paragraph",
+          "text": "Il servizio restituisce rango uno e score 1,0 mediante la convenzione dichiarata per la candidata singola. Non è un risultato di competizione tra azioni. La validazione è una chiamata distinta: la risorsa è l’asset a, la richiesta è il rimedio r, entrambi identificati nell’ontologia distribuita."
+        },
+        {
+          "type": "table",
+          "semantic_table_id": "reasoning",
+          "caption": "Tabella 15. Output di ranking e validazione mantenuti distinti.",
+          "headers": [
+            "Campo",
+            "Valore nel caso C1",
+            "Significato"
+          ],
+          "rows": [
+            [
+              "Score del ranking",
+              "1,0; convenzione singola",
+              "Nessuna preferenza multicandidata dimostrata"
+            ],
+            [
+              "Penalità di abduzione",
+              "38",
+              "Descrizione mancante rispetto alla richiesta semantica"
+            ],
+            [
+              "Score di affinità nativo",
+              "62 = 100 − 38",
+              "Funzione del contratto semantico, distinta dal ranking"
+            ],
+            [
+              "Affinità applicativa",
+              "0,62",
+              "Conversione di scala; non probabilità"
+            ],
+            [
+              "Bonus / contrazione",
+              "Bonus non eseguito; contrazione non invocata",
+              "Il valore zero non prova l’esecuzione di quel ramo"
+            ],
+            [
+              "Stato semantico",
+              "requires_prerequisites",
+              "Descrizione dell’asset non sufficiente per accettare r"
+            ]
+          ],
+          "widths": [
+            0.29,
+            0.32,
+            0.39
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "L’ipotesi di abduzione restituita include, fra gli altri, Solutions, TargetsProduct_Logback_core, ForCVE_CVE_2026_1225 e le restrizioni sul vettore d’attacco. Identifica ciò che occorre aggiungere alla descrizione della risorsa per soddisfare la richiesta. La penalità 38 non è presentata come numero di capacità operative mancanti."
+        },
+        {
+          "type": "paragraph",
+          "text": "L’assenza di tali termini nel profilo di a non dimostra che la capacità reale sia assente: segnala un’insufficienza della rappresentazione rispetto al confronto richiesto. Non si può quindi tradurre automaticamente l’ipotesi in una lista di interventi da eseguire."
+        }
+      ]
+    },
+    {
+      "title": "5.5 Decisione, PROV-O e riscontro sul ledger",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "Dalla valutazione alla decisione condivisa"
+        },
+        {
+          "type": "paragraph",
+          "text": "Nel caso C1 la policy dichiara disponibili sia maintenance_window sia package_upgrade, non rileva capacità mancanti e non vieta l’azione. Rimane però un vincolo testuale sulla manutenzione senza mapping strutturato: lo stato operativo è requires_review. La semantica restituisce requires_prerequisites, che prevale secondo la regola di composizione; la candidata non viene selezionata."
+        },
+        {
+          "type": "paragraph",
+          "text": "La decisione finale conserva quindi outcome requires_prerequisites, identificativo selezionato nullo e azione non eseguita. Gli otto nodi del DAG risultano comunque completati: una finalizzazione può registrare correttamente un’astensione motivata. Il caso non confonde disponibilità della capacità operativa con sufficienza della descrizione ontologica."
+        },
+        {
+          "type": "heading",
+          "text": "Relazioni di provenienza effettivamente prodotte"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’export PROV-O conserva 16 entità, nove attività, undici agenti e 40 relazioni. Gli agenti PROV comprendono anche servizi e ruoli applicativi: non corrispondono a undici modelli linguistici. Nella tabella gli alias indicano le entità e attività della stessa run."
+        },
+        {
+          "type": "table",
+          "semantic_table_id": "provenance",
+          "caption": "Tabella 16. Estratti della provenienza, con identificativi abbreviati.",
+          "headers": [
+            "Tripla espositiva",
+            "Interpretazione"
+          ],
+          "rows": [
+            [
+              "A_prep prov:used E_runtime",
+              "La preparazione utilizza l’evidenza runtime"
+            ],
+            [
+              "A_val prov:wasAssociatedWith TinyME",
+              "La valutazione è associata al reasoner; la policy operativa è tracciata separatamente"
+            ],
+            [
+              "P prov:wasGeneratedBy A_sel",
+              "La raccomandazione finale deriva dall’attività di selezione"
+            ]
+          ],
+          "widths": [
+            0.49,
+            0.51
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Il documento condiviso collega mediante otto digest evidenza, rapporto CTI, candidate, preparazione, ranking, validazione, profilo operativo e raccomandazione. Decisione e PROV-O sono registrate insieme; il commit del caso appartiene al blocco 22 con codice di validazione zero. La rilettura indipendente conferma record, provenienza e ricevuta identici."
+        },
+        {
+          "type": "paragraph",
+          "text": "La catena rende verificabile quali informazioni hanno alimentato il risultato. Non certifica la veridicità originaria dei log, non completa il profilo semantico e non trasforma una decisione condizionata in una mitigazione applicata."
+        }
+      ]
+    },
+    {
+      "title": "6. Risultati e metriche: metodo e componenti",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "6.1 Protocollo di valutazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le evidenze sono organizzate per livello: scenari simulati, componenti deterministici, launcher applicativi, ranking nativo e confronti controllati. Revisioni del motore, input, confini temporali e modalità di inferenza sono mantenuti distinti. Le copie degli artefatti non sono considerate nuove osservazioni e i tentativi tecnicamente falliti non vengono convertiti in successi di dominio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il campione di estrazione comprende 12 documenti: quattro esportazioni SDK e otto derivati controllati. Le etichette sono congelate e verificate dall’assistente sulle fonti; manca una revisione umana indipendente. Le metriche caratterizzano il componente deterministico e non l’accuratezza dell’intero sistema multi-agente."
+        },
+        {
+          "type": "paragraph",
+          "text": "La precisione è TP/(TP+FP), il richiamo è TP/(TP+FN) e F1 è 2TP/(2TP+FP+FN). I conteggi micro delle entità sono TP=7, FP=1 e FN=3. L’esattezza documentale richiede la corrispondenza dell’insieme estratto secondo le regole di annotazione. Le accuratezze CTI usano denominatori espliciti e distinti."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 17. Metriche dei componenti su campione assistito.",
+          "headers": [
+            "Misura",
+            "Conteggio / denominatore",
+            "Risultato"
+          ],
+          "rows": [
+            [
+              "Precisione delle entità",
+              "7 / (7+1)",
+              "0,8750"
+            ],
+            [
+              "Richiamo delle entità",
+              "7 / (7+3)",
+              "0,7000"
+            ],
+            [
+              "F1 delle entità",
+              "14 / (14+1+3)",
+              "0,7778"
+            ],
+            [
+              "Esattezza documentale",
+              "9 / 12",
+              "0,7500"
+            ],
+            [
+              "Accuratezza identità prodotto",
+              "13 / 16",
+              "0,8125"
+            ],
+            [
+              "Accuratezza versione, tre classi",
+              "10 / 13",
+              "0,7692"
+            ],
+            [
+              "Accuratezza versione, binaria",
+              "7 / 8",
+              "0,8750"
+            ]
+          ],
+          "widths": [
+            0.48,
+            0.32,
+            0.2
+          ],
+          "metric_table_id": 11
+        },
+        {
+          "type": "paragraph",
+          "text": "Nei quattro SDK originali precisione, richiamo e F1 sono pari a uno; negli otto derivati valgono 0,75, 0,50 e 0,60. Gli errori riguardano informazioni parziali, vendor, certezza fuori intervallo e astensioni lessicali. L’assenza di errori tecnici non implica assenza di errori semantici. La classificazione binaria esclude casi non eleggibili e non sostituisce il risultato a tre classi."
+        }
+      ]
+    },
+    {
+      "title": "6.2 Quattro casi applicativi reali",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "I quattro casi completi separano presenza di un finding, assenza di finding, identità insufficiente e vincoli operativi. Il componente positivo è Logback-core 1.5.24; il confronto negativo usa 1.5.25. Il caso ambiguo degrada soltanto il nome osservato in “logback”, mentre il caso operativo rimuove la disponibilità della finestra di manutenzione."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 18. Esiti primari della pipeline con backend reali.",
+          "headers": [
+            "Caso",
+            "Stato tecnico",
+            "Esito applicativo",
+            "Durata [s]"
+          ],
+          "rows": [
+            [
+              "C1: nominale",
+              "Otto nodi completati; finalizzazione verificata",
+              "Richiede prerequisiti; nessuna strategia scelta",
+              "1.274,172"
+            ],
+            [
+              "C2: negativo",
+              "Assessment completato; fasi native non applicabili",
+              "Nessun finding",
+              "298,132"
+            ],
+            [
+              "C3: identità degradata",
+              "Assessment completato; fasi native non applicabili",
+              "Evidenza insufficiente",
+              "296,697"
+            ],
+            [
+              "C4: manutenzione assente",
+              "Otto nodi completati nello stesso launcher; rilettura verificata",
+              "Richiede prerequisiti; nessuna strategia scelta",
+              "1.224,254"
+            ]
+          ],
+          "widths": [
+            0.22,
+            0.31,
+            0.28,
+            0.19
+          ],
+          "metric_table_id": 12
+        },
+        {
+          "type": "paragraph",
+          "text": "C1 e C4 individuano il rimedio relativo a CVE-2026-1225 disponibile nel KG e pubblicano una decisione condivisa. Il successo tecnico attesta il completamento e la rilettura, non l’accettazione del rimedio. Tiny-ME restituisce un’ipotesi di abduzione con penalità 38 e affinità 0,62. La differenza tra profilo dell’asset e descrizione del rimedio mantiene l’esito condizionato."
+        },
+        {
+          "type": "paragraph",
+          "text": "C4 conserva anche la capacità di manutenzione mancante e un limite lessicale: una formulazione testuale della capacità di aggiornamento non è riconciliata automaticamente con la capacità strutturata disponibile. I vincoli non mappati richiedono revisione. Il modello non è autorizzato a risolvere queste incongruenze inventando un’associazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "Le durate includono il coordinamento e la chiusura dei gateway; non rappresentano il tempo trascorso dall’evento originale alla decisione. I tentativi interrotti per autenticazione, risorse o timeout rimangono separati dalle esecuzioni primarie. Cinque riletture indipendenti confermano l’identità di record, provenienza e ricevute dei casi finalizzati e dei replay controllati. Nessuna contromisura è applicata."
+        }
+      ]
+    },
+    {
+      "title": "6.3 Stabilità del ranking e qualità delle spiegazioni",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Il benchmark nativo impiega cinque grafi multicandidata, ciascuno in forma originale e riordinata, con tre ripetizioni per input: 30 esecuzioni, 30 confronti tra repliche e 15 confronti di permutazione. Gli input delle coppie sono verificati come strutturalmente equivalenti prima dell’analisi numerica."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 19. Dimensioni e mediane di storage e ranking nativi via MCP.",
+          "headers": [
+            "Grafo",
+            "Nodi",
+            "Archi",
+            "n",
+            "Storage [s]",
+            "Ranking [s]"
+          ],
+          "rows": [
+            [
+              "G1",
+              "6",
+              "11",
+              "6",
+              "0,074017",
+              "0,115473"
+            ],
+            [
+              "G2",
+              "8",
+              "20",
+              "6",
+              "0,070757",
+              "0,145062"
+            ],
+            [
+              "G3",
+              "12",
+              "21",
+              "6",
+              "0,075862",
+              "0,131587"
+            ],
+            [
+              "G4",
+              "24",
+              "43",
+              "6",
+              "0,074469",
+              "0,183548"
+            ],
+            [
+              "G5",
+              "40",
+              "75",
+              "6",
+              "0,072857",
+              "0,290056"
+            ]
+          ],
+          "widths": [
+            0.12,
+            0.1,
+            0.1,
+            0.08,
+            0.3,
+            0.3
+          ],
+          "metric_table_id": 13
+        },
+        {
+          "type": "paragraph",
+          "text": "Score e pesi sono identici nei 45 confronti, con massima differenza osservata pari a zero. Gli insiemi dei massimi sono stabili; nei grafi maggiori esistono pareggi entro la tolleranza di 10 alla meno 6. La verifica della persistenza comprende 60 commit validi e 30 riletture indipendenti. I tempi includono chiamata MCP, trasporto, contratto e persistenza, non il solo calcolo C++."
+        },
+        {
+          "type": "heading",
+          "text": "Difetto di associazione e adattamento verificato"
+        },
+        {
+          "type": "paragraph",
+          "text": "L’analisi dei riordinamenti ha rilevato spiegazioni assegnate a una candidata diversa dal nodo raggiunto dai cammini. Un adattamento nel contratto Go controlla direzione degli archi, prodotto dei pesi e destinazione univoca, riassegnando soltanto prove non ambigue. Le prove ambigue non vengono esposte come validate; il risultato nativo originale e l’audit restano conservati. Il controllo raggiunge 60 cammini coerenti su 60, rispetto ai 30 su 60 osservati senza adattamento, senza modificare punteggi o libreria."
+        },
+        {
+          "type": "paragraph",
+          "text": "Rimangono 12 cammini classificati come opposizione con prodotto positivo e 156 occorrenze di candidate senza cammini su 186. Solo sei coppie su 15 conservano spiegazioni interamente identiche per etichette. La stabilità del ranking non dimostra quindi invarianza o completezza della spiegazione. Il sorgente integrale del core non è disponibile e l’equivalenza numerica alla semantica teorica non è certificata [9]."
+        }
+      ]
+    },
+    {
+      "title": "6.4 Pesi degli archi e servizi semantici",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "La sensibilità è valutata su G1 mediante le proprietà degli archi esposte dall’SDK nativo. Cinque varianti sono ripetute tre volte: riferimento invariato e quattro interventi. Topologia, nodi e pesi non interessati rimangono identici; il getter e il grafo restituito confermano i valori imposti. Non si tratta di una nuova interfaccia applicativa di regolazione."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 20. Sensibilità al peso di un arco su G1.",
+          "headers": [
+            "Intervento",
+            "Fattore",
+            "Massima variazione score",
+            "Vincitore"
+          ],
+          "rows": [
+            [
+              "Riferimento",
+              "1,00",
+              "0",
+              "Invariato"
+            ],
+            [
+              "Attacco ridotto",
+              "0,50",
+              "0,009324670",
+              "Invariato"
+            ],
+            [
+              "Attacco aumentato",
+              "1,50",
+              "0,011376977",
+              "Invariato"
+            ],
+            [
+              "Supporto ridotto",
+              "0,50",
+              "0,005605340",
+              "Invariato"
+            ],
+            [
+              "Supporto aumentato",
+              "1,05",
+              "0,000162482",
+              "Invariato"
+            ]
+          ],
+          "widths": [
+            0.32,
+            0.14,
+            0.34,
+            0.2
+          ],
+          "metric_table_id": 14
+        },
+        {
+          "type": "paragraph",
+          "text": "Gli score variano in modo ripetibile e il massimo rimane associato alla stessa candidata. Il risultato riguarda il grafo e gli interventi valutati, senza dimostrare una proprietà generale di monotonia. I pesi iniziali dei nodi non sono parametri configurabili esposti e rimangono non valutati."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 21. Diagnostiche native effettivamente invocate.",
+          "headers": [
+            "Operazione",
+            "Coppia valutata",
+            "Esito in tre ripetizioni"
+          ],
+          "rows": [
+            [
+              "Abduzione",
+              "Asset e rimedio Logback",
+              "Ipotesi non vuota; penalità 38"
+            ],
+            [
+              "Bonus",
+              "Stessa coppia Logback",
+              "Surplus dell’asset osservato; incentivo 1"
+            ],
+            [
+              "Contrazione",
+              "Individui baseline esplicitamente disgiunti",
+              "Parti mantenute e rinunciate; penalità 2"
+            ]
+          ],
+          "widths": [
+            0.2,
+            0.39,
+            0.41
+          ],
+          "metric_table_id": 15
+        },
+        {
+          "type": "paragraph",
+          "text": "Le sei query diagnostiche usano ontologie esistenti. Bonus è esercitato a livello nativo, ma non dal percorso applicativo di affinità; la contrazione del caso compatibile Logback non viene invocata. Un risultato vuoto di un ramo non eseguito non è una misura pari a zero."
+        },
+        {
+          "type": "paragraph",
+          "text": "Controlli aggiuntivi sul ranking persistito mostrano accettazione immediata e una sequenza di rifiuto, due condizioni e accettazione. Il controllo positivo usa lo stesso individuo come risorsa e richiesta: verifica riflessività, non applicabilità di una mitigazione a un asset reale. Non costituisce una dimostrazione di fallback operativo del sistema completo."
+        }
+      ]
+    },
+    {
+      "title": "6.5 Prestazioni dei componenti e confini di misura",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "L’ambiente comprende un host ARM64 con 18 GiB di memoria, container Linux AMD64 emulati, modello locale e servizi CTI, SaaS e Fabric effettivi. I campioni sono piccoli e sequenziali. Le osservazioni iniziali sono incluse e non vengono eliminate come riscaldamento; le durate di fasi sovrapposte non sono sommate."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 22. Tempi isolati o esplicitamente delimitati.",
+          "headers": [
+            "Operazione",
+            "n",
+            "Valori [s]",
+            "Confine"
+          ],
+          "rows": [
+            [
+              "Gateway telemetria",
+              "3",
+              "Mediana 0,027668; min 0,019959; max 0,135874",
+              "Richiesta HTTP su replay SDK"
+            ],
+            [
+              "TelemetryAgent",
+              "3",
+              "Mediana 57,370528; min 56,668928; max 71,086058",
+              "Step del worker, strumenti e pubblicazione"
+            ],
+            [
+              "OWL osservato",
+              "1 per braccio",
+              "0,000322 / 0,000414",
+              "Funzione generatrice"
+            ],
+            [
+              "Proiezione ALN",
+              "1 per braccio",
+              "102,026871 / 105,498657",
+              "Funzione di proiezione"
+            ],
+            [
+              "Grafo e lookup KG",
+              "1 per braccio",
+              "8,542962 / 9,517914",
+              "Costruzione e ricerca insieme"
+            ]
+          ],
+          "widths": [
+            0.25,
+            0.12,
+            0.36,
+            0.27
+          ],
+          "metric_table_id": 16
+        },
+        {
+          "type": "paragraph",
+          "text": "Le tre esecuzioni isolate del TelemetryAgent usano il worker di produzione con Qwen da quattro miliardi di parametri tramite Ollama, contesto di 32.768 token, limite di 4.096 token in uscita e temperatura zero. La durata include chiamate al modello, strumenti e pubblicazione, mentre esclude la gestione complessiva della Workforce. Tutte le pubblicazioni corrispondono ai payload acquisiti; queste prove non ampliano il campione di precisione e richiamo."
+        },
+        {
+          "type": "paragraph",
+          "text": "I timer del generatore sono applicati a funzioni esistenti mediante wrapper sottili, senza cambiamenti alla logica. I due valori si riferiscono ai bracci con e senza contesto runtime. Il costo della costruzione del grafo comprende il lookup: non può essere interpretato come costo puro della topologia. Una singola osservazione per braccio non sostiene conclusioni inferenziali."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 23. Chiamate di dominio nei launcher reali; una osservazione per caso.",
+          "headers": [
+            "Fase",
+            "C1 [s]",
+            "C4 [s]"
+          ],
+          "rows": [
+            [
+              "Matching CTI",
+              "0,112060",
+              "0,166130"
+            ],
+            [
+              "Validazione semantica e operativa",
+              "0,302031",
+              "0,260106"
+            ],
+            [
+              "Finalizzazione condivisa",
+              "0,693981",
+              "0,677643"
+            ]
+          ],
+          "widths": [
+            0.6,
+            0.2,
+            0.2
+          ],
+          "metric_table_id": 17
+        },
+        {
+          "type": "paragraph",
+          "text": "Questi timer includono client e trasporto. La finalizzazione comprende decisione, PROV-O, commit e verifiche: non isola il costo della sola provenienza. Restano non misurati l’intervallo originale evento-decisione e la sola acquisizione SDK; il tempo del modello non è ricavato per differenza."
+        }
+      ]
+    },
+    {
+      "title": "6.6 Stima del costo del percorso blockchain",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Il confronto off-chain esegue lo stesso contratto Go e la stessa libreria nativa, con ontologia e immagine equivalenti, usando uno stato in memoria al posto di Fabric. Tutti i 30 output adattati e i byte nativi coincidono con quelli on-chain. Il calcolo off-chain è quindi distinto dall’euristica del mockup. Le due coorti non sono intervallate e la differenza comprende client, trasporto e gestione dello stato, oltre a Fabric."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 24. Ranking nativo con stato distribuito e in memoria.",
+          "headers": [
+            "Grafo",
+            "MCP [s]",
+            "In memoria [s]",
+            "Mediana differenze [s]"
+          ],
+          "rows": [
+            [
+              "G1",
+              "0,115473",
+              "0,032637",
+              "0,080185"
+            ],
+            [
+              "G2",
+              "0,145062",
+              "0,061768",
+              "0,082569"
+            ],
+            [
+              "G3",
+              "0,131587",
+              "0,045445",
+              "0,083831"
+            ],
+            [
+              "G4",
+              "0,183548",
+              "0,092566",
+              "0,087453"
+            ],
+            [
+              "G5",
+              "0,290056",
+              "0,196302",
+              "0,099257"
+            ]
+          ],
+          "widths": [
+            0.15,
+            0.25,
+            0.25,
+            0.35
+          ],
+          "metric_table_id": 18
+        },
+        {
+          "type": "paragraph",
+          "text": "Ogni riga riassume sei osservazioni. La mediana delle differenze appaiate è calcolata sulle coppie e può differire dalla sottrazione delle due mediane. L’equivalenza degli output rende il confronto utile come stima delimitata del percorso distribuito, senza isolarne il costo di consenso."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 25. Differenza REST tra invocazione con commit e sola valutazione.",
+          "headers": [
+            "Grafo",
+            "Coppie",
+            "Minimo [s]",
+            "Mediana [s]",
+            "Massimo [s]"
+          ],
+          "rows": [
+            [
+              "G1",
+              "3",
+              "0,002200",
+              "0,068940",
+              "0,068986"
+            ],
+            [
+              "G2",
+              "3",
+              "0,063957",
+              "0,064593",
+              "0,068244"
+            ],
+            [
+              "G3",
+              "3",
+              "0,060689",
+              "0,061327",
+              "0,076862"
+            ],
+            [
+              "G4",
+              "3",
+              "0,063828",
+              "0,064111",
+              "0,071794"
+            ],
+            [
+              "G5",
+              "3",
+              "0,062028",
+              "0,069293",
+              "0,073503"
+            ]
+          ],
+          "widths": [
+            0.15,
+            0.15,
+            0.23,
+            0.24,
+            0.23
+          ],
+          "metric_table_id": 19
+        },
+        {
+          "type": "paragraph",
+          "text": "Il secondo confronto usa lo stesso client REST e lo stesso metodo di ranking, alternando l’ordine evaluate/invoke. La prima operazione non conserva gli stati derivati; la seconda verifica output, audit e commit. Le 15 differenze sono firmate e nessun valore viene eliminato. La misura include endorsement, invio e conferma, senza rappresentare un costo puro di consenso, una misura di throughput o una prova di scalabilità generale."
+        }
+      ]
+    },
+    {
+      "title": "6.7 Confronti controllati e problematiche osservate",
+      "blocks": [
+        {
+          "type": "heading",
+          "text": "Con e senza contesto runtime"
+        },
+        {
+          "type": "paragraph",
+          "text": "Un replay dal confine degli artefatti rimuove riferimento, contesto e osservazioni di telemetria, mantenendo invariati inventario, CTI, candidate, binding e policy. Entrambi i bracci attraversano generatore, ranking e validazione reali, selezione e finalizzazione; non vengono rieseguiti gli agenti upstream. Le durate sono 205,544 e 209,080 secondi, con una esecuzione per braccio."
+        },
+        {
+          "type": "paragraph",
+          "text": "Grafo, richieste, OWL osservato e ALN risultano identici. Rimangono invariati rango, abduzione e decisione condizionata. A identità e conoscenza fissate, il contesto runtime rimosso non cambia l’esito del generatore. La conclusione riguarda questo confine sperimentale: non dimostra che la telemetria sia inutile nell’identificazione degli asset o nell’intera pipeline."
+        },
+        {
+          "type": "table",
+          "caption": "Tabella 26. Contenuto informativo runtime e inventario dichiarato.",
+          "headers": [
+            "Policy di confronto",
+            "Componenti interrogati",
+            "Esiti CTI"
+          ],
+          "rows": [
+            [
+              "Solo intersezione positivamente osservata",
+              "1",
+              "1 corrispondenza"
+            ],
+            [
+              "Inventario SBOM esplicito",
+              "14",
+              "1 corrispondenza, 1 senza finding, 12 ambigui"
+            ]
+          ],
+          "widths": [
+            0.43,
+            0.19,
+            0.38
+          ],
+          "metric_table_id": 20
+        },
+        {
+          "type": "paragraph",
+          "text": "Cinque log collegano positivamente Logback-core a uno dei 14 componenti dichiarati. Un componente non osservato non è necessariamente assente o sicuro; le ambiguità CTI non sono falsi positivi. Il confronto valuta contenuto e copertura, non accuratezza o completezza del monitoraggio."
+        },
+        {
+          "type": "heading",
+          "text": "Prima e dopo la validazione"
+        },
+        {
+          "type": "paragraph",
+          "text": "Sullo stesso insieme di artefatti, la proposta di aggiornamento è al rango uno con score convenzionale 1,0; la semantica richiede prerequisiti, la policy richiede revisione per un vincolo testuale non mappato e l’esito effettivo resta condizionato, senza selezione. La validazione impedisce di scambiare la testa del ranking con un’azione accettata. Non è stato disabilitato alcun controllo per generare un successo."
+        },
+        {
+          "type": "paragraph",
+          "text": "Le principali criticità sono copertura insufficiente del KG, descrizioni delle azioni poco discriminanti, vincoli lessicali non riconciliati, spiegazioni native parziali, timeout generativi e scadenza delle credenziali. Un arresto nativo sul caso a candidata singola è gestito riusando una convenzione già disponibile: score uno dichiarato, senza pesi o cammini inventati. Tale caso non dimostra una competizione multicandidata."
+        }
+      ]
+    },
+    {
+      "title": "7. Conclusioni, limiti e sviluppi futuri",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Il prototipo realizza un collegamento verificabile tra osservabilità, agenti collaborativi, conoscenza CTI, servizi semantici e ledger distribuito. Il mockup dimostra contratti, selezione e astensione in scenari controllati; la configurazione completa mantiene tali responsabilità e le collega a backend effettivi. La registrazione condivisa della decisione e della provenienza, seguita da rilettura, rende ispezionabile il percorso che conduce al risultato."
+        },
+        {
+          "type": "paragraph",
+          "text": "La valutazione evidenzia un ranking numericamente stabile nel corpus di ripetizioni e riordinamenti, output persistiti coerenti e un miglioramento verificato dell’associazione tra cammini e candidate. Le metriche di estrazione e matching quantificano anche omissioni e ambiguità. I casi applicativi distinguono correttamente successo tecnico, assenza di finding, evidenza insufficiente e decisione condizionata: completare il flusso non equivale a dimostrare la fattibilità della mitigazione."
+        },
+        {
+          "type": "heading",
+          "text": "Limiti del lavoro"
+        },
+        {
+          "type": "paragraph",
+          "text": "La copertura della conoscenza e la rappresentazione dei rimedi limitano i casi reali a una candidata utile, senza accettazione applicativa o fallback operativo dimostrati. I nodi runtime espliciti previsti dal modello concettuale non sono presenti nei grafi applicativi; il confronto a inventario e CTI fissati non mostra un effetto del contesto rimosso. Non è implementato un ThreatAgent autonomo: alcune responsabilità informative sono assorbite dagli altri ruoli."
+        },
+        {
+          "type": "paragraph",
+          "text": "Il campione annotato è assistito e privo di revisione umana indipendente; le numerosità non consentono generalizzazioni statistiche. Restano parziali copertura e interpretazione delle spiegazioni, non è disponibile un controllo sui pesi iniziali dei nodi e il core non è integralmente ispezionabile. I tempi non isolano consenso, sola provenienza o latenza originale degli eventi. L’esecuzione è batch e simulata nelle azioni, senza attuatori."
+        },
+        {
+          "type": "heading",
+          "text": "Sviluppi futuri"
+        },
+        {
+          "type": "paragraph",
+          "text": "Le estensioni scientificamente più utili riguardano profili delle contromisure fondati su requisiti ed effetti documentati, formalizzazione dei vincoli operativi e rappresentazione di evidenze runtime come argomenti indipendenti. Un campione revisionato da annotatori umani, casi reali multicandidata e confronti dell’intera pipeline consentirebbero di valutarne il contributo. Sul piano infrastrutturale, ripristino dei metadati, gestione delle identità e test su ambienti distribuiti amplierebbero l’affidabilità dimostrata. Questi sviluppi sono separati dai risultati ottenuti e non vengono presentati come funzionalità già realizzate."
+        }
+      ]
+    },
+    {
+      "title": "Riferimenti bibliografici",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "[1] G. Li, H. A. A. K. Hammoud, H. Itani, D. Khizbullin, B. Ghanem. CAMEL: Communicative Agents for “Mind” Exploration of Large Language Model Society. Advances in Neural Information Processing Systems, vol. 36. DOI: 10.52202/075280-2264."
+        },
+        {
+          "type": "paragraph",
+          "text": "[2] T. Mossakowski, F. Neuhaus. Modular Semantics and Characteristics for Bipolar Weighted Argumentation Graphs. arXiv:1807.06685."
+        },
+        {
+          "type": "paragraph",
+          "text": "[3] OpenTelemetry. What is OpenTelemetry? Documentazione ufficiale sul modello di osservabilità e sui segnali di telemetria."
+        },
+        {
+          "type": "paragraph",
+          "text": "[4] Open Source Security Foundation. Open Source Vulnerability format. Specifica del modello degli advisory OSV. CycloneDX. Specifica Software Bill of Materials."
+        },
+        {
+          "type": "paragraph",
+          "text": "[5] W3C. OWL 2 Web Ontology Language: Document Overview; Direct Semantics. Raccomandazioni del World Wide Web Consortium."
+        },
+        {
+          "type": "paragraph",
+          "text": "[6] M. Ruta, F. Scioscia, I. Bilenchi, F. Gramegna, G. Loseto, S. Ieva, A. Pinto. A multiplatform reasoning engine for the Semantic Web of Everything. Journal of Web Semantics. DOI: 10.1016/j.websem.2022.100709."
+        },
+        {
+          "type": "paragraph",
+          "text": "[7] W3C. PROV-O: The PROV Ontology. Raccomandazione del World Wide Web Consortium."
+        },
+        {
+          "type": "paragraph",
+          "text": "[8] Hyperledger Fabric. Smart Contracts and Chaincode; Fabric Gateway. Documentazione ufficiale della piattaforma."
+        },
+        {
+          "type": "paragraph",
+          "text": "[9] C. Fasciano, G. Loseto, A. Pinto, M. Ruta, F. Scioscia. A propagation-based ranking semantics in Explainable Bipolar Weighted Argumentation. Engineering Applications of Artificial Intelligence. DOI: 10.1016/j.engappai.2024.109767."
+        },
+        {
+          "type": "paragraph",
+          "text": "[10] Model Context Protocol. Architecture. Specifica del protocollo client-server e delle interfacce di integrazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "[11] Pydantic. Models. Documentazione tecnica dei contratti di validazione e serializzazione."
+        },
+        {
+          "type": "paragraph",
+          "text": "[12] Ollama. OpenAI compatibility; Qwen model library. Documentazione tecnica dell’inferenza locale."
+        },
+        {
+          "type": "heading",
+          "text": "Materiali di progetto e attribuzioni"
+        },
+        {
+          "type": "paragraph",
+          "text": "Il progetto riutilizza la pipeline CTI agentica e i servizi semantici con ledger distribuito messi a disposizione come basi sperimentali. I contributi di integrazione sono distinti nella Tabella 1. I dati sperimentali derivano dalle campagne controllate del prototipo e sono conservati con protocolli e verifiche di integrità. Le affermazioni sui singoli componenti sono limitate alle funzionalità effettivamente esaminate e collaudate."
+        }
+      ]
+    }
+  ]
+}
